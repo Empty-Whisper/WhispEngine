@@ -39,6 +39,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	float GetDeltaTime();
+
 private:
 
 	void AddModule(Module* mod);

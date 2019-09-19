@@ -24,7 +24,7 @@ bool ModuleSceneIntro::Start()
 }
 
 // Update
-update_status ModuleSceneIntro::Update(float dt)
+update_status ModuleSceneIntro::Update()
 {
 	plane->Render();
 	return UPDATE_CONTINUE;

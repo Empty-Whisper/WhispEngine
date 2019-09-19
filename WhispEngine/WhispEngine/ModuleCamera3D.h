@@ -10,7 +10,7 @@ public:
 	~ModuleCamera3D();
 
 	bool Start();
-	update_status Update(float dt);
+	update_status Update();
 	bool CleanUp();
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);

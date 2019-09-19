@@ -70,6 +70,11 @@ void Application::FinishUpdate()
 {
 }
 
+float Application::GetDeltaTime()
+{
+	return dt;
+}
+
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
@@ -77,15 +82,15 @@ update_status Application::Update()
 	PrepareUpdate();
 	
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
-		ret = (*item)->PreUpdate(dt);
+		ret = (*item)->PreUpdate();
 	}
 
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
-		ret = (*item)->Update(dt);
+		ret = (*item)->Update();
 	}
 
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
-		ret = (*item)->PostUpdate(dt);
+		ret = (*item)->PostUpdate();
 	}
 
 	FinishUpdate();
