@@ -1,43 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Imgui">
-      <UniqueIdentifier>{c8daf298-46b1-48f0-ab58-717eea6645e6}</UniqueIdentifier>
+    <Filter Include="Main Modules">
+      <UniqueIdentifier>{1d4b9467-ce8c-4bef-bf38-9d8a73d16398}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tools">
+    <Filter Include="Modules">
+      <UniqueIdentifier>{36dc7274-c073-496f-8d82-a2c701fe6464}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\GUI">
+      <UniqueIdentifier>{219882b9-54aa-49d9-8433-5b74e60e3262}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Tools">
       <UniqueIdentifier>{6ef7fbea-7230-4817-a298-3ce59c7be9c7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{2d72e173-c07b-427c-8e61-f4e5f05504c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{fc3f97f3-3e67-432b-aa30-24411bd3da77}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI">
-      <UniqueIdentifier>{219882b9-54aa-49d9-8433-5b74e60e3262}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Main Modules">
-      <UniqueIdentifier>{1d4b9467-ce8c-4bef-bf38-9d8a73d16398}</UniqueIdentifier>
+    <Filter Include="Modules\Tools\Imgui">
+      <UniqueIdentifier>{c8daf298-46b1-48f0-ab58-717eea6645e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_impl_sdl.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_demo.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_draw.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_widgets.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_impl_opengl2.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Core</Filter>
@@ -46,22 +46,22 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClCompile>
     <ClCompile Include="glmath.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClCompile>
     <ClCompile Include="log.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClCompile>
     <ClCompile Include="ModuleAudio.cpp">
       <Filter>Main Modules</Filter>
@@ -82,39 +82,39 @@
       <Filter>Main Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleGUI.cpp">
-      <Filter>GUI</Filter>
+      <Filter>Modules\GUI</Filter>
     </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
-      <Filter>Scenes</Filter>
+      <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="PhysBody3D.cpp">
-      <Filter>Main Modules</Filter>
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_sdl.h">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imconfig.h">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_internal.h">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_rectpack.h">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_textedit.h">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_truetype.h">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_opengl2.h">
-      <Filter>Imgui</Filter>
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Globals.h">
       <Filter>Core</Filter>
@@ -126,22 +126,22 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="glmath.h">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="p2Point.h">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Primitive.h">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Tools</Filter>
+      <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="ModuleWindow.h">
       <Filter>Main Modules</Filter>
@@ -161,14 +161,14 @@
     <ClInclude Include="ModuleRenderer3D.h">
       <Filter>Main Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleSceneIntro.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleGUI.h">
-      <Filter>GUI</Filter>
+      <Filter>Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSceneIntro.h">
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="PhysBody3D.h">
-      <Filter>Main Modules</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

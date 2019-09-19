@@ -17,4 +17,6 @@ public:
 
 private:
 	bool show_demo_window = false;
+	bool show_example_window = false;
+	bool show_example2_window = false;
 };
