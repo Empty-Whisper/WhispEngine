@@ -44,9 +44,27 @@ update_status ModuleGUI::PreUpdate()
 
 update_status ModuleGUI::Update()
 {
-	ImGui::ShowDemoWindow();
+	update_status ret = update_status::UPDATE_CONTINUE;
 
-	return UPDATE_CONTINUE;
+	if (ImGui::BeginMainMenuBar()) {
+		if (ImGui::BeginMenu("Demo")) {
+			show_demo_window = !show_demo_window;
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Close")) {
+			ret = update_status::UPDATE_STOP;
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
+
+	if (show_demo_window) {
+		ImGui::ShowDemoWindow();
+	}
+	
+	return ret;
 }
 
 update_status ModuleGUI::PostUpdate()
