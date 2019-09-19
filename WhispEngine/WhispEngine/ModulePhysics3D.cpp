@@ -69,7 +69,7 @@ bool ModulePhysics3D::Start()
 // ---------------------------------------------------------
 update_status ModulePhysics3D::PreUpdate()
 {
-	world->stepSimulation(App->GetDeltaTime, 15);
+	world->stepSimulation(App->GetDeltaTime(), 15);
 
 	int numManifolds = world->getDispatcher()->getNumManifolds();
 	for(int i = 0; i<numManifolds; i++)
