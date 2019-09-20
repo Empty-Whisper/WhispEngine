@@ -7,6 +7,7 @@
 
 #pragma comment (lib, "glut/glut32.lib")
 
+using namespace prim;
 // ------------------------------------------------------------
 Primitive::Primitive() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point)
 {}

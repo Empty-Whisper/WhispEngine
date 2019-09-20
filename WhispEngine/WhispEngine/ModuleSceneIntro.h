@@ -13,5 +13,5 @@ public:
 	bool CleanUp();
 
 public:
-	//Plane* plane = nullptr;
+	prim::Plane* plane = nullptr;
 };

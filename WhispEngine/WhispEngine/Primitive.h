@@ -13,84 +13,87 @@ enum PrimitiveTypes
 	Primitive_Cylinder
 };
 
-class Primitive
-{
-public:
+namespace prim {
 
-	Primitive();
+	class Primitive
+	{
+	public:
 
-	virtual void	Render() const;
-	virtual void	InnerRender() const;
-	void			SetPos(float x, float y, float z);
-	void			SetPos(const vec3 &pos);
-	void			SetRotation(float angle, const vec3 &u);
-	void			Scale(float x, float y, float z);
-	PrimitiveTypes	GetType() const;
+		Primitive();
 
-public:
-	
-	Color color;
-	mat4x4 transform;
-	bool axis,wire, active = true;
+		virtual void	Render() const;
+		virtual void	InnerRender() const;
+		void			SetPos(float x, float y, float z);
+		void			SetPos(const vec3 &pos);
+		void			SetRotation(float angle, const vec3 &u);
+		void			Scale(float x, float y, float z);
+		PrimitiveTypes	GetType() const;
 
-protected:
-	PrimitiveTypes type;
-};
+	public:
 
-// ============================================
-class Cube : public Primitive
-{
-public :
-	Cube();
-	Cube(float sizeX, float sizeY, float sizeZ);
-	void InnerRender() const;
-public:
-	vec3 size;
-};
+		Color color;
+		mat4x4 transform;
+		bool axis, wire, active = true;
 
-// ============================================
-class Sphere : public Primitive
-{
-public:
-	Sphere();
-	Sphere(float radius);
-	void InnerRender() const;
-public:
-	float radius;
-};
+	protected:
+		PrimitiveTypes type;
+	};
 
-// ============================================
-class Cylinder : public Primitive
-{
-public:
-	Cylinder();
-	Cylinder(float radius, float height);
-	void InnerRender() const;
-public:
-	float radius;
-	float height;
-};
+	// ============================================
+	class Cube : public Primitive
+	{
+	public:
+		Cube();
+		Cube(float sizeX, float sizeY, float sizeZ);
+		void InnerRender() const;
+	public:
+		vec3 size;
+	};
 
-// ============================================
-class Line : public Primitive
-{
-public:
-	Line();
-	Line(float x, float y, float z);
-	void InnerRender() const;
-public:
-	vec3 origin;
-	vec3 destination;
-};
+	// ============================================
+	class Sphere : public Primitive
+	{
+	public:
+		Sphere();
+		Sphere(float radius);
+		void InnerRender() const;
+	public:
+		float radius;
+	};
 
-// ============================================
-class Plane : public Primitive
-{
-public:
-	Plane();
-	Plane(float x, float y, float z, float d);
-	void InnerRender() const;
-public:
-	vec3 normal;
-	float constant;
-};
+	// ============================================
+	class Cylinder : public Primitive
+	{
+	public:
+		Cylinder();
+		Cylinder(float radius, float height);
+		void InnerRender() const;
+	public:
+		float radius;
+		float height;
+	};
+
+	// ============================================
+	class Line : public Primitive
+	{
+	public:
+		Line();
+		Line(float x, float y, float z);
+		void InnerRender() const;
+	public:
+		vec3 origin;
+		vec3 destination;
+	};
+
+	// ============================================
+	class Plane : public Primitive
+	{
+	public:
+		Plane();
+		Plane(float x, float y, float z, float d);
+		void InnerRender() const;
+	public:
+		vec3 normal;
+		float constant;
+	};
+}

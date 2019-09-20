@@ -90,9 +90,6 @@
     <ClCompile Include="ModuleInput.cpp">
       <Filter>Main Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ModulePhysics3D.cpp">
-      <Filter>Main Modules</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleRenderer3D.cpp">
       <Filter>Main Modules</Filter>
     </ClCompile>
@@ -103,9 +100,6 @@
       <Filter>Modules\GUI</Filter>
     </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysBody3D.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="MathGeoLib\include\Time\Clock.cpp">
@@ -269,9 +263,6 @@
     <ClInclude Include="ModuleInput.h">
       <Filter>Main Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModulePhysics3D.h">
-      <Filter>Main Modules</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleRenderer3D.h">
       <Filter>Main Modules</Filter>
     </ClInclude>
@@ -279,9 +270,6 @@
       <Filter>Modules\GUI</Filter>
     </ClInclude>
     <ClInclude Include="ModuleSceneIntro.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysBody3D.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="MathGeoLib\include\MathGeoLib.h">

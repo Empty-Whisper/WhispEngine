@@ -2,11 +2,7 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
-#include "PhysBody3D.h"
 #include "ModuleAudio.h"
-
-//test
-#include "MathGeoLib/include/MathGeoLib.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -21,21 +17,11 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	//plane = new Plane();
-	math::Sphere *a = new math::Sphere(math::float3(0.f, 0.f, 0.f), 5);
-	math::Sphere *b = new math::Sphere(math::float3(0.f, 0.f, 0.f), 5);
-	math::Sphere *c = new math::Sphere(math::float3(10.f, 10.f, 10.f), 1);
-	
-	
-	if (a->Intersects(*b)) {
-		LOG("A has intersection with B");
-	}
-	if (b->Intersects(*c)) {
-		LOG("B has intersection with C");
-	}
-	else {
-		LOG("B has no intersection with C");
-	}
+	plane = new prim::Plane();
+	plane->axis = true;
+
+	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
+	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
 	return ret;
 }
@@ -43,7 +29,7 @@ bool ModuleSceneIntro::Start()
 // Update
 update_status ModuleSceneIntro::Update()
 {
-	//plane->Render();
+	plane->Render();
 	
 	return UPDATE_CONTINUE;
 }
@@ -53,6 +39,8 @@ update_status ModuleSceneIntro::Update()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	delete plane;
 
 	return true;
 }
