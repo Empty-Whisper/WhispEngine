@@ -198,6 +198,9 @@
     <ClCompile Include="MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>Modules\Tools\MathGeoLib\Algorithm\Random</Filter>
     </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
+      <Filter>Modules\Tools\Imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -240,9 +243,6 @@
       <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Modules\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Point.h">
       <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Primitive.h">
@@ -451,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h">
       <Filter>Modules\Tools\MathGeoLib\Algorithm\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_opengl3.h">
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

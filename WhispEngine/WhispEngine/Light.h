@@ -2,6 +2,11 @@
 #pragma once
 #include "Color.h"
 #include "glmath.h"
+#include "glew/glew.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
+#pragma comment (lib, "glew/glew32.lib")
 
 struct Light
 {

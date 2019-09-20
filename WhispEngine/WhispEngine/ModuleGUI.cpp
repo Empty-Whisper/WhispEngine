@@ -8,6 +8,7 @@
 #include "Imgui/imgui.h"
 #include "Imgui/imgui_impl_sdl.h"
 #include "Imgui/imgui_impl_opengl2.h"
+//#include "Imgui/imgui_impl_opengl3.h"
 
 
 ModuleGUI::ModuleGUI(Application * app, bool enable_true) :Module(app, enable_true)
@@ -25,6 +26,7 @@ bool ModuleGUI::Init()
 	ImGuiIO& io = ImGui::GetIO();
 	
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
+	//ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION)); // TODO: Set ImGui in openGL3
 	ImGui_ImplOpenGL2_Init();
 
 	ImGui::StyleColorsDark();
@@ -35,6 +37,7 @@ bool ModuleGUI::Init()
 update_status ModuleGUI::PreUpdate()
 {
 	ImGui_ImplOpenGL2_NewFrame();
+	//ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	
 	ImGui::NewFrame();
@@ -95,12 +98,14 @@ update_status ModuleGUI::PostUpdate()
 {
 	ImGui::Render();
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	return UPDATE_CONTINUE;
 }
 
 bool ModuleGUI::CleanUp() {
 	ImGui_ImplOpenGL2_Shutdown();
+	//ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
