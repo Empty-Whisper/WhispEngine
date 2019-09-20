@@ -13,5 +13,5 @@ public:
 	bool CleanUp();
 
 public:
-	Plane* plane = nullptr;
+	//Plane* plane = nullptr;
 };
