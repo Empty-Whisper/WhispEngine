@@ -63,7 +63,6 @@
     <ClCompile Include="MathGeoLib\include\Math\SSEMath.cpp" />
     <ClCompile Include="MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="MathGeoLib\include\Time\Clock.cpp" />
-    <ClCompile Include="ModuleAudio.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleGUI.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
@@ -148,7 +147,6 @@
     <ClInclude Include="MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="MathGeoLib\include\Time\Clock.h" />
     <ClInclude Include="Module.h" />
-    <ClInclude Include="ModuleAudio.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleGUI.h" />
     <ClInclude Include="ModuleInput.h" />

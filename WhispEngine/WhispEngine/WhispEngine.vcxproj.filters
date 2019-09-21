@@ -81,9 +81,6 @@
     <ClCompile Include="Primitive.cpp">
       <Filter>Modules\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleAudio.cpp">
-      <Filter>Main Modules</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleCamera3D.cpp">
       <Filter>Main Modules</Filter>
     </ClCompile>
@@ -252,9 +249,6 @@
       <Filter>Main Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleCamera3D.h">
-      <Filter>Main Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleAudio.h">
       <Filter>Main Modules</Filter>
     </ClInclude>
     <ClInclude Include="ModuleInput.h">
