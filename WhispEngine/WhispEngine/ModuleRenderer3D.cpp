@@ -22,6 +22,13 @@ bool ModuleRenderer3D::Init()
 	
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
+	
+	GLenum init = glewInit();
+	if (init != GLEW_OK) {
+		LOG("Fail to init glew: %s", (const char*)glewGetErrorString(init));
+		ret = false;
+	}
+
 	if(context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -42,7 +49,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", glewGetErrorString(error));
 			ret = false;
 		}
 

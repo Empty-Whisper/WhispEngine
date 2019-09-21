@@ -54,9 +54,6 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp">
       <Filter>Modules\Tools\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Imgui\imgui_impl_opengl2.cpp">
-      <Filter>Modules\Tools\Imgui</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -195,6 +192,9 @@
     <ClCompile Include="MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>Modules\Tools\MathGeoLib\Algorithm\Random</Filter>
     </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
+      <Filter>Modules\Tools\Imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -216,9 +216,6 @@
       <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_truetype.h">
-      <Filter>Modules\Tools\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Imgui\imgui_impl_opengl2.h">
       <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Globals.h">
@@ -442,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h">
       <Filter>Modules\Tools\MathGeoLib\Algorithm\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_opengl3.h">
+      <Filter>Modules\Tools\Imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
