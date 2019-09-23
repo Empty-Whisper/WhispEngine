@@ -153,6 +153,9 @@
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="ModuleSceneIntro.h" />
     <ClInclude Include="ModuleWindow.h" />
+    <ClInclude Include="PCG\pcg_extras.hpp" />
+    <ClInclude Include="PCG\pcg_random.hpp" />
+    <ClInclude Include="PCG\pcg_uint128.hpp" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
@@ -220,9 +223,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -242,7 +246,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>

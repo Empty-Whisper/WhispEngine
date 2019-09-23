@@ -3,6 +3,9 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 
+#include <random>
+#include "PCG/pcg_random.hpp"
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -29,6 +32,18 @@ bool ModuleSceneIntro::Start()
 update_status ModuleSceneIntro::Update()
 {
 	plane->Render();
+
+	pcg_extras::seed_seq_from<std::random_device> seed_source;
+
+	pcg32 rng(seed_source);
+	std::uniform_int_distribution<int> uniform_dist_int(0, 10);
+	std::uniform_real_distribution<float> uniform_dist_f(0, 1);
+
+
+	for (int i = 0; i < 10; ++i) {
+		LOG("%i", uniform_dist_int(rng));
+		LOG("%f", uniform_dist_f(rng));
+	}
 	
 	return UPDATE_CONTINUE;
 }

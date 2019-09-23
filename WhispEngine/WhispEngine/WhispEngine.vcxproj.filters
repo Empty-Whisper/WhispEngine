@@ -37,6 +37,9 @@
     <Filter Include="Modules\Tools\MathGeoLib\Algorithm\Random">
       <UniqueIdentifier>{2fe5fa57-8018-43ec-93bf-7d689aa43b0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules\Tools\PCG">
+      <UniqueIdentifier>{c641e84c-c793-46aa-9f6b-45e05d55eed3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -442,6 +445,15 @@
     </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_opengl3.h">
       <Filter>Modules\Tools\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG\pcg_random.hpp">
+      <Filter>Modules\Tools\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG\pcg_uint128.hpp">
+      <Filter>Modules\Tools\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG\pcg_extras.hpp">
+      <Filter>Modules\Tools\PCG</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
