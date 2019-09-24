@@ -78,9 +78,6 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Modules\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="Primitive.cpp">
-      <Filter>Modules\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleCamera3D.cpp">
       <Filter>Main Modules</Filter>
     </ClCompile>
@@ -237,9 +234,6 @@
       <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Modules\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitive.h">
       <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">

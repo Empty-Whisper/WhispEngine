@@ -1,6 +1,5 @@
 #pragma once
 #include "Module.h"
-#include "Primitive.h"
 
 class ModuleSceneIntro : public Module
 {
@@ -13,5 +12,12 @@ public:
 	bool CleanUp();
 
 public:
-	prim::Plane* plane = nullptr;
+	//TEST
+	char * a_inter_b = nullptr;
+	char * b_inter_c = nullptr;
+	char * a_inter_c = nullptr;
+	char * count_down = nullptr;
+	Timer timer;
+	int inum = 0;
+	float fnum = 0.0f;
 };
