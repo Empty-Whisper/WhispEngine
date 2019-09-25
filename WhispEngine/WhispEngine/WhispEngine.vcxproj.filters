@@ -40,6 +40,9 @@
     <Filter Include="Modules\Tools\PCG">
       <UniqueIdentifier>{c641e84c-c793-46aa-9f6b-45e05d55eed3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules\Tools\JSON">
+      <UniqueIdentifier>{748397e5-3a07-4cc8-b0ac-f9b2cf12037d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -448,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="PCG\pcg_extras.hpp">
       <Filter>Modules\Tools\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="JSON\json.hpp">
+      <Filter>Modules\Tools\JSON</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
