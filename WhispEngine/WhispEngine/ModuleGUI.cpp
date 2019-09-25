@@ -69,6 +69,7 @@ update_status ModuleGUI::Update()
 			}
 			ImGui::EndMenu();
 		}
+
 		if (ImGui::BeginMenu("View"))
 		{
 			if (ImGui::MenuItem("Console", "LShift+1"))
@@ -85,9 +86,10 @@ update_status ModuleGUI::Update()
 			}
 			ImGui::EndMenu();
 		}
+
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("Demo"))
+			if (ImGui::MenuItem("Demo", NULL, show_demo_window))
 			{
 				show_demo_window = !show_demo_window;
 			}
@@ -116,26 +118,19 @@ update_status ModuleGUI::Update()
 	
 	if (show_console_window)
 	{
-		if (ImGui::Begin("Console"))
-		{
-
-		}
-		ImGui::End();
+		MenuWindowConsole(&show_console_window);
 	}
 
 	if (show_configuration_window)
 	{
-		if (ImGui::Begin("Configuration"))
-		{
-			
-		}
-		ImGui::End();
+		MenuWindowConfiguration(&show_configuration_window);
 	}
 
 	if (show_demo_window)
 	{
-		ImGui::ShowDemoWindow();		
+		ImGui::ShowDemoWindow();
 	}
+
 	if (show_style_window)
 	{
 		if (ImGui::Begin("Style editor"))
@@ -147,7 +142,9 @@ update_status ModuleGUI::Update()
 
 	if (show_about_window)
 	{
-		MenuItemAbout(&show_about_window);
+		MenuWindowAbout(&show_about_window);
+
+		
 	}
 	
 
@@ -173,17 +170,94 @@ bool ModuleGUI::CleanUp() {
 	return true;
 }
 
-bool ModuleGUI::MenuItemAbout(bool* p_open)
+bool ModuleGUI::MenuWindowAbout(bool* p_open)
 {
 	bool ret = true;
-	if (ImGui::Begin("About Whisp Engine", p_open, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::Begin("About Whisp Engine", p_open))
 	{
 		ImGui::Text("Version 0.1-alpha");
 		ImGui::Columns(1);
 		ImGui::NewLine();
 		ImGui::Text("By Christian Martínez @christt105 and Marc Gálvez @optus23 for learning purposes.");
 		ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
+		ImGui::NewLine();
+		ImGui::Checkbox("Show MIT LICENSE", &show_mit_license_window);
+		
+			
+		
 	}
 	ImGui::End();
 	return ret;
 }
+
+bool ModuleGUI::MenuWindowConsole(bool * p_open)
+{
+	bool ret = true;
+	if (ImGui::Begin("Console", p_open))
+	{
+		ImGui::Text("------------- Welcome to Whisp Engine -------------");
+	
+	}
+	ImGui::End();
+	
+	return ret;
+}
+
+bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
+{
+	bool ret = true;
+	if (ImGui::Begin("Configuration", p_open, ImGuiWindowFlags_MenuBar))
+	{
+		if (ImGui::BeginMenu("Options", p_open))
+		{
+			if (ImGui::MenuItem("Set Defaults"))
+			{
+			}
+			if (ImGui::MenuItem("Load"))
+			{
+			}
+			if (ImGui::MenuItem("Save"))
+			{
+			}
+			ImGui::End();
+		}
+		if (ImGui::CollapsingHeader("Appliction"))
+		{
+			ImGui::InputText("Whisp Engine", "App Name", 0);
+			ImGui::InputText("Empty Whisper", "Organitzation", 0);
+			ImGui::SliderInt("Max FPS", &actual_fps, 0, 120);
+			ImGui::Text("Limit Framerate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", actual_fps);
+
+			//TODO: Frame rate graphic
+			//TODO: Memory Consumption graphic
+
+			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", total_reported_mem);
+			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", total_actual_mem);
+			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", peak_reported_mem);
+			ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", peak_actual_mem);
+			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", accumulated_reported_mem);
+			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", accumulated_actual_mem);
+			ImGui::Text("Accumulated Alloc Mem: "); ImGui::SameLine(); ImGui::Text("%i", accumulated_alloc_unit);
+			ImGui::Text("Total Alloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", total_alloc_unity_count);
+			ImGui::Text("PeakAlloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", peak_alloc_unit_count);
+
+
+		}
+		if (ImGui::CollapsingHeader("Window"))
+		{		
+		}
+		if (ImGui::CollapsingHeader("File System"))
+		{
+		}
+		if (ImGui::CollapsingHeader("Input"))
+		{
+		}
+		if (ImGui::CollapsingHeader("Hardware"))
+		{
+		}
+	}
+	ImGui::End();
+
+	return ret;
+}
+
