@@ -1,4 +1,9 @@
 #include <stdlib.h>
+
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include "Application.h"
 #include "Globals.h"
 
@@ -30,7 +35,7 @@ int main(int argc, char ** argv)
 		case MAIN_CREATION:
 
 			LOG("-------------- Application Creation --------------");
-			App = new Application();
+			App = DBG_NEW Application();
 			state = MAIN_START;
 			break;
 
@@ -83,6 +88,7 @@ int main(int argc, char ** argv)
 	}
 
 	delete App;
+	_CrtDumpMemoryLeaks();
 	LOG("Exiting game '%s'...\n", TITLE);
 	return main_return;
 }
