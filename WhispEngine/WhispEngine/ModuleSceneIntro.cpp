@@ -105,6 +105,14 @@ update_status ModuleSceneIntro::Update()
 	ImGui::Text("Cache:"); ImGui::SameLine(); ImGui::Text("%i", App->hardware->GetCPUCacheLineSize());
 	ImGui::Text("RAM:"); ImGui::SameLine(); ImGui::Text("%i", App->hardware->GetSystemRAM());
 	ImGui::Text("SDL Version:"); ImGui::SameLine(); ImGui::Text(App->hardware->GetSDLVersion());
+	ImGui::Text("OpenGL Version:"); ImGui::SameLine(); ImGui::Text(App->hardware->GetOpenGLVersion());
+	ImGui::Text("Graphics Card Company:"); ImGui::SameLine(); ImGui::Text(App->hardware->GetGraphicsCardVendor());
+	ImGui::Text("Graphics Card Model:"); ImGui::SameLine(); ImGui::Text(App->hardware->GetGraphicsCardModel());
+
+	ImGui::Text("VRAM Budget:"); ImGui::SameLine(); ImGui::Text("%i", App->hardware->GetTotalAvailableMemory());/*TODO: Names are correct?*/
+	ImGui::Text("VRAM Usage:"); ImGui::SameLine(); ImGui::Text("%i", App->hardware->GetCurrentMemory());
+	ImGui::Text("VRAM Available:"); ImGui::SameLine(); ImGui::Text("%i", App->hardware->GetDedicatedMemory());
+	ImGui::Text("VRAM Reserved:"); ImGui::SameLine(); ImGui::Text("%i", App->hardware->GetTotalMemoryEvicted());
 	ImGui::End();
 	//-------------------------------------------------------------------
 	

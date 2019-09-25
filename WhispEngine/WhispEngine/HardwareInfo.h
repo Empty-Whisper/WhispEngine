@@ -11,7 +11,16 @@ public:
 	int GetCPUCacheLineSize();
 	int GetCPUCount();
 	int GetSystemRAM();
+
 	const char* GetSDLVersion();
+	const char* GetOpenGLVersion();
+	const char* GetGraphicsCardVendor();
+	const char* GetGraphicsCardModel();
+
+	int GetDedicatedMemory();
+	int GetTotalAvailableMemory();
+	int GetCurrentMemory();
+	int GetTotalMemoryEvicted();
 
 private:
 	SDL_version sdl_version;
