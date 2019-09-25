@@ -14,6 +14,9 @@ public:
 	update_status PostUpdate();
 
 	bool CleanUp();
+private:
+
+	bool MenuItemAbout(bool* p_open);
 
 private:
 	bool show_demo_window = false;
@@ -21,4 +24,7 @@ private:
 	bool show_about_window = false;
 	bool show_console_window = false;
 	bool show_configuration_window = false;
+
+	bool my_bool = true;
+
 };

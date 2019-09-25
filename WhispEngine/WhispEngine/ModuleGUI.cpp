@@ -48,6 +48,10 @@ update_status ModuleGUI::PreUpdate()
 	{
 		show_configuration_window = !show_configuration_window;
 	}
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_3) == KEY_STATE::KEY_DOWN)
+	{
+		show_style_window = !show_style_window;
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -75,7 +79,7 @@ update_status ModuleGUI::Update()
 			{
 				show_configuration_window = !show_configuration_window;
 			}
-			if (ImGui::MenuItem("Style Editor"))
+			if (ImGui::MenuItem("Style Editor", "LShift+3"))
 			{
 				show_style_window = !show_style_window;
 			}
@@ -99,9 +103,10 @@ update_status ModuleGUI::Update()
 			{
 				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine/issues", NULL, NULL, SW_SHOWNORMAL);
 			}
-			if (ImGui::MenuItem("About"))
+			if (ImGui::MenuItem("About", NULL, show_about_window))
 			{
 				show_about_window = !show_about_window;
+				
 			}
 			ImGui::EndMenu();
 		}
@@ -133,24 +138,16 @@ update_status ModuleGUI::Update()
 	}
 	if (show_style_window)
 	{
-		
-		ImGui::ShowStyleEditor();
+		if (ImGui::Begin("Style editor"))
+		{
+			ImGui::ShowStyleEditor();
+		}
+		ImGui::End();
 	}
 
 	if (show_about_window)
 	{
-		if (ImGui::Begin("About Whisp Engine"))
-		{
-			
-			ImGui::SetWindowSize(ImVec2(700, 140));
-			ImGui::Text("Version 0.1-alpha");
-			ImGui::NewLine();
-			ImGui::Text("By Christian Martínez @christt105 and Marc Gálvez @optus23 for learning purposes.");
-			ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
-			
-			//ImGui::Checkbox("Build Information", NULL);
-		}
-		ImGui::End();
+		MenuItemAbout(&show_about_window);
 	}
 	
 
@@ -174,4 +171,19 @@ bool ModuleGUI::CleanUp() {
 	ImGui::DestroyContext();
 
 	return true;
+}
+
+bool ModuleGUI::MenuItemAbout(bool* p_open)
+{
+	bool ret = true;
+	if (ImGui::Begin("About Whisp Engine", p_open, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Version 0.1-alpha");
+		ImGui::Columns(1);
+		ImGui::NewLine();
+		ImGui::Text("By Christian Martínez @christt105 and Marc Gálvez @optus23 for learning purposes.");
+		ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
+	}
+	ImGui::End();
+	return ret;
 }
