@@ -39,6 +39,15 @@ update_status ModuleGUI::PreUpdate()
 	
 	ImGui::NewFrame();
 
+	//  Input Shortcut Keys
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_1) == KEY_STATE::KEY_DOWN)
+	{
+		show_console_window = !show_console_window;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_2) == KEY_STATE::KEY_DOWN)
+	{
+		show_configuration_window = !show_configuration_window;
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -50,7 +59,7 @@ update_status ModuleGUI::Update()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Quit", "ESC"))
+			if (ImGui::MenuItem("Quit", "Alt+F4"))
 			{
 				ret = update_status::UPDATE_STOP;
 			}
@@ -58,13 +67,17 @@ update_status ModuleGUI::Update()
 		}
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Console", "Shift+1"))
+			if (ImGui::MenuItem("Console", "LShift+1"))
 			{
 				show_console_window = !show_console_window;
 			}
-			if (ImGui::MenuItem("Configuration", "Shift+2"))
+			if (ImGui::MenuItem("Configuration", "LShift+2"))
 			{
 				show_configuration_window = !show_configuration_window;
+			}
+			if (ImGui::MenuItem("Style Editor"))
+			{
+				show_style_window = !show_style_window;
 			}
 			ImGui::EndMenu();
 		}
@@ -116,7 +129,12 @@ update_status ModuleGUI::Update()
 
 	if (show_demo_window)
 	{
-		ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow();		
+	}
+	if (show_style_window)
+	{
+		
+		ImGui::ShowStyleEditor();
 	}
 
 	if (show_about_window)
@@ -129,12 +147,15 @@ update_status ModuleGUI::Update()
 			ImGui::NewLine();
 			ImGui::Text("By Christian Martínez @christt105 and Marc Gálvez @optus23 for learning purposes.");
 			ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
-			//ImGui::Checkbox("Build Information",);
+			
+			//ImGui::Checkbox("Build Information", NULL);
 		}
 		ImGui::End();
 	}
 	
 
+
+	
 	return ret;
 }
 
