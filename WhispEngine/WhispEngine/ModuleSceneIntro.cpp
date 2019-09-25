@@ -13,6 +13,8 @@
 #include <istream>
 #include <iomanip>
 
+#include "HardwareInfo.h"
+
 #include "MathGeoLib/include/MathGeoLib.h"
 #ifdef _DEBUG
 #pragma comment (lib, "MathGeoLib/lib_x86/Debug/MathGeoLib.lib")
@@ -98,14 +100,11 @@ update_status ModuleSceneIntro::Update()
 	ImGui::End();
 
 	//----------------------------------------------------------------------
-	ImGui::Begin("Spheres intersections");
-	ImGui::Text("A is in (0, 0, 0) and has rad = 5");
-	ImGui::Text("\nB is in (0, 0, 0) and has rad = 5");
-	ImGui::Text("\nC is in (10, 10, 10) and has rad = 1");
-	ImGui::NewLine();
-	ImGui::Text(a_inter_b);
-	ImGui::Text(b_inter_c);
-	ImGui::Text(a_inter_c);
+	ImGui::Begin("Hardware");
+	ImGui::Text("CPUs:"); ImGui::SameLine(); ImGui::Text("%i", App->hardware->GetCPUCount());
+	ImGui::Text("Cache:"); ImGui::SameLine(); ImGui::Text("%i", App->hardware->GetCPUCacheLineSize());
+	ImGui::Text("RAM:"); ImGui::SameLine(); ImGui::Text("%i", App->hardware->GetSystemRAM());
+	ImGui::Text("SDL Version:"); ImGui::SameLine(); ImGui::Text(App->hardware->GetSDLVersion());
 	ImGui::End();
 	//-------------------------------------------------------------------
 	
