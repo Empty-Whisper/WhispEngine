@@ -46,47 +46,94 @@ update_status ModuleGUI::Update()
 {
 	update_status ret = update_status::UPDATE_CONTINUE;
 
-	ImGui::BeginMainMenuBar();
-
-	if (ImGui::Button("Demo")) 
+	if (ImGui::BeginMainMenuBar())
 	{
-		show_demo_window = !show_demo_window;
-	}
-	if (ImGui::Button("Example"))
-	{
-		show_example_window = !show_example_window;
-	}
-	if (ImGui::Button("Close")) 
-	{
-		ret = update_status::UPDATE_STOP;
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Quit", "ESC"))
+			{
+				ret = update_status::UPDATE_STOP;
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("View"))
+		{
+			if (ImGui::MenuItem("Console", "Shift+1"))
+			{
+				show_console_window = !show_console_window;
+			}
+			if (ImGui::MenuItem("Configuration", "Shift+2"))
+			{
+				show_configuration_window = !show_configuration_window;
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("Demo"))
+			{
+				show_demo_window = !show_demo_window;
+			}
+			if (ImGui::MenuItem("Documentation", "link"))
+			{
+				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine", NULL, NULL, SW_SHOWNORMAL);
+			}
+			if (ImGui::MenuItem("Download Lastest", "link"))
+			{
+				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine/releases", NULL, NULL, SW_SHOWNORMAL);
+			}
+			if (ImGui::MenuItem("Report a bug", "link"))
+			{
+				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine/issues", NULL, NULL, SW_SHOWNORMAL);
+			}
+			if (ImGui::MenuItem("About"))
+			{
+				show_about_window = !show_about_window;
+			}
+			ImGui::EndMenu();
+		}
 	}
 	ImGui::EndMainMenuBar();
 
-	//  Button
-	ImGui::Begin("Mystery Windows");
-	ImGui::SetWindowSize(ImVec2(150, 60));
-	if (ImGui::Button("Click me"))
+	
+	if (show_console_window)
 	{
-		show_example2_window = !show_example2_window;
-	}	
-		
-	if (show_example2_window)
-	{
-		ImGui::Text("I'm a text");
-		ImGui::SetWindowSize(ImVec2(500, 640));
+		if (ImGui::Begin("Console"))
+		{
+
+		}
+		ImGui::End();
 	}
-	ImGui::End();
 
-
+	if (show_configuration_window)
+	{
+		if (ImGui::Begin("Configuration"))
+		{
+			
+		}
+		ImGui::End();
+	}
 
 	if (show_demo_window)
 	{
 		ImGui::ShowDemoWindow();
 	}
-	if (show_example_window)
+
+	if (show_about_window)
 	{
-		ImGui::Text("Hola Gente estoy Doramio");
+		if (ImGui::Begin("About Whisp Engine"))
+		{
+			
+			ImGui::SetWindowSize(ImVec2(700, 140));
+			ImGui::Text("Version 0.1-alpha");
+			ImGui::NewLine();
+			ImGui::Text("By Christian Martínez @christt105 and Marc Gálvez @optus23 for learning purposes.");
+			ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
+			//ImGui::Checkbox("Build Information",);
+		}
+		ImGui::End();
 	}
+	
 
 	return ret;
 }

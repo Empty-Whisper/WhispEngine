@@ -17,6 +17,7 @@ public:
 
 private:
 	bool show_demo_window = false;
-	bool show_example_window = false;
-	bool show_example2_window = false;
+	bool show_about_window = false;
+	bool show_console_window = false;
+	bool show_configuration_window = false;
 };
