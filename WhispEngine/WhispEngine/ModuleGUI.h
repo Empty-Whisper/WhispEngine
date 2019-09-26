@@ -82,4 +82,5 @@ private:
 	SDL_version sdl_version;
 
 	ImGuiTextBuffer buffer;
+	bool log_new_line = false;
 };

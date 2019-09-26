@@ -45,3 +45,4 @@ enum update_status
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC false
 #define TITLE "Whisp 3D Engine"
+#define ORGANIZATION "Empty Whisper"
