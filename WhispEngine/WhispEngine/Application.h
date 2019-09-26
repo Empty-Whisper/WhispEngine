@@ -11,6 +11,8 @@
 #include "ModuleCamera3D.h"
 #include "ModuleGUI.h"
 
+#include "HardwareInfo.h"
+
 #include <list>
 
 class Application
@@ -57,6 +59,8 @@ public:
 	bool CleanUp();
 
 	float GetDeltaTime();
+
+	HardwareInfo *hardware = nullptr;
 
 private:
 

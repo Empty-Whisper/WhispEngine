@@ -202,6 +202,9 @@
       <Filter>Modules\Tools</Filter>
     </ClCompile>
     <ClCompile Include="GPUdetect\DeviceId.cpp" />
+    <ClCompile Include="HardwareInfo.cpp">
+      <Filter>Modules\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -464,6 +467,9 @@
     </ClInclude>
     <ClInclude Include="GPUdetect\DeviceId.h" />
     <ClInclude Include="GPUdetect\dxgi1_4.h" />
+    <ClInclude Include="HardwareInfo.h">
+      <Filter>Modules\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

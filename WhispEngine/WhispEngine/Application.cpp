@@ -26,6 +26,8 @@ Application::Application()
 	// Renderer last!
 	AddModule(renderer3D);
 
+	hardware = new HardwareInfo();
+
 	first_frame = true;
 }
 
@@ -167,6 +169,9 @@ bool Application::CleanUp()
 	for (auto item = list_modules.rbegin(); item != list_modules.rend() && ret; item++) {
 		ret = (*item)->CleanUp();
 	}
+
+	delete hardware;
+	hardware = nullptr;
 
 	return ret;
 }

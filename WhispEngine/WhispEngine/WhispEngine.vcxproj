@@ -23,6 +23,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="GPUdetect\DeviceId.cpp" />
+    <ClCompile Include="HardwareInfo.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
     <ClCompile Include="Imgui\imgui_draw.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GPUdetect\DeviceId.h" />
     <ClInclude Include="GPUdetect\dxgi1_4.h" />
+    <ClInclude Include="HardwareInfo.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
     <ClInclude Include="Imgui\imgui_impl_opengl3.h" />
