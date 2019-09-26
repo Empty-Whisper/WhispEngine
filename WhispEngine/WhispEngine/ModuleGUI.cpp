@@ -144,7 +144,7 @@ update_status ModuleGUI::Update()
 
 	if (show_demo_window)
 	{
-		ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow(&show_demo_window);
 	}
 
 	if (show_style_window)
