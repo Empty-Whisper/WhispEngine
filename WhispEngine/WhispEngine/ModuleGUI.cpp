@@ -4,6 +4,7 @@
 
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "GPUdetect/DeviceId.h"
 
 #include "Imgui/imgui.h"
 #include "Imgui/imgui_impl_sdl.h"
@@ -20,6 +21,7 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init()
 {
+	SDL_VERSION(&sdl_version);
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -173,7 +175,7 @@ bool ModuleGUI::MenuWindowAbout(bool* p_open)
 	if (ImGui::Begin("About Whisp Engine", p_open))
 	{
 		ImGui::Text("Version 0.1-alpha");
-		ImGui::Columns(1);
+		ImGui::Separator();
 		ImGui::NewLine();
 		ImGui::Text("By Christian Martínez @christt105 and Marc Gálvez @optus23 for learning purposes.");
 		ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
@@ -207,7 +209,8 @@ bool ModuleGUI::MenuWindowConsole(bool * p_open)
 	if (ImGui::Begin("Console", p_open))
 	{
 		ImGui::Text("------------- Welcome to Whisp Engine -------------");
-	
+		ImGui::Separator();
+
 	}
 	ImGui::End();
 	
@@ -223,12 +226,15 @@ bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
 		{
 			if (ImGui::MenuItem("Set Defaults"))
 			{
+				// TODO: Load Default data from JSON
 			}
 			if (ImGui::MenuItem("Load"))
 			{
+				// TODO: Load Saved data from JSON
 			}
 			if (ImGui::MenuItem("Save"))
 			{
+				// TODO: Save data from JSON
 			}
 			ImGui::End();
 		}
@@ -243,8 +249,8 @@ bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
 			}
 			ImGui::Text("Limit Framerate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", max_fps);
 
-			ImGui::Text("%f", App->GetDeltaTime()); ImGui::SameLine();
-			ImGui::Text("%f", App->GetDeltaTime());
+			//ImGui::Text("%f", App->prev_last_sec_frame_count);
+
 			FillVectorFPS();
 			char title[25];
 			sprintf_s(title, 25, "Framerate %.1f", fps_reg[fps_reg.size() - 1]);
@@ -252,15 +258,15 @@ bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
 			//TODO: MS graphic
 			//TODO: Memory Consumption graphic
 
-			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", total_reported_mem);
-			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", total_actual_mem);
-			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", peak_reported_mem);
-			ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", peak_actual_mem);
-			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", accumulated_reported_mem);
-			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", accumulated_actual_mem);
-			ImGui::Text("Accumulated Alloc Mem: "); ImGui::SameLine(); ImGui::Text("%i", accumulated_alloc_unit);
-			ImGui::Text("Total Alloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", total_alloc_unity_count);
-			ImGui::Text("PeakAlloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", peak_alloc_unit_count);
+			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.total_reported_mem);
+			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.total_actual_mem);
+			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.peak_reported_mem);
+			ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.peak_actual_mem);
+			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.accumulated_reported_mem);
+			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.accumulated_actual_mem);
+			ImGui::Text("Accumulated Alloc Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.accumulated_alloc_unit);
+			ImGui::Text("Total Alloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.total_alloc_unity_count);
+			ImGui::Text("PeakAlloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.peak_alloc_unit_count);
 
 
 		}
@@ -275,6 +281,25 @@ bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
+			std::string sdl_version_string = std::to_string(sdl_version.major) + "." + std::to_string(sdl_version.minor) + "." + std::to_string(sdl_version.patch);
+			ImGui::Text("SDL Version: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (sdl_version_string.c_str()));
+			ImGui::Separator();
+
+			std::string sdl_cpu_string = std::to_string(SDL_GetCPUCount()) + " (Cache: " + std::to_string(SDL_GetCPUCacheLineSize()) + "Kb)";
+			ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (sdl_cpu_string.c_str()));
+
+			std::string sdl_ram_string = std::to_string(SDL_GetSystemRAM()) + "Mb";
+			ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (sdl_ram_string.c_str()));
+
+			ImGui::Text("Caps: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, FindCapsHardware());
+			ImGui::Separator();
+
+			ImGui::Text("GPU: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "vendor %u device %u", hardware.gpu_vendor, hardware.gpu_device);
+			ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (hardware.gpu_brand));
+			ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", hardware.vram_mb_budget);
+			ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", hardware.vram_mb_usage);
+			ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", hardware.vram_mb_available);
+			ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", hardware.vram_mb_reserved);
 		}
 	}
 	ImGui::End();
@@ -287,9 +312,9 @@ bool ModuleGUI::FillVectorFPS()
 	bool ret = true;
 
 	static uint count = 0;
-	if (count == 100)
+	if (count >= MAX_FPS_COUNT)
 	{
-		for (uint i = 0; i < 100 - 1; ++i)
+		for (uint i = 0; i < MAX_FPS_COUNT - 1; ++i)
 		{
 			fps_reg[i] = fps_reg[i + 1];
 		}
@@ -299,12 +324,11 @@ bool ModuleGUI::FillVectorFPS()
 	else
 	{
 		++count;
-		if (fps_reg.size() < 100)
+		if (fps_reg.size() < MAX_FPS_COUNT)
 		{
-			for (uint i = 0; i < 100; ++i)
+			for (uint i = 0; i < MAX_FPS_COUNT; ++i)
 			{
 				fps_reg.push_back(i);
-				fps_reg[count - 1] = App->prev_last_sec_frame_count;
 			}
 		}
 	}
@@ -316,6 +340,51 @@ bool ModuleGUI::FillVectorMS()
 {
 	bool ret = true;
 	return ret;
+}
+
+bool ModuleGUI::FindVRAMHardware()
+{
+	bool ret = true;
+	Uint64 mb_budget, mb_usage, mb_available, mb_reserved;
+
+	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &mb_budget, &mb_usage, &mb_available, &mb_reserved))
+	{
+		hardware.vram_mb_budget = float(mb_budget) / (1024.f * 1024.f);
+		hardware.vram_mb_usage = float(mb_usage) / (1024.f * 1024.f);
+		hardware.vram_mb_available = float(mb_available) / (1024.f * 1024.f);
+		hardware.vram_mb_reserved = float(mb_reserved) / (1024.f * 1024.f);
+	}
+
+	return ret;
+}
+
+const char* FindCapsHardware()
+{
+	std::string caps;
+
+	if (SDL_Has3DNow())
+		caps.append("3DNow, ");
+	if (SDL_HasAVX())
+		caps.append("AVX, ");
+	if (SDL_HasAVX2())
+		caps.append("AVX2, ");
+	if (SDL_HasMMX())
+		caps.append("MMX, ");
+	if (SDL_HasRDTSC())
+		caps.append("RDTSC, ");
+	if (SDL_HasSSE())
+		caps.append("SSE, ");
+	if (SDL_HasSSE2())
+		caps.append("SSE2, ");
+	if (SDL_HasSSE3())
+		caps.append("SSE3, ");
+	if (SDL_HasSSE41())
+		caps.append("SSE41, ");
+	if (SDL_HasSSE42())
+		caps.append("SSE42, ");
+
+	return caps.c_str();
+
 }
 
 

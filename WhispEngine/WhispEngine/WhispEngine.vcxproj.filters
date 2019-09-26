@@ -201,6 +201,7 @@
     <ClCompile Include="PerfTimer.cpp">
       <Filter>Modules\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="GPUdetect\DeviceId.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -461,6 +462,8 @@
     <ClInclude Include="PerfTimer.h">
       <Filter>Modules\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="GPUdetect\DeviceId.h" />
+    <ClInclude Include="GPUdetect\dxgi1_4.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
