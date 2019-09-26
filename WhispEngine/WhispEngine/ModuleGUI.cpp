@@ -259,8 +259,13 @@ bool ModuleGUI::MenuWindowConfiguration()
 		}
 		if (ImGui::CollapsingHeader("Application"))
 		{
-			ImGui::InputText("App Name", TITLE, 0);
-			ImGui::InputText("Organitzation", ORGANIZATION, 0);
+			
+			if (ImGui::InputText("App Name", app_name, 30)) {
+				App->window->SetTitle(app_name);
+			}
+			if (ImGui::InputText("Organitzation", organization, 30)) {
+
+			}
 			
 			if (ImGui::SliderInt("Max FPS", &max_fps, 0, 120))
 			{
