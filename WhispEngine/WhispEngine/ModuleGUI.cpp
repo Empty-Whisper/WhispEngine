@@ -88,15 +88,15 @@ update_status ModuleGUI::Update()
 
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Console", "LShift+1"))
+			if (ImGui::MenuItem("Console", "LShift+1"), show_console_window)
 			{
 				show_console_window = !show_console_window;
 			}
-			if (ImGui::MenuItem("Configuration", "LShift+2"))
+			if (ImGui::MenuItem("Configuration", "LShift+2"), show_configuration_window)
 			{
 				show_configuration_window = !show_configuration_window;
 			}
-			if (ImGui::MenuItem("Style Editor", "LShift+3"))
+			if (ImGui::MenuItem("Style Editor", "LShift+3", show_style_window))
 			{
 				show_style_window = !show_style_window;
 			}
@@ -198,10 +198,14 @@ bool ModuleGUI::MenuWindowAbout()
 		ImGui::Text("By Christian Martínez @christt105 and Marc Gálvez @optus23 for learning purposes.");
 		ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
 		ImGui::NewLine();
+		if(ImGui::Button("Github @christ105")) 	ShellExecuteA(NULL, "open", "https://github.com/christt105", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::SameLine();
+		if(ImGui::Button("Github @optus23")) 	ShellExecuteA(NULL, "open", "https://github.com/optus23", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::NewLine();
 		ImGui::Checkbox("Show MIT LICENSE", &show_mit_license_window);
 		if (show_mit_license_window)
 		{
-			ImGui::SetWindowSize(ImVec2(580, 485));
+			ImGui::SetWindowSize(ImVec2(580, 530));
 			ImGui::NewLine(); ImGui::NewLine();
 			ImGui::Text("MIT LICENSE");	ImGui::NewLine();
 			ImGui::Text("Copyright (c) 2019 Empty-Whisper"); ImGui::NewLine();
@@ -212,7 +216,7 @@ bool ModuleGUI::MenuWindowAbout()
 		}
 		else
 		{
-			ImGui::SetWindowSize(ImVec2(580, 150));
+			ImGui::SetWindowSize(ImVec2(580, 200));
 		}
 			
 		
