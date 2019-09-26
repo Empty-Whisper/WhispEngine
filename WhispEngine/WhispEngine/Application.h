@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 #include "Timer.h"
+#include "PerfTimer.h"
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
@@ -22,10 +23,28 @@ public:
 	ModuleCamera3D* camera = nullptr;
 	ModuleGUI* gui = nullptr;
 
+public:
+
+	uint	frame_count = 0;
+	int		framerate_cap = 60;
+	bool	apply_cap_frames = true;
+	bool	pause_game = false;
+
+	uint	last_sec_frame_count = 0;
+	uint	prev_last_sec_frame_count = 0;
+
+
 private:
 
-	Timer	ms_timer;
-	float	dt;
+	bool    first_frame = true;
+	float	dt = 0.0f;
+
+	Timer		last_sec_frame_time;
+	PerfTimer   perfect_frame_time;
+	Timer		frame_time;
+	Timer		start_time;
+
+
 	std::list<Module*> list_modules;
 
 public:

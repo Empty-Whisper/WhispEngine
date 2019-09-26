@@ -25,6 +25,8 @@ Application::Application()
 
 	// Renderer last!
 	AddModule(renderer3D);
+
+	first_frame = true;
 }
 
 Application::~Application()
@@ -53,21 +55,51 @@ bool Application::Init()
 		ret = (*item)->Start();
 	}
 	
-	ms_timer.Start();
+	
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();
+	frame_count++;
+	last_sec_frame_count++;
+	/*ms_timer.Start();
+	dt = (float)ms_timer.Read() / 1000.0f;*/
+	if (pause_game)
+	{
+		dt = 0.0f;
+	}
+	else if (first_frame)
+	{
+		
+		dt = 1.0f / framerate_cap;
+	}
+	else
+	{
+		double framerate = 1000.00 / perfect_frame_time.ReadMs();
+
+		dt = 1.0f / framerate;
+
+		if (dt > 1.0f / (float)framerate_cap + 0.02f)
+		{
+			dt = 1.0f / (float)framerate_cap + 0.02f;
+		}
+	}
+
+	perfect_frame_time.Start();
+
+	// Change frame cap/Pause Game ========================================
+	if (input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+	{
+		apply_cap_frames = !apply_cap_frames;
+	}
+	if (input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+	{
+		pause_game = !pause_game;
+	}
 }
 
-// ---------------------------------------------
-void Application::FinishUpdate()
-{
-}
 
 float Application::GetDeltaTime()
 {
@@ -94,6 +126,38 @@ update_status Application::Update()
 
 	FinishUpdate();
 	return ret;
+}
+
+// ---------------------------------------------
+void Application::FinishUpdate()
+{
+
+	if (first_frame == true)
+	{
+		first_frame = false;
+	}
+
+	if (last_sec_frame_time.Read() >= 1000)
+	{
+		last_sec_frame_time.Start();
+		prev_last_sec_frame_count = last_sec_frame_count;
+		last_sec_frame_count = 0;
+	}
+
+	double last_frame_ms = perfect_frame_time.ReadMs();
+
+	if (!VSYNC && framerate_cap != 0 && apply_cap_frames)
+	{
+		
+		Uint32 frame_cap_ms = 1000.0F / (float)framerate_cap;
+
+		if (frame_cap_ms > last_frame_ms)
+		{
+			SDL_Delay((Uint32)frame_cap_ms - last_frame_ms);
+		}
+		else
+			SDL_Delay(frame_cap_ms - (Uint32)last_frame_ms % (Uint32)frame_cap_ms);
+	}
 }
 
 bool Application::CleanUp()
