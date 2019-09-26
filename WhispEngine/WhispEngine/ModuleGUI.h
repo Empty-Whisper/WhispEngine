@@ -58,7 +58,7 @@ private:
 	bool FillVectorFPS();
 	bool FillVectorMS();
 
-	const char* FindCapsHardware();
+	std::string ModuleGUI::FindCapsHardware();
 	bool FindVRAMHardware();
 
 private:

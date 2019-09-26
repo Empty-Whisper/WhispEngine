@@ -13,6 +13,20 @@
 
 ModuleGUI::ModuleGUI(Application * app, bool enable_true) :Module(app, enable_true)
 {
+	uint vendor_id, device_id;
+	Uint64 mp_buget, mb_usage, mb_available, vmb_reserved;
+	std::wstring brand;
+
+	if (getGraphicsDeviceInfo(&vendor_id, &device_id, &brand, &mp_buget, &mb_usage, &mb_available, &vmb_reserved))
+	{
+		hardware.gpu_vendor = vendor_id;
+		hardware.gpu_device = device_id;
+		sprintf_s(hardware.gpu_brand, 250, "%S", brand.c_str());
+		hardware.vram_mb_budget = float(mp_buget) / (1024.f * 1024.f);
+		hardware.vram_mb_usage = float(mb_usage) / (1024.f * 1024.f);
+		hardware.vram_mb_available = float(mb_available) / (1024.f * 1024.f);
+		hardware.vram_mb_reserved = float(vmb_reserved) / (1024.f * 1024.f);
+	}
 }
 
 ModuleGUI::~ModuleGUI()
@@ -291,9 +305,10 @@ bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
 			std::string sdl_ram_string = std::to_string(SDL_GetSystemRAM()) + "Mb";
 			ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (sdl_ram_string.c_str()));
 
-			ImGui::Text("Caps: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, FindCapsHardware());
+			ImGui::Text("Caps: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, FindCapsHardware().c_str());
 			ImGui::Separator();
 
+			FindVRAMHardware();
 			ImGui::Text("GPU: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "vendor %u device %u", hardware.gpu_vendor, hardware.gpu_device);
 			ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (hardware.gpu_brand));
 			ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", hardware.vram_mb_budget);
@@ -358,7 +373,7 @@ bool ModuleGUI::FindVRAMHardware()
 	return ret;
 }
 
-const char* FindCapsHardware()
+std::string ModuleGUI::FindCapsHardware()
 {
 	std::string caps;
 
