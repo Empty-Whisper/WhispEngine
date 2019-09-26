@@ -10,6 +10,11 @@
 #include "Imgui/imgui_impl_sdl.h"
 #include "Imgui/imgui_impl_opengl3.h"
 
+#include <fstream>
+#include <iomanip>
+
+#include "JSON/json.hpp"
+
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
@@ -18,6 +23,10 @@ ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 	uint vendor_id, device_id;
 	Uint64 mp_buget, mb_usage, mb_available, vmb_reserved;
 	std::wstring brand;
+
+	for (int i = 0; i < 100; ++i) {
+		ms_reg.push_back(0.0f);
+	}
 
 	if (getGraphicsDeviceInfo(&vendor_id, &device_id, &brand, &mp_buget, &mb_usage, &mb_available, &vmb_reserved))
 	{
@@ -91,19 +100,11 @@ update_status ModuleGUI::Update()
 		}
 
 		if (ImGui::BeginMenu("View"))
-		{
-			if (ImGui::MenuItem("Console", "LShift+1"))
-			{
-				show_console_window = !show_console_window;
-			}
-			if (ImGui::MenuItem("Configuration", "LShift+2"))
-			{
-				show_configuration_window = !show_configuration_window;
-			}
-			if (ImGui::MenuItem("Style Editor", "LShift+3", show_style_window))
-			{
-				show_style_window = !show_style_window;
-			}
+		{		
+			ImGui::MenuItem("Console", "LShift+1", &show_console_window);
+			ImGui::MenuItem("Configuration", "LShift+2", &show_configuration_window);
+			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
+			
 			ImGui::EndMenu();
 		}
 
@@ -256,11 +257,31 @@ bool ModuleGUI::MenuWindowConfiguration()
 			if (ImGui::MenuItem("Load"))
 			{
 				// TODO: Load Saved data from JSON
+				std::ifstream i ("configuration.json");
+				nlohmann::json l;
+				i >> l;
+
+				max_fps = App->framerate_cap = l["fps_cap"];
+				bright = l["window"]["brightness"];
+				SDL_SetWindowBrightness(App->window->window, bright);
 			}
 			if (ImGui::MenuItem("Save"))
 			{
 				// TODO: Save data from JSON
+				std::ofstream o("configuration.json");
 
+				nlohmann::json j;
+				j["app_name"] = app_name;
+				j["organization"] = organization;
+				j["fps_cap"] = App->framerate_cap;
+				j["vsync"] = VSYNC;
+				j["window"]["brightness"] = bright;
+				j["window"]["width"] = -1;
+				j["window"]["height"] = -1;
+
+				o << std::setw(4) << j << std::endl;
+				o.close();
+				
 			}
 			ImGui::End();
 		}
@@ -286,7 +307,12 @@ bool ModuleGUI::MenuWindowConfiguration()
 			char title[25];
 			sprintf_s(title, 25, "Framerate %.1f", fps_reg[fps_reg.size() - 1]);
 			ImGui::PlotHistogram("framerate", &fps_reg[0], fps_reg.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-			//TODO: MS graphic
+			//MS graphic
+			ms_reg.erase(ms_reg.begin());
+			ms_reg.push_back(1000.0f / App->prev_last_sec_frame_count);
+			
+			sprintf_s(title, 25, "Miliseconds %0.1f", ms_reg[ms_reg.size() - 1]);
+			ImGui::PlotHistogram("##miliseconds", &ms_reg[0], ms_reg.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 			//TODO: Memory Consumption graphic
 
 			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.total_reported_mem);
@@ -302,14 +328,21 @@ bool ModuleGUI::MenuWindowConfiguration()
 
 		}
 		if (ImGui::CollapsingHeader("Window"))
-		{		
-			
+		{	
 
-			if (ImGui::SliderInt("Width", &window_width, 640, 1920) || ImGui::SliderInt("Height", &window_height, 480, 1))
+			ImGui::Text("Icon:"); ImGui::SameLine(); ImGui::Text("*null*");
+
+			if (ImGui::SliderFloat("Brightness", &bright, 0.0f, 1.0f)) {
+				SDL_SetWindowBrightness(App->window->window, bright);
+			}
+			if (ImGui::SliderInt("Width", &window_width, 640, 1920) || ImGui::SliderInt("Height", &window_height, 480, 1080))
 			{ 
 				SDL_SetWindowSize(App->window->window, window_width, window_height);
 			}
 
+			SDL_DisplayMode display;
+			SDL_GetCurrentDisplayMode(NULL, &display);
+			ImGui::Text("Refresh rate:"); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, std::to_string(display.refresh_rate).data());
 
 
 			if (ImGui::Checkbox("Fullscreen", &checkbox_fullscreen_window))
@@ -344,10 +377,15 @@ bool ModuleGUI::MenuWindowConfiguration()
 				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_RESIZABLE);
 			}
 
-		}
+			
+			}
 		if (ImGui::CollapsingHeader("File System"))
 		{
 			// TODO: Wait for the next class indications
+			char path[100];
+			GetModuleFileNameA(NULL, path, 100);
+			ImGui::Text("Base Path:");
+			ImGui::TextColored(IMGUI_COLOR_YELLOW, path);
 		}
 		if (ImGui::CollapsingHeader("Input"))
 		{

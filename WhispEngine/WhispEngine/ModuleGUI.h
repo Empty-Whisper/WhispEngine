@@ -71,7 +71,7 @@ private:
 	bool show_style_window = false;
 	bool show_about_window = false;
 	bool show_console_window = true;
-	bool show_configuration_window = false;
+	bool show_configuration_window = true;
 
 	bool checkbox_mit_license_window = false;
 	bool checkbox_fullscreen_window = false;
@@ -88,6 +88,8 @@ private:
 	int max_fps = 0;
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
+
+	float bright = 1.0f;
 
 	Application_config config;
 	Gpu_detect hardware;
