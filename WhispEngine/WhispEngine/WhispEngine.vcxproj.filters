@@ -75,9 +75,6 @@
     <ClCompile Include="Light.cpp">
       <Filter>Modules\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="log.cpp">
-      <Filter>Modules\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Modules\Tools</Filter>
     </ClCompile>
@@ -205,6 +202,9 @@
     <ClCompile Include="HardwareInfo.cpp">
       <Filter>Modules\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Modules\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -227,9 +227,6 @@
     </ClInclude>
     <ClInclude Include="Imgui\imstb_truetype.h">
       <Filter>Modules\Tools\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Globals.h">
-      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Core</Filter>
@@ -468,6 +465,9 @@
     <ClInclude Include="GPUdetect\DeviceId.h" />
     <ClInclude Include="GPUdetect\dxgi1_4.h" />
     <ClInclude Include="HardwareInfo.h">
+      <Filter>Modules\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
       <Filter>Modules\Tools</Filter>
     </ClInclude>
   </ItemGroup>

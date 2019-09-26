@@ -39,7 +39,7 @@ struct Gpu_detect {
 
 class ModuleGUI :public Module {
 public:
-	ModuleGUI(Application* app, bool enable_true = true);
+	ModuleGUI(bool enable_true = true);
 	~ModuleGUI();
 
 public:
@@ -50,11 +50,15 @@ public:
 	update_status PostUpdate();
 
 	bool CleanUp();
+
+public:
+	void Log(const char* str);
+
 private:
 
-	bool MenuWindowAbout(bool* p_open);
-	bool MenuWindowConsole(bool* p_open);
-	bool MenuWindowConfiguration(bool* p_open);
+	bool MenuWindowAbout();
+	bool MenuWindowConsole();
+	bool MenuWindowConfiguration();
 
 	bool FillVectorFPS();
 	bool FillVectorMS();
@@ -67,7 +71,7 @@ private:
 	bool show_style_window = false;
 	bool show_about_window = false;
 	bool show_mit_license_window = false;
-	bool show_console_window = false;
+	bool show_console_window = true;
 	bool show_configuration_window = false;
 
 	int max_fps = 0;
@@ -78,6 +82,5 @@ private:
 	Gpu_detect hardware;
 	SDL_version sdl_version;
 
-
-
+	ImGuiTextBuffer buffer;
 };
