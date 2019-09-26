@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
-
+#include <vector>
+#define MAX_FPS_COUNT 120
 class ModuleGUI :public Module {
 public:
 	ModuleGUI(Application* app, bool enable_true = true);
@@ -20,6 +21,9 @@ private:
 	bool MenuWindowConsole(bool* p_open);
 	bool MenuWindowConfiguration(bool* p_open);
 
+	bool FillVectorFPS();
+	bool FillVectorMS();
+
 private:
 	bool show_demo_window = false;
 	bool show_style_window = false;
@@ -28,7 +32,11 @@ private:
 	bool show_console_window = false;
 	bool show_configuration_window = false;
 
-	int actual_fps = 0;
+	int max_fps = 0;
+	std::vector<float> ms_reg;
+	std::vector<float> fps_reg;
+
+
 	int total_reported_mem = 0;
 	int total_actual_mem = 0;
 	int peak_reported_mem = 0;

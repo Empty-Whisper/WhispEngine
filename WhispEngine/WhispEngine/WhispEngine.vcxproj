@@ -28,6 +28,7 @@
     <ClCompile Include="Imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -84,6 +85,7 @@
     <ClInclude Include="Imgui\imstb_rectpack.h" />
     <ClInclude Include="Imgui\imstb_textedit.h" />
     <ClInclude Include="Imgui\imstb_truetype.h" />
+    <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="JSON\json.hpp" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h" />

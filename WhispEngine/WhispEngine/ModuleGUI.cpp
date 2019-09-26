@@ -147,9 +147,6 @@ update_status ModuleGUI::Update()
 		
 	}
 	
-
-
-	
 	return ret;
 }
 
@@ -184,7 +181,7 @@ bool ModuleGUI::MenuWindowAbout(bool* p_open)
 		ImGui::Checkbox("Show MIT LICENSE", &show_mit_license_window);
 		if (show_mit_license_window)
 		{
-			ImGui::SetWindowSize(ImVec2(550, 485));
+			ImGui::SetWindowSize(ImVec2(580, 485));
 			ImGui::NewLine(); ImGui::NewLine();
 			ImGui::Text("MIT LICENSE");	ImGui::NewLine();
 			ImGui::Text("Copyright (c) 2019 Empty-Whisper"); ImGui::NewLine();
@@ -195,7 +192,7 @@ bool ModuleGUI::MenuWindowAbout(bool* p_open)
 		}
 		else
 		{
-			ImGui::SetWindowSize(ImVec2(550, 150));
+			ImGui::SetWindowSize(ImVec2(580, 150));
 		}
 			
 		
@@ -239,10 +236,20 @@ bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
 		{
 			ImGui::InputText("Whisp Engine", "App Name", 0);
 			ImGui::InputText("Empty Whisper", "Organitzation", 0);
-			ImGui::SliderInt("Max FPS", &actual_fps, 0, 120);
-			ImGui::Text("Limit Framerate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", actual_fps);
+			
+			if (ImGui::SliderInt("Max FPS", &max_fps, 0, 120))
+			{
+				App->framerate_cap = max_fps;
+			}
+			ImGui::Text("Limit Framerate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", max_fps);
 
-			//TODO: Frame rate graphic
+			ImGui::Text("%f", App->GetDeltaTime()); ImGui::SameLine();
+			ImGui::Text("%f", App->GetDeltaTime());
+			FillVectorFPS();
+			char title[25];
+			sprintf_s(title, 25, "Framerate %.1f", fps_reg[fps_reg.size() - 1]);
+			ImGui::PlotHistogram("framerate", &fps_reg[0], fps_reg.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+			//TODO: MS graphic
 			//TODO: Memory Consumption graphic
 
 			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", total_reported_mem);
@@ -274,4 +281,42 @@ bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
 
 	return ret;
 }
+
+bool ModuleGUI::FillVectorFPS()
+{
+	bool ret = true;
+
+	static uint count = 0;
+	if (count == 100)
+	{
+		for (uint i = 0; i < 100 - 1; ++i)
+		{
+			fps_reg[i] = fps_reg[i + 1];
+		}
+		fps_reg[count - 1] = App->prev_last_sec_frame_count;
+
+	}
+	else
+	{
+		++count;
+		if (fps_reg.size() < 100)
+		{
+			for (uint i = 0; i < 100; ++i)
+			{
+				fps_reg.push_back(i);
+				fps_reg[count - 1] = App->prev_last_sec_frame_count;
+			}
+		}
+	}
+
+	return ret;
+}
+
+bool ModuleGUI::FillVectorMS()
+{
+	bool ret = true;
+	return ret;
+}
+
+
 

@@ -198,6 +198,9 @@
     <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
       <Filter>Modules\Tools\Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="PerfTimer.cpp">
+      <Filter>Modules\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -454,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="JSON\json.hpp">
       <Filter>Modules\Tools\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="PerfTimer.h">
+      <Filter>Modules\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
