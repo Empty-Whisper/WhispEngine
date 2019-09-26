@@ -55,9 +55,9 @@ public:
 
 private:
 
-	bool MenuWindowAbout(bool* p_open);
-	bool MenuWindowConsole(bool* p_open);
-	bool MenuWindowConfiguration(bool* p_open);
+	bool MenuWindowAbout();
+	bool MenuWindowConsole();
+	bool MenuWindowConfiguration();
 
 	bool FillVectorFPS();
 	bool FillVectorMS();

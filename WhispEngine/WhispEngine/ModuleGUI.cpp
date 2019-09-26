@@ -134,12 +134,12 @@ update_status ModuleGUI::Update()
 	
 	if (show_console_window)
 	{
-		MenuWindowConsole(&show_console_window);
+		MenuWindowConsole();
 	}
 
 	if (show_configuration_window)
 	{
-		MenuWindowConfiguration(&show_configuration_window);
+		MenuWindowConfiguration();
 	}
 
 	if (show_demo_window)
@@ -158,9 +158,7 @@ update_status ModuleGUI::Update()
 
 	if (show_about_window)
 	{
-		MenuWindowAbout(&show_about_window);
-
-		
+		MenuWindowAbout();
 	}
 	
 	return ret;
@@ -188,10 +186,10 @@ void ModuleGUI::Log(const char * str)
 	buffer.appendf(str);
 }
 
-bool ModuleGUI::MenuWindowAbout(bool* p_open)
+bool ModuleGUI::MenuWindowAbout()
 {
 	bool ret = true;
-	if (ImGui::Begin("About Whisp Engine", p_open))
+	if (ImGui::Begin("About Whisp Engine"))
 	{
 		ImGui::Text("Version 0.1-alpha");
 		ImGui::Separator();
@@ -222,23 +220,23 @@ bool ModuleGUI::MenuWindowAbout(bool* p_open)
 	return ret;
 }
 
-bool ModuleGUI::MenuWindowConsole(bool * p_open)
+bool ModuleGUI::MenuWindowConsole()
 {
 	bool ret = true;
 
-	ImGui::Begin("Console");
+	ImGui::Begin("Console", &show_console_window);
 	ImGui::TextUnformatted(buffer.begin());
 	ImGui::End();
 	
 	return ret;
 }
 
-bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
+bool ModuleGUI::MenuWindowConfiguration()
 {
 	bool ret = true;
-	if (ImGui::Begin("Configuration", p_open, ImGuiWindowFlags_MenuBar))
+	if (ImGui::Begin("Configuration", &show_configuration_window, ImGuiWindowFlags_MenuBar))
 	{
-		if (ImGui::BeginMenu("Options", p_open))
+		if (ImGui::BeginMenu("Options"))
 		{
 			if (ImGui::MenuItem("Set Defaults"))
 			{
@@ -254,7 +252,7 @@ bool ModuleGUI::MenuWindowConfiguration(bool * p_open)
 			}
 			ImGui::End();
 		}
-		if (ImGui::CollapsingHeader("Appliction"))
+		if (ImGui::CollapsingHeader("Application"))
 		{
 			ImGui::InputText("Whisp Engine", "App Name", 0);
 			ImGui::InputText("Empty Whisper", "Organitzation", 0);
