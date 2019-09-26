@@ -1,5 +1,6 @@
 #pragma once
 #include "Module.h"
+#include "imgui/imgui.h"
 #include <vector>
 #define MAX_FPS_COUNT 120
 
@@ -76,6 +77,7 @@ private:
 	Application_config config;
 	Gpu_detect hardware;
 	SDL_version sdl_version;
+
 
 
 };

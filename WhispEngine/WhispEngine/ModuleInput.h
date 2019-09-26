@@ -1,6 +1,9 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "imgui/imgui.h"
+
+#include <vector>
 
 #define MAX_MOUSE_BUTTONS 5
 
@@ -57,6 +60,13 @@ public:
 	{
 		return mouse_y_motion;
 	}
+	
+	int GetMouseWheel() const
+	{
+		return mouse_z;
+	}
+
+
 
 private:
 	KEY_STATE* keyboard;
@@ -66,5 +76,10 @@ private:
 	int mouse_z;
 	int mouse_x_motion;
 	int mouse_y_motion;
-	//int mouse_z_motion;
+
+public:
+	ImGuiTextBuffer text_buffer;
+	void GetTextBuffer(std::string key, int key_num, std::string key_state);
+
+
 };
