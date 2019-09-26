@@ -74,6 +74,9 @@ private:
 	bool show_console_window = true;
 	bool show_configuration_window = false;
 
+	char app_name[30] = TITLE;
+	char organization[30] = ORGANIZATION;
+
 	int max_fps = 0;
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
