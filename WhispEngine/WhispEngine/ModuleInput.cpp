@@ -3,8 +3,10 @@
 #include "ModuleInput.h"
 #include "Imgui/imgui.h"
 #include "Imgui/imgui_impl_sdl.h"
+#include "Imgui/imgui_impl_opengl3.h"
 
 #define MAX_KEYS 300
+
 
 ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 {
@@ -46,15 +48,25 @@ update_status ModuleInput::PreUpdate()
 	{
 		if(keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
+			if (keyboard[i] == KEY_IDLE)
+			{
 				keyboard[i] = KEY_DOWN;
+				GetTextBuffer("Keybr", i, "KEY_DOWN");
+				GetTextBuffer("Keybr", i, "KEY_REPEAT");
+				
+			}
 			else
 				keyboard[i] = KEY_REPEAT;
 		}
 		else
 		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			{
 				keyboard[i] = KEY_UP;
+				GetTextBuffer("Keybr", i, "KEY_UP");
+			}
+
+			
 			else
 				keyboard[i] = KEY_IDLE;
 		}
@@ -70,15 +82,23 @@ update_status ModuleInput::PreUpdate()
 	{
 		if(buttons & SDL_BUTTON(i))
 		{
-			if(mouse_buttons[i] == KEY_IDLE)
+			if (mouse_buttons[i] == KEY_IDLE)
+			{
 				mouse_buttons[i] = KEY_DOWN;
+				GetTextBuffer("Mouse", i, "KEY_DOWN");
+			}
 			else
 				mouse_buttons[i] = KEY_REPEAT;
+			
 		}
 		else
 		{
-			if(mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
+			if (mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
+			{
 				mouse_buttons[i] = KEY_UP;
+				GetTextBuffer("Mouse", i, "KEY_UP");
+			}
+
 			else
 				mouse_buttons[i] = KEY_IDLE;
 		}
@@ -130,3 +150,10 @@ bool ModuleInput::CleanUp()
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }
+
+void ModuleInput::GetTextBuffer(std::string key, int key_num, std::string key_state)
+{
+	std::string text = key + ": " + std::to_string(key_num) + " - " + key_state + "\n";
+	this->text_buffer.appendf(text.c_str());
+}
+

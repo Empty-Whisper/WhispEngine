@@ -291,12 +291,24 @@ bool ModuleGUI::MenuWindowConfiguration()
 		}
 		if (ImGui::CollapsingHeader("Window"))
 		{		
+
 		}
 		if (ImGui::CollapsingHeader("File System"))
 		{
+			// TODO: Wait for the next class indications
 		}
 		if (ImGui::CollapsingHeader("Input"))
 		{
+			ImGui::Text("Mouse Position: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW,"%i, %i", App->input->GetMouseX(), App->input->GetMouseY());
+			ImGui::Text("Mouse Motion: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%i,%i", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+			ImGui::Text("Mouse Wheel: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%i", App->input->GetMouseWheel());
+			ImGui::Separator();
+
+			ImGui::BeginChild("Buffer");
+			ImGui::TextUnformatted(App->input->text_buffer.begin());
+			ImGui::EndChild();
+
+				
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
@@ -374,9 +386,11 @@ bool ModuleGUI::FindVRAMHardware()
 		hardware.vram_mb_available = float(mb_available) / (1024.f * 1024.f);
 		hardware.vram_mb_reserved = float(mb_reserved) / (1024.f * 1024.f);
 	}
-
+	
 	return ret;
 }
+
+
 
 std::string ModuleGUI::FindCapsHardware()
 {

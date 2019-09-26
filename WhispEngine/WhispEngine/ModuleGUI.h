@@ -1,5 +1,6 @@
 #pragma once
 #include "Module.h"
+#include "imgui/imgui.h"
 #include <vector>
 #define MAX_FPS_COUNT 120
 
