@@ -10,6 +10,11 @@
 #include "Imgui/imgui_impl_sdl.h"
 #include "Imgui/imgui_impl_opengl3.h"
 
+#include <fstream>
+#include <iomanip>
+
+#include "JSON/json.hpp"
+
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
@@ -92,18 +97,10 @@ update_status ModuleGUI::Update()
 
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Console", "LShift+1"), show_console_window)
-			{
-				show_console_window = !show_console_window;
-			}
-			if (ImGui::MenuItem("Configuration", "LShift+2"), show_configuration_window)
-			{
-				show_configuration_window = !show_configuration_window;
-			}
-			if (ImGui::MenuItem("Style Editor", "LShift+3", show_style_window))
-			{
-				show_style_window = !show_style_window;
-			}
+			ImGui::MenuItem("Console", "LShift+1", &show_console_window);
+			ImGui::MenuItem("Configuration", "LShift+2", &show_configuration_window);
+			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
+			
 			ImGui::EndMenu();
 		}
 
@@ -261,7 +258,20 @@ bool ModuleGUI::MenuWindowConfiguration()
 			if (ImGui::MenuItem("Save"))
 			{
 				// TODO: Save data from JSON
+				std::ofstream o("configuration.json");
 
+				nlohmann::json j;
+				j["app_name"] = app_name;
+				j["organization"] = organization;
+				j["fps_cap"] = App->framerate_cap;
+				j["vsync"] = VSYNC;
+				j["window"]["brightness"] = bright;
+				j["window"]["width"] = -1;
+				j["window"]["height"] = -1;
+
+				o << std::setw(4) << j << std::endl;
+				o.close();
+				
 			}
 			ImGui::End();
 		}
@@ -309,11 +319,21 @@ bool ModuleGUI::MenuWindowConfiguration()
 		}
 		if (ImGui::CollapsingHeader("Window"))
 		{		
-
+			ImGui::Text("Icon:"); ImGui::SameLine(); ImGui::Text("*null*");
+			if (ImGui::SliderFloat("Brightness", &bright, 0.0f, 1.0f)) {
+				SDL_SetWindowBrightness(App->window->window, bright);
+			}
+			SDL_DisplayMode display;
+			SDL_GetCurrentDisplayMode(NULL, &display);
+			ImGui::Text("Refresh rate:"); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, std::to_string(display.refresh_rate).data());
 		}
 		if (ImGui::CollapsingHeader("File System"))
 		{
 			// TODO: Wait for the next class indications
+			char path[100];
+			GetModuleFileNameA(NULL, path, 100);
+			ImGui::Text("Base Path:");
+			ImGui::TextColored(IMGUI_COLOR_YELLOW, path);
 		}
 		if (ImGui::CollapsingHeader("Input"))
 		{
