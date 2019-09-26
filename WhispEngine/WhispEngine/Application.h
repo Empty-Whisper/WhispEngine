@@ -46,8 +46,9 @@ private:
 	Timer		frame_time;
 	Timer		start_time;
 
-
 	std::list<Module*> list_modules;
+
+	std::string log_buff;
 
 public:
 
@@ -59,6 +60,8 @@ public:
 	bool CleanUp();
 
 	float GetDeltaTime();
+	void Log(const char*);
+	void SaveLogFile();
 
 	HardwareInfo *hardware = nullptr;
 
@@ -68,3 +71,5 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
+
+extern Application* App;

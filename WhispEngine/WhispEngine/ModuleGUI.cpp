@@ -11,7 +11,7 @@
 #include "Imgui/imgui_impl_opengl3.h"
 
 
-ModuleGUI::ModuleGUI(Application * app, bool enable_true) :Module(app, enable_true)
+ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
 	uint vendor_id, device_id;
 	Uint64 mp_buget, mb_usage, mb_available, vmb_reserved;
@@ -183,6 +183,11 @@ bool ModuleGUI::CleanUp() {
 	return true;
 }
 
+void ModuleGUI::Log(const char * str)
+{
+	buffer.appendf(str);
+}
+
 bool ModuleGUI::MenuWindowAbout(bool* p_open)
 {
 	bool ret = true;
@@ -220,12 +225,9 @@ bool ModuleGUI::MenuWindowAbout(bool* p_open)
 bool ModuleGUI::MenuWindowConsole(bool * p_open)
 {
 	bool ret = true;
-	if (ImGui::Begin("Console", p_open))
-	{
-		ImGui::Text("------------- Welcome to Whisp Engine -------------");
-		ImGui::Separator();
 
-	}
+	ImGui::Begin("Console");
+	ImGui::TextUnformatted(buffer.begin());
 	ImGui::End();
 	
 	return ret;

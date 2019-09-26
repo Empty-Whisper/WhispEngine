@@ -1,5 +1,7 @@
 #include "Application.h"
 
+#include <fstream>
+
 Application::Application()
 {
 	window = new ModuleWindow(this);
@@ -106,6 +108,20 @@ void Application::PrepareUpdate()
 float Application::GetDeltaTime()
 {
 	return dt;
+}
+
+void Application::Log(const char * str)
+{
+	log_buff.append(str); //Save log data to export in txt when Engine close
+
+	gui->Log(str); //Send to Console log engine
+}
+
+void Application::SaveLogFile()
+{
+	std::ofstream log_output("Log.log");
+	log_output << log_buff;
+	log_output.close();
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
