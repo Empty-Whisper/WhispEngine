@@ -184,6 +184,7 @@ bool ModuleGUI::CleanUp() {
 void ModuleGUI::Log(const char * str)
 {
 	buffer.appendf(str);
+	log_new_line = true;
 }
 
 bool ModuleGUI::MenuWindowAbout()
@@ -226,6 +227,9 @@ bool ModuleGUI::MenuWindowConsole()
 
 	ImGui::Begin("Console", &show_console_window);
 	ImGui::TextUnformatted(buffer.begin());
+	if (log_new_line)
+		ImGui::SetScrollHereY(1.0f);
+	log_new_line = false;
 	ImGui::End();
 	
 	return ret;
@@ -249,13 +253,14 @@ bool ModuleGUI::MenuWindowConfiguration()
 			if (ImGui::MenuItem("Save"))
 			{
 				// TODO: Save data from JSON
+
 			}
 			ImGui::End();
 		}
 		if (ImGui::CollapsingHeader("Application"))
 		{
-			ImGui::InputText("Whisp Engine", "App Name", 0);
-			ImGui::InputText("Empty Whisper", "Organitzation", 0);
+			ImGui::InputText("App Name", TITLE, 0);
+			ImGui::InputText("Organitzation", ORGANIZATION, 0);
 			
 			if (ImGui::SliderInt("Max FPS", &max_fps, 0, 120))
 			{
