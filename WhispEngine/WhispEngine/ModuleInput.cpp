@@ -86,6 +86,7 @@ update_status ModuleInput::PreUpdate()
 			{
 				mouse_buttons[i] = KEY_DOWN;
 				GetTextBuffer("Mouse", i, "KEY_DOWN");
+				GetTextBuffer("Keybr", i, "KEY_REPEAT");
 			}
 			else
 				mouse_buttons[i] = KEY_REPEAT;
@@ -155,5 +156,6 @@ void ModuleInput::GetTextBuffer(std::string key, int key_num, std::string key_st
 {
 	std::string text = key + ": " + std::to_string(key_num) + " - " + key_state + "\n";
 	this->text_buffer.appendf(text.c_str());
+	auto_scroll = true;
 }
 

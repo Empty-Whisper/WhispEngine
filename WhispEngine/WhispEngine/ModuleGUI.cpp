@@ -301,6 +301,11 @@ bool ModuleGUI::MenuWindowConfiguration()
 
 			ImGui::BeginChild("Buffer");
 			ImGui::TextUnformatted(App->input->text_buffer.begin());
+			if (App->input->auto_scroll)
+			{
+				ImGui::SetScrollHereY(1.0f);
+				App->input->auto_scroll = false;
+			}
 			ImGui::EndChild();
 
 				

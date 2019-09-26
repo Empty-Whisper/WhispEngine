@@ -80,6 +80,6 @@ private:
 public:
 	ImGuiTextBuffer text_buffer;
 	void GetTextBuffer(std::string key, int key_num, std::string key_state);
-
+	bool auto_scroll = false;
 
 };
