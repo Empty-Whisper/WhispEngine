@@ -13,6 +13,8 @@
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
+	
+
 	uint vendor_id, device_id;
 	Uint64 mp_buget, mb_usage, mb_available, vmb_reserved;
 	std::wstring brand;
@@ -42,8 +44,10 @@ bool ModuleGUI::Init()
 	
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION));
-
 	ImGui::StyleColorsDark();
+
+	window_width = App->window->screen_width;
+	window_height = App->window->screen_height;
 
 	return true;
 }
@@ -88,11 +92,11 @@ update_status ModuleGUI::Update()
 
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Console", "LShift+1"), show_console_window)
+			if (ImGui::MenuItem("Console", "LShift+1"))
 			{
 				show_console_window = !show_console_window;
 			}
-			if (ImGui::MenuItem("Configuration", "LShift+2"), show_configuration_window)
+			if (ImGui::MenuItem("Configuration", "LShift+2"))
 			{
 				show_configuration_window = !show_configuration_window;
 			}
@@ -202,8 +206,8 @@ bool ModuleGUI::MenuWindowAbout()
 		ImGui::SameLine();
 		if(ImGui::Button("Github @optus23")) 	ShellExecuteA(NULL, "open", "https://github.com/optus23", NULL, NULL, SW_SHOWNORMAL);
 		ImGui::NewLine();
-		ImGui::Checkbox("Show MIT LICENSE", &show_mit_license_window);
-		if (show_mit_license_window)
+		ImGui::Checkbox("Show MIT LICENSE", &checkbox_mit_license_window);
+		if (checkbox_mit_license_window)
 		{
 			ImGui::SetWindowSize(ImVec2(580, 530));
 			ImGui::NewLine(); ImGui::NewLine();
@@ -212,7 +216,6 @@ bool ModuleGUI::MenuWindowAbout()
 			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files(the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :"); ImGui::NewLine();
 			ImGui::Text("The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software."); ImGui::NewLine();
 			ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE."); ImGui::NewLine();
-
 		}
 		else
 		{
@@ -300,6 +303,46 @@ bool ModuleGUI::MenuWindowConfiguration()
 		}
 		if (ImGui::CollapsingHeader("Window"))
 		{		
+			
+
+			if (ImGui::SliderInt("Width", &window_width, 640, 1920) || ImGui::SliderInt("Height", &window_height, 480, 1))
+			{ 
+				SDL_SetWindowSize(App->window->window, window_width, window_height);
+			}
+
+
+
+			if (ImGui::Checkbox("Fullscreen", &checkbox_fullscreen_window))
+			{
+				if (checkbox_fulldesktop_window)
+					checkbox_fulldesktop_window = false;
+
+				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN);
+			}						
+			else if (ImGui::Checkbox("Full Desktop", &checkbox_fulldesktop_window))
+			{
+				if (checkbox_fullscreen_window)
+					checkbox_fullscreen_window = false;
+
+				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			}
+			else if (ImGui::Checkbox("Bordeless", &checkbox_borderless_window))
+			{
+				if (!checkbox_fullscreen_window && !checkbox_fulldesktop_window)
+					SDL_SetWindowBordered(App->window->window, (SDL_bool)!checkbox_borderless_window);
+				else
+					checkbox_borderless_window = false;
+			}
+			else if (ImGui::Checkbox("Resizable", &checkbox_resizable_window))
+			{
+				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_RESIZABLE);
+				checkbox_fullscreen_window = checkbox_fulldesktop_window = checkbox_borderless_window = false;
+				SDL_SetWindowBordered(App->window->window, (SDL_bool)!checkbox_borderless_window);
+			}
+			else if(!checkbox_fullscreen_window && !checkbox_fulldesktop_window)
+			{
+				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_RESIZABLE);
+			}
 
 		}
 		if (ImGui::CollapsingHeader("File System"))

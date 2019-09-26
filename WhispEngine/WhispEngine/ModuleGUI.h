@@ -70,9 +70,17 @@ private:
 	bool show_demo_window = false;
 	bool show_style_window = false;
 	bool show_about_window = false;
-	bool show_mit_license_window = false;
 	bool show_console_window = true;
 	bool show_configuration_window = false;
+
+	bool checkbox_mit_license_window = false;
+	bool checkbox_fullscreen_window = false;
+	bool checkbox_borderless_window = false;
+	bool checkbox_fulldesktop_window = false;
+	bool checkbox_resizable_window = false;
+
+	int window_width = 0;
+	int window_height = 0;
 
 	char app_name[30] = TITLE;
 	char organization[30] = ORGANIZATION;
