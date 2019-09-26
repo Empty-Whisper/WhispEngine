@@ -17,6 +17,10 @@ ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 	Uint64 mp_buget, mb_usage, mb_available, vmb_reserved;
 	std::wstring brand;
 
+	for (int i = 0; i < 100; ++i) {
+		ms_reg.push_back(0.0f);
+	}
+
 	if (getGraphicsDeviceInfo(&vendor_id, &device_id, &brand, &mp_buget, &mb_usage, &mb_available, &vmb_reserved))
 	{
 		hardware.gpu_vendor = vendor_id;
@@ -279,7 +283,12 @@ bool ModuleGUI::MenuWindowConfiguration()
 			char title[25];
 			sprintf_s(title, 25, "Framerate %.1f", fps_reg[fps_reg.size() - 1]);
 			ImGui::PlotHistogram("framerate", &fps_reg[0], fps_reg.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-			//TODO: MS graphic
+			//MS graphic
+			ms_reg.erase(ms_reg.begin());
+			ms_reg.push_back(1000.0f / App->prev_last_sec_frame_count);
+			
+			sprintf_s(title, 25, "Miliseconds %0.1f", ms_reg[ms_reg.size() - 1]);
+			ImGui::PlotHistogram("##miliseconds", &ms_reg[0], ms_reg.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 			//TODO: Memory Consumption graphic
 
 			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.total_reported_mem);

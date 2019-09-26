@@ -68,8 +68,6 @@ void Application::PrepareUpdate()
 {
 	frame_count++;
 	last_sec_frame_count++;
-	/*ms_timer.Start();
-	dt = (float)ms_timer.Read() / 1000.0f;*/
 	if (pause_game)
 	{
 		dt = 0.0f;
@@ -162,7 +160,7 @@ void Application::FinishUpdate()
 		last_sec_frame_count = 0;
 	}
 
-	double last_frame_ms = perfect_frame_time.ReadMs();
+	last_frame_ms = perfect_frame_time.ReadMs();
 
 	if (!VSYNC && framerate_cap != 0 && apply_cap_frames)
 	{

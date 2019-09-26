@@ -34,6 +34,7 @@ public:
 
 	uint	last_sec_frame_count = 0;
 	uint	prev_last_sec_frame_count = 0;
+	double last_frame_ms = 0;
 
 
 private:
