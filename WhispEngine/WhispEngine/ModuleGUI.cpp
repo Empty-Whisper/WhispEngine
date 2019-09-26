@@ -254,6 +254,13 @@ bool ModuleGUI::MenuWindowConfiguration()
 			if (ImGui::MenuItem("Load"))
 			{
 				// TODO: Load Saved data from JSON
+				std::ifstream i ("configuration.json");
+				nlohmann::json l;
+				i >> l;
+
+				max_fps = App->framerate_cap = l["fps_cap"];
+				bright = l["window"]["brightness"];
+				SDL_SetWindowBrightness(App->window->window, bright);
 			}
 			if (ImGui::MenuItem("Save"))
 			{
