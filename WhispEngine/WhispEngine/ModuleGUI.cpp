@@ -351,28 +351,28 @@ bool ModuleGUI::MenuWindowConfiguration()
 					checkbox_fulldesktop_window = false;
 
 				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN);
-			}						
-			else if (ImGui::Checkbox("Full Desktop", &checkbox_fulldesktop_window))
-			{
-				if (checkbox_fullscreen_window)
-					checkbox_fullscreen_window = false;
-
-				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-			}
-			else if (ImGui::Checkbox("Bordeless", &checkbox_borderless_window))
+			}									
+			if (ImGui::Checkbox("Bordeless", &checkbox_borderless_window))
 			{
 				if (!checkbox_fullscreen_window && !checkbox_fulldesktop_window)
 					SDL_SetWindowBordered(App->window->window, (SDL_bool)!checkbox_borderless_window);
 				else
 					checkbox_borderless_window = false;
 			}
-			else if (ImGui::Checkbox("Resizable", &checkbox_resizable_window))
+			if (ImGui::Checkbox("Full Desktop", &checkbox_fulldesktop_window))
+			{
+				if (checkbox_fullscreen_window)
+					checkbox_fullscreen_window = false;
+
+				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			}
+			if (ImGui::Checkbox("Resizable", &checkbox_resizable_window))
 			{
 				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_RESIZABLE);
 				checkbox_fullscreen_window = checkbox_fulldesktop_window = checkbox_borderless_window = false;
 				SDL_SetWindowBordered(App->window->window, (SDL_bool)!checkbox_borderless_window);
 			}
-			else if(!checkbox_fullscreen_window && !checkbox_fulldesktop_window)
+			if(!checkbox_fullscreen_window && !checkbox_fulldesktop_window)
 			{
 				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_RESIZABLE);
 			}
