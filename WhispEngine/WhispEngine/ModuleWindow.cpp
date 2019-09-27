@@ -6,8 +6,8 @@ ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 	window = NULL;
 	screen_surface = NULL;
 
-	screen_width = SCREEN_WIDTH;
-	screen_height = SCREEN_HEIGHT;
+	screen_width = SCREEN_WIDTH * SCREEN_SIZE;
+	screen_height = SCREEN_HEIGHT * SCREEN_SIZE;
 
 }
 
