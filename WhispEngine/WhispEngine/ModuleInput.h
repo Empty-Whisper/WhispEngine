@@ -31,6 +31,16 @@ public:
 		return keyboard[id];
 	}
 
+	bool GetKeyDown(int id) const
+	{
+		return keyboard[id] == KEY_DOWN;
+	}
+
+	bool GetKeyUp(int id) const
+	{
+		return keyboard[id] == KEY_UP;
+	}
+
 	KEY_STATE GetMouseButton(int id) const
 	{
 		return mouse_buttons[id];

@@ -69,15 +69,15 @@ update_status ModuleGUI::PreUpdate()
 	ImGui::NewFrame();
 
 	//  Input Shortcut Keys
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_1) == KEY_STATE::KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_1))
 	{
 		show_console_window = !show_console_window;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_2) == KEY_STATE::KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_2))
 	{
 		show_configuration_window = !show_configuration_window;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_3) == KEY_STATE::KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_3))
 	{
 		show_style_window = !show_style_window;
 	}
@@ -195,7 +195,7 @@ void ModuleGUI::Log(const char * str)
 bool ModuleGUI::MenuWindowAbout()
 {
 	bool ret = true;
-	if (ImGui::Begin("About Whisp Engine"))
+	if (ImGui::Begin("About Whisp Engine", &show_about_window))
 	{
 		ImGui::Text("Version 0.1-alpha");
 		ImGui::Separator();
