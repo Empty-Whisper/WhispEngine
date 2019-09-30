@@ -23,7 +23,6 @@ void PanelConfiguration::Update()
 {
 	if (ImGui::Begin(name.data(), &active, ImGuiWindowFlags_MenuBar))
 	{
-	
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("Options")) {

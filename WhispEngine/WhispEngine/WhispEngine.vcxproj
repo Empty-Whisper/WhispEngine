@@ -33,6 +33,7 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
     <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfiguration.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="mmgr\mmgr.h" />
     <ClInclude Include="mmgr\nommgr.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PanelConfiguration.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="JSON\json.hpp" />
@@ -186,7 +188,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A5B79842-0622-425A-B0F7-D5932562E996}</ProjectGuid>
     <RootNamespace>WhispEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
