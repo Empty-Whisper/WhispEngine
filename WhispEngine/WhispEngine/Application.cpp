@@ -111,7 +111,7 @@ float Application::GetDeltaTime()
 
 const char * Application::GetLog()
 {
-	return nullptr/*log_buff.data()*/;
+	return log_buff.data();
 }
 
 void Application::Log(const char * str)

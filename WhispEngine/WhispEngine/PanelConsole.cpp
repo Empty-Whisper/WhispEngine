@@ -6,7 +6,7 @@
 PanelConsole::PanelConsole(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	:Panel("Console", start_active, shortcut1, shortcut2, shortcut3)
 {
-	//Log(App->GetLog());
+	Log(App->GetLog());
 }
 
 
