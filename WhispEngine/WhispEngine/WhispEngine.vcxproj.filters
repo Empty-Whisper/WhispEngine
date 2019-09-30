@@ -43,6 +43,12 @@
     <Filter Include="Modules\Tools\JSON">
       <UniqueIdentifier>{748397e5-3a07-4cc8-b0ac-f9b2cf12037d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules\Tools\DeviceId">
+      <UniqueIdentifier>{d2865dab-1235-4788-b7bc-a2dffd4d5c6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Tools\mmgr">
+      <UniqueIdentifier>{684fb54f-213d-45da-b830-2c58c0839b5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -198,12 +204,17 @@
     <ClCompile Include="PerfTimer.cpp">
       <Filter>Modules\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="GPUdetect\DeviceId.cpp" />
     <ClCompile Include="HardwareInfo.cpp">
       <Filter>Modules\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Globals.cpp">
       <Filter>Modules\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUdetect\DeviceId.cpp">
+      <Filter>Modules\Tools\DeviceId</Filter>
+    </ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>Modules\Tools\mmgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -462,13 +473,23 @@
     <ClInclude Include="PerfTimer.h">
       <Filter>Modules\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="GPUdetect\DeviceId.h" />
-    <ClInclude Include="GPUdetect\dxgi1_4.h" />
     <ClInclude Include="HardwareInfo.h">
       <Filter>Modules\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Globals.h">
       <Filter>Modules\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUdetect\dxgi1_4.h">
+      <Filter>Modules\Tools\DeviceId</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUdetect\DeviceId.h">
+      <Filter>Modules\Tools\DeviceId</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>Modules\Tools\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>Modules\Tools\mmgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

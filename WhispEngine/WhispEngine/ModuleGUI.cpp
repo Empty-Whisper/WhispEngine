@@ -1,42 +1,24 @@
+#include <fstream>
+#include <iomanip>
+
 #include "Application.h"
 #include "Globals.h"
 #include "ModuleGUI.h"
 
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
-#include "GPUdetect/DeviceId.h"
 
 #include "Imgui/imgui.h"
 #include "Imgui/imgui_impl_sdl.h"
 #include "Imgui/imgui_impl_opengl3.h"
-
-#include <fstream>
-#include <iomanip>
 
 #include "JSON/json.hpp"
 
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
-	
-
-	uint vendor_id, device_id;
-	Uint64 mp_buget, mb_usage, mb_available, vmb_reserved;
-	std::wstring brand;
-
 	for (int i = 0; i < 100; ++i) {
 		ms_reg.push_back(0.0f);
-	}
-
-	if (getGraphicsDeviceInfo(&vendor_id, &device_id, &brand, &mp_buget, &mb_usage, &mb_available, &vmb_reserved))
-	{
-		hardware.gpu_vendor = vendor_id;
-		hardware.gpu_device = device_id;
-		sprintf_s(hardware.gpu_brand, 250, "%S", brand.c_str());
-		hardware.vram_mb_budget = float(mp_buget) / (1024.f * 1024.f);
-		hardware.vram_mb_usage = float(mb_usage) / (1024.f * 1024.f);
-		hardware.vram_mb_available = float(mb_available) / (1024.f * 1024.f);
-		hardware.vram_mb_reserved = float(vmb_reserved) / (1024.f * 1024.f);
 	}
 }
 
@@ -46,7 +28,6 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init()
 {
-	SDL_VERSION(&sdl_version);
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -315,15 +296,16 @@ bool ModuleGUI::MenuWindowConfiguration()
 			ImGui::PlotHistogram("##miliseconds", &ms_reg[0], ms_reg.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 			//TODO: Memory Consumption graphic
 
-			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.total_reported_mem);
-			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.total_actual_mem);
-			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.peak_reported_mem);
-			ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.peak_actual_mem);
-			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.accumulated_reported_mem);
-			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.accumulated_actual_mem);
-			ImGui::Text("Accumulated Alloc Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.accumulated_alloc_unit);
-			ImGui::Text("Total Alloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.total_alloc_unity_count);
-			ImGui::Text("PeakAlloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", config.peak_alloc_unit_count);
+			App->hardware->UpdateMemory();
+			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_reported_mem);
+			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_actual_mem);
+			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.peak_reported_mem);
+			ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.peak_actual_mem);
+			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.accumulated_reported_mem);
+			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.accumulated_actual_mem);
+			ImGui::Text("Accumulated Alloc Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.accumulated_alloc_unit);
+			ImGui::Text("Total Alloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_alloc_unity_count);
+			ImGui::Text("PeakAlloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.peak_alloc_unit_count);
 
 
 		}
@@ -407,8 +389,8 @@ bool ModuleGUI::MenuWindowConfiguration()
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
-			std::string sdl_version_string = std::to_string(sdl_version.major) + "." + std::to_string(sdl_version.minor) + "." + std::to_string(sdl_version.patch);
-			ImGui::Text("SDL Version: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (sdl_version_string.c_str()));
+			ImGui::Text("SDL Version: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, App->hardware->GetSDLVersion());
+			ImGui::Text("OpenGL Version: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, App->hardware->GetOpenGLVersion());
 			ImGui::Separator();
 
 			std::string sdl_cpu_string = std::to_string(SDL_GetCPUCount()) + " (Cache: " + std::to_string(SDL_GetCPUCacheLineSize()) + "Kb)";
@@ -417,16 +399,16 @@ bool ModuleGUI::MenuWindowConfiguration()
 			std::string sdl_ram_string = std::to_string(SDL_GetSystemRAM()) + "Mb";
 			ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (sdl_ram_string.c_str()));
 
-			ImGui::Text("Caps: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, FindCapsHardware().c_str());
+			ImGui::Text("Caps: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, App->hardware->GetCapsHardware());
 			ImGui::Separator();
 
-			FindVRAMHardware();
-			ImGui::Text("GPU: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "vendor %u device %u", hardware.gpu_vendor, hardware.gpu_device);
-			ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (hardware.gpu_brand));
-			ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", hardware.vram_mb_budget);
-			ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", hardware.vram_mb_usage);
-			ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", hardware.vram_mb_available);
-			ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", hardware.vram_mb_reserved);
+			App->hardware->SetVRAMHardware();
+			ImGui::Text("GPU: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "vendor %u device %u", App->hardware->hardware.gpu_vendor, App->hardware->hardware.gpu_device);
+			ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (App->hardware->hardware.gpu_brand));
+			ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", App->hardware->hardware.vram_mb_budget);
+			ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", App->hardware->hardware.vram_mb_usage);
+			ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", App->hardware->hardware.vram_mb_available);
+			ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", App->hardware->hardware.vram_mb_reserved);
 		}
 	}
 	ImGui::End();
@@ -468,53 +450,3 @@ bool ModuleGUI::FillVectorMS()
 	bool ret = true;
 	return ret;
 }
-
-bool ModuleGUI::FindVRAMHardware()
-{
-	bool ret = true;
-	Uint64 mb_budget, mb_usage, mb_available, mb_reserved;
-
-	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &mb_budget, &mb_usage, &mb_available, &mb_reserved))
-	{
-		hardware.vram_mb_budget = float(mb_budget) / (1024.f * 1024.f);
-		hardware.vram_mb_usage = float(mb_usage) / (1024.f * 1024.f);
-		hardware.vram_mb_available = float(mb_available) / (1024.f * 1024.f);
-		hardware.vram_mb_reserved = float(mb_reserved) / (1024.f * 1024.f);
-	}
-	
-	return ret;
-}
-
-
-
-std::string ModuleGUI::FindCapsHardware()
-{
-	std::string caps;
-
-	if (SDL_Has3DNow())
-		caps.append("3DNow, ");
-	if (SDL_HasAVX())
-		caps.append("AVX, ");
-	if (SDL_HasAVX2())
-		caps.append("AVX2, ");
-	if (SDL_HasMMX())
-		caps.append("MMX, ");
-	if (SDL_HasRDTSC())
-		caps.append("RDTSC, ");
-	if (SDL_HasSSE())
-		caps.append("SSE, ");
-	if (SDL_HasSSE2())
-		caps.append("SSE2, ");
-	if (SDL_HasSSE3())
-		caps.append("SSE3, ");
-	if (SDL_HasSSE41())
-		caps.append("SSE41, ");
-	if (SDL_HasSSE42())
-		caps.append("SSE42, ");
-
-	return caps.c_str();
-
-}
-
-
-
