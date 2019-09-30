@@ -12,14 +12,11 @@
 #include "Imgui/imgui_impl_sdl.h"
 #include "Imgui/imgui_impl_opengl3.h"
 
-#include "JSON/json.hpp"
+#include "PanelConfiguration.h"
 
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
-	fps_reg.resize(100);
-	ms_reg.resize(100);
-	mem_reg.resize(100);
 }
 
 ModuleGUI::~ModuleGUI()
@@ -36,8 +33,7 @@ bool ModuleGUI::Init()
 	ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION));
 	ImGui::StyleColorsDark();
 
-	window_width = App->window->screen_width;
-	window_height = App->window->screen_height;
+	panels.push_back(new PanelConfiguration(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
 
 	return true;
 }
@@ -48,8 +44,6 @@ update_status ModuleGUI::PreUpdate()
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	
 	ImGui::NewFrame();
-
-	FillVectorFPS();
 
 	//  Input Shortcut Keys
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_1))
@@ -75,7 +69,7 @@ update_status ModuleGUI::Update()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Quit", "Alt+F4"))
+			if (ImGui::MenuItem("Quit"))
 			{
 				ret = update_status::UPDATE_STOP;
 			}
@@ -119,15 +113,18 @@ update_status ModuleGUI::Update()
 	}
 	ImGui::EndMainMenuBar();
 
+	for (auto i = panels.begin(); i != panels.end(); ++i) {
+		if ((*i)->IsShortCutPressed()) {
+			(*i)->ChangeActive();
+		}
+		if ((*i)->IsActive()) {
+			(*i)->Update();
+		}
+	}
 	
 	if (show_console_window)
 	{
 		MenuWindowConsole();
-	}
-
-	if (show_configuration_window)
-	{
-		MenuWindowConfiguration();
 	}
 
 	if (show_demo_window)
@@ -224,223 +221,4 @@ bool ModuleGUI::MenuWindowConsole()
 	ImGui::End();
 	
 	return ret;
-}
-
-bool ModuleGUI::MenuWindowConfiguration()
-{
-	bool ret = true;
-	if (ImGui::Begin("Configuration", &show_configuration_window, ImGuiWindowFlags_MenuBar))
-	{
-		if (ImGui::BeginMenu("Options"))
-		{
-			if (ImGui::MenuItem("Set Defaults"))
-			{
-				// TODO: Load Default data from JSON
-			}
-			if (ImGui::MenuItem("Load"))
-			{
-				// TODO: Load Saved data from JSON
-				std::ifstream i ("configuration.json");
-				nlohmann::json l;
-				i >> l;
-
-				max_fps = App->framerate_cap = l["fps_cap"];
-				bright = l["window"]["brightness"];
-				SDL_SetWindowBrightness(App->window->window, bright);
-			}
-			if (ImGui::MenuItem("Save"))
-			{
-				// TODO: Save data from JSON
-				std::ofstream o("configuration.json");
-
-				nlohmann::json j;
-				j["app_name"] = app_name;
-				j["organization"] = organization;
-				j["fps_cap"] = App->framerate_cap;
-				j["vsync"] = VSYNC;
-				j["window"]["brightness"] = bright;
-				j["window"]["width"] = -1;
-				j["window"]["height"] = -1;
-
-				o << std::setw(4) << j << std::endl;
-				o.close();
-				
-			}
-			ImGui::End();
-		}
-		if (ImGui::CollapsingHeader("Application"))
-		{
-			
-			if (ImGui::InputText("App Name", app_name, 30)) {
-				App->window->SetTitle(app_name);
-			}
-			if (ImGui::InputText("Organitzation", organization, 30)) {
-
-			}
-			
-			if (ImGui::SliderInt("Max FPS", &max_fps, 0, 120))
-			{
-				App->framerate_cap = max_fps;
-			}
-			ImGui::Text("Limit Framerate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", max_fps);
-
-			//ImGui::Text("%f", App->prev_last_sec_frame_count);
-
-			//FPS graphic
-
-			if (App->last_sec_frame_count == 1) { // At the beggining of the second
-				PushBackVectorAsQueue(fps_reg, App->prev_last_sec_frame_count);
-			}
-
-			char title[25];
-			sprintf_s(title, 25, "Framerate %.1f", fps_reg[fps_reg.size() - 1]);
-			ImGui::PlotHistogram("framerate", &fps_reg[0], fps_reg.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-			//MS graphic
-			PushBackVectorAsQueue(ms_reg, 1000.0f / App->prev_last_sec_frame_count);
-			
-			sprintf_s(title, 25, "Miliseconds %0.1f", ms_reg[ms_reg.size() - 1]);
-			ImGui::PlotHistogram("##miliseconds", &ms_reg[0], ms_reg.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
-			//TODO: Memory Consumption graphic
-			App->hardware->UpdateMemory();
-
-			if (App->last_sec_frame_count == 1) { // At the beggining of the second
-				PushBackVectorAsQueue(mem_reg, App->hardware->config.total_reported_mem);
-			}
-
-			ImGui::PlotHistogram("##memory", &mem_reg[0], mem_reg.size(), 0.f, "Memory Consumption", 0.0f, App->hardware->config.peak_reported_mem * 1.5f, ImVec2(310, 100));
-			
-			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_reported_mem);
-			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_actual_mem);
-			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.peak_reported_mem);
-			ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.peak_actual_mem);
-			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.accumulated_reported_mem);
-			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.accumulated_actual_mem);
-			ImGui::Text("Accumulated Alloc Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.accumulated_alloc_unit);
-			ImGui::Text("Total Alloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_alloc_unity_count);
-			ImGui::Text("PeakAlloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.peak_alloc_unit_count);
-
-
-		}
-		if (ImGui::CollapsingHeader("Window"))
-		{	
-
-			ImGui::Text("Icon:"); ImGui::SameLine(); ImGui::Text("*null*");
-
-			if (ImGui::SliderFloat("Brightness", &bright, 0.0f, 1.0f)) {
-				SDL_SetWindowBrightness(App->window->window, bright);
-			}
-			if (ImGui::SliderInt("Width", &window_width, 640, 1920) || ImGui::SliderInt("Height", &window_height, 480, 1080))
-			{ 
-				SDL_SetWindowSize(App->window->window, window_width, window_height);
-			}
-
-			SDL_DisplayMode display;
-			SDL_GetCurrentDisplayMode(NULL, &display);
-			ImGui::Text("Refresh rate:"); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, std::to_string(display.refresh_rate).data());
-
-
-			if (ImGui::Checkbox("Fullscreen", &checkbox_fullscreen_window))
-			{
-				if (checkbox_fulldesktop_window)
-					checkbox_fulldesktop_window = false;
-
-				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN);
-			}									
-			if (ImGui::Checkbox("Bordeless", &checkbox_borderless_window))
-			{
-				if (!checkbox_fullscreen_window && !checkbox_fulldesktop_window)
-					SDL_SetWindowBordered(App->window->window, (SDL_bool)!checkbox_borderless_window);
-				else
-					checkbox_borderless_window = false;
-			}
-			if (ImGui::Checkbox("Full Desktop", &checkbox_fulldesktop_window))
-			{
-				if (checkbox_fullscreen_window)
-					checkbox_fullscreen_window = false;
-
-				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-			}
-			if (ImGui::Checkbox("Resizable", &checkbox_resizable_window))
-			{
-				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_RESIZABLE);
-				checkbox_fullscreen_window = checkbox_fulldesktop_window = checkbox_borderless_window = false;
-				SDL_SetWindowBordered(App->window->window, (SDL_bool)!checkbox_borderless_window);
-			}
-			if(!checkbox_fullscreen_window && !checkbox_fulldesktop_window)
-			{
-				SDL_SetWindowFullscreen(App->window->window, SDL_WINDOW_RESIZABLE);
-			}
-
-			
-			}
-		if (ImGui::CollapsingHeader("File System"))
-		{
-			// TODO: Wait for the next class indications
-			char path[100];
-			GetModuleFileNameA(NULL, path, 100);
-			ImGui::Text("Base Path:");
-			ImGui::TextColored(IMGUI_COLOR_YELLOW, path);
-		}
-		if (ImGui::CollapsingHeader("Input"))
-		{
-			ImGui::Text("Mouse Position: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW,"%i, %i", App->input->GetMouseX(), App->input->GetMouseY());
-			ImGui::Text("Mouse Motion: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%i,%i", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
-			ImGui::Text("Mouse Wheel: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%i", App->input->GetMouseWheel());
-			ImGui::Separator();
-
-			ImGui::BeginChild("Buffer");
-			ImGui::TextUnformatted(App->input->text_buffer.begin());
-			if (App->input->auto_scroll)
-			{
-				ImGui::SetScrollHereY(1.0f);
-				App->input->auto_scroll = false;
-			}
-			ImGui::EndChild();
-
-				
-		}
-		if (ImGui::CollapsingHeader("Hardware"))
-		{
-			ImGui::Text("SDL Version: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, App->hardware->GetSDLVersion());
-			ImGui::Text("OpenGL Version: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, App->hardware->GetOpenGLVersion());
-			ImGui::Separator();
-
-			std::string sdl_cpu_string = std::to_string(SDL_GetCPUCount()) + " (Cache: " + std::to_string(SDL_GetCPUCacheLineSize()) + "Kb)";
-			ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (sdl_cpu_string.c_str()));
-
-			std::string sdl_ram_string = std::to_string(SDL_GetSystemRAM()) + "Mb";
-			ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (sdl_ram_string.c_str()));
-
-			ImGui::Text("Caps: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, App->hardware->GetCapsHardware());
-			ImGui::Separator();
-
-			App->hardware->SetVRAMHardware();
-			ImGui::Text("GPU: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "vendor %u device %u", App->hardware->hardware.gpu_vendor, App->hardware->hardware.gpu_device);
-			ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, (App->hardware->hardware.gpu_brand));
-			ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", App->hardware->hardware.vram_mb_budget);
-			ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", App->hardware->hardware.vram_mb_usage);
-			ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", App->hardware->hardware.vram_mb_available);
-			ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, "%.1f Mb", App->hardware->hardware.vram_mb_reserved);
-		}
-	}
-	ImGui::End();
-
-	return ret;
-}
-
-bool ModuleGUI::FillVectorFPS()
-{
-	bool ret = true;
-
-	
-
-	return ret;
-}
-
-void ModuleGUI::PushBackVectorAsQueue(std::vector<float> &vector,const float &value)
-{
-	for (int i = 0; i < vector.size() - 1; ++i) {
-		vector[i] = vector[i + 1];
-	}
-	vector[vector.size() - 1] = value;
 }
