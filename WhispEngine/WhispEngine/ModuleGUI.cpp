@@ -17,10 +17,9 @@
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
-	for (int i = 0; i < 100; ++i) {
-		fps_reg.push_back(0.f);
-		ms_reg.push_back(0.f);
-	}
+	fps_reg.resize(100);
+	ms_reg.resize(100);
+	mem_reg.resize(100);
 }
 
 ModuleGUI::~ModuleGUI()
@@ -288,18 +287,28 @@ bool ModuleGUI::MenuWindowConfiguration()
 			//ImGui::Text("%f", App->prev_last_sec_frame_count);
 
 			//FPS graphic
+
+			if (App->last_sec_frame_count == 1) { // At the beggining of the second
+				PushBackVectorAsQueue(fps_reg, App->prev_last_sec_frame_count);
+			}
+
 			char title[25];
 			sprintf_s(title, 25, "Framerate %.1f", fps_reg[fps_reg.size() - 1]);
 			ImGui::PlotHistogram("framerate", &fps_reg[0], fps_reg.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 			//MS graphic
-			ms_reg.erase(ms_reg.begin());
-			ms_reg.push_back(1000.0f / App->prev_last_sec_frame_count);
+			PushBackVectorAsQueue(ms_reg, 1000.0f / App->prev_last_sec_frame_count);
 			
 			sprintf_s(title, 25, "Miliseconds %0.1f", ms_reg[ms_reg.size() - 1]);
 			ImGui::PlotHistogram("##miliseconds", &ms_reg[0], ms_reg.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 			//TODO: Memory Consumption graphic
-
 			App->hardware->UpdateMemory();
+
+			if (App->last_sec_frame_count == 1) { // At the beggining of the second
+				PushBackVectorAsQueue(mem_reg, App->hardware->config.total_reported_mem);
+			}
+
+			ImGui::PlotHistogram("##memory", &mem_reg[0], mem_reg.size(), 0.f, "Memory Consumption", 0.0f, App->hardware->config.peak_reported_mem * 1.5f, ImVec2(310, 100));
+			
 			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_reported_mem);
 			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_actual_mem);
 			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.peak_reported_mem);
@@ -423,10 +432,15 @@ bool ModuleGUI::FillVectorFPS()
 {
 	bool ret = true;
 
-	if (App->last_sec_frame_count == 1) {
-		fps_reg.erase(fps_reg.begin());
-		fps_reg.push_back(App->prev_last_sec_frame_count);
-	}
+	
 
 	return ret;
+}
+
+void ModuleGUI::PushBackVectorAsQueue(std::vector<float> &vector,const float &value)
+{
+	for (int i = 0; i < vector.size() - 1; ++i) {
+		vector[i] = vector[i + 1];
+	}
+	vector[vector.size() - 1] = value;
 }

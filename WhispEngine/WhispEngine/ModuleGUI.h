@@ -36,6 +36,8 @@ private:
 
 	bool FillVectorFPS();
 
+	void PushBackVectorAsQueue(std::vector<float> &vector, const float &value);
+
 private:
 	bool show_demo_window = false;
 	bool show_style_window = false;
@@ -58,6 +60,7 @@ private:
 	int max_fps = 0;
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
+	std::vector<float> mem_reg;
 
 	float bright = 1.0f;
 
