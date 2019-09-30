@@ -29,6 +29,7 @@ Application::Application()
 	AddModule(renderer3D);
 
 	hardware = new HardwareInfo();
+	file_system = new FileSystem();
 
 	first_frame = true;
 }

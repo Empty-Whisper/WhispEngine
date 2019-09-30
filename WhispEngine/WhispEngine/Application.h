@@ -10,6 +10,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGUI.h"
+#include "FileSystem.h"
 
 #include "HardwareInfo.h"
 
@@ -65,6 +66,7 @@ public:
 	void SaveLogFile();
 
 	HardwareInfo *hardware = nullptr;
+	FileSystem *file_system = nullptr;
 
 private:
 
