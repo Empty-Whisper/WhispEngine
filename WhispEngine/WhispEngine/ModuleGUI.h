@@ -3,8 +3,10 @@
 #include "imgui/imgui.h"
 #include "Panel.h"
 
+class PanelConsole;
 class PanelConfiguration;
 class PanelAbout;
+
 #define IMGUI_COLOR_BLUE ImVec4(0.2f,0.2f,1.f,1.f)
 #define IMGUI_COLOR_GREEN ImVec4(0.f,1.f,0.f,1.f)
 #define IMGUI_COLOR_PINK ImVec4(1.0f,0.0f,1.0f,1.0f)
@@ -32,12 +34,14 @@ public:
 private:
 
 	bool MenuWindowConsole();
+	bool MenuWindowAbout();
 
 
 private:
 	bool show_demo_window = false;
 	bool show_style_window = false;
 	bool show_console_window = true;
+	bool show_about_window = false;
 
 	bool checkbox_mit_license_window = false;
 
@@ -48,4 +52,6 @@ private:
 
 	PanelConfiguration* config = nullptr;
 	PanelAbout* about = nullptr;
+	PanelConsole* console = nullptr;
+	PanelConfiguration* config = nullptr;
 };

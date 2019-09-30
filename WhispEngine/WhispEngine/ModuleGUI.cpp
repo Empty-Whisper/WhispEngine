@@ -13,6 +13,7 @@
 #include "Imgui/imgui_impl_opengl3.h"
 
 #include "PanelConfiguration.h"
+#include "PanelConsole.h"
 
 #include "PanelAbout.h"
 
@@ -37,6 +38,7 @@ bool ModuleGUI::Init()
 
 	panels.push_back(config = new PanelConfiguration(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
 	panels.push_back(about = new PanelAbout(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
+	panels.push_back(console = new PanelConsole(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
 
 	return true;
 }
@@ -79,6 +81,8 @@ update_status ModuleGUI::Update()
 		if (ImGui::BeginMenu("View"))
 		{		
 			ImGui::MenuItem("Console", "LShift+1", &show_console_window);
+			ImGui::MenuItem("Console", "LShift+1", &console->active);
+			ImGui::MenuItem("Configuration", "LShift+2", &config->active);
 			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
 			
 			ImGui::EndMenu();
@@ -120,11 +124,6 @@ update_status ModuleGUI::Update()
 			(*i)->Update();
 		}
 	}
-	
-	if (show_console_window)
-	{
-		MenuWindowConsole();
-	}
 
 	if (show_demo_window)
 	{
@@ -152,6 +151,11 @@ update_status ModuleGUI::PostUpdate()
 }
 
 bool ModuleGUI::CleanUp() {
+	for (auto i = panels.begin(); i != panels.end(); ++i) {
+		delete *i;
+	}
+	panels.clear();
+	console = nullptr;
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -162,8 +166,9 @@ bool ModuleGUI::CleanUp() {
 
 void ModuleGUI::Log(const char * str)
 {
-	buffer.appendf(str);
-	log_new_line = true;
+	if (console != nullptr) {
+		console->Log(str);
+	}
 }
 
 //bool ModuleGUI::MenuWindowAbout()
@@ -174,7 +179,7 @@ void ModuleGUI::Log(const char * str)
 //		ImGui::Text("Version 0.1-alpha");
 //		ImGui::Separator();
 //		ImGui::NewLine();
-//		ImGui::Text("By Christian Martínez @christt105 and Marc Gálvez @optus23 for learning purposes.");
+//		ImGui::Text("By Christian Martï¿½nez @christt105 and Marc Gï¿½lvez @optus23 for learning purposes.");
 //		ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
 //		ImGui::NewLine();
 //		if(ImGui::Button("Github @christ105")) 	ShellExecuteA(NULL, "open", "https://github.com/christt105", NULL, NULL, SW_SHOWNORMAL);
@@ -212,5 +217,41 @@ bool ModuleGUI::MenuWindowConsole()
 	log_new_line = false;
 	ImGui::End();
 	
+	return ret;
+}
+bool ModuleGUI::MenuWindowAbout()
+{
+	bool ret = true;
+	if (ImGui::Begin("About Whisp Engine", &show_about_window))
+	{
+		ImGui::Text("Version 0.1-alpha");
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::Text("By Christian Martï¿½nez @christt105 and Marc Gï¿½lvez @optus23 for learning purposes.");
+		ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
+		ImGui::NewLine();
+		if(ImGui::Button("Github @christ105")) 	ShellExecuteA(NULL, "open", "https://github.com/christt105", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::SameLine();
+		if(ImGui::Button("Github @optus23")) 	ShellExecuteA(NULL, "open", "https://github.com/optus23", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::NewLine();
+		ImGui::Checkbox("Show MIT LICENSE", &checkbox_mit_license_window);
+		if (checkbox_mit_license_window)
+		{
+			ImGui::SetWindowSize(ImVec2(580, 530));
+			ImGui::NewLine(); ImGui::NewLine();
+			ImGui::Text("MIT LICENSE");	ImGui::NewLine();
+			ImGui::Text("Copyright (c) 2019 Empty-Whisper"); ImGui::NewLine();
+			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files(the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :"); ImGui::NewLine();
+			ImGui::Text("The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software."); ImGui::NewLine();
+			ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE."); ImGui::NewLine();
+		}
+		else
+		{
+			ImGui::SetWindowSize(ImVec2(580, 200));
+		}
+			
+		
+	}
+	ImGui::End();
 	return ret;
 }

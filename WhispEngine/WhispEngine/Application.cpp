@@ -109,6 +109,11 @@ float Application::GetDeltaTime()
 	return dt;
 }
 
+const char * Application::GetLog()
+{
+	return log_buff.data();
+}
+
 void Application::Log(const char * str)
 {
 	log_buff.append(str); //Save log data to export in txt when Engine close
@@ -187,6 +192,8 @@ bool Application::CleanUp()
 
 	delete hardware;
 	hardware = nullptr;
+	delete file_system;
+	file_system = nullptr;
 
 	return ret;
 }

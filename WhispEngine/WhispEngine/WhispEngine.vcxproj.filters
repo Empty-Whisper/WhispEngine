@@ -226,6 +226,7 @@
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="PanelAbout.cpp">
+    <ClCompile Include="PanelConsole.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
   </ItemGroup>
@@ -513,6 +514,7 @@
       <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="PanelAbout.h">
+    <ClInclude Include="PanelConsole.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
   </ItemGroup>

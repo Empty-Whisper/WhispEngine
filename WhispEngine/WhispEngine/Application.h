@@ -62,6 +62,7 @@ public:
 	bool CleanUp();
 
 	float GetDeltaTime();
+	const char* GetLog();
 	void Log(const char*);
 	void SaveLogFile();
 
