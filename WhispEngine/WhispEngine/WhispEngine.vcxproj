@@ -34,6 +34,7 @@
     <ClCompile Include="mmgr\mmgr.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelConfiguration.cpp" />
+    <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Globals.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="mmgr\nommgr.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelConfiguration.h" />
+    <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="JSON\json.hpp" />
     <ClInclude Include="Light.h" />

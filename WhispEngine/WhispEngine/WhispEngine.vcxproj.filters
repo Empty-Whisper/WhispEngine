@@ -225,6 +225,9 @@
     <ClCompile Include="FileSystem.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="PanelConsole.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -508,6 +511,9 @@
     </ClInclude>
     <ClInclude Include="FileSystem.h">
       <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelConsole.h">
+      <Filter>UI_Elements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

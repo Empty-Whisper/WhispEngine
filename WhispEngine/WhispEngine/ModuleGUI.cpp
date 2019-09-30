@@ -13,6 +13,7 @@
 #include "Imgui/imgui_impl_opengl3.h"
 
 #include "PanelConfiguration.h"
+#include "PanelConsole.h"
 
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
@@ -33,7 +34,8 @@ bool ModuleGUI::Init()
 	ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION));
 	ImGui::StyleColorsDark();
 
-	panels.push_back(new PanelConfiguration(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
+	panels.push_back(config = new PanelConfiguration(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
+	panels.push_back(console = new PanelConsole(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
 
 	return true;
 }
@@ -45,15 +47,6 @@ update_status ModuleGUI::PreUpdate()
 	
 	ImGui::NewFrame();
 
-	//  Input Shortcut Keys
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_1))
-	{
-		show_console_window = !show_console_window;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_2))
-	{
-		show_configuration_window = !show_configuration_window;
-	}
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_3))
 	{
 		show_style_window = !show_style_window;
@@ -78,8 +71,8 @@ update_status ModuleGUI::Update()
 
 		if (ImGui::BeginMenu("View"))
 		{		
-			ImGui::MenuItem("Console", "LShift+1", &show_console_window);
-			ImGui::MenuItem("Configuration", "LShift+2", &show_configuration_window);
+			ImGui::MenuItem("Console", "LShift+1", &console->active);
+			ImGui::MenuItem("Configuration", "LShift+2", &config->active);
 			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
 			
 			ImGui::EndMenu();
@@ -121,11 +114,6 @@ update_status ModuleGUI::Update()
 			(*i)->Update();
 		}
 	}
-	
-	if (show_console_window)
-	{
-		MenuWindowConsole();
-	}
 
 	if (show_demo_window)
 	{
@@ -158,6 +146,11 @@ update_status ModuleGUI::PostUpdate()
 }
 
 bool ModuleGUI::CleanUp() {
+	for (auto i = panels.begin(); i != panels.end(); ++i) {
+		delete *i;
+	}
+	panels.clear();
+	console = nullptr;
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -168,8 +161,9 @@ bool ModuleGUI::CleanUp() {
 
 void ModuleGUI::Log(const char * str)
 {
-	buffer.appendf(str);
-	log_new_line = true;
+	if (console != nullptr) {
+		console->Log(str);
+	}
 }
 
 bool ModuleGUI::MenuWindowAbout()
@@ -206,19 +200,5 @@ bool ModuleGUI::MenuWindowAbout()
 		
 	}
 	ImGui::End();
-	return ret;
-}
-
-bool ModuleGUI::MenuWindowConsole()
-{
-	bool ret = true;
-
-	ImGui::Begin("Console", &show_console_window);
-	ImGui::TextUnformatted(buffer.begin());
-	if (log_new_line)
-		ImGui::SetScrollHereY(1.0f);
-	log_new_line = false;
-	ImGui::End();
-	
 	return ret;
 }
