@@ -32,18 +32,8 @@ public:
 	void Log(const char* str);
 
 private:
-
-	bool MenuWindowConsole();
-	bool MenuWindowAbout();
-
-
-private:
 	bool show_demo_window = false;
 	bool show_style_window = false;
-	bool show_console_window = true;
-	bool show_about_window = false;
-
-	bool checkbox_mit_license_window = false;
 
 	std::vector<Panel*> panels;
 
@@ -53,5 +43,4 @@ private:
 	PanelConfiguration* config = nullptr;
 	PanelAbout* about = nullptr;
 	PanelConsole* console = nullptr;
-	PanelConfiguration* config = nullptr;
 };
