@@ -18,7 +18,8 @@
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
 	for (int i = 0; i < 100; ++i) {
-		ms_reg.push_back(0.0f);
+		fps_reg.push_back(0.f);
+		ms_reg.push_back(0.f);
 	}
 }
 
@@ -48,6 +49,8 @@ update_status ModuleGUI::PreUpdate()
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	
 	ImGui::NewFrame();
+
+	FillVectorFPS();
 
 	//  Input Shortcut Keys
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_1))
@@ -284,7 +287,7 @@ bool ModuleGUI::MenuWindowConfiguration()
 
 			//ImGui::Text("%f", App->prev_last_sec_frame_count);
 
-			FillVectorFPS();
+			//FPS graphic
 			char title[25];
 			sprintf_s(title, 25, "Framerate %.1f", fps_reg[fps_reg.size() - 1]);
 			ImGui::PlotHistogram("framerate", &fps_reg[0], fps_reg.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
@@ -420,33 +423,10 @@ bool ModuleGUI::FillVectorFPS()
 {
 	bool ret = true;
 
-	static uint count = 0;
-	if (count >= MAX_FPS_COUNT)
-	{
-		for (uint i = 0; i < MAX_FPS_COUNT - 1; ++i)
-		{
-			fps_reg[i] = fps_reg[i + 1];
-		}
-		fps_reg[count - 1] = App->prev_last_sec_frame_count;
-
-	}
-	else
-	{
-		++count;
-		if (fps_reg.size() < MAX_FPS_COUNT)
-		{
-			for (uint i = 0; i < MAX_FPS_COUNT; ++i)
-			{
-				fps_reg.push_back(i);
-			}
-		}
+	if (App->last_sec_frame_count == 1) {
+		fps_reg.erase(fps_reg.begin());
+		fps_reg.push_back(App->prev_last_sec_frame_count);
 	}
 
-	return ret;
-}
-
-bool ModuleGUI::FillVectorMS()
-{
-	bool ret = true;
 	return ret;
 }

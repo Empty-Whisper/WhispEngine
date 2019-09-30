@@ -35,7 +35,6 @@ private:
 	bool MenuWindowConfiguration();
 
 	bool FillVectorFPS();
-	bool FillVectorMS();
 
 private:
 	bool show_demo_window = false;
