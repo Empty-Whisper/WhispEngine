@@ -3,6 +3,7 @@
 #include "ModuleSceneIntro.h"
 
 #include "Imgui/imgui.h"
+#include "par_shapes.h"
 
 #include "MathGeoLib/include/MathGeoLib.h"
 #ifdef _DEBUG
@@ -28,6 +29,8 @@ bool ModuleSceneIntro::Start()
 	
 	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
+
+	
 
 	// Piramid
 	int m = 0;
