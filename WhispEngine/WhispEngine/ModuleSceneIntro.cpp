@@ -37,22 +37,13 @@ bool ModuleSceneIntro::Start()
 
 	m = par_shapes_create_cube();
 
-	glGenBuffers(1, &shape);
-	glBindBuffer(GL_ARRAY_BUFFER, shape);
+	glGenBuffers(1, &id_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->npoints * 3, m->points, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &shape2);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape2);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*m->ntriangles * 3, m->triangles, GL_STATIC_DRAW);
-
-	for (int i = 0; i < m->npoints*3; i++) {
-		if (i % 3 == 0) LOG("\n");
-		LOG("%f", m->points[i]);
-	}
-	LOG("\n");
-	for (int i = 0; i < m->ntriangles; i++) {
-		LOG("%i", m->triangles[i]);
-	}
+	glGenBuffers(1, &id_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*m->ntriangles, m->triangles, GL_STATIC_DRAW);
 	
 	return ret;
 }
@@ -63,10 +54,10 @@ update_status ModuleSceneIntro::Update()
 	glColor3f(1.f, 0.f, 0.f);
 	// activate and specify pointer to vertex array
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, shape);
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape2);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	// draw a cube
 	glDrawElements(GL_TRIANGLES, m->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
 
@@ -81,6 +72,6 @@ update_status ModuleSceneIntro::Update()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
+	par_shapes_free_mesh(m);
 	return true;
 }
