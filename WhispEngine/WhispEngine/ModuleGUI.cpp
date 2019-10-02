@@ -109,9 +109,6 @@ update_status ModuleGUI::Update()
 	ImGui::EndMainMenuBar();
 
 	for (auto i = panels.begin(); i != panels.end(); ++i) {
-		if ((*i)->IsShortCutPressed()) {
-			(*i)->ChangeActive();
-		}
 		if ((*i)->IsActive()) {
 			(*i)->Update();
 		}

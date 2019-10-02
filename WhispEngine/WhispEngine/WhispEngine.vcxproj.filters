@@ -181,6 +181,7 @@
     <ClCompile Include="PanelConsole.cpp">
       <Filter>Tools\UI</Filter>
     </ClCompile>
+    <ClCompile Include="ShortCut.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -471,6 +472,7 @@
     <ClInclude Include="PanelConfiguration.h">
       <Filter>Tools\UI</Filter>
     </ClInclude>
+    <ClInclude Include="ShortCut.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
