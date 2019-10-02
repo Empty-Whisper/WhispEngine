@@ -11,6 +11,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleGUI.h"
 #include "FileSystem.h"
+#include "ModuleShortCut.h"
 
 #include "HardwareInfo.h"
 
@@ -25,6 +26,7 @@ public:
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;
 	ModuleGUI* gui = nullptr;
+	ModuleShortCut* shortcut = nullptr;
 
 public:
 

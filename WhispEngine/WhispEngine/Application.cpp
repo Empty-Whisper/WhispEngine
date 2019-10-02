@@ -10,15 +10,17 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	gui = new ModuleGUI(this);
+	shortcut = new ModuleShortCut();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+	AddModule(input);
 	AddModule(window);
 	AddModule(camera);
-	AddModule(input);
+	AddModule(shortcut);
 	
 	// Scenes
 	AddModule(scene_intro);

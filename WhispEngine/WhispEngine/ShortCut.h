@@ -18,5 +18,5 @@ public:
 private:
 	SDL_Scancode shortcut[3] = { SDL_SCANCODE_UNKNOWN };
 
-	std::function<void()> function;
+	std::function<void()> function = nullptr;
 };

@@ -232,6 +232,7 @@
       <Filter>UI_Elements</Filter>
     </ClCompile>
     <ClCompile Include="ShortCut.cpp" />
+    <ClCompile Include="ModuleShortCut.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -526,6 +527,7 @@
       <Filter>UI_Elements</Filter>
     </ClInclude>
     <ClInclude Include="ShortCut.h" />
+    <ClInclude Include="ModuleShortCut.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
