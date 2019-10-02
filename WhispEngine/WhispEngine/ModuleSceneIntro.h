@@ -23,7 +23,12 @@ public:
 	float fnum = 0.0f;
 
 
-	uint num_vertices = 6;
-	uint my_id = 0;
+	int cube_num_vertices= 54;
+	int cube_num_index= 8;
+	uint vao;          // Vertex array object
+	uint index_vbo;    // Index buffer object
+	int piramid_num_vertices = 54;
+	int piramid_num_index = 8;
+
 
 };
