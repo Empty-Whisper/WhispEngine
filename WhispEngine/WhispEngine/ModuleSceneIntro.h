@@ -21,4 +21,9 @@ public:
 	Timer timer;
 	int inum = 0;
 	float fnum = 0.0f;
+
+
+	uint num_vertices = 6;
+	uint my_id = 0;
+
 };
