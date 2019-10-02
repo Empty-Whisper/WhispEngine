@@ -51,9 +51,9 @@ void PanelConfiguration::Update()
 		{
 			Hardware();
 		}
-		ImGui::End();
+		
 	}
-	
+	ImGui::End();
 }
 
 void PanelConfiguration::Hardware()
