@@ -31,10 +31,6 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
 
-	// Generate a sphere from a subdivided icosahedron, which produces a nicer
-	// distribution of triangles, but no texture coordinates.
-	//par_shapes_mesh* par_shapes_create_subdivided_sphere(int nsubdivisions);
-
 	// Piramid
 	/*int m = 0;
 	int n = 2;*/
@@ -70,65 +66,17 @@ bool ModuleSceneIntro::Start()
 	int j = 2;
 
 	float cube_vertices[8*3]{
-		j,j,i, //v0
-		i,j,i, //v1
-		i,i,i, //v2
-		j,i,i, //v3
+		i,j,i, //v0
+		j,j,i, //v1
+		j,i,i, //v2
+		i,i,i, //v3
 
 		i,i,j, //v4
 		i,j,j, //v5
 		j,j,j, //v6
 		j,i,j, //v7
 	};
-	//float cube_vertices[54*3]{
-	//	i,i,i,
-	//	i,j,i,
-	//	j,i,i,
 
-	//	j,i,i,
-	//	i,j,i,
-	//	j,j,i,
-	//	//---
-	//	i,i,j,
-	//	j,i,j,
-	//	i,j,j,
-
-	//	j,i,j,
-	//	j,j,j,
-	//	i,j,j,
-	//	//---
-	//	i,j,i,
-	//	i,j,j,
-	//	j,j,i,
-
-	//	j,j,i,
-	//	i,j,j,
-	//	j,j,j,
-	//	//---
-	//	i,i,i,
-	//	j,i,i,
-	//	i,i,j,
-
-	//	j,i,i,
-	//	j,i,j,
-	//	i,i,j,
-	//	//---
-	//	i,i,i,
-	//	i,i,j,
-	//	i,j,j,
-
-	//	i,i,i,
-	//	i,j,j,
-	//	i,j,i,
-	//	//---
-	//	j,i,i,
-	//	j,j,j,
-	//	j,i,j,
-
-	//	j,i,i,
-	//	j,j,i,
-	//	j,j,j
-	//};
 	uint cube_index[36]{
 		0,1,2, 2,3,0,   // 36 of indices
 		0,3,4, 4,5,0,
@@ -155,12 +103,6 @@ bool ModuleSceneIntro::Start()
 // Update
 update_status ModuleSceneIntro::Update()
 {	
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glBindBuffer(GL_ARRAY_BUFFER, vao);
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
-	//// … draw other buffers
-	//glDrawArrays(GL_TRIANGLES, 0, piramid_num_vertices);
-	//glDisableClientState(GL_VERTEX_ARRAY);
 	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_vbo);
@@ -170,7 +112,6 @@ update_status ModuleSceneIntro::Update()
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glBegin(GL_LINES);
-
 	for (int i = 0; i <= 100; ++i)
 	{
 		
@@ -185,9 +126,6 @@ update_status ModuleSceneIntro::Update()
 
 	}	
 	glEnd();
-
-
-	//par_shapes_mesh* par_shapes_create_parametric_sphere(int slices, int stacks);
 
 	return UPDATE_CONTINUE;
 }
