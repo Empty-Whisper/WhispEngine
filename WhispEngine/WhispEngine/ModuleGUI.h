@@ -28,6 +28,8 @@ public:
 
 	bool CleanUp();
 
+	update_status MainMenuBar();
+
 public:
 	void Log(const char* str);
 

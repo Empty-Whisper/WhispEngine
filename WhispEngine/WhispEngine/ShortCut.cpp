@@ -44,5 +44,5 @@ bool ShortCut::IsShortCutPressed() const
 
 void ShortCut::DoFunc()
 {
-		function();
+	function();
 }

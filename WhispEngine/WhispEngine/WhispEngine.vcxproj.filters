@@ -231,8 +231,12 @@
     <ClCompile Include="PanelConsole.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
-    <ClCompile Include="ShortCut.cpp" />
-    <ClCompile Include="ModuleShortCut.cpp" />
+    <ClCompile Include="ShortCut.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleShortCut.cpp">
+      <Filter>Main Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -526,8 +530,12 @@
     <ClInclude Include="PanelConsole.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
-    <ClInclude Include="ShortCut.h" />
-    <ClInclude Include="ModuleShortCut.h" />
+    <ClInclude Include="ShortCut.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleShortCut.h">
+      <Filter>Main Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

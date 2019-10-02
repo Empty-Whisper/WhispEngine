@@ -2,6 +2,8 @@
 #include "Module.h"
 #include "Imgui/imgui.h"
 
+#include "par_shapes.h"
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -27,6 +29,11 @@ public:
 	int cube_num_index= 36;
 	uint vao = 1;          // Vertex array object
 	uint index_vbo = 0;    // Index buffer object
+
+	uint shape = 0;
+	uint shape2 = 0;
+	par_shapes_mesh* m = nullptr;
+
 	int piramid_num_vertices = 54;
 	int piramid_num_index = 8;
 

@@ -61,7 +61,34 @@ update_status ModuleGUI::PreUpdate()
 
 update_status ModuleGUI::Update()
 {
-	update_status ret = update_status::UPDATE_CONTINUE;
+	update_status ret = MainMenuBar();
+
+	for (auto i = panels.begin(); i != panels.end(); ++i) {
+		if ((*i)->IsActive()) {
+			(*i)->Update();
+		}
+	}
+
+	if (show_demo_window)
+	{
+		ImGui::ShowDemoWindow(&show_demo_window);
+	}
+
+	if (show_style_window)
+	{
+		if (ImGui::Begin("Style editor"))
+		{
+			ImGui::ShowStyleEditor();
+		}
+		ImGui::End();
+	}
+	
+	return ret;
+}
+
+update_status ModuleGUI::MainMenuBar()
+{
+	update_status ret = UPDATE_CONTINUE;
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -75,11 +102,11 @@ update_status ModuleGUI::Update()
 		}
 
 		if (ImGui::BeginMenu("View"))
-		{		
+		{
 			ImGui::MenuItem("Console", "LShift+1", &console->active);
 			ImGui::MenuItem("Configuration", "LShift+2", &config->active);
 			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
-			
+
 			ImGui::EndMenu();
 		}
 
@@ -108,26 +135,6 @@ update_status ModuleGUI::Update()
 	}
 	ImGui::EndMainMenuBar();
 
-	for (auto i = panels.begin(); i != panels.end(); ++i) {
-		if ((*i)->IsActive()) {
-			(*i)->Update();
-		}
-	}
-
-	if (show_demo_window)
-	{
-		ImGui::ShowDemoWindow(&show_demo_window);
-	}
-
-	if (show_style_window)
-	{
-		if (ImGui::Begin("Style editor"))
-		{
-			ImGui::ShowStyleEditor();
-		}
-		ImGui::End();
-	}
-	
 	return ret;
 }
 
