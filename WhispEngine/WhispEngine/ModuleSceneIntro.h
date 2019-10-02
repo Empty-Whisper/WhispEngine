@@ -30,8 +30,8 @@ public:
 	uint vao = 1;          // Vertex array object
 	uint index_vbo = 0;    // Index buffer object
 
-	uint shape = 0;
-	uint shape2 = 0;
+	uint id_vertex = 0;
+	uint id_index = 0;
 	par_shapes_mesh* m = nullptr;
 
 	int piramid_num_vertices = 54;
