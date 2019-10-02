@@ -43,7 +43,7 @@ bool ModuleSceneIntro::Start()
 
 	glGenBuffers(1, &shape2);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape2);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*m->ntriangles, m->triangles, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*m->ntriangles, m->triangles, GL_STATIC_DRAW);
 	
 	return ret;
 }
@@ -72,6 +72,6 @@ update_status ModuleSceneIntro::Update()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
+	par_shapes_free_mesh(m);
 	return true;
 }
