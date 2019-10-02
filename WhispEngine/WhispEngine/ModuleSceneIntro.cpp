@@ -39,11 +39,20 @@ bool ModuleSceneIntro::Start()
 
 	glGenBuffers(1, &shape);
 	glBindBuffer(GL_ARRAY_BUFFER, shape);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m->npoints * 3, m->points, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->npoints * 3, m->points, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &shape2);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape2);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*m->ntriangles, m->triangles, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*m->ntriangles * 3, m->triangles, GL_STATIC_DRAW);
+
+	for (int i = 0; i < m->npoints*3; i++) {
+		if (i % 3 == 0) LOG("\n");
+		LOG("%f", m->points[i]);
+	}
+	LOG("\n");
+	for (int i = 0; i < m->ntriangles; i++) {
+		LOG("%i", m->triangles[i]);
+	}
 	
 	return ret;
 }
@@ -59,7 +68,7 @@ update_status ModuleSceneIntro::Update()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shape2);
 	// draw a cube
-	glDrawElements(GL_TRIANGLES, m->ntriangles, GL_UNSIGNED_SHORT, NULL);
+	glDrawElements(GL_TRIANGLES, m->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
 
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_VERTEX_ARRAY);
