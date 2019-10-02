@@ -42,45 +42,66 @@ update_status ModuleInput::PreUpdate()
 {
 	SDL_PumpEvents();
 
-	const Uint8* keys = SDL_GetKeyboardState(NULL);
-	
-	for(int i = 0; i < MAX_KEYS; ++i)
-	{
-		if(keys[i] == 1)
-		{
-			if (keyboard[i] == KEY_IDLE)
-			{
-				keyboard[i] = KEY_DOWN;
-				GetTextBuffer("Keybr", i, "KEY_DOWN");
-				GetTextBuffer("Keybr", i, "KEY_REPEAT");
-				
-			}
-			else
-				keyboard[i] = KEY_REPEAT;
-		}
-		else
-		{
-			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
-			{
-				keyboard[i] = KEY_UP;
-				GetTextBuffer("Keybr", i, "KEY_UP");
-			}
+	UpdateInput();
 
-			
-			else
-				keyboard[i] = KEY_IDLE;
+	update_status ret = PollEvents();
+
+	return ret;
+}
+
+update_status ModuleInput::PollEvents()
+{
+	SDL_Event e;
+	while (SDL_PollEvent(&e))
+	{
+		ImGui_ImplSDL2_ProcessEvent(&e);
+		switch (e.type)
+		{
+		case SDL_MOUSEWHEEL:
+			mouse_z = e.wheel.y;
+			break;
+
+		case SDL_MOUSEMOTION:
+			mouse_x = e.motion.x / SCREEN_SIZE;
+			mouse_y = e.motion.y / SCREEN_SIZE;
+
+			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
+			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+			break;
+
+		case SDL_QUIT:
+			return UPDATE_STOP;
+			break;
+
+		case SDL_WINDOWEVENT:
+		{
+			if (e.window.event == SDL_WINDOWEVENT_RESIZED)
+				App->renderer3D->OnResize(e.window.data1, e.window.data2);
+		}
 		}
 	}
 
+	return UPDATE_CONTINUE;
+}
+
+void ModuleInput::UpdateInput()
+{
+	UpdateKeyStates();
+
+	UpdateButtonStates();
+}
+
+void ModuleInput::UpdateButtonStates()
+{
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
 	mouse_x /= SCREEN_SIZE;
 	mouse_y /= SCREEN_SIZE;
 	mouse_z = 0;
 
-	for(int i = 0; i < 5; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
-		if(buttons & SDL_BUTTON(i))
+		if (buttons & SDL_BUTTON(i))
 		{
 			if (mouse_buttons[i] == KEY_IDLE)
 			{
@@ -90,7 +111,7 @@ update_status ModuleInput::PreUpdate()
 			}
 			else
 				mouse_buttons[i] = KEY_REPEAT;
-			
+
 		}
 		else
 		{
@@ -106,42 +127,39 @@ update_status ModuleInput::PreUpdate()
 	}
 
 	mouse_x_motion = mouse_y_motion = 0;
+}
 
-	bool quit = false;
-	SDL_Event e;
-	while(SDL_PollEvent(&e))
+void ModuleInput::UpdateKeyStates()
+{
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
+
+	for (int i = 0; i < MAX_KEYS; ++i)
 	{
-		ImGui_ImplSDL2_ProcessEvent(&e);
-		switch(e.type)
+		if (keys[i] == 1)
 		{
-			case SDL_MOUSEWHEEL:
-			mouse_z = e.wheel.y;
-			break;
-
-			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / SCREEN_SIZE;
-			mouse_y = e.motion.y / SCREEN_SIZE;
-
-			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
-			break;
-
-			case SDL_QUIT:
-			quit = true;
-			break;
-
-			case SDL_WINDOWEVENT:
+			if (keyboard[i] == KEY_IDLE)
 			{
-				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
-					App->renderer3D->OnResize(e.window.data1, e.window.data2);
+				keyboard[i] = KEY_DOWN;
+				GetTextBuffer("Keybr", i, "KEY_DOWN");
+				GetTextBuffer("Keybr", i, "KEY_REPEAT");
+
 			}
+			else
+				keyboard[i] = KEY_REPEAT;
+		}
+		else
+		{
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			{
+				keyboard[i] = KEY_UP;
+				GetTextBuffer("Keybr", i, "KEY_UP");
+			}
+
+
+			else
+				keyboard[i] = KEY_IDLE;
 		}
 	}
-
-	if(quit == true /*|| keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP*/)
-		return UPDATE_STOP;
-
-	return UPDATE_CONTINUE;
 }
 
 // Called before quitting
@@ -152,7 +170,7 @@ bool ModuleInput::CleanUp()
 	return true;
 }
 
-void ModuleInput::GetTextBuffer(std::string key, int key_num, std::string key_state)
+void ModuleInput::GetTextBuffer(const std::string &key,const int &key_num, const std::string &key_state)
 {
 	std::string text = key + ": " + std::to_string(key_num) + " - " + key_state + "\n";
 	this->text_buffer.appendf(text.c_str());

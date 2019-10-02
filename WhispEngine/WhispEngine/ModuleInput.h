@@ -24,6 +24,10 @@ public:
 
 	bool Init();
 	update_status PreUpdate();
+	update_status PollEvents();
+	void UpdateInput();
+	void UpdateButtonStates();
+	void UpdateKeyStates();
 	bool CleanUp();
 
 	KEY_STATE GetKey(int id) const
@@ -89,7 +93,7 @@ private:
 
 public:
 	ImGuiTextBuffer text_buffer;
-	void GetTextBuffer(std::string key, int key_num, std::string key_state);
+	void GetTextBuffer(const std::string &key, const int &key_num, const std::string &key_state);
 	bool auto_scroll = false;
 
 };

@@ -37,7 +37,7 @@ bool ModuleGUI::Init()
 	ImGui::StyleColorsDark();
 
 	panels.push_back(config = new PanelConfiguration(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
-	panels.push_back(about = new PanelAbout(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
+	panels.push_back(about = new PanelAbout(false, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
 	panels.push_back(console = new PanelConsole(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
 
 	return true;
