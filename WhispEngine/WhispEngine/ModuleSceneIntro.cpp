@@ -35,7 +35,13 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
-	m = par_shapes_create_cube();
+	m = par_shapes_create_subdivided_sphere(5);
+	//m = par_shapes_create_rock(30, 3);
+	//m = par_shapes_create_torus(30, 14, 0.8f);
+	//m = par_shapes_create_cone(4, 3); //Piramide
+	//m = par_shapes_create_cone(100, 3); //Cone
+	//m = par_shapes_create_plane(1, 1);
+
 
 	glGenBuffers(1, &id_vertex);
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
@@ -44,7 +50,7 @@ bool ModuleSceneIntro::Start()
 	glGenBuffers(1, &id_index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*m->ntriangles * 3, m->triangles, GL_STATIC_DRAW);
-
+	
 	return ret;
 }
 
@@ -55,9 +61,8 @@ update_status ModuleSceneIntro::Update()
 	// activate and specify pointer to vertex array
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	// draw a cube
 	glDrawElements(GL_TRIANGLES, m->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
 
