@@ -35,11 +35,12 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
-	m = par_shapes_create_subdivided_sphere(5);
+	//m = par_shapes_create_subdivided_sphere(5);
+	//m = par_shapes_create_cube();
 	//m = par_shapes_create_rock(30, 3);
 	//m = par_shapes_create_torus(30, 14, 0.8f);
 	//m = par_shapes_create_cone(4, 3); //Piramide
-	//m = par_shapes_create_cone(100, 3); //Cone
+	m = par_shapes_create_cone(100, 3); //Cone
 	//m = par_shapes_create_plane(1, 1);
 
 
