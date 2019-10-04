@@ -82,6 +82,22 @@ update_status ModuleSceneIntro::Update()
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_VERTEX_ARRAY);
 
+
+
+	glBegin(GL_LINES);
+	for (int i = 0; i <= 100; ++i)
+	{
+
+		glVertex3f(i, 0, 0);
+		glVertex3f(i, 0, 100);
+
+		glVertex3f(100, 0, i);
+		glVertex3f(0, 0, i);
+
+		glColor3f(1.f, 1.f, 1.f);
+
+	}
+	glEnd();
 	return UPDATE_CONTINUE;
 }
 
