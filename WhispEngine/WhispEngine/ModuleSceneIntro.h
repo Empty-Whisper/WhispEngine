@@ -17,8 +17,7 @@ public:
 
 public:
 
-	par_shapes_mesh* m = nullptr;
-
 	GameObject *cube = nullptr;
+	GameObject *w = nullptr;
 
 };

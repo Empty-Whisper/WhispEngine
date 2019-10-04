@@ -6,10 +6,16 @@
 class GameObject
 {
 public:
-	GameObject(const int &n_vertex, const float* vertex, const int &n_index, const uint16_t* index);
+	GameObject() {}
+	GameObject(const int &n_vertex, const float* vertex, const int &n_index, const uint* index);
+	
+	//GameObject(const par_shape *shape, Vector3¿?);
 	~GameObject();
 
 public:
+
+	void SetGLBuffers();
+
 	void Draw();
 
 public:
@@ -19,6 +25,6 @@ public:
 
 	uint id_index = 0;
 	uint n_index = 0;
-	uint16_t *index = nullptr;
+	uint *index = nullptr;
 };
 
