@@ -49,6 +49,9 @@
     <Filter Include="UI_Elements">
       <UniqueIdentifier>{c4bf4285-76b4-46a4-aef1-d490f1ff800b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\ParShapes">
+      <UniqueIdentifier>{b66f1cda-111d-4b30-86d2-66d925cd484b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -236,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="ModuleShortCut.cpp">
       <Filter>Main Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="par_shapes.cpp">
+      <Filter>Tools\ParShapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -524,9 +530,6 @@
     <ClInclude Include="PanelAbout.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
-    <ClInclude Include="par_shapes.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="PanelConsole.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
@@ -535,6 +538,9 @@
     </ClInclude>
     <ClInclude Include="ModuleShortCut.h">
       <Filter>Main Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="par_shapes.h">
+      <Filter>Tools\ParShapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -43,14 +43,22 @@ bool ModuleSceneIntro::Start()
 	m = par_shapes_create_cone(100, 3); //Cone
 	//m = par_shapes_create_plane(1, 1);
 
+	shapes.push_back(par_shapes_create_subdivided_sphere(5));
+	shapes.push_back(par_shapes_create_rock(30, 3));
+	shapes.push_back(par_shapes_create_torus(30, 14, 0.8f));
+	shapes.push_back(par_shapes_create_cone(4, 3));
+	shapes.push_back(par_shapes_create_cone(100, 3));
+	shapes.push_back(par_shapes_create_plane(1, 1));
 
-	glGenBuffers(1, &id_vertex);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->npoints * 3, m->points, GL_STATIC_DRAW);
+	for (auto i = shapes.begin(); i != shapes.end(); ++i) {
+		glGenBuffers(1, &(*i).id_vertex);
+		glBindBuffer(GL_ARRAY_BUFFER, (*i).id_vertex);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (*i).mesh->npoints * 3, (*i).mesh->points, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &id_index);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*m->ntriangles * 3, m->triangles, GL_STATIC_DRAW);
+		glGenBuffers(1, &(*i).id_index);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*i).id_index);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*(*i).mesh->ntriangles * 3, (*i).mesh->triangles, GL_STATIC_DRAW);
+	}	
 	
 	return ret;
 }
@@ -60,12 +68,16 @@ update_status ModuleSceneIntro::Update()
 {
 	glColor3f(1.f, 0.f, 0.f);
 	// activate and specify pointer to vertex array
+
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	// draw a cube
-	glDrawElements(GL_TRIANGLES, m->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
+	
+	for (auto i = shapes.begin(); i != shapes.end(); ++i) {
+		glBindBuffer(GL_ARRAY_BUFFER, (*i).id_vertex);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*i).id_index);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		// draw a cube
+		glDrawElements(GL_TRIANGLES, (*i).mesh->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
+	}
 
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -78,6 +90,9 @@ update_status ModuleSceneIntro::Update()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-	par_shapes_free_mesh(m);
+	for (auto i = shapes.begin(); i != shapes.end(); ++i) {
+		par_shapes_free_mesh((*i).mesh);
+	}
+	//par_shapes_free_mesh(m);
 	return true;
 }
