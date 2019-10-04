@@ -3,17 +3,7 @@
 #include "Imgui/imgui.h"
 
 #include "par_shapes.h"
-#define PAR_PI (3.14159265359)
-
-struct primitive {
-	primitive(par_shapes_mesh* mesh) : mesh(mesh)
-	{
-	}
-
-	par_shapes_mesh* mesh = nullptr;
-	uint id_vertex = 0;
-	uint id_index = 0;
-};
+#include "GameObject.h"
 
 class ModuleSceneIntro : public Module
 {
@@ -26,23 +16,9 @@ public:
 	bool CleanUp();
 
 public:
-	//TEST
-	char * a_inter_b = nullptr;
-	char * b_inter_c = nullptr;
-	char * a_inter_c = nullptr;
-	char * count_down = nullptr;
-	Timer timer;
-	int inum = 0;
-	float fnum = 0.0f;
 
-
-	
-	uint vao = 0;          // Vertex array object
-	uint index_vbo = 0;    // Index buffer object
-
-	uint id_vertex = 0;
-	uint id_index = 0;
 	par_shapes_mesh* m = nullptr;
-	std::vector<primitive> shapes;
+
+	GameObject *cube = nullptr;
 
 };

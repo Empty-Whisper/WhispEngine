@@ -2,13 +2,8 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 
-//#ifndef PAR_SHAPES_IMPLEMENTATION
-//#define PAR_SHAPES_IMPLEMENTATION
-//#endif // !1
-#include "par_shapes.h"
-
 #include "Imgui/imgui.h"
-//#include "par_shapes.h" //https://prideout.net/shapes
+#include "GameObject.h"
 
 #include "MathGeoLib/include/MathGeoLib.h"
 #ifdef _DEBUG
@@ -35,30 +30,9 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
-	//m = par_shapes_create_subdivided_sphere(5);
-	//m = par_shapes_create_cube();
-	//m = par_shapes_create_rock(30, 3);
-	//m = par_shapes_create_torus(30, 14, 0.8f);
-	//m = par_shapes_create_cone(4, 3); //Piramide
-	m = par_shapes_create_cone(100, 3); //Cone
-	//m = par_shapes_create_plane(1, 1);
-
-	shapes.push_back(par_shapes_create_subdivided_sphere(5));
-	shapes.push_back(par_shapes_create_rock(30, 3));
-	shapes.push_back(par_shapes_create_torus(30, 14, 0.8f));
-	shapes.push_back(par_shapes_create_cone(4, 3));
-	shapes.push_back(par_shapes_create_cone(100, 3));
-	shapes.push_back(par_shapes_create_plane(1, 1));
-
-	for (auto i = shapes.begin(); i != shapes.end(); ++i) {
-		glGenBuffers(1, &(*i).id_vertex);
-		glBindBuffer(GL_ARRAY_BUFFER, (*i).id_vertex);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (*i).mesh->npoints * 3, (*i).mesh->points, GL_STATIC_DRAW);
-
-		glGenBuffers(1, &(*i).id_index);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*i).id_index);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*(*i).mesh->ntriangles * 3, (*i).mesh->triangles, GL_STATIC_DRAW);
-	}	
+	m = par_shapes_create_cube();
+	cube = new GameObject(m->npoints, m->points, m->ntriangles, m->triangles);
+	par_shapes_free_mesh(m);
 	
 	return ret;
 }
@@ -71,13 +45,7 @@ update_status ModuleSceneIntro::Update()
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	
-	for (auto i = shapes.begin(); i != shapes.end(); ++i) {
-		glBindBuffer(GL_ARRAY_BUFFER, (*i).id_vertex);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*i).id_index);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
-		// draw a cube
-		glDrawElements(GL_TRIANGLES, (*i).mesh->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
-	}
+	cube->Draw();
 
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -106,9 +74,8 @@ update_status ModuleSceneIntro::Update()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-	for (auto i = shapes.begin(); i != shapes.end(); ++i) {
-		par_shapes_free_mesh((*i).mesh);
-	}
-	//par_shapes_free_mesh(m);
+	
+	delete cube;
+
 	return true;
 }

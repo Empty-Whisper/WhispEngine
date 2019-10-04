@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Globals.h"
+#include "SDL/include/SDL_config.h"
 
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(const int &n_vertex, const float* vertex, const int &n_index, const uint16_t* index);
 	~GameObject();
 
 public:
@@ -18,6 +19,6 @@ public:
 
 	uint id_index = 0;
 	uint n_index = 0;
-	uint *index = nullptr;
+	uint16_t *index = nullptr;
 };
 

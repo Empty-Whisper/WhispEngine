@@ -1,21 +1,33 @@
 #include "GameObject.h"
 #include "Application.h"
+#include "Globals.h"
 
-
-GameObject::GameObject()
+GameObject::GameObject(const int & n_vertex, const float * vertex, const int & n_index, const uint16_t * index)
+	: n_vertex(n_vertex), n_index(n_index)
 {
-	/*glGenBuffers(1, &id_vertex);
+	this->vertex = new float[n_vertex * 3];
+	this->index = new uint16_t[n_index * 3];
+
+	memcpy(this->vertex, vertex, sizeof(float) * n_vertex * 3);
+	memcpy(this->index, index, sizeof(uint16_t) * n_index * 3);
+
+
+	glGenBuffers(1, &id_vertex);
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * n_points, points, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * n_vertex * 3, vertex, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &id_index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T) * n_index * 3, index, GL_STATIC_DRAW);*/
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * n_index * 3, index, GL_STATIC_DRAW);
 }
-
 
 GameObject::~GameObject()
 {
+	delete[] vertex;
+	delete[] index;
+
+	vertex = nullptr;
+	index = nullptr;
 }
 
 void GameObject::Draw()
