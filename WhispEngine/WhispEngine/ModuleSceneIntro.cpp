@@ -35,7 +35,13 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
+	//m = par_shapes_create_subdivided_sphere(5);
+	//m = par_shapes_create_cube();
+	//m = par_shapes_create_rock(30, 3);
 	//m = par_shapes_create_torus(30, 14, 0.8f);
+	//m = par_shapes_create_cone(4, 3); //Piramide
+	m = par_shapes_create_cone(100, 3); //Cone
+	//m = par_shapes_create_plane(1, 1);
 
 	shapes.push_back(par_shapes_create_subdivided_sphere(5));
 	shapes.push_back(par_shapes_create_rock(30, 3));
@@ -76,6 +82,22 @@ update_status ModuleSceneIntro::Update()
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_VERTEX_ARRAY);
 
+
+
+	glBegin(GL_LINES);
+	for (int i = 0; i <= 100; ++i)
+	{
+
+		glVertex3f(i, 0, 0);
+		glVertex3f(i, 0, 100);
+
+		glVertex3f(100, 0, i);
+		glVertex3f(0, 0, i);
+
+		glColor3f(1.f, 1.f, 1.f);
+
+	}
+	glEnd();
 	return UPDATE_CONTINUE;
 }
 

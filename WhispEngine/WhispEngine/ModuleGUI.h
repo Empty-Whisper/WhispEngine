@@ -36,6 +36,7 @@ public:
 private:
 	bool show_demo_window = false;
 	bool show_style_window = false;
+	bool show_wireframe = false;
 
 	std::vector<Panel*> panels;
 
