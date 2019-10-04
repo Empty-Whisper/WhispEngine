@@ -63,7 +63,6 @@ update_status ModuleSceneIntro::Update()
 	glColor3f(1.f, 0.f, 0.f);
 	// activate and specify pointer to vertex array
 
-
 	glEnableClientState(GL_VERTEX_ARRAY);
 	
 	for (auto i = shapes.begin(); i != shapes.end(); ++i) {
