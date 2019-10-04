@@ -243,6 +243,7 @@
     <ClCompile Include="par_shapes.cpp">
       <Filter>Tools\ParShapes</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -542,6 +543,7 @@
     <ClInclude Include="par_shapes.h">
       <Filter>Tools\ParShapes</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
