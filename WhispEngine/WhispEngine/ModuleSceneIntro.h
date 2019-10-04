@@ -5,6 +5,15 @@
 #include "par_shapes.h"
 #define PAR_PI (3.14159265359)
 
+struct primitive {
+	primitive(par_shapes_mesh* mesh) : mesh(mesh)
+	{
+	}
+
+	par_shapes_mesh* mesh = nullptr;
+	uint id_vertex = 0;
+	uint id_index = 0;
+};
 
 class ModuleSceneIntro : public Module
 {
@@ -34,7 +43,6 @@ public:
 	uint id_vertex = 0;
 	uint id_index = 0;
 	par_shapes_mesh* m = nullptr;
-
-	
+	std::vector<primitive> shapes;
 
 };
