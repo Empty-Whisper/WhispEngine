@@ -13,7 +13,7 @@ public:
 	// Destructor
 	virtual ~ModuleWindow();
 
-	bool Init();
+	bool Init(nlohmann::json &node);
 	bool CleanUp();
 
 	bool Save(nlohmann::json &node);

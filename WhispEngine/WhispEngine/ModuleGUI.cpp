@@ -27,7 +27,7 @@ ModuleGUI::~ModuleGUI()
 {
 }
 
-bool ModuleGUI::Init()
+bool ModuleGUI::Init(nlohmann::json &node)
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

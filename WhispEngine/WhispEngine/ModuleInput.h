@@ -22,7 +22,7 @@ public:
 	ModuleInput(bool start_enabled = true);
 	~ModuleInput();
 
-	bool Init();
+	bool Init(nlohmann::json &node);
 	update_status PreUpdate();
 	update_status PollEvents();
 	void UpdateInput();

@@ -20,7 +20,7 @@ public:
 	~ModuleGUI();
 
 public:
-	bool Init();
+	bool Init(nlohmann::json &node);
 
 	update_status PreUpdate();
 	update_status Update();

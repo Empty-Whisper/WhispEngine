@@ -12,7 +12,7 @@ public:
 	ModuleRenderer3D(bool start_enabled = true);
 	~ModuleRenderer3D();
 
-	bool Init();
+	bool Init(nlohmann::json &node);
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();
@@ -29,6 +29,5 @@ public:
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	GLenum vision_mode = GL_FILL;
 
-private:
 	bool vsync = true;
 };

@@ -1,11 +1,23 @@
 {
-    "app_name": "Whisp 3D Engine",
-    "fps_cap": 60,
-    "organization": "Empty Whisper",
-    "vsync": false,
-    "window": {
-        "brightness": 1.0,
-        "height": 1024,
-        "width": 1280
+    "Configuration": {
+        "App": {
+            "name": "Whisp 3D Engine",
+            "organization": "Empty Whisper",
+            "version": 0
+        },
+        "Camera3D": null,
+        "Input": null,
+        "Renderer": {
+            "framerate_cap": 60,
+            "vsync": true
+        },
+        "SceneIntro": null,
+        "ShortCut": null,
+        "UI": null,
+        "Window": {
+            "bright": 1.0,
+            "height": 1024,
+            "width": 1280
+        }
     }
 }

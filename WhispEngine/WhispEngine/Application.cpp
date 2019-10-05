@@ -51,9 +51,11 @@ bool Application::Init()
 {
 	bool ret = true;
 
+	nlohmann::json load = file_system->OpenFile("configuration.json");
+
 	// Call Init() in all modules
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret; item++) {
-		ret = (*item)->Init();
+		ret = (*item)->Init(load["Configuration"][(*item)->name.data()]);
 	}
 
 	// After all Init calls we call Start() in all modules
@@ -135,6 +137,16 @@ void Application::SaveConfiguration()
 	want_to_save = true;
 }
 
+const char * Application::GetAppName() const
+{
+	return engine_name.data();
+}
+
+const char * Application::GetOrganizationName() const
+{
+	return organization.data();
+}
+
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
@@ -178,7 +190,7 @@ void Application::FinishUpdate()
 
 	last_frame_ms = perfect_frame_time.ReadMs();
 
-	if (!VSYNC && framerate_cap != 0 && apply_cap_frames)
+	if (!App->renderer3D->vsync && framerate_cap != 0 && apply_cap_frames)
 	{
 		
 		Uint32 frame_cap_ms = 1000.0F / (float)framerate_cap;

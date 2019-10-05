@@ -73,6 +73,9 @@ public:
 	void SaveLogFile();
 	void SaveConfiguration();
 
+	const char* GetAppName() const;
+	const char* GetOrganizationName() const;
+
 	HardwareInfo *hardware = nullptr;
 	FileSystem *file_system = nullptr;
 

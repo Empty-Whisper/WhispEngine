@@ -24,7 +24,7 @@ Application* App = nullptr;
 
 int main(int argc, char ** argv)
 {
-	LOG("Starting game '%s'...", TITLE);
+	LOG("Starting Engine...");
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
@@ -88,7 +88,7 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	LOG("Exiting game '%s'...\n", TITLE);
+	LOG("Exiting Engine...");
 	App->SaveLogFile();
 	delete App;
 	App = nullptr;

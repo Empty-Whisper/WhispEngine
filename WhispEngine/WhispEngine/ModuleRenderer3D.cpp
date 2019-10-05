@@ -16,13 +16,16 @@ ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
 // Called before render is available
-bool ModuleRenderer3D::Init()
+bool ModuleRenderer3D::Init(nlohmann::json &node)
 {
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 	
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
+
+	vsync = node["vsync"];
+	App->framerate_cap = node["framerate_cap"];
 	
 	GLenum init = glewInit();
 	if (init != GLEW_OK) {
@@ -39,7 +42,7 @@ bool ModuleRenderer3D::Init()
 	if(ret == true)
 	{
 		//Use Vsync
-		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		if (vsync && SDL_GL_SetSwapInterval(1) < 0)
 		{
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 		}
@@ -117,7 +120,7 @@ bool ModuleRenderer3D::Init()
 	}
 
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(App->window->screen_width, App->window->screen_height);
 
 	return ret;
 }

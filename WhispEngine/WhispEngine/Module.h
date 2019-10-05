@@ -18,7 +18,7 @@ public:
 	virtual ~Module()
 	{}
 
-	virtual bool Init() 
+	virtual bool Init(nlohmann::json &node)
 	{
 		return true; 
 	}
@@ -52,4 +52,5 @@ public:
 	{ 
 		return true;
 	}
+
 };
