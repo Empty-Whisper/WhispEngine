@@ -23,7 +23,7 @@ void GameObject::SetGLBuffers()
 
 	glGenBuffers(1, &id_index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * n_index * 3, index, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * n_index, index, GL_STATIC_DRAW);
 }
 
 GameObject::~GameObject()
@@ -41,5 +41,5 @@ void GameObject::Draw()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawElements(GL_TRIANGLES, n_index * 3, GL_UNSIGNED_SHORT, NULL);
+	glDrawElements(GL_TRIANGLES, n_index*3, GL_UNSIGNED_INT, NULL);
 }
