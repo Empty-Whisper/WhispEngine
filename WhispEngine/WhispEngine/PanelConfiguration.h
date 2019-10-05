@@ -28,17 +28,9 @@ private:
 	bool checkbox_fulldesktop_window = false;
 	bool checkbox_resizable_window = false;
 
-	float bright = 1.0f;
-
 	int max_fps = 0;
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
 	std::vector<float> mem_reg;
-
-	char app_name[30] = TITLE;
-	char organization[30] = ORGANIZATION;
-
-	int window_width = 0;
-	int window_height = 0;
 };
 

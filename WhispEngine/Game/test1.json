@@ -1,0 +1,23 @@
+{
+    "Configuration": {
+        "App": {
+            "name": "",
+            "organization": "",
+            "version": 0
+        },
+        "Camera3D": null,
+        "Input": null,
+        "Renderer": {
+            "framerate_cap": 60,
+            "vsync": true
+        },
+        "SceneIntro": null,
+        "ShortCut": null,
+        "UI": null,
+        "Window": {
+            "bright": 1.0,
+            "height": 1024,
+            "width": 1280
+        }
+    }
+}

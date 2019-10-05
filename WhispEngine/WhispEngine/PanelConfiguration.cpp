@@ -9,9 +9,6 @@ PanelConfiguration::PanelConfiguration(const bool &start_active, const SDL_Scanc
 	fps_reg.resize(100);
 	ms_reg.resize(100);
 	mem_reg.resize(100);
-
-	window_width = App->window->screen_width;
-	window_height = App->window->screen_height;
 }
 
 
@@ -118,24 +115,14 @@ void PanelConfiguration::Options()
 		nlohmann::json lfile = App->file_system->OpenFile("configuration.json");
 
 		max_fps = App->framerate_cap = lfile["fps_cap"];
-		bright = lfile["window"]["brightness"];
-		SDL_SetWindowBrightness(App->window->window, bright);
+		//bright = lfile["window"]["brightness"];
+		//SDL_SetWindowBrightness(App->window->window, bright);
 
 	}
 	if (ImGui::MenuItem("Save"))
 	{
 		// TODO: Save data from JSON
 
-		nlohmann::json sfile;
-		sfile["app_name"] = app_name;
-		sfile["organization"] = organization;
-		sfile["fps_cap"] = App->framerate_cap;
-		sfile["vsync"] = VSYNC;
-		sfile["window"]["brightness"] = bright;
-		sfile["window"]["width"] = window_width;
-		sfile["window"]["height"] = window_height;
-
-		App->file_system->SaveFile("configuration.json", sfile);
 
 	}
 }
@@ -144,12 +131,12 @@ void PanelConfiguration::Window()
 {
 	ImGui::Text("Icon:"); ImGui::SameLine(); ImGui::Text("*null*");
 
-	if (ImGui::SliderFloat("Brightness", &bright, 0.0f, 1.0f)) {
-		SDL_SetWindowBrightness(App->window->window, bright);
+	if (ImGui::SliderFloat("Brightness", &App->window->bright, 0.0f, 1.0f)) {
+		SDL_SetWindowBrightness(App->window->window, App->window->bright);
 	}
-	if (ImGui::SliderInt("Width", &window_width, 640, 1920) || ImGui::SliderInt("Height", &window_height, 480, 1080))
+	if (ImGui::SliderInt("Width", (int*)&App->window->screen_width, 640, 1920) || ImGui::SliderInt("Height", (int*)&App->window->screen_height, 480, 1080))
 	{
-		SDL_SetWindowSize(App->window->window, window_width, window_height);
+		SDL_SetWindowSize(App->window->window, App->window->screen_width, App->window->screen_height);
 	}
 
 	SDL_DisplayMode display;
@@ -192,12 +179,12 @@ void PanelConfiguration::Window()
 
 void PanelConfiguration::Application()
 {
-	if (ImGui::InputText("App Name", app_name, 30)) {
+	/*if (ImGui::InputText("App Name", app_name, 30)) {
 		App->window->SetTitle(app_name);
 	}
 	if (ImGui::InputText("Organitzation", organization, 30)) {
 
-	}
+	}*/
 
 	if (ImGui::SliderInt("Max FPS", &max_fps, 0, 120))
 	{

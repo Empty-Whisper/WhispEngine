@@ -3,6 +3,8 @@
 
 ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
+	name.assign("Window");
+
 	window = NULL;
 	screen_surface = NULL;
 
@@ -89,6 +91,15 @@ bool ModuleWindow::CleanUp()
 
 	//Quit SDL subsystems
 	SDL_Quit();
+	return true;
+}
+
+bool ModuleWindow::Save(nlohmann::json & node)
+{
+	node["width"] = screen_width;
+	node["height"] = screen_height;
+	node["bright"] = bright;
+
 	return true;
 }
 

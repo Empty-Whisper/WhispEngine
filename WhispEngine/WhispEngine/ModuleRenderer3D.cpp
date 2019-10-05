@@ -8,6 +8,7 @@
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
+	name.assign("Renderer");
 }
 
 // Destructor
@@ -152,6 +153,14 @@ bool ModuleRenderer3D::CleanUp()
 	LOG("Destroying 3D Renderer");
 
 	SDL_GL_DeleteContext(context);
+
+	return true;
+}
+
+bool ModuleRenderer3D::Save(nlohmann::json & node)
+{
+	node["vsync"] = vsync;
+	node["framerate_cap"] = App->framerate_cap;
 
 	return true;
 }

@@ -1,10 +1,14 @@
 #pragma once
 #include "Globals.h"
+#include <string>
+#include "JSON/json.hpp"
 
 class Module
 {
 private :
 	bool enabled;
+public:
+	std::string name = "module";
 
 public:
 
@@ -44,4 +48,8 @@ public:
 		return true; 
 	}
 
+	virtual bool Save(nlohmann::json &node) 
+	{ 
+		return true;
+	}
 };

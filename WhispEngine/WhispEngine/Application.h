@@ -41,6 +41,8 @@ public:
 
 
 private:
+	std::string engine_name;
+	std::string organization;
 
 	bool    first_frame = true;
 	float	dt = 0.0f;
@@ -51,6 +53,8 @@ private:
 	Timer		start_time;
 
 	std::list<Module*> list_modules;
+
+	bool want_to_save = true;
 
 	std::string log_buff;
 
@@ -67,6 +71,7 @@ public:
 	const char* GetLog();
 	void Log(const char*);
 	void SaveLogFile();
+	void SaveConfiguration();
 
 	HardwareInfo *hardware = nullptr;
 	FileSystem *file_system = nullptr;
@@ -76,6 +81,8 @@ private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+
+	bool SaveConfNow();
 };
 
 extern Application* App;

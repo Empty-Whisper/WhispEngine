@@ -20,6 +20,7 @@
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
+	name.assign("UI");
 }
 
 ModuleGUI::~ModuleGUI()

@@ -13,6 +13,7 @@ public:
 
 	bool Start();
 	update_status Update();
+	void DrawGrid(int width);
 	bool CleanUp();
 
 public:

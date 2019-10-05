@@ -16,6 +16,8 @@ public:
 	bool Init();
 	bool CleanUp();
 
+	bool Save(nlohmann::json &node);
+
 	void SetTitle(const char* title);
 
 public:
@@ -28,6 +30,8 @@ public:
 	//Screen measures
 	uint screen_width;
 	uint screen_height;
+
+	float bright = 1.0f;
 
 	//Device mode structure
 	DEVMODE ScreenSettings;

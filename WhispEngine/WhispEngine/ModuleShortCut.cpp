@@ -4,6 +4,7 @@
 
 ModuleShortCut::ModuleShortCut()
 {
+	name.assign("ShortCut");
 }
 
 

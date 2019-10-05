@@ -130,6 +130,11 @@ void Application::SaveLogFile()
 	log_output.close();
 }
 
+void Application::SaveConfiguration()
+{
+	want_to_save = true;
+}
+
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
@@ -155,6 +160,9 @@ update_status Application::Update()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	if (want_to_save) {
+		SaveConfNow();
+	}
 
 	if (first_frame == true)
 	{
@@ -182,6 +190,28 @@ void Application::FinishUpdate()
 		else
 			SDL_Delay(frame_cap_ms - (Uint32)last_frame_ms % (Uint32)frame_cap_ms);
 	}
+}
+
+bool Application::SaveConfNow()
+{
+	bool ret = true;
+
+	nlohmann::json save;
+	
+	//save = save["Configuration"];
+	save["Configuration"]["App"]["name"] = engine_name.data();
+	save["Configuration"]["App"]["organization"] = organization.data();
+	save["Configuration"]["App"]["version"] = 0;
+	
+	for (auto i = list_modules.begin(); i != list_modules.end(); ++i) {
+		(*i)->Save(save["Configuration"][(*i)->name.data()]);
+	}
+
+	file_system->SaveFile("test1.json", save);
+
+	want_to_save = false;
+
+	return ret;
 }
 
 bool Application::CleanUp()
