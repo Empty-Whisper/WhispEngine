@@ -54,29 +54,29 @@ bool ModuleSceneIntro::Start()
 
 	const aiScene* scene = aiImportFile("warrior.FBX", aiProcessPreset_TargetRealtime_MaxQuality);
 
-	w = new GameObject();
-
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		/*uint n_v = 0;
+		uint n_v = 0;
 		uint n_i = 0;
 		float* v = nullptr;
-		uint* a_i = nullptr;*/
+		uint* a_i = nullptr;
+
+		float* normals = nullptr;
 
 		aiMesh* it = nullptr;
 		for (uint i = 0; i < scene->mNumMeshes; ++i) 
 		{
 			it = scene->mMeshes[i];
-			w->n_vertex = it->mNumVertices;
-			w->vertex = new float[w->n_vertex * 3];
-			memcpy(w->vertex, it->mVertices, sizeof(float) * w->n_vertex * 3);
-			LOG("New mesh with %d", w->vertex);
+			n_v = it->mNumVertices;
+			v = new float[n_v * 3];
+			memcpy(v, it->mVertices, sizeof(float) * n_v * 3);
+			LOG("New mesh with %d", n_v);
 
 			if (it->HasFaces()) 
 			{
-				w->n_index = it->mNumFaces*3;
-				w->index = new uint[w->n_index];
+				n_i = it->mNumFaces*3;
+				a_i = new uint[n_i];
 
 				for (uint j = 0; j < it->mNumFaces; ++j) 
 				{
@@ -86,17 +86,30 @@ bool ModuleSceneIntro::Start()
 					}
 					else 
 					{
-						memcpy(&w->index[j * 3], it->mFaces[j].mIndices, sizeof(uint) * 3);
+						memcpy(&a_i[j * 3], it->mFaces[j].mIndices, sizeof(uint) * 3);
 					}
 				}
 			}
 
-	//		//warrior = new GameObject(n_v, v, n_i, a_i);
-			w->SetGLBuffers();
-	//		/*delete[] v;
-	//		v = nullptr;
-	//		delete[] a_i;
-	//		a_i = nullptr;*/
+			if (it->HasNormals()) {
+				normals = new float[n_v * 3];
+				memcpy(normals, it->mNormals, sizeof(float) * n_v * 3);
+
+				for (int i = 0; i < n_v * 3; i+=3) {
+					LOG("n(%i): %.2f %.2f %.2f", i / 3, normals[i], normals[i + 1], normals[i + 2]);
+					normals[i] *= 5;
+					normals[i+1] *= 5;
+					normals[i+2] *= 5;
+				}
+			}
+
+			w = new GameObject(n_v, v, n_i, a_i, normals);
+
+			delete[] v;
+			v = nullptr;
+			delete[] a_i;
+			a_i = nullptr;
+			delete[] normals;
 
 			it = nullptr;
 		}
@@ -123,7 +136,7 @@ update_status ModuleSceneIntro::Update()
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_VERTEX_ARRAY);
 
-	DrawGrid(50);
+	//DrawGrid(50);
 
 	return UPDATE_CONTINUE;
 }
