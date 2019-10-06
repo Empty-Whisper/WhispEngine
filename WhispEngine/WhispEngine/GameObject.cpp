@@ -2,6 +2,12 @@
 #include "Application.h"
 #include "Globals.h"
 
+GameObject::GameObject()
+{
+	color = new float[3];
+	color[0] = 1.f;
+}
+
 GameObject::GameObject(const int & n_vertex, float * vertex, const int & n_index, uint * index, float * normals)
 	: n_vertex(n_vertex), n_index(n_index), vertex(vertex), index(index), normals(normals)
 {

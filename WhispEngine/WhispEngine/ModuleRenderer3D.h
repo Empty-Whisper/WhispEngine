@@ -30,5 +30,8 @@ public:
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	GLenum vision_mode = GL_FILL;
 
+	bool wireframe = true;
+	bool fill = true;
+
 	bool vsync = true;
 };

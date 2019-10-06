@@ -40,6 +40,8 @@
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfiguration.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
+    <ClCompile Include="PanelObjects.cpp" />
+    <ClCompile Include="PanelRender.cpp" />
     <ClCompile Include="par_shapes.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -113,6 +115,8 @@
     <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PanelConfiguration.h" />
     <ClInclude Include="PanelConsole.h" />
+    <ClInclude Include="PanelObjects.h" />
+    <ClInclude Include="PanelRender.h" />
     <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="JSON\json.hpp" />

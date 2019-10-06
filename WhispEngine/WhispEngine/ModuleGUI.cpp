@@ -14,8 +14,9 @@
 
 #include "PanelConfiguration.h"
 #include "PanelConsole.h"
-
 #include "PanelAbout.h"
+#include "PanelRender.h"
+#include "PanelObjects.h"
 
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
@@ -37,9 +38,11 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION));
 	ImGui::StyleColorsDark();
 
-	panels.push_back(config = new PanelConfiguration(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
-	panels.push_back(about = new PanelAbout(false, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
-	panels.push_back(console = new PanelConsole(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
+	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
+	panels.push_back(about = new PanelAbout(node["panels"]["about"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
+	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
+	panels.push_back(render = new PanelRender());
+	panels.push_back(inspector = new PanelObjects());
 
 	return true;
 }
@@ -55,10 +58,6 @@ update_status ModuleGUI::PreUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_3))
 	{
 		show_style_window = !show_style_window;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_4))
-	{
-		show_wireframe = !show_wireframe;
 	}
 
 	return UPDATE_CONTINUE;
@@ -87,14 +86,6 @@ update_status ModuleGUI::Update()
 		}
 		ImGui::End();
 	}
-	if (show_wireframe)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	else
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	
-
 
 	return ret;
 }
@@ -119,7 +110,6 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Console", "LShift+1", &console->active);
 			ImGui::MenuItem("Configuration", "LShift+2", &config->active);
 			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
-			ImGui::Checkbox("Wireframe", &show_wireframe);
 			
 
 

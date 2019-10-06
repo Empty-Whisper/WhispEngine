@@ -6,7 +6,7 @@
 class GameObject
 {
 public:
-	GameObject() {}
+	GameObject();
 	GameObject(const int &n_vertex, float* vertex, const int &n_index, uint* index, float* normals = nullptr);
 	
 	//GameObject(const par_shape *shape, Vector3¿?);
@@ -31,5 +31,8 @@ public:
 
 	uint id_normals = 0;
 	float* normals = nullptr;
+
+	bool active = true;
+	float* color = nullptr;
 };
 

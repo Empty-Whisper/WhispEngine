@@ -107,7 +107,10 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (fill)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if(wireframe)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		//Attributes --------------------------------------------------
 		//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);

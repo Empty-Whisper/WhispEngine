@@ -250,6 +250,10 @@
     <ClCompile Include="ModuleObjectManager.cpp">
       <Filter>Main Modules</Filter>
     </ClCompile>
+    <ClCompile Include="PanelRender.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -556,6 +560,10 @@
     <ClInclude Include="ModuleImport.h">
       <Filter>Main Modules</Filter>
     </ClInclude>
+    <ClInclude Include="PanelRender.h">
+      <Filter>UI_Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelObjects.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
