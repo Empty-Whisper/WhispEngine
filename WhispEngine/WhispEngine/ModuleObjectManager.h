@@ -14,6 +14,8 @@ public:
 
 	void AddObject(GameObject* obj);
 
+	const std::vector<GameObject*>* GetObjects() const;
+
 private:
 	std::vector<GameObject*> objects;
 };

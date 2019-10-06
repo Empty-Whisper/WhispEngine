@@ -38,14 +38,15 @@ bool ModuleSceneIntro::Start()
 // Update
 update_status ModuleSceneIntro::Update()
 {
-
-	DrawGrid(50);
+	if (show_grid)
+		DrawGrid(50);
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::DrawGrid(int width)
 {
+	glColor3f(1.f, 1.f, 1.f);
 	glBegin(GL_LINES);
 	for (int i = -width; i <= width; ++i)
 	{
@@ -55,9 +56,7 @@ void ModuleSceneIntro::DrawGrid(int width)
 
 		glVertex3f(width, 0, i);
 		glVertex3f(-width, 0, i);
-
-		glColor3f(1.f, 1.f, 1.f);
-
+		
 	}
 	glEnd();
 }
@@ -67,9 +66,6 @@ void ModuleSceneIntro::DrawGrid(int width)
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
-	
-	delete cube;
-	delete w;
 
 	return true;
 }

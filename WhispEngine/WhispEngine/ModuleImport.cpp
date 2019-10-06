@@ -13,6 +13,7 @@
 
 ModuleImport::ModuleImport()
 {
+	name.assign("Importer");
 }
 
 
@@ -47,26 +48,28 @@ bool ModuleImport::ImportFile(const char * path)
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		uint n_v = 0;
+		/*uint n_v = 0;
 		uint n_i = 0;
 		float* v = nullptr;
 		uint* a_i = nullptr;
 
-		float* normals = nullptr;
+		float* normals = nullptr;*/
+
+		GameObject *obj = new GameObject();
 
 		aiMesh* it = nullptr;
 		for (uint i = 0; i < scene->mNumMeshes; ++i)
 		{
 			it = scene->mMeshes[i];
-			n_v = it->mNumVertices;
-			v = new float[n_v * 3];
-			memcpy(v, it->mVertices, sizeof(float) * n_v * 3);
-			LOG("New mesh with %d vertex", n_v);
+			obj->n_vertex = it->mNumVertices;
+			obj->vertex = new float[obj->n_vertex * 3];
+			memcpy(obj->vertex, it->mVertices, sizeof(float) * obj->n_vertex * 3);
+			LOG("New mesh with %d vertex", obj->n_vertex);
 
 			if (it->HasFaces())
 			{
-				n_i = it->mNumFaces * 3;
-				a_i = new uint[n_i];
+				obj->n_index = it->mNumFaces * 3;
+				obj->index = new uint[obj->n_index];
 
 				for (uint j = 0; j < it->mNumFaces; ++j)
 				{
@@ -76,32 +79,23 @@ bool ModuleImport::ImportFile(const char * path)
 					}
 					else
 					{
-						memcpy(&a_i[j * 3], it->mFaces[j].mIndices, sizeof(uint) * 3);
+						memcpy(&obj->index[j * 3], it->mFaces[j].mIndices, sizeof(uint) * 3);
 					}
 				}
-				LOG("New mesh with %i faces", n_i / 3);
+				LOG("New mesh with %i faces", obj->n_index / 3);
 			}
 
 			if (it->HasNormals()) {
-				normals = new float[n_v * 3];
-				memcpy(normals, it->mNormals, sizeof(float) * n_v * 3);
+				obj->normals = new float[obj->n_vertex * 3];
+				memcpy(obj->normals, it->mNormals, sizeof(float) * obj->n_vertex * 3);
 
-				for (int i = 0; i < n_v * 3; i += 3) {
-					/*normals[i] *= 5;
-					normals[i + 1] *= 5;
-					normals[i + 2] *= 5;*/
+				/*for (int i = 0; i < n_v * 3; i += 3) {
 					LOG("n(%i): %.2f %.2f %.2f", i / 3, normals[i], normals[i + 1], normals[i + 2]);
-
-				}
+				}*/
 			}
 
-			App->object_manager->AddObject(new GameObject(n_v,v,n_i,a_i,normals));
-
-			/*delete[] v;
-			v = nullptr;
-			delete[] a_i;
-			a_i = nullptr;
-			delete[] normals;*/
+			obj->SetGLBuffers();
+			App->object_manager->AddObject(obj);
 
 			it = nullptr;
 		}

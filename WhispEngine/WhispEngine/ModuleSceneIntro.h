@@ -18,7 +18,6 @@ public:
 
 public:
 
-	GameObject *cube = nullptr;
-	GameObject *w = nullptr;
+	bool show_grid = true;
 
 };

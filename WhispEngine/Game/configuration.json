@@ -13,7 +13,19 @@
         },
         "SceneIntro": null,
         "ShortCut": null,
-        "UI": null,
+        "UI": {
+			"panels": {
+				"configuration":{
+					"start_enabled": false
+				},
+				"about":{
+					"start_enabled": false
+				},
+				"console":{
+					"start_enabled": false
+				}
+			}
+		},
         "Window": {
             "bright": 1.0,
             "flags": {
