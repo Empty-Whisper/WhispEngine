@@ -4,13 +4,15 @@
 
 Application::Application()
 {
-	window = new ModuleWindow(this);
-	input = new ModuleInput(this);
-	scene_intro = new ModuleSceneIntro(this);
-	renderer3D = new ModuleRenderer3D(this);
-	camera = new ModuleCamera3D(this);
-	gui = new ModuleGUI(this);
-	shortcut = new ModuleShortCut();
+	window =			new ModuleWindow();
+	input =				new ModuleInput();
+	scene_intro =		new ModuleSceneIntro();
+	renderer3D =		new ModuleRenderer3D();
+	camera =			new ModuleCamera3D();
+	gui =				new ModuleGUI();
+	shortcut =			new ModuleShortCut();
+	importer =			new ModuleImport();
+	object_manager =	new ModuleObjectManager();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -21,6 +23,8 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(shortcut);
+	AddModule(importer);
+	AddModule(object_manager);
 	
 	// Scenes
 	AddModule(scene_intro);

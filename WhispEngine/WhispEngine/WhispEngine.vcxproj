@@ -33,6 +33,8 @@
     <ClCompile Include="Imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
+    <ClCompile Include="ModuleImport.cpp" />
+    <ClCompile Include="ModuleObjectManager.cpp" />
     <ClCompile Include="ModuleShortCut.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelAbout.cpp" />
@@ -104,6 +106,8 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="mmgr\mmgr.h" />
     <ClInclude Include="mmgr\nommgr.h" />
+    <ClInclude Include="ModuleImport.h" />
+    <ClInclude Include="ModuleObjectManager.h" />
     <ClInclude Include="ModuleShortCut.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelAbout.h" />

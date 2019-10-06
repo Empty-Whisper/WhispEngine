@@ -12,6 +12,8 @@
 #include "ModuleGUI.h"
 #include "FileSystem.h"
 #include "ModuleShortCut.h"
+#include "ModuleImport.h"
+#include "ModuleObjectManager.h"
 
 #include "HardwareInfo.h"
 
@@ -27,6 +29,8 @@ public:
 	ModuleCamera3D* camera = nullptr;
 	ModuleGUI* gui = nullptr;
 	ModuleShortCut* shortcut = nullptr;
+	ModuleObjectManager* object_manager = nullptr;
+	ModuleImport* importer = nullptr;
 
 public:
 

@@ -76,10 +76,18 @@ update_status ModuleInput::PollEvents()
 			break;
 
 		case SDL_WINDOWEVENT:
-		{
 			if (e.window.event == SDL_WINDOWEVENT_RESIZED)
 				App->renderer3D->OnResize(e.window.data1, e.window.data2);
-		}
+			break;
+		
+		case SDL_DROPFILE:
+			char* file = e.drop.file;
+
+			App->importer->ImportFile(file);
+
+			SDL_free(file);
+			break;
+		
 		}
 	}
 

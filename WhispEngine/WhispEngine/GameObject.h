@@ -7,7 +7,7 @@ class GameObject
 {
 public:
 	GameObject() {}
-	GameObject(const int &n_vertex, const float* vertex, const int &n_index, const uint* index, const float* normals = nullptr);
+	GameObject(const int &n_vertex, float* vertex, const int &n_index, uint* index, float* normals = nullptr);
 	
 	//GameObject(const par_shape *shape, Vector3¿?);
 	~GameObject();

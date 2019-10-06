@@ -244,6 +244,12 @@
       <Filter>Tools\ParShapes</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="ModuleImport.cpp">
+      <Filter>Main Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleObjectManager.cpp">
+      <Filter>Main Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -544,6 +550,12 @@
       <Filter>Tools\ParShapes</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ModuleObjectManager.h">
+      <Filter>Main Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleImport.h">
+      <Filter>Main Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
