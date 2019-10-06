@@ -17,7 +17,8 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	bool Save(nlohmann::json &node);
+	bool Save(nlohmann::json &node) const;
+	bool Load(nlohmann::json &node);
 
 	void OnResize(int width, int height);
 

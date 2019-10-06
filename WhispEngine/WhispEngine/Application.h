@@ -54,7 +54,9 @@ private:
 
 	std::list<Module*> list_modules;
 
-	bool want_to_save = true;
+	bool want_to_save = false;
+	bool want_to_load = false;
+	bool want_to_load_def = false;
 
 	std::string log_buff;
 
@@ -72,7 +74,11 @@ public:
 	void Log(const char*);
 	void SaveLogFile();
 	void SaveConfiguration();
+	void LoadConfiguration();
+	void LoadDefaultConfiguration();
 
+	void SetAppName(const char* name);
+	void SetOrganizationName(const char* name);
 	const char* GetAppName() const;
 	const char* GetOrganizationName() const;
 
@@ -86,6 +92,7 @@ private:
 	void FinishUpdate();
 
 	bool SaveConfNow();
+	bool LoadConfNow();
 };
 
 extern Application* App;

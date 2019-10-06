@@ -28,7 +28,6 @@ private:
 	bool checkbox_fulldesktop_window = false;
 	bool checkbox_resizable_window = false;
 
-	int max_fps = 0;
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
 	std::vector<float> mem_reg;

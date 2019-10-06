@@ -160,7 +160,7 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-bool ModuleRenderer3D::Save(nlohmann::json & node)
+bool ModuleRenderer3D::Save(nlohmann::json & node) const
 {
 	node["vsync"] = vsync;
 	node["framerate_cap"] = App->framerate_cap;
@@ -168,6 +168,16 @@ bool ModuleRenderer3D::Save(nlohmann::json & node)
 	return true;
 }
 
+
+bool ModuleRenderer3D::Load(nlohmann::json & node)
+{
+	vsync = node["vsync"];
+	App->framerate_cap = node["framerate_cap"];
+
+	//SDL_GL_SetSwapInterval(vsync);
+
+	return true;
+}
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {

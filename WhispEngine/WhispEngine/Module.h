@@ -48,8 +48,13 @@ public:
 		return true; 
 	}
 
-	virtual bool Save(nlohmann::json &node) 
+	virtual bool Save(nlohmann::json &node) const
 	{ 
+		return true;
+	}
+
+	virtual bool Load(nlohmann::json &node)
+	{
 		return true;
 	}
 

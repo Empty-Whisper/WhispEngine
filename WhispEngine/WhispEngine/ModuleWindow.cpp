@@ -32,10 +32,11 @@ bool ModuleWindow::Init(nlohmann::json &node)
 		screen_width = node["width"];
 		screen_height = node["height"];
 		bright = node["bright"];
+		size = node["size"];
 
 		//Create window
-		int width = screen_width * SCREEN_SIZE;
-		int height = screen_height * SCREEN_SIZE;
+		int width = screen_width * size;
+		int height = screen_height * size;
 		flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
@@ -43,22 +44,22 @@ bool ModuleWindow::Init(nlohmann::json &node)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
 
-		if(WIN_FULLSCREEN == true)
+		if(node["flags"]["fullscreen"])
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(WIN_RESIZABLE == true)
+		if(node["flags"]["resizable"])
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(WIN_BORDERLESS == true)
+		if(node["flags"]["borderless"])
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(WIN_FULLSCREEN_DESKTOP == true)
+		if(node["flags"]["fullscreen_desktop"])
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
@@ -96,7 +97,7 @@ bool ModuleWindow::CleanUp()
 	return true;
 }
 
-bool ModuleWindow::Save(nlohmann::json & node)
+bool ModuleWindow::Save(nlohmann::json & node) const
 {
 	node["width"] = screen_width;
 	node["height"] = screen_height;
@@ -105,7 +106,28 @@ bool ModuleWindow::Save(nlohmann::json & node)
 	return true;
 }
 
+bool ModuleWindow::Load(nlohmann::json & node)
+{
+	size = node["size"];
+
+	screen_width = node["width"];
+	screen_height = node["height"];
+	
+	bright = node["bright"];
+
+	SetTitle(App->GetAppName());
+	SetWindowSize(screen_width, screen_height);
+	SDL_SetWindowBrightness(window, bright);
+
+	return true;
+}
+
 void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);
+}
+
+void ModuleWindow::SetWindowSize(const uint & width, const uint & height)
+{
+	SDL_SetWindowSize(window, width, height);
 }

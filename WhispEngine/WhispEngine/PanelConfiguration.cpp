@@ -106,24 +106,15 @@ void PanelConfiguration::Options()
 {
 	if (ImGui::MenuItem("Set Defaults"))
 	{
-		// TODO: Load Default data from JSON
-
+		App->LoadDefaultConfiguration();
 	}
 	if (ImGui::MenuItem("Load"))
 	{
-		// TODO: Load Saved data from JSON
-		nlohmann::json lfile = App->file_system->OpenFile("configuration.json");
-
-		max_fps = App->framerate_cap = lfile["fps_cap"];
-		//bright = lfile["window"]["brightness"];
-		//SDL_SetWindowBrightness(App->window->window, bright);
-
+		App->LoadConfiguration();
 	}
 	if (ImGui::MenuItem("Save"))
 	{
-		// TODO: Save data from JSON
-
-
+		App->SaveConfiguration();
 	}
 }
 
@@ -134,15 +125,20 @@ void PanelConfiguration::Window()
 	if (ImGui::SliderFloat("Brightness", &App->window->bright, 0.0f, 1.0f)) {
 		SDL_SetWindowBrightness(App->window->window, App->window->bright);
 	}
-	if (ImGui::SliderInt("Width", (int*)&App->window->screen_width, 640, 1920) || ImGui::SliderInt("Height", (int*)&App->window->screen_height, 480, 1080))
+
+	if (ImGui::SliderInt("Width", (int*)&App->window->screen_width, 640, 1920))
 	{
-		SDL_SetWindowSize(App->window->window, App->window->screen_width, App->window->screen_height);
+		App->window->SetWindowSize(App->window->screen_width, App->window->screen_height);
 	}
+	if (ImGui::SliderInt("Height", (int*)&App->window->screen_height, 480, 1080))
+	{
+		App->window->SetWindowSize(App->window->screen_width, App->window->screen_height);
+	}
+
 
 	SDL_DisplayMode display;
 	SDL_GetCurrentDisplayMode(NULL, &display);
 	ImGui::Text("Refresh rate:"); ImGui::SameLine(); ImGui::TextColored(IMGUI_COLOR_YELLOW, std::to_string(display.refresh_rate).data());
-
 
 	if (ImGui::Checkbox("Fullscreen", &checkbox_fullscreen_window))
 	{
@@ -179,20 +175,23 @@ void PanelConfiguration::Window()
 
 void PanelConfiguration::Application()
 {
-	/*if (ImGui::InputText("App Name", app_name, 30)) {
-		App->window->SetTitle(app_name);
+	int length = 30;
+
+	char name[30];
+	char org[30];
+	sprintf_s(name, length, App->GetAppName());
+	sprintf_s(org, length, App->GetOrganizationName());
+
+	if (ImGui::InputText("App Name", name, length, ImGuiInputTextFlags_EnterReturnsTrue)) {
+		App->SetAppName(name);
+		App->window->SetTitle(name);
 	}
-	if (ImGui::InputText("Organitzation", organization, 30)) {
-
-	}*/
-
-	if (ImGui::SliderInt("Max FPS", &max_fps, 0, 120))
-	{
-		App->framerate_cap = max_fps;
+	if (ImGui::InputText("Organitzation", org, length)) {
+		App->SetOrganizationName(org);
 	}
-	ImGui::Text("Limit Framerate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", max_fps);
 
-	//ImGui::Text("%f", App->prev_last_sec_frame_count);
+	ImGui::SliderInt("Max FPS", (int*)&App->framerate_cap, 1, 120);
+	ImGui::Text("Limit Framerate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", App->framerate_cap);
 
 	//FPS graphic
 
