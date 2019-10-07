@@ -22,18 +22,20 @@ update_status ModuleObjectManager::Update()
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		if ((*i)->active) {
 
-			(*i)->see_normals = App->renderer3D->see_normals;
-
 			if (App->renderer3D->fill) {
 				glColor3fv((*i)->color);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				(*i)->Draw();
 			}
 			if (App->renderer3D->wireframe) {
-				glColor3f(0.f, 0.f, 0.f);
+				glColor3fv((*i)->wire_color);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				(*i)->Draw();
 			}
+
+			(*i)->vertex_normals = App->renderer3D->my_normals;
+			if (App->renderer3D->see_normals)
+				(*i)->DrawNormals();
 		}
 	}
 	glLineWidth(1.0f);
