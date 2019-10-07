@@ -43,6 +43,7 @@ public:
 
 	void AddObject(GameObject* obj);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
+	void Demo();
 
 	const std::vector<GameObject*>* GetObjects() const;
 

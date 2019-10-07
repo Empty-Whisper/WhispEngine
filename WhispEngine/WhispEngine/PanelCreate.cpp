@@ -144,6 +144,12 @@ void PanelCreate::Update()
 		ImGui::ColorEdit3("Face color", data.face_color);
 		ImGui::ColorEdit3("Wire color", data.wire_color);
 
+		if (ImGui::Button("Demo")) {
+			App->object_manager->Demo();
+		}
+
+		ImGui::SameLine();
+
 		if (ImGui::Button("Create")) {
 			App->object_manager->CreatePrimitive((Primitives)(iterator - items.begin()), data);
 		}

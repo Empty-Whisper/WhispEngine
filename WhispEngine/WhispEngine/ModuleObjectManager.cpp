@@ -122,6 +122,35 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 	return ret;
 }
 
+void ModuleObjectManager::Demo()
+{
+	std::vector<par_shapes_mesh*> mesh;
+	mesh.resize((int)Primitives::MAX);
+	mesh[0] = par_shapes_create_cube();
+	mesh[1] = par_shapes_create_tetrahedron();
+	mesh[2] = par_shapes_create_octahedron();
+	mesh[3] = par_shapes_create_dodecahedron();
+	mesh[4] = par_shapes_create_icosahedron();
+	mesh[5] = par_shapes_create_subdivided_sphere(3);
+	mesh[6] = par_shapes_create_hemisphere(10, 10);
+	mesh[7] = par_shapes_create_torus(10, 10, 0.5f);
+	mesh[8] = par_shapes_create_cone(10, 10);
+	mesh[9] = par_shapes_create_cylinder(10, 10);
+
+	int posx = -10;
+	float color[3] = {1,1,1};
+	for (auto i = mesh.begin(); i != mesh.end(); ++i) {
+		par_shapes_translate(*i, posx, 0.f, 3);
+		GameObject* obj = new GameObject((*i)->npoints, (*i)->points, (*i)->ntriangles * 3, (*i)->triangles, (*i)->normals);
+		obj->SetColors(color);
+		objects.push_back(obj);
+		par_shapes_free_mesh((*i));
+		posx += 3;
+	}
+
+	
+}
+
 const std::vector<GameObject*>* ModuleObjectManager::GetObjects() const
 {
 	return &objects;
