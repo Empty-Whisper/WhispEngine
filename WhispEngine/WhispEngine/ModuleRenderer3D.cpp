@@ -76,7 +76,11 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 		glClearDepth(1.0f);
 		
 		//Initialize clear color
-		glClearColor(0.f, 0.f, 0.f, 1.f);
+		background_color = new float[3];
+		background_color[0] = 0.15f;
+		background_color[1] = 0.15f;
+		background_color[2] = 0.15f;
+		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
 
 		//Check for error
 		error = glGetError();
@@ -131,6 +135,7 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate()
 {
+	glClearColor(background_color[0], background_color[1], background_color[2], 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 

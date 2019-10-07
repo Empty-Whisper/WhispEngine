@@ -29,10 +29,12 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	GLenum vision_mode = GL_FILL;
+	float* background_color = nullptr;
 
 	bool wireframe = true;
 	bool fill = true;
 	bool see_normals = false;
+	bool my_normals = false;
 
 	bool vsync = true;
 };
