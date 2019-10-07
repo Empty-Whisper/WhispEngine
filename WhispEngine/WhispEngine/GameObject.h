@@ -31,6 +31,7 @@ public:
 
 	uint id_normals = 0;
 	float* normals = nullptr;
+	bool see_normals = false;
 
 	bool active = true;
 	float* color = nullptr;

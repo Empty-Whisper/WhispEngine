@@ -253,7 +253,9 @@
     <ClCompile Include="PanelRender.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
-    <ClCompile Include="PanelObjects.cpp" />
+    <ClCompile Include="PanelObjects.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -563,7 +565,9 @@
     <ClInclude Include="PanelRender.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
-    <ClInclude Include="PanelObjects.h" />
+    <ClInclude Include="PanelObjects.h">
+      <Filter>UI_Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

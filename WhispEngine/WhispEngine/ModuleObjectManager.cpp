@@ -21,6 +21,9 @@ update_status ModuleObjectManager::Update()
 	glLineWidth(1.5f);
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		if ((*i)->active) {
+
+			(*i)->see_normals = App->renderer3D->see_normals;
+
 			if (App->renderer3D->fill) {
 				glColor3fv((*i)->color);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

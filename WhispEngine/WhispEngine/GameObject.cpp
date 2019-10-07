@@ -69,7 +69,7 @@ void GameObject::Draw()
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	glDrawElements(GL_TRIANGLES, n_index, GL_UNSIGNED_INT, NULL);
 
-	if (normals != nullptr) {
+	if (normals != nullptr && see_normals) {
 		/*glBindBuffer(GL_ARRAY_BUFFER, id_normals);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 		glDrawArrays(GL_POINTS, 0, n_vertex);*/
