@@ -104,10 +104,17 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 	}
 
 	par_shapes_translate(mesh, data.pos.x, data.pos.y, data.pos.z);
-	par_shapes_rotate(mesh, data.rotate.angle, data.rotate.axis);
+
+	if (data.rotate.axis[0] != 0 || data.rotate.axis[1] != 0 || data.rotate.axis[2] != 0) {
+		float mgn = std::sqrt(data.rotate.axis[0] * data.rotate.axis[0] + data.rotate.axis[1] * data.rotate.axis[1] + data.rotate.axis[2] * data.rotate.axis[2]); // normalize rotation axis
+		float rot[3] = { data.rotate.axis[0] / mgn,data.rotate.axis[1] / mgn ,data.rotate.axis[2] / mgn };
+		par_shapes_rotate(mesh, data.rotate.angle, rot);
+	}
+
 	par_shapes_scale(mesh, data.scale.x, data.scale.y, data.scale.z);
 
 	GameObject* obj = new GameObject(mesh->npoints, mesh->points, mesh->ntriangles * 3, mesh->triangles, mesh->normals);
+	obj->SetColors(data.face_color, data.wire_color);
 	objects.push_back(obj);
 
 	par_shapes_free_mesh(mesh);

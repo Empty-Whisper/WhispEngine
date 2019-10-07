@@ -16,6 +16,7 @@ public:
 public:
 
 	void SetGLBuffers();
+	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
 
 	void Draw();
 

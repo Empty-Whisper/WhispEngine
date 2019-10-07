@@ -68,6 +68,18 @@ void GameObject::SetGLBuffers()
 	}
 }
 
+void GameObject::SetColors(const float * face_color, const float * wire_color)
+{
+	if (face_color != nullptr) {
+		for (int i = 0; i < 3; ++i)
+			color[i] = face_color[i];
+	}
+	if (wire_color != nullptr) {
+		for (int i = 0; i < 3; ++i)
+			this->wire_color[i] = wire_color[i];
+	}
+}
+
 GameObject::~GameObject()
 {
 	delete[] vertex;

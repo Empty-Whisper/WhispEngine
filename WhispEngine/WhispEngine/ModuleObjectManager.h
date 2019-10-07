@@ -21,11 +21,14 @@ struct rot {
 struct Object_data {
 	vector3 pos;
 	rot rotate;
-	vector3 scale;
+	vector3 scale{ 1.f,1.f,1.f };
 
-	float radius = 0;
-	int slices = 0;
-	int rings = 0;
+	float face_color[3]{ 1.f,1.f,1.f };
+	float wire_color[3]{ 0.f,0.f,0.f };
+
+	float radius = 0.1f;
+	int slices = 3;
+	int rings = 3;
 };
 
 class ModuleObjectManager :

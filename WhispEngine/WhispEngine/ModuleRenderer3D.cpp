@@ -165,6 +165,8 @@ bool ModuleRenderer3D::CleanUp()
 
 	SDL_GL_DeleteContext(context);
 
+	delete[] background_color;
+
 	return true;
 }
 
