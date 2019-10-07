@@ -148,7 +148,7 @@ void ModuleObjectManager::Demo()
 		posx += 3;
 	}
 
-	
+	mesh.clear();	
 }
 
 const std::vector<GameObject*>* ModuleObjectManager::GetObjects() const

@@ -22,7 +22,7 @@
 					"start_enabled": false
 				},
 				"console":{
-					"start_enabled": false
+					"start_enabled": true
 				}
 			}
 		},

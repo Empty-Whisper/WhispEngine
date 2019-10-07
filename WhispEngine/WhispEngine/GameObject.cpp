@@ -114,13 +114,13 @@ void GameObject::DrawNormals()
 		glColor3f(0.f, 1.f, 0.f);
 		glBegin(GL_LINES);
 		if (!vertex_normals) {
-			for (int i = 0; i < n_vertex; i += 3) {
+			for (int i = 0; i < n_vertex*3; i += 3) {
 				glVertex3f(vertex[i], vertex[i + 1], vertex[i + 2]);
 				glVertex3f(vertex[i] + normals[i], vertex[i + 1] + normals[i + 1], vertex[i + 2] + normals[i + 2]);
 			}
 		}
 		else {
-			for (int i = 0; i < n_vertex; i += 3) {
+			for (int i = 0; i < n_vertex * 3; i += 3) {
 				glVertex3f(middle_point[i], middle_point[i + 1], middle_point[i + 2]);
 				glVertex3f(middle_point[i] + normals[i], middle_point[i + 1] + normals[i + 1], middle_point[i + 2] + normals[i + 2]);
 			}
