@@ -86,6 +86,11 @@ GameObject::~GameObject()
 	delete[] index;
 	delete[] normals;
 
+	delete[] middle_point;
+	
+	delete[] color;
+	delete[] wire_color;
+
 	vertex = nullptr;
 	index = nullptr;
 }

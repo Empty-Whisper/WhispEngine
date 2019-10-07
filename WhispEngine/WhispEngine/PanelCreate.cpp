@@ -71,9 +71,9 @@ void PanelCreate::Update()
 		ImGui::PushItemWidth(100);
 		ImGui::PushID("pos");
 		ImGui::Text("Position");
-		ImGui::SliderFloat("X", &data.pos.x, 0.f, 5.f); ImGui::SameLine();
-		ImGui::SliderFloat("Y", &data.pos.y, 0.f, 5.f); ImGui::SameLine();
-		ImGui::SliderFloat("Z", &data.pos.z, 0.f, 5.f);
+		ImGui::SliderFloat("X", &data.pos.x, -15.f, 15.f); ImGui::SameLine();
+		ImGui::SliderFloat("Y", &data.pos.y, -15.f, 15.f); ImGui::SameLine();
+		ImGui::SliderFloat("Z", &data.pos.z, -15.f, 15.f);
 		ImGui::PopID();
 
 		ImGui::Separator();
