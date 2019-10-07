@@ -17,6 +17,7 @@
 #include "PanelAbout.h"
 #include "PanelRender.h"
 #include "PanelObjects.h"
+#include "PanelCreate.h"
 
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
@@ -43,6 +44,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
 	panels.push_back(render = new PanelRender());
 	panels.push_back(inspector = new PanelObjects());
+	panels.push_back(create = new PanelCreate());
 
 	return true;
 }

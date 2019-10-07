@@ -59,6 +59,20 @@ void ModuleObjectManager::AddObject(GameObject * obj)
 	objects.push_back(obj);
 }
 
+bool ModuleObjectManager::CreatePrimitive(const Primitives & type)
+{
+	bool ret = true;
+
+	par_shapes_mesh* mesh = par_shapes_create_cube();
+
+	GameObject* obj = new GameObject(mesh->npoints, mesh->points, mesh->ntriangles * 3, mesh->triangles, mesh->normals);
+	objects.push_back(obj);
+
+	par_shapes_free_mesh(mesh);
+
+	return ret;
+}
+
 const std::vector<GameObject*>* ModuleObjectManager::GetObjects() const
 {
 	return &objects;

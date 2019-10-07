@@ -2,6 +2,12 @@
 #include "Module.h"
 #include "GameObject.h"
 
+enum class Primitives {
+	NONE = -1,
+	CUBE, SPHERE,
+	MAX
+};
+
 class ModuleObjectManager :
 	public Module
 {
@@ -13,6 +19,7 @@ public:
 	bool CleanUp();
 
 	void AddObject(GameObject* obj);
+	bool CreatePrimitive(const Primitives &type);
 
 	const std::vector<GameObject*>* GetObjects() const;
 

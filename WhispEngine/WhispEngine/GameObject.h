@@ -7,6 +7,7 @@ class GameObject
 {
 public:
 	GameObject();
+	void InitColors();
 	GameObject(const int &n_vertex, float* vertex, const int &n_index, uint* index, float* normals = nullptr);
 	
 	//GameObject(const par_shape *shape, Vector3¿?);

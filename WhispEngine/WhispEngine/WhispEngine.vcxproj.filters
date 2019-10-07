@@ -52,6 +52,9 @@
     <Filter Include="Tools\ParShapes">
       <UniqueIdentifier>{b66f1cda-111d-4b30-86d2-66d925cd484b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{9fe82b16-f1fc-4aca-8559-a32383215a1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -243,7 +246,6 @@
     <ClCompile Include="par_shapes.cpp">
       <Filter>Tools\ParShapes</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="ModuleImport.cpp">
       <Filter>Main Modules</Filter>
     </ClCompile>
@@ -256,6 +258,11 @@
     <ClCompile Include="PanelObjects.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelCreate.cpp" />
+    <ClCompile Include="Primitive.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -555,7 +562,6 @@
     <ClInclude Include="par_shapes.h">
       <Filter>Tools\ParShapes</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="ModuleObjectManager.h">
       <Filter>Main Modules</Filter>
     </ClInclude>
@@ -568,6 +574,11 @@
     <ClInclude Include="PanelObjects.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelCreate.h" />
+    <ClInclude Include="Primitive.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

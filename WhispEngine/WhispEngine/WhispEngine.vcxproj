@@ -40,6 +40,7 @@
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfiguration.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
+    <ClCompile Include="PanelCreate.cpp" />
     <ClCompile Include="PanelObjects.cpp" />
     <ClCompile Include="PanelRender.cpp" />
     <ClCompile Include="par_shapes.cpp" />
@@ -85,6 +86,7 @@
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="ShortCut.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
@@ -115,6 +117,7 @@
     <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PanelConfiguration.h" />
     <ClInclude Include="PanelConsole.h" />
+    <ClInclude Include="PanelCreate.h" />
     <ClInclude Include="PanelObjects.h" />
     <ClInclude Include="PanelRender.h" />
     <ClInclude Include="par_shapes.h" />
@@ -191,6 +194,7 @@
     <ClInclude Include="PCG\pcg_extras.hpp" />
     <ClInclude Include="PCG\pcg_random.hpp" />
     <ClInclude Include="PCG\pcg_uint128.hpp" />
+    <ClInclude Include="Primitive.h" />
     <ClInclude Include="ShortCut.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>

@@ -4,6 +4,11 @@
 
 GameObject::GameObject()
 {
+	InitColors();
+}
+
+void GameObject::InitColors()
+{
 	color = new float[3];
 	color[0] = 1.f;
 	wire_color = new float[3];
@@ -13,14 +18,15 @@ GameObject::GameObject()
 }
 
 GameObject::GameObject(const int & n_vertex, float * vertex, const int & n_index, uint * index, float * normals)
-	: n_vertex(n_vertex), n_index(n_index), vertex(vertex), index(index), normals(normals)
+	: n_vertex(n_vertex), n_index(n_index)
 {
+	InitColors();
 	/*this->n_vertex = n_vertex;
 	this->n_index = n_index;
 	this->vertex = vertex;
 	this->index = index;
 	this->normals = normals;*/
-	/*this->vertex = new float[n_vertex * 3];
+	this->vertex = new float[n_vertex * 3];
 	this->index = new uint[n_index * 3];
 	if (normals != nullptr) {
 		this->normals = new float[n_vertex * 3];
@@ -29,8 +35,8 @@ GameObject::GameObject(const int & n_vertex, float * vertex, const int & n_index
 
 	memcpy(this->vertex, vertex, sizeof(float) * n_vertex * 3);
 	memcpy(this->index, index, sizeof(uint) * n_index);
-
-	middle_point = new float[n_index];
+	
+	/*middle_point = new float[n_index];
 	for (int i = 0; i < n_index; ++i) {
 		middle_point[i] = (vertex[i] + vertex[i + 3] + vertex[i + 6]) / 3;
 	}*/
