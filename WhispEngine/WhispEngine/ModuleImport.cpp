@@ -86,8 +86,31 @@ bool ModuleImport::ImportFile(const char * path)
 			}
 
 			if (it->HasNormals()) {
-				obj->normals = new float[obj->n_vertex * 3];
-				memcpy(obj->normals, it->mNormals, sizeof(float) * obj->n_vertex * 3);
+
+				obj->normals = new float[obj->n_index];
+				obj->middle_point = new float[obj->n_index];
+				for (int k = 0; k < obj->n_index; k += 3) {
+					vec3 p1(obj->vertex[obj->index[k]], obj->vertex[obj->index[k] + 1], obj->vertex[obj->index[k] + 2]);
+					vec3 p2(obj->vertex[obj->index[k + 1]], obj->vertex[obj->index[k + 1] + 1], obj->vertex[obj->index[k + 1] + 2]);
+					vec3 p3(obj->vertex[obj->index[k + 2]], obj->vertex[obj->index[k + 2] + 1], obj->vertex[obj->index[k + 2] + 2]);
+
+					obj->middle_point[k]		= (p1.x + p2.x + p3.x) / 3.f;
+					obj->middle_point[k + 1]	= (p1.y + p2.y + p3.y) / 3.f;
+					obj->middle_point[k + 2]	= (p1.z + p2.z + p3.z) / 3.f;
+
+					vec3 v1 = p2 - p1;
+					vec3 v2 = p3 - p1;
+					
+					vec3 v_norm = cross(v1, v2);
+					v_norm = normalize(v_norm);
+
+					float magnitude = 1.f;
+					obj->normals[k] =		v_norm.x * magnitude;
+					obj->normals[k + 1] =   v_norm.y * magnitude;
+					obj->normals[k + 2] =   v_norm.z * magnitude;
+				}
+				
+				/*memcpy(obj->normals, it->mNormals, sizeof(float) * obj->n_vertex * 3);*/
 
 				/*for (int i = 0; i < n_v * 3; i += 3) {
 					LOG("n(%i): %.2f %.2f %.2f", i / 3, normals[i], normals[i + 1], normals[i + 2]);

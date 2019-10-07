@@ -47,10 +47,10 @@ GameObject::GameObject(const int & n_vertex, float * vertex, const int & n_index
 void GameObject::SetGLBuffers()
 {
 	//TEST NORMALS----------------------------------------------------------------
-	middle_point = new float[n_index];
+	/*middle_point = new float[n_index];
 	for (int i = 0; i < n_index; ++i) {
 		middle_point[i] = (vertex[i] + vertex[i + 3] + vertex[i + 6]) / 3;
-	}
+	}*/
 	// !TEST NORMALS--------------------------------------------------------
 
 	glGenBuffers(1, &id_vertex);
@@ -61,11 +61,11 @@ void GameObject::SetGLBuffers()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * n_index, index, GL_STATIC_DRAW);
 
-	if (normals != nullptr) {
+	/*if (normals != nullptr) {
 		glGenBuffers(1, &id_normals);
 		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * n_vertex * 3, normals, GL_STATIC_DRAW);
-	}
+	}*/
 }
 
 void GameObject::SetColors(const float * face_color, const float * wire_color)
@@ -113,7 +113,11 @@ void GameObject::DrawNormals()
 		glDrawArrays(GL_POINTS, 0, n_vertex);*/
 		glColor3f(0.f, 1.f, 0.f);
 		glBegin(GL_LINES);
-		if (!vertex_normals) {
+		for (int i = 0; i < n_index * 3; i += 3) {
+			glVertex3f(middle_point[i], middle_point[i + 1], middle_point[i + 2]);
+			glVertex3f(middle_point[i] + normals[i], middle_point[i + 1] + normals[i + 1], middle_point[i + 2] + normals[i + 2]);
+		}
+		/*if (!vertex_normals) {
 			for (int i = 0; i < n_vertex*3; i += 3) {
 				glVertex3f(vertex[i], vertex[i + 1], vertex[i + 2]);
 				glVertex3f(vertex[i] + normals[i], vertex[i + 1] + normals[i + 1], vertex[i + 2] + normals[i + 2]);
@@ -124,7 +128,7 @@ void GameObject::DrawNormals()
 				glVertex3f(middle_point[i], middle_point[i + 1], middle_point[i + 2]);
 				glVertex3f(middle_point[i] + normals[i], middle_point[i + 1] + normals[i + 1], middle_point[i + 2] + normals[i + 2]);
 			}
-		}
+		}*/
 		glEnd();
 	}
 }
