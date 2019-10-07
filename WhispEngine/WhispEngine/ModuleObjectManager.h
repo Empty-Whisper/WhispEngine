@@ -4,8 +4,28 @@
 
 enum class Primitives {
 	NONE = -1,
-	CUBE, SPHERE,
+	CUBE, TETRAHEDRON, OCTAHEDRON, DODECAHEDRON, ICOSAHEDRON,
+	SPHERE, HEMISPHERE, TORUS, CONE, CYLINDER,
 	MAX
+};
+
+struct vector3 {
+	float x = 0;
+	float y = 0;
+	float z = 0;
+};
+struct rot {
+	float axis[3]{ 0.f,0.f,0.f };
+	float angle = 0.f; //in radians
+};
+struct Object_data {
+	vector3 pos;
+	rot rotate;
+	vector3 scale;
+
+	float radius = 0;
+	int slices = 0;
+	int rings = 0;
 };
 
 class ModuleObjectManager :
@@ -19,11 +39,12 @@ public:
 	bool CleanUp();
 
 	void AddObject(GameObject* obj);
-	bool CreatePrimitive(const Primitives &type);
+	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 
 	const std::vector<GameObject*>* GetObjects() const;
 
 private:
+	
 	std::vector<GameObject*> objects;
 };
 

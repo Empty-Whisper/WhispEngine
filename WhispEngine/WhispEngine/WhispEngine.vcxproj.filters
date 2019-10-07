@@ -261,8 +261,9 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="PanelCreate.cpp" />
-    <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="PanelCreate.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -577,8 +578,9 @@
     <ClInclude Include="GameObject.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="PanelCreate.h" />
-    <ClInclude Include="Primitive.h" />
+    <ClInclude Include="PanelCreate.h">
+      <Filter>UI_Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
