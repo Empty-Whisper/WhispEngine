@@ -56,10 +56,15 @@ void GameObject::SetGLBuffers()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index.id);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * index.size, index.data, GL_STATIC_DRAW);
 
-	if (normals.data != nullptr) {
-		glGenBuffers(1, &normals.id);
-		glBindBuffer(GL_ARRAY_BUFFER, normals.id);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals.size, normals.data, GL_STATIC_DRAW);
+	if (face_normals.data != nullptr) {
+		glGenBuffers(1, &face_normals.id);
+		glBindBuffer(GL_ARRAY_BUFFER, face_normals.id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_normals.size, face_normals.data, GL_STATIC_DRAW);
+	}
+	if (vertex_normals.data != nullptr) {
+		glGenBuffers(1, &vertex_normals.id);
+		glBindBuffer(GL_ARRAY_BUFFER, vertex_normals.id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertex_normals.size, vertex_normals.data, GL_STATIC_DRAW);
 	}
 }
 
@@ -79,7 +84,7 @@ GameObject::~GameObject()
 {
 	delete[] vertex.data;
 	delete[] index.data;
-	delete[] normals.data;
+	delete[] face_normals.data;
 
 	//delete[] middle_point;
 	
@@ -88,7 +93,7 @@ GameObject::~GameObject()
 
 	glDeleteBuffers(1, &vertex.id);
 	glDeleteBuffers(1, &index.id);
-	glDeleteBuffers(1, &normals.id);
+	glDeleteBuffers(1, &face_normals.id);
 }
 
 void GameObject::Draw()
@@ -103,22 +108,24 @@ void GameObject::Draw()
 
 void GameObject::DrawNormals()
 {
-	if (normals.data != nullptr) {
+	if (face_normals.data != nullptr) {
 		glColor3f(0.f, 1.f, 0.f);
 		glLineWidth(3.f);
-		glBindBuffer(GL_ARRAY_BUFFER, normals.id);
+		glBindBuffer(GL_ARRAY_BUFFER, face_normals.id);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
-		glDrawArrays(GL_LINES, 0, normals.size);
+		glDrawArrays(GL_LINES, 0, face_normals.size);
 		glLineWidth(1.f);
-		//*glBindBuffer(GL_ARRAY_BUFFER, id_normals);
-		//glVertexPointer(3, GL_FLOAT, 0, NULL);
-		//glDrawArrays(GL_POINTS, 0, n_vertex);*/
-		//glColor3f(0.f, 1.f, 0.f);
-		//glBegin(GL_LINES);
-		//for (int i = 0; i < index.size; i += 3) {
-		//	glVertex3f(middle_point[i], middle_point[i + 1], middle_point[i + 2]);
-		//	glVertex3f(middle_point[i] + normals[i], middle_point[i + 1] + normals[i + 1], middle_point[i + 2] + normals[i + 2]);
-		//}
-		//glEnd();
+
+		glColor3f(0.f, 0.f, 1.f);
+		/*glBindBuffer(GL_ARRAY_BUFFER, vertex_normals.id);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glDrawArrays(GL_POINTS, 0, vertex_normals.size);*/
+
+		glBegin(GL_LINES);
+		for (int i = 0; i < index.size*2; i += 3) {
+			glVertex3f(vertex.data[i], vertex.data[i+1], vertex.data[i+2]);
+			glVertex3f(vertex_normals.data[i], vertex_normals.data[i+1], vertex_normals.data[i+2]);
+		}
+		glEnd();
 	}
 }

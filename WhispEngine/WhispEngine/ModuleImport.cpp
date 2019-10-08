@@ -79,17 +79,28 @@ bool ModuleImport::ImportFile(const char * path)
 
 			if (it->HasNormals()) {
 
-				obj->normals.size = obj->index.size * 2;
-				obj->normals.data = new float[obj->normals.size];
+				float magnitude = 0.3f; // To multiply normalized vectors
+
+				// Vertex Normals --------------------------------------------------
+				obj->vertex_normals.size = obj->vertex.size;
+				obj->vertex_normals.data = new float[obj->vertex_normals.size * 3];
+				memcpy(obj->vertex_normals.data, it->mNormals, sizeof(float) * obj->vertex_normals.size * 3);
+				for (int l = 0; l < obj->vertex_normals.size * 3; ++l)
+					obj->vertex_normals.data[l] = obj->vertex_normals.data[l] * magnitude + obj->vertex.data[l];
+				
+
+				// Face Normals ----------------------------------------------------
+				obj->face_normals.size = obj->index.size * 2;
+				obj->face_normals.data = new float[obj->face_normals.size];
 
 				for (int k = 0; k < obj->index.size; k += 3) {
 					vec3 p1(obj->vertex.data[obj->index.data[k]*3], obj->vertex.data[obj->index.data[k] * 3 + 1], obj->vertex.data[obj->index.data[k] * 3 + 2]);
 					vec3 p2(obj->vertex.data[obj->index.data[k + 1] * 3], obj->vertex.data[obj->index.data[k + 1] * 3 + 1], obj->vertex.data[obj->index.data[k + 1] * 3 + 2]);
 					vec3 p3(obj->vertex.data[obj->index.data[k + 2] * 3], obj->vertex.data[obj->index.data[k + 2] * 3 + 1], obj->vertex.data[obj->index.data[k + 2] * 3 + 2]);
 
-					obj->normals.data[k*2]		= (p1.x + p2.x + p3.x) / 3.f;
-					obj->normals.data[k*2 + 1]	= (p1.y + p2.y + p3.y) / 3.f;
-					obj->normals.data[k*2 + 2]	= (p1.z + p2.z + p3.z) / 3.f;
+					obj->face_normals.data[k*2]		= (p1.x + p2.x + p3.x) / 3.f;
+					obj->face_normals.data[k*2 + 1]	= (p1.y + p2.y + p3.y) / 3.f;
+					obj->face_normals.data[k*2 + 2]	= (p1.z + p2.z + p3.z) / 3.f;
 
 					vec3 v1 = p2 - p1;
 					vec3 v2 = p3 - p1;
@@ -97,17 +108,10 @@ bool ModuleImport::ImportFile(const char * path)
 					vec3 v_norm = cross(v1, v2);
 					v_norm = normalize(v_norm);
 
-					float magnitude = 0.3f;
-					obj->normals.data[k * 2 + 3] = obj->normals.data[k * 2] + v_norm.x * magnitude;
-					obj->normals.data[k * 2 + 4] = obj->normals.data[k * 2 + 1] + v_norm.y * magnitude;
-					obj->normals.data[k * 2 + 5] = obj->normals.data[k * 2 + 2] + v_norm.z * magnitude;
+					obj->face_normals.data[k * 2 + 3] = obj->face_normals.data[k * 2] + v_norm.x * magnitude;
+					obj->face_normals.data[k * 2 + 4] = obj->face_normals.data[k * 2 + 1] + v_norm.y * magnitude;
+					obj->face_normals.data[k * 2 + 5] = obj->face_normals.data[k * 2 + 2] + v_norm.z * magnitude;
 				}
-
-				for (int i = 0; i < obj->normals.size; i+=6) {
-					LOG("%.2f %.2f %.2f - %.2f %.2f %.2f", obj->normals.data[i], obj->normals.data[i+1], obj->normals.data[i+2], obj->normals.data[i+3], obj->normals.data[i+4], obj->normals.data[i+5])
-				}
-				
-				/*memcpy(obj->normals, it->mNormals, sizeof(float) * obj->n_vertex * 3);*/
 			}
 
 			obj->SetGLBuffers();
