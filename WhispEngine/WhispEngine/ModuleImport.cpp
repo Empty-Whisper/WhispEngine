@@ -90,9 +90,9 @@ bool ModuleImport::ImportFile(const char * path)
 				obj->normals = new float[obj->n_index];
 				obj->middle_point = new float[obj->n_index];
 				for (int k = 0; k < obj->n_index; k += 3) {
-					vec3 p1(obj->vertex[obj->index[k]], obj->vertex[obj->index[k] + 1], obj->vertex[obj->index[k] + 2]);
-					vec3 p2(obj->vertex[obj->index[k + 1]], obj->vertex[obj->index[k + 1] + 1], obj->vertex[obj->index[k + 1] + 2]);
-					vec3 p3(obj->vertex[obj->index[k + 2]], obj->vertex[obj->index[k + 2] + 1], obj->vertex[obj->index[k + 2] + 2]);
+					vec3 p1(obj->vertex[obj->index[k]*3], obj->vertex[obj->index[k] * 3 + 1], obj->vertex[obj->index[k] * 3 + 2]);
+					vec3 p2(obj->vertex[obj->index[k + 1] * 3], obj->vertex[obj->index[k + 1] * 3 + 1], obj->vertex[obj->index[k + 1]*3 + 2]);
+					vec3 p3(obj->vertex[obj->index[k + 2] * 3], obj->vertex[obj->index[k + 2] * 3 + 1], obj->vertex[obj->index[k + 2]*3 + 2]);
 
 					obj->middle_point[k]		= (p1.x + p2.x + p3.x) / 3.f;
 					obj->middle_point[k + 1]	= (p1.y + p2.y + p3.y) / 3.f;

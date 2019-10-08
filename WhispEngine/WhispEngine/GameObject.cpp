@@ -107,7 +107,7 @@ void GameObject::Draw()
 
 void GameObject::DrawNormals()
 {
-	if (normals != nullptr) {
+	if (normals != nullptr && middle_point != nullptr) {
 		/*glBindBuffer(GL_ARRAY_BUFFER, id_normals);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 		glDrawArrays(GL_POINTS, 0, n_vertex);*/
