@@ -2,12 +2,24 @@
 
 #include "Globals.h"
 #include "SDL/include/SDL_config.h"
+#include <vector>
 
 template <class T>
 struct Buffer {
 	uint id = 0;
 	uint size = 0;
 	T* data = nullptr;
+};
+
+struct Mesh {
+	~Mesh();
+
+	void SetGLBuffers();
+
+	Buffer<float> vertex;
+	Buffer<uint> index;
+	Buffer<float> face_normals;
+	Buffer<float> vertex_normals;
 };
 
 class GameObject
@@ -22,8 +34,6 @@ private:
 	void InitColors();
 
 public:
-
-	void SetGLBuffers();
 	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
 
 	void Draw();
@@ -31,10 +41,7 @@ public:
 	void DrawNormals();
 
 public:
-	Buffer<float> vertex;
-	Buffer<uint> index;
-	Buffer<float> face_normals;
-	Buffer<float> vertex_normals;
+	std::vector<Mesh*> mesh;
 
 	bool active = true;
 	float* color = nullptr;
