@@ -16,7 +16,7 @@
         "UI": {
 			"panels": {
 				"configuration":{
-					"start_enabled": false
+					"start_enabled": true
 				},
 				"about":{
 					"start_enabled": false

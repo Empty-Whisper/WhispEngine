@@ -61,96 +61,209 @@ void ModuleObjectManager::AddObject(GameObject * obj)
 	objects.push_back(obj);
 }
 
+Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals)
+{
+	Mesh *mesh = new Mesh();
+
+	FillVertex(mesh, n_vertex, vertex);
+
+	FillIndex(mesh, n_index*3, index);
+
+	FillNormals(mesh, normals);
+
+	mesh->SetGLBuffers();
+
+	return mesh;
+}
+
+Mesh * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
+{
+	Mesh *ret = new Mesh();
+
+	FillVertex(ret, mesh->mNumVertices, (float*)mesh->mVertices);
+
+	if (mesh->HasFaces())
+	{
+		FillIndex(ret, mesh->mNumFaces, mesh->mFaces);
+	}
+
+	if (mesh->HasNormals()) {
+
+		FillNormals(ret, (float*)mesh->mNormals);
+	}
+
+	ret->SetGLBuffers();
+
+	return ret;
+}
+
+void ModuleObjectManager::FillNormals(Mesh * ret, const float * normals)
+{
+	float magnitude = 0.3f; // To multiply normalized vectors
+
+	if (normals != nullptr) {
+		// Vertex Normals --------------------------------------------------
+		ret->vertex_normals.size = ret->vertex.size;
+		ret->vertex_normals.data = new float[ret->vertex_normals.size * 3];
+		memcpy(ret->vertex_normals.data, normals, sizeof(float) * ret->vertex_normals.size * 3);
+		for (int l = 0; l < ret->vertex_normals.size * 3; ++l)
+			ret->vertex_normals.data[l] = ret->vertex_normals.data[l] * magnitude + ret->vertex.data[l];
+	}
+
+	// Face Normals ----------------------------------------------------
+	ret->face_normals.size = ret->index.size * 2;
+	ret->face_normals.data = new float[ret->face_normals.size];
+
+	for (int k = 0; k < ret->index.size/3; k += 3) {
+		vec3 p1(ret->vertex.data[ret->index.data[k] * 3], ret->vertex.data[ret->index.data[k] * 3 + 1], ret->vertex.data[ret->index.data[k] * 3 + 2]);
+		vec3 p2(ret->vertex.data[ret->index.data[k + 1] * 3], ret->vertex.data[ret->index.data[k + 1] * 3 + 1], ret->vertex.data[ret->index.data[k + 1] * 3 + 2]);
+		vec3 p3(ret->vertex.data[ret->index.data[k + 2] * 3], ret->vertex.data[ret->index.data[k + 2] * 3 + 1], ret->vertex.data[ret->index.data[k + 2] * 3 + 2]);
+
+		ret->face_normals.data[k * 2] = (p1.x + p2.x + p3.x) / 3.f;
+		ret->face_normals.data[k * 2 + 1] = (p1.y + p2.y + p3.y) / 3.f;
+		ret->face_normals.data[k * 2 + 2] = (p1.z + p2.z + p3.z) / 3.f;
+
+		vec3 v1 = p2 - p1;
+		vec3 v2 = p3 - p1;
+
+		vec3 v_norm = cross(v1, v2);
+		v_norm = normalize(v_norm);
+
+		ret->face_normals.data[k * 2 + 3] = ret->face_normals.data[k * 2] + v_norm.x * magnitude;
+		ret->face_normals.data[k * 2 + 4] = ret->face_normals.data[k * 2 + 1] + v_norm.y * magnitude;
+		ret->face_normals.data[k * 2 + 5] = ret->face_normals.data[k * 2 + 2] + v_norm.z * magnitude;
+	}
+}
+
+void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const aiFace* faces)
+{
+	ret->index.size = n_index * 3 * 3;
+	ret->index.data = new uint[ret->index.size];
+
+	for (uint j = 0; j < n_index; ++j)
+	{
+		if (faces[j].mNumIndices != 3)
+		{
+			LOG("WARNING, geometry face with != 3 indices!");
+		}
+		else
+		{
+			memcpy(&ret->index.data[j * 3], faces[j].mIndices, sizeof(uint) * 3);
+		}
+	}
+	LOG("New mesh with %i faces", ret->index.size / 3);
+}
+
+void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const uint * index)
+{
+	ret->index.size = n_index * 3;
+	ret->index.data = new uint[ret->index.size];
+	memcpy(ret->index.data, index, sizeof(uint) * n_index);
+	LOG("New mesh with %i faces", ret->index.size / 3);
+}
+
+void ModuleObjectManager::FillVertex(Mesh * ret, const uint & n_vertex, const float* vertex)
+{
+	ret->vertex.size = n_vertex;
+	ret->vertex.data = new float[ret->vertex.size * 3];
+	memcpy(ret->vertex.data, vertex, sizeof(float) * ret->vertex.size * 3);
+	LOG("New mesh with %d vertex", ret->vertex.size);
+}
+
 bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_data &data)
 {
 	bool ret = true;
 
-	par_shapes_mesh* mesh = nullptr;
+	par_shapes_mesh* prim = nullptr;
 
 	switch (type)
 	{
 	case Primitives::CUBE:
-		mesh = par_shapes_create_cube();
+		prim = par_shapes_create_cube();
 		break;
 	case Primitives::TETRAHEDRON:
-		mesh = par_shapes_create_tetrahedron();
+		prim = par_shapes_create_tetrahedron();
 		break;
 	case Primitives::OCTAHEDRON:
-		mesh = par_shapes_create_octahedron();
+		prim = par_shapes_create_octahedron();
 		break;
 	case Primitives::DODECAHEDRON:
-		mesh = par_shapes_create_dodecahedron();
+		prim = par_shapes_create_dodecahedron();
 		break;
 	case Primitives::ICOSAHEDRON:
-		mesh = par_shapes_create_icosahedron();
+		prim = par_shapes_create_icosahedron();
 		break;
 	case Primitives::SPHERE:
 		//TODO Create a sphere with radious, rings and sectors, not by subdivisions https://stackoverflow.com/questions/5988686/creating-a-3d-sphere-in-opengl-using-visual-c/5989676#5989676
-		mesh = par_shapes_create_subdivided_sphere(data.slices);
+		prim = par_shapes_create_subdivided_sphere(data.slices);
 		break;
 	case Primitives::HEMISPHERE:
-		mesh = par_shapes_create_hemisphere(data.slices, data.rings);
+		prim = par_shapes_create_hemisphere(data.slices, data.rings);
 		break;
 	case Primitives::TORUS:
-		mesh = par_shapes_create_torus(data.slices, data.rings, data.radius);
+		prim = par_shapes_create_torus(data.slices, data.rings, data.radius);
 		break;
 	case Primitives::CONE:
-		mesh = par_shapes_create_cone(data.slices, data.rings);
+		prim = par_shapes_create_cone(data.slices, data.rings);
 		break;
 	case Primitives::CYLINDER:
-		mesh = par_shapes_create_cylinder(data.slices, data.rings);
+		prim = par_shapes_create_cylinder(data.slices, data.rings);
 		break;
 	default:
 		LOG("Primitive not found to create. id: %i", (int)type);
 		break;
 	}
 
-	par_shapes_translate(mesh, data.pos.x, data.pos.y, data.pos.z);
+	par_shapes_translate(prim, data.pos.x, data.pos.y, data.pos.z);
 
 	if (data.rotate.axis[0] != 0 || data.rotate.axis[1] != 0 || data.rotate.axis[2] != 0) {
 		float mgn = std::sqrt(data.rotate.axis[0] * data.rotate.axis[0] + data.rotate.axis[1] * data.rotate.axis[1] + data.rotate.axis[2] * data.rotate.axis[2]); // normalize rotation axis
 		float rot[3] = { data.rotate.axis[0] / mgn,data.rotate.axis[1] / mgn ,data.rotate.axis[2] / mgn };
-		par_shapes_rotate(mesh, data.rotate.angle, rot);
+		par_shapes_rotate(prim, data.rotate.angle, rot);
 	}
 
-	par_shapes_scale(mesh, data.scale.x, data.scale.y, data.scale.z);
+	par_shapes_scale(prim, data.scale.x, data.scale.y, data.scale.z);
 
-	//GameObject* obj = new GameObject(mesh->npoints, mesh->points, mesh->ntriangles * 3, mesh->triangles, mesh->normals);
-	//obj->SetColors(data.face_color, data.wire_color);
-	//objects.push_back(obj);
+	GameObject* obj = new GameObject();
+	Mesh* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals);
+	obj->mesh.push_back(mesh);
+	obj->SetColors(data.face_color, data.wire_color);
+	objects.push_back(obj);
 
-	par_shapes_free_mesh(mesh);
+	par_shapes_free_mesh(prim);
 
 	return ret;
 }
 
 void ModuleObjectManager::Demo()
 {
-	std::vector<par_shapes_mesh*> mesh;
-	mesh.resize((int)Primitives::MAX);
-	mesh[0] = par_shapes_create_cube();
-	mesh[1] = par_shapes_create_tetrahedron();
-	mesh[2] = par_shapes_create_octahedron();
-	mesh[3] = par_shapes_create_dodecahedron();
-	mesh[4] = par_shapes_create_icosahedron();
-	mesh[5] = par_shapes_create_subdivided_sphere(3);
-	mesh[6] = par_shapes_create_hemisphere(10, 10);
-	mesh[7] = par_shapes_create_torus(10, 10, 0.5f);
-	mesh[8] = par_shapes_create_cone(10, 10);
-	mesh[9] = par_shapes_create_cylinder(10, 10);
+	std::vector<par_shapes_mesh*> prim;
+	prim.resize((int)Primitives::MAX);
+	prim[0] = par_shapes_create_cube();
+	prim[1] = par_shapes_create_tetrahedron();
+	prim[2] = par_shapes_create_octahedron();
+	prim[3] = par_shapes_create_dodecahedron();
+	prim[4] = par_shapes_create_icosahedron();
+	prim[5] = par_shapes_create_subdivided_sphere(3);
+	prim[6] = par_shapes_create_hemisphere(10, 10);
+	prim[7] = par_shapes_create_torus(10, 10, 0.5f);
+	prim[8] = par_shapes_create_cone(10, 10);
+	prim[9] = par_shapes_create_cylinder(10, 10);
 
 	int posx = -10;
 	float color[3] = {1,1,1};
-	for (auto i = mesh.begin(); i != mesh.end(); ++i) {
+	for (auto i = prim.begin(); i != prim.end(); ++i) {
 		par_shapes_translate(*i, posx, 0.f, 3);
-		//GameObject* obj = new GameObject((*i)->npoints, (*i)->points, (*i)->ntriangles * 3, (*i)->triangles, (*i)->normals);
-		/*obj->SetColors(color);
-		objects.push_back(obj);*/
+		GameObject* obj = new GameObject();
+		Mesh* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals);
+		obj->mesh.push_back(mesh);
+		obj->SetColors(color);
+		objects.push_back(obj);
 		par_shapes_free_mesh((*i));
 		posx += 3;
 	}
 
-	mesh.clear();	
+	prim.clear();	
 }
 
 const std::vector<GameObject*>* ModuleObjectManager::GetObjects() const

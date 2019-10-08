@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "GameObject.h"
+#include "Assimp/include/mesh.h"
 
 enum class Primitives {
 	NONE = -1,
@@ -42,6 +43,12 @@ public:
 	bool CleanUp();
 
 	void AddObject(GameObject* obj);
+	Mesh* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals);
+	Mesh* CreateMesh(const aiMesh *mesh);
+	void FillNormals(Mesh * ret, const float * normals = nullptr);
+	void FillIndex(Mesh * ret, const uint & n_index, const aiFace* faces);
+	void FillIndex(Mesh * ret, const uint & n_index, const uint* index);
+	void FillVertex(Mesh * ret, const uint & n_vertex, const float* vertex);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 	void Demo();
 
