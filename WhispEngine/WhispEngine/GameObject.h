@@ -33,6 +33,7 @@ public:
 public:
 	Buffer<float> vertex;
 	Buffer<uint> index;
+	Buffer<float> normals;
 	/*uint id_vertex = 0;
 	uint n_vertex = 0;
 	float * vertex = nullptr;
@@ -41,10 +42,10 @@ public:
 	uint n_index = 0;
 	uint *index = nullptr;*/
 
-	float *middle_point = nullptr;
+	/*float *middle_point = nullptr;
 
 	uint id_normals = 0;
-	float* normals = nullptr;
+	float* normals = nullptr;*/
 
 	bool active = true;
 	float* color = nullptr;
