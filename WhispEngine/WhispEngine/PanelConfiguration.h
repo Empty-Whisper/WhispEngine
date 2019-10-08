@@ -17,6 +17,7 @@ private:
 	void FileSystem();
 	void Options();
 	void Window();
+	void Render();
 	void Application();
 
 private:
