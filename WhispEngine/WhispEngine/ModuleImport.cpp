@@ -47,29 +47,21 @@ bool ModuleImport::ImportFile(const char * path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		/*uint n_v = 0;
-		uint n_i = 0;
-		float* v = nullptr;
-		uint* a_i = nullptr;
-
-		float* normals = nullptr;*/
-
 		GameObject *obj = new GameObject();
 
 		aiMesh* it = nullptr;
 		for (uint i = 0; i < scene->mNumMeshes; ++i)
 		{
 			it = scene->mMeshes[i];
-			obj->n_vertex = it->mNumVertices;
-			obj->vertex = new float[obj->n_vertex * 3];
-			memcpy(obj->vertex, it->mVertices, sizeof(float) * obj->n_vertex * 3);
-			LOG("New mesh with %d vertex", obj->n_vertex);
+			obj->vertex.size = it->mNumVertices;
+			obj->vertex.data = new float[obj->vertex.size * 3];
+			memcpy(obj->vertex.data, it->mVertices, sizeof(float) * obj->vertex.size * 3);
+			LOG("New mesh with %d vertex.data", obj->vertex.size);
 
 			if (it->HasFaces())
 			{
-				obj->n_index = it->mNumFaces * 3;
-				obj->index = new uint[obj->n_index];
+				obj->index.size = it->mNumFaces * 3;
+				obj->index.data = new uint[obj->index.size];
 
 				for (uint j = 0; j < it->mNumFaces; ++j)
 				{
@@ -79,20 +71,20 @@ bool ModuleImport::ImportFile(const char * path)
 					}
 					else
 					{
-						memcpy(&obj->index[j * 3], it->mFaces[j].mIndices, sizeof(uint) * 3);
+						memcpy(&obj->index.data[j * 3], it->mFaces[j].mIndices, sizeof(uint) * 3);
 					}
 				}
-				LOG("New mesh with %i faces", obj->n_index / 3);
+				LOG("New mesh with %i faces", obj->index.size / 3);
 			}
 
 			if (it->HasNormals()) {
 
-				obj->normals = new float[obj->n_index];
-				obj->middle_point = new float[obj->n_index];
-				for (int k = 0; k < obj->n_index; k += 3) {
-					vec3 p1(obj->vertex[obj->index[k]*3], obj->vertex[obj->index[k] * 3 + 1], obj->vertex[obj->index[k] * 3 + 2]);
-					vec3 p2(obj->vertex[obj->index[k + 1] * 3], obj->vertex[obj->index[k + 1] * 3 + 1], obj->vertex[obj->index[k + 1] * 3 + 2]);
-					vec3 p3(obj->vertex[obj->index[k + 2] * 3], obj->vertex[obj->index[k + 2] * 3 + 1], obj->vertex[obj->index[k + 2] * 3 + 2]);
+				obj->normals = new float[obj->index.size];
+				obj->middle_point = new float[obj->index.size];
+				for (int k = 0; k < obj->index.size; k += 3) {
+					vec3 p1(obj->vertex.data[obj->index.data[k]*3], obj->vertex.data[obj->index.data[k] * 3 + 1], obj->vertex.data[obj->index.data[k] * 3 + 2]);
+					vec3 p2(obj->vertex.data[obj->index.data[k + 1] * 3], obj->vertex.data[obj->index.data[k + 1] * 3 + 1], obj->vertex.data[obj->index.data[k + 1] * 3 + 2]);
+					vec3 p3(obj->vertex.data[obj->index.data[k + 2] * 3], obj->vertex.data[obj->index.data[k + 2] * 3 + 1], obj->vertex.data[obj->index.data[k + 2] * 3 + 2]);
 
 					obj->middle_point[k]		= (p1.x + p2.x + p3.x) / 3.f;
 					obj->middle_point[k + 1]	= (p1.y + p2.y + p3.y) / 3.f;

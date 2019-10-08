@@ -17,8 +17,7 @@ ModuleObjectManager::~ModuleObjectManager()
 update_status ModuleObjectManager::Update()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glLineWidth(1.5f);
+	
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		if ((*i)->active) {
 
@@ -29,16 +28,19 @@ update_status ModuleObjectManager::Update()
 			}
 			if (App->renderer3D->wireframe) {
 				glColor3fv((*i)->wire_color);
+				glEnable(GL_POLYGON_OFFSET_LINE);
+				glPolygonOffset(-1.f, 1.f);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				(*i)->Draw();
+				glDisable(GL_POLYGON_OFFSET_LINE);
+
 			}
 
-			(*i)->vertex_normals = App->renderer3D->my_normals;
 			if (App->renderer3D->see_normals)
 				(*i)->DrawNormals();
 		}
 	}
-	glLineWidth(1.0f);
+	
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	return UPDATE_CONTINUE;
@@ -113,9 +115,9 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 
 	par_shapes_scale(mesh, data.scale.x, data.scale.y, data.scale.z);
 
-	GameObject* obj = new GameObject(mesh->npoints, mesh->points, mesh->ntriangles * 3, mesh->triangles, mesh->normals);
-	obj->SetColors(data.face_color, data.wire_color);
-	objects.push_back(obj);
+	//GameObject* obj = new GameObject(mesh->npoints, mesh->points, mesh->ntriangles * 3, mesh->triangles, mesh->normals);
+	//obj->SetColors(data.face_color, data.wire_color);
+	//objects.push_back(obj);
 
 	par_shapes_free_mesh(mesh);
 
@@ -141,9 +143,9 @@ void ModuleObjectManager::Demo()
 	float color[3] = {1,1,1};
 	for (auto i = mesh.begin(); i != mesh.end(); ++i) {
 		par_shapes_translate(*i, posx, 0.f, 3);
-		GameObject* obj = new GameObject((*i)->npoints, (*i)->points, (*i)->ntriangles * 3, (*i)->triangles, (*i)->normals);
-		obj->SetColors(color);
-		objects.push_back(obj);
+		//GameObject* obj = new GameObject((*i)->npoints, (*i)->points, (*i)->ntriangles * 3, (*i)->triangles, (*i)->normals);
+		/*obj->SetColors(color);
+		objects.push_back(obj);*/
 		par_shapes_free_mesh((*i));
 		posx += 3;
 	}

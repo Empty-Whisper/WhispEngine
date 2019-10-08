@@ -111,6 +111,7 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
+		
 		if (fill)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		if(wireframe)
