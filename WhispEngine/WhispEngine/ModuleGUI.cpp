@@ -111,9 +111,6 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Console", "LShift+1", &console->active);
 			ImGui::MenuItem("Configuration", "LShift+2", &config->active);
 			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
-			
-
-
 			ImGui::EndMenu();
 		}
 
@@ -145,11 +142,8 @@ update_status ModuleGUI::MainMenuBar()
 			
 			if (ImGui::MenuItem("Demo", NULL, &show_demo_create))
 			{
-
-			}
-			
-
-			
+				App->object_manager->Demo();
+			}	
 			ImGui::EndMenu();
 		}
 	}
