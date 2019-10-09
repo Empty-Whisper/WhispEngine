@@ -47,6 +47,8 @@ PanelCreate::PanelCreate(/*const bool &start_active, const SDL_Scancode &shortcu
 		}
 	}
 	iterator = items.begin() + (int)Primitives::CUBE;
+
+	active = false;
 }
 
 

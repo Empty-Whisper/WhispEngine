@@ -12,6 +12,6 @@ public:
 	void Update() override;
 
 private:
-	bool checkbox_mit_license_window;
+	bool checkbox_mit_license_window = false;
 
 };

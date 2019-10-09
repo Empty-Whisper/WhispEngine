@@ -17,19 +17,30 @@ void PanelAbout::Update()
 		ImGui::Text("Version 0.1-alpha");
 		ImGui::Separator();
 		ImGui::NewLine();
-		ImGui::Text("By Christian Martínez @christt105 and Marc Gálvez @optus23 for learning purposes.");
+		ImGui::Text("By Christian Martinez @christt105 and Marc Galvez @optus23 for learning purposes.");
 		ImGui::Text("Whisp Engine is licensed under the MIT LICENSE, see LICENSE for more information.");
 		ImGui::NewLine();
 		if (ImGui::Button("Github @christ105")) 	ShellExecuteA(NULL, "open", "https://github.com/christt105", NULL, NULL, SW_SHOWNORMAL);
 		ImGui::SameLine();
 		if (ImGui::Button("Github @optus23")) 	ShellExecuteA(NULL, "open", "https://github.com/optus23", NULL, NULL, SW_SHOWNORMAL);
-		
+		ImGui::NewLine();
+		ImGui::Text("3rd Party Libraries used:");
+		ImGui::BulletText("SDL.2.0.6");
+		ImGui::BulletText("Gleww.2.0");
+		ImGui::BulletText("OpenGL3");
+		ImGui::BulletText("MathGeoLib v1.5");
+		ImGui::BulletText("PCG v0.9");
+		ImGui::BulletText("Mmgr");
+		ImGui::BulletText("ImGui v1.73");
+		ImGui::BulletText("JSON parser v3.7");
+		ImGui::BulletText("par_shaper.h");
+		ImGui::BulletText("Assimp v4.1");
+
 		ImGui::NewLine();
 		ImGui::Checkbox("Show MIT LICENSE", &checkbox_mit_license_window);
 		if (checkbox_mit_license_window)
 		{
-			ImGui::SetWindowSize(ImVec2(580, 530));
-			ImGui::NewLine(); ImGui::NewLine();
+			ImGui::SetWindowSize(ImVec2(580, 730));
 			ImGui::Text("MIT LICENSE");	ImGui::NewLine();
 			ImGui::Text("Copyright (c) 2019 Empty-Whisper"); ImGui::NewLine();
 			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files(the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :"); ImGui::NewLine();
@@ -38,7 +49,7 @@ void PanelAbout::Update()
 		}
 		else
 		{
-			ImGui::SetWindowSize(ImVec2(580, 200));
+			ImGui::SetWindowSize(ImVec2(580, 430));
 		}
 	}
 	ImGui::End();
