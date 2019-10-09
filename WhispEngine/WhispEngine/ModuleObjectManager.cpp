@@ -15,7 +15,7 @@ ModuleObjectManager::~ModuleObjectManager()
 update_status ModuleObjectManager::Update()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
-	
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		if ((*i)->active) {
 
@@ -36,7 +36,7 @@ update_status ModuleObjectManager::Update()
 			(*i)->DrawNormals();
 		}
 	}
-	
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	return UPDATE_CONTINUE;
@@ -57,7 +57,7 @@ void ModuleObjectManager::AddObject(GameObject * obj)
 	objects.push_back(obj);
 }
 
-Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals)
+Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords)
 {
 	Mesh *mesh = new Mesh();
 
@@ -66,6 +66,8 @@ Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vert
 	FillIndex(mesh, n_index*3, index);
 
 	FillNormals(mesh, normals);
+
+	FillTextureCoords(mesh, texCoords);
 
 	mesh->SetGLBuffers();
 
@@ -86,6 +88,10 @@ Mesh * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 	if (mesh->HasNormals()) {
 
 		FillNormals(ret, (float*)mesh->mNormals);
+	}
+
+	if (mesh->HasTextureCoords(0)) {
+		FillTextureCoords(ret, (float*)mesh->mTextureCoords[0]);
 	}
 
 	ret->SetGLBuffers();
@@ -166,6 +172,13 @@ void ModuleObjectManager::FillVertex(Mesh * ret, const uint & n_vertex, const fl
 	LOG("New mesh with %d vertex", ret->vertex.size);
 }
 
+void ModuleObjectManager::FillTextureCoords(Mesh * mesh, const float * textureCoords)
+{
+	mesh->tex_coords.size = mesh->vertex.size;
+	mesh->tex_coords.data = new float[mesh->tex_coords.size * 3];
+	memcpy(mesh->tex_coords.data, textureCoords, sizeof(float) * mesh->tex_coords.size * 3);
+}
+
 bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_data &data)
 {
 	bool ret = true;
@@ -221,7 +234,7 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 	par_shapes_scale(prim, data.scale.x, data.scale.y, data.scale.z);
 
 	GameObject* obj = new GameObject();
-	Mesh* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals);
+	Mesh* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
 	obj->mesh.push_back(mesh);
 	obj->SetColors(data.face_color, data.wire_color);
 	objects.push_back(obj);
@@ -251,7 +264,7 @@ void ModuleObjectManager::Demo()
 	for (auto i = prim.begin(); i != prim.end(); ++i) {
 		par_shapes_translate(*i, posx, 0.f, 3);
 		GameObject* obj = new GameObject();
-		Mesh* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals);
+		Mesh* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
 		obj->mesh.push_back(mesh);
 
 		float rnd_color[3] = { App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f) };

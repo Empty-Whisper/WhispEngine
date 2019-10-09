@@ -45,12 +45,13 @@ public:
 	bool CleanUp();
 
 	void AddObject(GameObject* obj);
-	Mesh* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals);
+	Mesh* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
 	Mesh* CreateMesh(const aiMesh *mesh);
 	void FillNormals(Mesh * ret, const float * normals = nullptr);
 	void FillIndex(Mesh * ret, const uint & n_index, const aiFace* faces);
 	void FillIndex(Mesh * ret, const uint & n_index, const uint* index);
 	void FillVertex(Mesh * ret, const uint & n_vertex, const float* vertex);
+	void FillTextureCoords(Mesh* mesh, const float* textureCoords);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 	void Demo();
 	const std::vector<GameObject*>* GetObjects() const;

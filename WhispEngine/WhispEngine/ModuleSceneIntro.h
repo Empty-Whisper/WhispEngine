@@ -17,7 +17,9 @@ public:
 	bool CleanUp();
 
 public:
-
+	uint id;
+	int CHECKERS_WIDTH = 100;
+	int CHECKERS_HEIGHT = 100;
 	bool show_grid = true;
 
 };

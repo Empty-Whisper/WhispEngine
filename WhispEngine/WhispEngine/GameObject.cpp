@@ -46,6 +46,7 @@ void GameObject::Draw()
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->index.id);
 
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 		glDrawElements(GL_TRIANGLES, mesh[i]->index.size, GL_UNSIGNED_INT, NULL);
 	}
 }
@@ -90,10 +91,12 @@ Mesh::~Mesh()
 	delete[] face_normals.data;
 	if (vertex_normals.data != nullptr)
 		delete[] vertex_normals.data;
+	delete[] tex_coords.data;
 
 	glDeleteBuffers(1, &vertex.id);
 	glDeleteBuffers(1, &index.id);
 	glDeleteBuffers(1, &face_normals.id);
+	glDeleteBuffers(1, &tex_coords.id);
 }
 
 void Mesh::SetGLBuffers()
@@ -111,6 +114,10 @@ void Mesh::SetGLBuffers()
 		glBindBuffer(GL_ARRAY_BUFFER, face_normals.id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_normals.size, face_normals.data, GL_STATIC_DRAW);
 	}
+
+	glGenBuffers(1, &tex_coords.id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tex_coords.id);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * tex_coords.size * 3, tex_coords.data, GL_STATIC_DRAW);
 	/*if (mesh[i]->vertex_normals.data != nullptr) { // TODO Set Vertex mesh with a buffer and draw with it
 		glGenBuffers(1, &mesh[i]->vertex_normals.id);
 		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex_normals.id);

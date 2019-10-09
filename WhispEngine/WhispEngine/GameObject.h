@@ -20,6 +20,7 @@ struct Mesh {
 	Buffer<uint> index;
 	Buffer<float> face_normals;
 	Buffer<float> vertex_normals;
+	Buffer<float> tex_coords;
 };
 
 enum class Normals {
