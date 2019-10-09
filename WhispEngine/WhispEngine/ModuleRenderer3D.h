@@ -34,6 +34,7 @@ public:
 	bool wireframe = true;
 	bool fill = true;
 	bool see_normals = false;
+	bool see_vertex_normals = false;
 
 	bool vsync = true;
 };

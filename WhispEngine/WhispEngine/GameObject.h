@@ -32,18 +32,21 @@ public:
 
 private:
 	void InitColors();
+	void InitNormals();
 
 public:
 	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
+	void SetNormals(const int* normals = nullptr);
 
 	void Draw();
 
-	void DrawNormals();
+	void DrawNormals(/*const int* type_normals*/);
 
 public:
 	std::vector<Mesh*> mesh;
 
 	bool active = true;
+	int* normals = nullptr;
 	float* color = nullptr;
 	float* wire_color = nullptr;
 };

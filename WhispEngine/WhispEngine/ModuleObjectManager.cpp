@@ -37,7 +37,9 @@ update_status ModuleObjectManager::Update()
 			}
 
 			if (App->renderer3D->see_normals)
-				(*i)->DrawNormals();
+			{
+				(*i)->DrawNormals(/*(*i)->normals*/);
+			}									
 		}
 	}
 	
@@ -228,6 +230,7 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 	Mesh* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals);
 	obj->mesh.push_back(mesh);
 	obj->SetColors(data.face_color, data.wire_color);
+	obj->SetNormals(data.normals);
 	objects.push_back(obj);
 
 	par_shapes_free_mesh(prim);

@@ -27,6 +27,8 @@ struct Object_data {
 	float face_color[3]{ 1.f,1.f,1.f };
 	float wire_color[3]{ 0.f,0.f,0.f };
 
+	int normals[3]{0, 1, 2};
+
 	float radius = 0.1f;
 	int slices = 3;
 	int rings = 3;
