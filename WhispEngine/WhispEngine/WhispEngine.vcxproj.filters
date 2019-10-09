@@ -602,4 +602,9 @@
       <Filter>Tools\MathGeoLib\Geometry</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="badprog.rc">
+      <Filter>Tools</Filter>
+    </ResourceCompile>
+  </ItemGroup>
 </Project>

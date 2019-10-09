@@ -113,7 +113,16 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Shape"))
+		{
+			ImGui::MenuItem("Create", "LShift+4", &create->active);
 
+			if (ImGui::MenuItem("Demo", NULL, &show_demo_create))
+			{
+				App->object_manager->Demo();
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Demo", NULL, show_demo_window))
@@ -135,17 +144,7 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("About", "LControl+LShift+A", &about->active);
 
 			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Shape"))
-		{
-			ImGui::MenuItem("Create", "LShift+4", &create->active);
-			
-			if (ImGui::MenuItem("Demo", NULL, &show_demo_create))
-			{
-				App->object_manager->Demo();
-			}	
-			ImGui::EndMenu();
-		}
+		}		
 	}
 	ImGui::EndMainMenuBar();
 

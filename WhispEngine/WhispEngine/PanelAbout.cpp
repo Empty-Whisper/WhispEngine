@@ -23,6 +23,7 @@ void PanelAbout::Update()
 		if (ImGui::Button("Github @christ105")) 	ShellExecuteA(NULL, "open", "https://github.com/christt105", NULL, NULL, SW_SHOWNORMAL);
 		ImGui::SameLine();
 		if (ImGui::Button("Github @optus23")) 	ShellExecuteA(NULL, "open", "https://github.com/optus23", NULL, NULL, SW_SHOWNORMAL);
+		
 		ImGui::NewLine();
 		ImGui::Checkbox("Show MIT LICENSE", &checkbox_mit_license_window);
 		if (checkbox_mit_license_window)
