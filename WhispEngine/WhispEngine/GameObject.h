@@ -22,6 +22,10 @@ struct Mesh {
 	Buffer<float> vertex_normals;
 };
 
+enum class Normals {
+	NONE = 0, FACE, VERTEX, MAX
+};
+
 class GameObject
 {
 public:
@@ -32,11 +36,9 @@ public:
 
 private:
 	void InitColors();
-	void InitNormals();
 
 public:
 	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
-	void SetNormals(const int* normals = nullptr);
 
 	void Draw();
 
@@ -45,8 +47,10 @@ public:
 public:
 	std::vector<Mesh*> mesh;
 
+	Normals normals_state = Normals::NONE;
+
 	bool active = true;
-	int* normals = nullptr;
+
 	float* color = nullptr;
 	float* wire_color = nullptr;
 };

@@ -5,7 +5,7 @@
 
 PanelObjects::PanelObjects()
 {
-}
+} 
 
 
 PanelObjects::~PanelObjects()
@@ -23,16 +23,7 @@ void PanelObjects::Update()
 				ImGui::ColorEdit3("Face color", (*i)->color);
 				ImGui::ColorEdit3("Wire color", (*i)->wire_color);
 
-				enum SliderElement { NONE, SHOW_NORMALS, SHOW_VERTEX_NORMALS, Element_COUNT };
-				const char* element_names[Element_COUNT] = { "None", "Show Normals", "Show Vertex Normals"};
-				static int current_element = NONE;
-				const char* current_element_name = (current_element >= 0 && current_element < Element_COUNT) ? element_names[current_element] : "Unknown";
-
-				ImGui::SliderInt("Set Normals", &current_element, 0, Element_COUNT - 1, current_element_name);
-				//(*i)->normals = &current_element;
-				if (current_element == 0) App->renderer3D->see_normals = false;
-				if (current_element == 1) App->renderer3D->see_normals = true;
-				if (current_element == 2) App->renderer3D->see_normals = false;
+				ImGui::SliderInt("Set Normals", (int*)&(*i)->normals_state, 0, (int)Normals::MAX - 1, normal_name[(int)(*i)->normals_state]);
 			}
 			ImGui::PopID();
 		}
