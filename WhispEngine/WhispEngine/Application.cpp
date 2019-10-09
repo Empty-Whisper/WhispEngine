@@ -36,6 +36,7 @@ Application::Application()
 
 	hardware = new HardwareInfo();
 	file_system = new FileSystem();
+	random = new Random();
 
 	first_frame = true;
 }
@@ -292,8 +293,12 @@ bool Application::CleanUp()
 
 	delete hardware;
 	hardware = nullptr;
+
 	delete file_system;
 	file_system = nullptr;
+
+	delete random;
+	random = nullptr;
 
 	return ret;
 }

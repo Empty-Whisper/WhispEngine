@@ -261,6 +261,9 @@
     <ClCompile Include="PanelCreate.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -574,6 +577,9 @@
     </ClInclude>
     <ClInclude Include="PanelCreate.h">
       <Filter>UI_Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

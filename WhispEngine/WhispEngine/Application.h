@@ -14,6 +14,7 @@
 #include "ModuleShortCut.h"
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
+#include "Random.h"
 
 #include "HardwareInfo.h"
 
@@ -88,6 +89,7 @@ public:
 
 	HardwareInfo *hardware = nullptr;
 	FileSystem *file_system = nullptr;
+	Random* random = nullptr;
 
 private:
 

@@ -2,10 +2,6 @@
 #include "glew/glew.h"
 #include "Application.h"
 
-#include <random>
-#include "PCG/pcg_random.hpp"
-
-
 ModuleObjectManager::ModuleObjectManager()
 {
 	name.assign("ObjectManager");
@@ -258,14 +254,7 @@ void ModuleObjectManager::Demo()
 		Mesh* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals);
 		obj->mesh.push_back(mesh);
 
-		pcg_extras::seed_seq_from<std::random_device> seed_source;
-		pcg32 rng(seed_source);
-
-		std::uniform_real_distribution<float> R(0, 1);
-		std::uniform_real_distribution<float> G(0, 1);
-		std::uniform_real_distribution<float> B(0, 1);
-
-		float rnd_color[3] = { R(rng), G(rng), B(rng) };
+		float rnd_color[3] = { App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f) };
 
 		obj->SetColors(rnd_color);
 		objects.push_back(obj);
