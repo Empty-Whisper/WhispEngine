@@ -23,8 +23,10 @@ void log(const char file[], int line, const char* format, ...);
 
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
+#define PI 3.14159265358979323846  /* pi */
 #define HAVE_M_PI
-
+#undef max
+#undef min
 
 typedef unsigned int uint;
 
