@@ -21,6 +21,6 @@ float Random::Randomf(const float & min, const float & max)
 
 int Random::Randomi(const int & min, const int & max)
 {
-	std::uniform_real_distribution<int> rand(min, max);
+	std::uniform_real_distribution<double> rand(min, max);
 	return rand(rng);
 }
