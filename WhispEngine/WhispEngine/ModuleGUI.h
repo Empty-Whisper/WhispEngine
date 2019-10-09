@@ -39,6 +39,7 @@ public:
 private:
 	bool show_demo_window = false;
 	bool show_style_window = false;
+	bool show_demo_create = false;
 
 	std::vector<Panel*> panels;
 
