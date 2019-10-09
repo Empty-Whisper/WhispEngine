@@ -53,7 +53,6 @@ public:
 	void FillVertex(Mesh * ret, const uint & n_vertex, const float* vertex);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 	void Demo();
-
 	const std::vector<GameObject*>* GetObjects() const;
 
 private:

@@ -2,6 +2,8 @@
 #include "glew/glew.h"
 #include "Application.h"
 
+#include <random>
+#include "PCG/pcg_random.hpp"
 
 
 ModuleObjectManager::ModuleObjectManager()
@@ -248,14 +250,24 @@ void ModuleObjectManager::Demo()
 	prim[8] = par_shapes_create_cone(10, 10);
 	prim[9] = par_shapes_create_cylinder(10, 10);
 
+	
 	int posx = -10;
-	float color[3] = {1,1,1};
 	for (auto i = prim.begin(); i != prim.end(); ++i) {
 		par_shapes_translate(*i, posx, 0.f, 3);
 		GameObject* obj = new GameObject();
 		Mesh* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals);
 		obj->mesh.push_back(mesh);
-		obj->SetColors(color);
+
+		pcg_extras::seed_seq_from<std::random_device> seed_source;
+		pcg32 rng(seed_source);
+
+		std::uniform_real_distribution<float> R(0, 1);
+		std::uniform_real_distribution<float> G(0, 1);
+		std::uniform_real_distribution<float> B(0, 1);
+
+		float rnd_color[3] = { R(rng), G(rng), B(rng) };
+
+		obj->SetColors(rnd_color);
 		objects.push_back(obj);
 		par_shapes_free_mesh((*i));
 		posx += 3;
