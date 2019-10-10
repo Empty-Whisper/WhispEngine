@@ -267,6 +267,7 @@
     <ClCompile Include="Random.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -593,6 +594,7 @@
     <ClInclude Include="DevIL\include\IL\ilut.h">
       <Filter>Tools\DevIL</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
