@@ -20,6 +20,9 @@ struct Mesh {
 	Buffer<uint> index;
 	Buffer<float> face_normals;
 	Buffer<float> vertex_normals;
+	Buffer<float> tex_coords;
+
+	uint tex_id = 0;
 };
 
 enum class Normals {
@@ -41,8 +44,9 @@ public:
 	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
 
 	void Draw();
+	void DrawWireFrame();
 
-	void DrawNormals(/*const int* type_normals*/);
+	void DrawNormals();
 
 public:
 	std::vector<Mesh*> mesh;

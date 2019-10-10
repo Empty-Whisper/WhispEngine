@@ -40,6 +40,10 @@ void PanelConfiguration::Update()
 		{
 			Render();
 		}
+		if (ImGui::CollapsingHeader("Textures"))
+		{
+			Textures();
+		}
 		if (ImGui::CollapsingHeader("File System"))
 		{
 			FileSystem();
@@ -222,7 +226,7 @@ void PanelConfiguration::Application()
 
 	sprintf_s(title, 25, "Miliseconds %0.1f", ms_reg[ms_reg.size() - 1]);
 	ImGui::PlotHistogram("##miliseconds", &ms_reg[0], ms_reg.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
-	//TODO: Memory Consumption graphic
+	
 	App->hardware->UpdateMemory();
 
 	if (App->last_sec_frame_count == 1) { // At the beggining of the second
@@ -240,6 +244,18 @@ void PanelConfiguration::Application()
 	ImGui::Text("Accumulated Alloc Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.accumulated_alloc_unit);
 	ImGui::Text("Total Alloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_alloc_unity_count);
 	ImGui::Text("PeakAlloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.peak_alloc_unit_count);
+}
+
+void PanelConfiguration::Textures()
+{
+	auto textures = App->object_manager->GetTextures();
+	for (auto i = textures->begin(); i != textures->end(); ++i) {
+		if (ImGui::ImageButton((ImTextureID)(*i).id, ImVec2((*i).width / 4, (*i).height / 4))) {
+			App->object_manager->SelectTexture(*i);
+		}
+		ImGui::SameLine();
+	}
+	ImGui::NewLine();
 }
 
 void PanelConfiguration::PushBackVectorAsQueue(std::vector<float> &vector, const float &value)

@@ -3,6 +3,8 @@
 #include "GameObject.h"
 #include "Assimp/include/mesh.h"
 
+#include "Texture.h"
+
 enum class Primitives {
 	NONE = -1,
 	CUBE, TETRAHEDRON, OCTAHEDRON, DODECAHEDRON, ICOSAHEDRON,
@@ -45,18 +47,34 @@ public:
 	bool CleanUp();
 
 	void AddObject(GameObject* obj);
-	Mesh* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals);
+	void AddTexture(const Texture &tex);
+
+	Mesh* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
 	Mesh* CreateMesh(const aiMesh *mesh);
+
+	bool CreatePrimitive(const Primitives &type, const Object_data &data);
+
 	void FillNormals(Mesh * ret, const float * normals = nullptr);
 	void FillIndex(Mesh * ret, const uint & n_index, const aiFace* faces);
 	void FillIndex(Mesh * ret, const uint & n_index, const uint* index);
 	void FillVertex(Mesh * ret, const uint & n_vertex, const float* vertex);
-	bool CreatePrimitive(const Primitives &type, const Object_data &data);
+	void FillTextureCoords(Mesh* mesh, const float* textureCoords);
+	
 	void Demo();
+
 	const std::vector<GameObject*>* GetObjects() const;
+	std::vector<Texture>* GetTextures();
+	const Texture* GetTexture(const int &id) const;
+	/*Return Selected texture*/
+	Texture* GetTexture() const;
+
+	void SelectTexture(Texture &tex);
 
 private:
 	
 	std::vector<GameObject*> objects;
+
+	std::vector<Texture> textures; //TEMPORARY
+	Texture* tex_select = nullptr;
 };
 
