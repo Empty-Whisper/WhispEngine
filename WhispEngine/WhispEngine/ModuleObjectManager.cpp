@@ -14,12 +14,11 @@ ModuleObjectManager::~ModuleObjectManager()
 
 update_status ModuleObjectManager::Update()
 {
+	glColor3f(0.f, 0.f, 0.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		if ((*i)->active) {
-
 			if (App->renderer3D->fill) {
-				glColor3fv((*i)->color);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				(*i)->Draw();
 			}
@@ -28,14 +27,13 @@ update_status ModuleObjectManager::Update()
 				glEnable(GL_POLYGON_OFFSET_LINE);
 				glPolygonOffset(-1.f, 1.f);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				(*i)->Draw();
+				(*i)->DrawWireFrame();
 				glDisable(GL_POLYGON_OFFSET_LINE);
-
 			}
 			(*i)->DrawNormals();
 		}
+		glColor3f(0.f, 0.f, 0.f);
 	}
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	return UPDATE_CONTINUE;

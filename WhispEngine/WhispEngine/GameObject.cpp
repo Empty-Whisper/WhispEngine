@@ -11,6 +11,8 @@ void GameObject::InitColors()
 {
 	color = new float[3];
 	color[0] = 1.f;
+	color[1] = 1.f;
+	color[2] = 1.f;
 	wire_color = new float[3];
 	wire_color[0] = 0.f;
 	wire_color[1] = 0.f;
@@ -42,11 +44,17 @@ GameObject::~GameObject()
 void GameObject::Draw()
 {
 	for (int i = 0; i < mesh.size(); ++i) {
+		if (mesh[i]->tex_id != NULL) {
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		}
+		else {
+			glColor3fv(color);
+		}
+
 		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex.id);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 		if (mesh[i]->tex_coords.data != nullptr) {
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->tex_coords.id);
 			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 		}
@@ -59,6 +67,18 @@ void GameObject::Draw()
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->index.id);
 		glDrawElements(GL_TRIANGLES, mesh[i]->index.size, GL_UNSIGNED_INT, NULL);
 		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	}
+}
+
+void GameObject::DrawWireFrame() {
+	glColor3fv(wire_color);
+	for (int i = 0; i < mesh.size(); ++i) {
+		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex.id);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->index.id);
+		glDrawElements(GL_TRIANGLES, mesh[i]->index.size, GL_UNSIGNED_INT, NULL);
 	}
 }
 
@@ -78,9 +98,6 @@ void GameObject::DrawNormals()
 		}
 		if (normals_state == Normals::VERTEX) {
 			glColor3f(0.f, 0.f, 1.f);
-			/*glBindBuffer(GL_ARRAY_BUFFER, vertex_normals.id);
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
-			glDrawArrays(GL_POINTS, 0, vertex_normals.size);*/
 
 			if (mesh[i]->vertex_normals.data != nullptr) {
 				glBegin(GL_LINES);

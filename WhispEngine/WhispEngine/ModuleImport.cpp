@@ -109,6 +109,8 @@ bool ModuleImport::ImportTexture(const char * path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 		App->object_manager->AddTexture(texture);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	ilDeleteImages(1, &devilID);
