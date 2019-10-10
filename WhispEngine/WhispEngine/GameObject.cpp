@@ -50,9 +50,16 @@ void GameObject::Draw()
 			glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->tex_coords.id);
 			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 		}
+		if (mesh[i]->vertex_normals.data != nullptr) {
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex_normals.id);
+			glNormalPointer(GL_FLOAT, 0, NULL);
+		}
+
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->index.id);
 		glDrawElements(GL_TRIANGLES, mesh[i]->index.size, GL_UNSIGNED_INT, NULL);
+		glDisableClientState(GL_NORMAL_ARRAY);
 	}
 }
 
@@ -125,9 +132,10 @@ void Mesh::SetGLBuffers()
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tex_coords.id);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * tex_coords.size * 3, tex_coords.data, GL_STATIC_DRAW);
 	}
-	/*if (mesh[i]->vertex_normals.data != nullptr) { // TODO Set Vertex mesh with a buffer and draw with it
-		glGenBuffers(1, &mesh[i]->vertex_normals.id);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex_normals.id);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh[i]->vertex_normals.size, mesh[i]->vertex_normals.data, GL_STATIC_DRAW);
-	}*/
+
+	if (vertex_normals.data != nullptr) { // TODO Set Vertex mesh with a buffer and draw with it
+		glGenBuffers(1, &vertex_normals.id);
+		glBindBuffer(GL_ARRAY_BUFFER, vertex_normals.id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertex_normals.size, vertex_normals.data, GL_STATIC_DRAW);
+	}
 }
