@@ -5,6 +5,16 @@
 #include "Imgui/imgui.h"
 #include "GameObject.h"
 
+// Devil ---------------------------------------------------------
+#include "DevIL/include/IL/il.h"
+#include "DevIL/include/IL/ilu.h"
+#include "DevIL/include/IL/ilut.h"
+
+#pragma comment (lib, "DevIL/lib/x86/unicode/Release/DevIL.lib")
+#pragma comment (lib, "DevIL/lib/x86/unicode/Release/ILU.lib")
+#pragma comment (lib, "DevIL/lib/x86/unicode/Release/ILUT.lib")
+//--------------------------------------------------------------------
+
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"
 #ifdef _DEBUG
@@ -32,6 +42,55 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	
+
+	ilInit();
+
+	ILuint devilID;
+
+
+	ilGenImages(1, &devilID);
+	ilBindImage(devilID);
+	ilutRenderer(ILUT_OPENGL);  // Switch the renderer
+	if (ilLoad(IL_DDS, "Lenna.dds") == IL_TRUE) {
+		LOG("OPEN LENA");
+	}
+	else {
+		LOG("CANNOT OPEN LENA");
+	}
+
+	/*if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+		LOG("FAILED TO CONVERT");
+	if (!ilTexImage(ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, 1, GL_RGBA, IL_UNSIGNED_BYTE, ilGetData()))
+		LOG("AYAYAYA");*/
+	LOG("%u",ilutGLBindTexImage());
+
+	glBindTexture(GL_TEXTURE_2D, ilutGLBindTexImage());
+
+	/*unsigned char* tex = new unsigned char[ilGetInteger(IL_IMAGE_WIDTH) * ilGetInteger(IL_IMAGE_HEIGHT)];
+	memcpy(tex, ilGetData(), ilGetInteger(IL_IMAGE_WIDTH) * ilGetInteger(IL_IMAGE_HEIGHT));
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+		0, GL_RGBA, GL_UNSIGNED_BYTE, tex);*/
+	//Delete file from memory
+	ilDeleteImages(1, &devilID);
+
+
+	
+	
+	GLuint openglID;
+
+	//openglID = ilutGLBindTexImage(); // This generates the texture for you
+
+
 	
 	GLubyte checkImage[100][100][4];
 	for (int i = 0; i < 100; i++) {
@@ -44,16 +103,9 @@ bool ModuleSceneIntro::Start()
 		}
 	}
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &id);
-	glBindTexture(GL_TEXTURE_2D, id);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	
+
+	
 	
 	return ret;
 }
@@ -62,71 +114,9 @@ bool ModuleSceneIntro::Start()
 update_status ModuleSceneIntro::Update()
 {
 	if (show_grid)
-		DrawGrid(50);
+		DrawGrid(50);	
 
-	static const GLfloat c[] = {
-	-1.0f,-1.0f,-1.0f, // triangle 1 : begin
-	-1.0f,-1.0f, 1.0f,
-	-1.0f, 1.0f, 1.0f, // triangle 1 : end
-	1.0f, 1.0f,-1.0f, // triangle 2 : begin
-	-1.0f,-1.0f,-1.0f,
-	-1.0f, 1.0f,-1.0f, // triangle 2 : end
-	1.0f,-1.0f, 1.0f,
-	-1.0f,-1.0f,-1.0f,
-	1.0f,-1.0f,-1.0f,
-	1.0f, 1.0f,-1.0f,
-	1.0f,-1.0f,-1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f,-1.0f,
-	1.0f,-1.0f, 1.0f,
-	-1.0f,-1.0f, 1.0f,
-	-1.0f,-1.0f,-1.0f,
-	-1.0f, 1.0f, 1.0f,
-	-1.0f,-1.0f, 1.0f,
-	1.0f,-1.0f, 1.0f,
-	1.0f, 1.0f, 1.0f,
-	1.0f,-1.0f,-1.0f,
-	1.0f, 1.0f,-1.0f,
-	1.0f,-1.0f,-1.0f,
-	1.0f, 1.0f, 1.0f,
-	1.0f,-1.0f, 1.0f,
-	1.0f, 1.0f, 1.0f,
-	1.0f, 1.0f,-1.0f,
-	-1.0f, 1.0f,-1.0f,
-	1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f,-1.0f,
-	-1.0f, 1.0f, 1.0f,
-	1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f, 1.0f,
-	1.0f,-1.0f, 1.0f
-	};
-	
-
-	glBindTexture(GL_TEXTURE_2D, id);
-	//glTexCoord2f(1, 0);
-	//glTexCoordPointer(2, GL_UNSIGNED_BYTE, sizeof(char) * CHECKERS_HEIGHT*CHECKERS_WIDTH * 4, NULL);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//glBegin(GL_TRIANGLES);
-	//for (int i = 0; i < 108; i+=9) {
-	//	/*glTexCoord2f(0.0, 0.0); glVertex3f(c[i], c[i + 1], c[i + 2]);
-	//	glTexCoord2f(1, 0.0); glVertex3f(c[i+3], c[i + 4], c[i + 5]);
-	//	glTexCoord2f(0.0, 1.0); glVertex3f(c[i+6], c[i + 7], c[i + 8]);
-
-	//	glTexCoord2f(1.0, 0.0); glVertex3f(c[i+9], c[i + 10], c[i + 11]);
-	//	glTexCoord2f(1.0, 1.0); glVertex3f(c[i + 12], c[i + 13], c[i + 14]);
-	//	glTexCoord2f(1.0, 1.0); glVertex3f(c[i + 15], c[i + 16], c[i + 17]);*/
-	//	glTexCoord2f(0, 0); glVertex3f(c[i], c[i + 1], c[i + 2]);
-	//	glTexCoord2f(1, 0); glVertex3f(c[i + 3], c[i + 4], c[i + 5]);
-	//	glTexCoord2f(0, 1); glVertex3f(c[i + 6], c[i + 7], c[i + 8]);
-
-	//	// second triangle, top right half
-	//	/*glVertex3f(1, 0, 0);
-	//	glTexCoord2f(1, 1); glVertex3f(1, 1, 0);
-	//	glTexCoord2f(0, 1); glVertex3f(0, 1, 0);*/
-	//}
-	//glEnd();
+	//glBindTexture(GL_TEXTURE_2D, id);
 
 	return UPDATE_CONTINUE;
 }

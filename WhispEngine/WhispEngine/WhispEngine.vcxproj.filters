@@ -55,6 +55,9 @@
     <Filter Include="GameObject">
       <UniqueIdentifier>{9fe82b16-f1fc-4aca-8559-a32383215a1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\DevIL">
+      <UniqueIdentifier>{01812f74-7971-4dc1-a6b3-07fd69105c8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -580,6 +583,15 @@
     </ClInclude>
     <ClInclude Include="Random.h">
       <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\IL\il.h">
+      <Filter>Tools\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\IL\ilu.h">
+      <Filter>Tools\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="DevIL\include\IL\ilut.h">
+      <Filter>Tools\DevIL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
