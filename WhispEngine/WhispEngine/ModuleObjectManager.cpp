@@ -15,7 +15,6 @@ ModuleObjectManager::~ModuleObjectManager()
 update_status ModuleObjectManager::Update()
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		if ((*i)->active) {
 
@@ -67,7 +66,8 @@ Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vert
 
 	FillNormals(mesh, normals);
 
-	FillTextureCoords(mesh, texCoords);
+	if (texCoords != nullptr)
+		FillTextureCoords(mesh, texCoords);
 
 	mesh->SetGLBuffers();
 
