@@ -45,7 +45,7 @@ void GameObject::Draw()
 		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex.id);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		if (mesh[i]->tex_coords.data != nullptr) { //TODO: Put that block of code in other better place
+		if (mesh[i]->tex_coords.data != nullptr) {
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->tex_coords.id);
 			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
@@ -55,7 +55,6 @@ void GameObject::Draw()
 			glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex_normals.id);
 			glNormalPointer(GL_FLOAT, 0, NULL);
 		}
-
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->index.id);
 		glDrawElements(GL_TRIANGLES, mesh[i]->index.size, GL_UNSIGNED_INT, NULL);

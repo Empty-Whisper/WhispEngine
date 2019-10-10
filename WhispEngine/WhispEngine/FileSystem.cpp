@@ -1,7 +1,7 @@
 #include "FileSystem.h"
 #include <fstream>
 #include <iomanip>
-
+#include "Globals.h"
 
 FileSystem::FileSystem()
 {
@@ -27,4 +27,32 @@ void FileSystem::SaveFile(const char * path, const nlohmann::json & to_save)
 	std::ofstream o(path);
 	o << std::setw(4) << to_save << std::endl;
 	o.close();
+}
+
+FileSystem::Format FileSystem::GetFormat(const char * file)
+{
+	std::string f(file);
+	std::string buffer;
+
+	for (auto i = f.rbegin(); i != f.rend(); i++) {
+		if (*i != '.')
+			buffer.push_back(*i);
+		else
+			break;
+	}
+	std::reverse(buffer.begin(), buffer.end());
+
+	if (buffer.compare("json") == 0) {
+		return FileSystem::Format::JSON;
+	}
+	else if (buffer.compare("fbx") == 0) {
+		return FileSystem::Format::FBX;
+	}
+	else if (buffer.compare("dds") == 0) {
+		return FileSystem::Format::DDS;
+	}
+	
+	LOG("Cannot identify format, format is: %s", buffer.data());
+
+	return FileSystem::Format::NONE;
 }

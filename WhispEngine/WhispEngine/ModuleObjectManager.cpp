@@ -48,12 +48,22 @@ bool ModuleObjectManager::CleanUp()
 	}
 	objects.clear();
 
+	for (auto t = textures.begin(); t != textures.end(); t++) {
+		glDeleteTextures(1, &(*t).id);
+	}
+	textures.clear();
+
 	return true;
 }
 
 void ModuleObjectManager::AddObject(GameObject * obj)
 {
 	objects.push_back(obj);
+}
+
+void ModuleObjectManager::AddTexture(const Texture & tex)
+{
+	textures.push_back(tex);
 }
 
 Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords)

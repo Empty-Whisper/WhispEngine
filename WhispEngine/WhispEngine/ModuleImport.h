@@ -11,7 +11,8 @@ public:
 
 	bool CleanUp();
 
-	bool ImportFile(const char* path);
+	bool ImportFbx(const char* path);
+	bool ImportTexture(const char* path);
 
 };
 

@@ -5,16 +5,6 @@
 #include "Imgui/imgui.h"
 #include "GameObject.h"
 
-// Devil ---------------------------------------------------------
-#include "DevIL/include/IL/il.h"
-#include "DevIL/include/IL/ilu.h"
-#include "DevIL/include/IL/ilut.h"
-
-#pragma comment (lib, "DevIL/lib/x86/unicode/Release/DevIL.lib")
-#pragma comment (lib, "DevIL/lib/x86/unicode/Release/ILU.lib")
-#pragma comment (lib, "DevIL/lib/x86/unicode/Release/ILUT.lib")
-//--------------------------------------------------------------------
-
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"
 #ifdef _DEBUG
@@ -41,71 +31,6 @@ bool ModuleSceneIntro::Start()
 	
 	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &id);
-	glBindTexture(GL_TEXTURE_2D, id);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	
-
-	ilInit();
-
-	ILuint devilID;
-
-
-	ilGenImages(1, &devilID);
-	ilBindImage(devilID);
-	ilutRenderer(ILUT_OPENGL);  // Switch the renderer
-	if (ilLoad(IL_DDS, "Lenna.dds") == IL_TRUE) {
-		LOG("OPEN LENA");
-	}
-	else {
-		LOG("CANNOT OPEN LENA");
-	}
-
-	/*if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
-		LOG("FAILED TO CONVERT");
-	if (!ilTexImage(ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, 1, GL_RGBA, IL_UNSIGNED_BYTE, ilGetData()))
-		LOG("AYAYAYA");*/
-	LOG("%u",ilutGLBindTexImage());
-
-	glBindTexture(GL_TEXTURE_2D, ilutGLBindTexImage());
-
-	/*unsigned char* tex = new unsigned char[ilGetInteger(IL_IMAGE_WIDTH) * ilGetInteger(IL_IMAGE_HEIGHT)];
-	memcpy(tex, ilGetData(), ilGetInteger(IL_IMAGE_WIDTH) * ilGetInteger(IL_IMAGE_HEIGHT));
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
-		0, GL_RGBA, GL_UNSIGNED_BYTE, tex);*/
-	//Delete file from memory
-	ilDeleteImages(1, &devilID);
-
-
-	
-	
-	GLuint openglID;
-
-	//openglID = ilutGLBindTexImage(); // This generates the texture for you
-
-
-	
-	GLubyte checkImage[100][100][4];
-	for (int i = 0; i < 100; i++) {
-		for (int j = 0; j < 100; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkImage[i][j][0] = (GLubyte)c;
-			checkImage[i][j][1] = (GLubyte)c;
-			checkImage[i][j][2] = (GLubyte)c;
-			checkImage[i][j][3] = (GLubyte)255;
-		}
-	}
-
-	
-
-	
 	
 	return ret;
 }
@@ -133,6 +58,7 @@ update_status ModuleSceneIntro::Update()
 	glEnd();
 	glFlush();
 	glDisable(GL_TEXTURE_2D);*/
+
 	return UPDATE_CONTINUE;
 }
 
@@ -158,6 +84,8 @@ void ModuleSceneIntro::DrawGrid(int width)
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	glDeleteTextures(1, &id);
 
 	return true;
 }

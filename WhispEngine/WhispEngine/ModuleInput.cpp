@@ -83,7 +83,19 @@ update_status ModuleInput::PollEvents()
 		case SDL_DROPFILE:
 			char* file = e.drop.file;
 
-			App->importer->ImportFile(file);
+			switch (App->file_system->GetFormat(file))
+			{
+			case FileSystem::Format::JSON:
+				break;
+			case FileSystem::Format::DDS:
+				App->importer->ImportTexture(file);
+				break;
+			case FileSystem::Format::FBX:
+				App->importer->ImportFbx(file);
+				break;
+			default:
+				break;
+			}
 
 			SDL_free(file);
 			break;

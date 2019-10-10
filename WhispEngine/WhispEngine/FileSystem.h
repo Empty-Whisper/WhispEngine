@@ -5,7 +5,9 @@ class FileSystem
 {
 public:
 	enum class Format {
-		TO_READ, TO_WRITE, TO_READ_AND_WRITE
+		NONE = -1,
+		JSON, FBX, DDS,
+		MAX
 	};
 
 public:
@@ -13,7 +15,9 @@ public:
 	~FileSystem();
 
 public:
-	nlohmann::json OpenFile(const char* path);
-	void SaveFile(const char* path, const nlohmann::json &to_save);
+	nlohmann::json	OpenFile(const char* path);
+	void			SaveFile(const char* path, const nlohmann::json &to_save);
+
+	FileSystem::Format GetFormat(const char* file);
 };
 
