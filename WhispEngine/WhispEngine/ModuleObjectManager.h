@@ -63,11 +63,18 @@ public:
 	void Demo();
 
 	const std::vector<GameObject*>* GetObjects() const;
+	std::vector<Texture>* GetTextures();
+	const Texture* GetTexture(const int &id) const;
+	/*Return Selected texture*/
+	Texture* GetTexture() const;
+
+	void SelectTexture(Texture &tex);
 
 private:
 	
 	std::vector<GameObject*> objects;
 
 	std::vector<Texture> textures; //TEMPORARY
+	Texture* tex_select = nullptr;
 };
 

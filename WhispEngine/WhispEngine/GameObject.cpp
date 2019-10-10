@@ -43,9 +43,11 @@ GameObject::~GameObject()
 
 void GameObject::Draw()
 {
+	glColor3f(1.f, 1.f, 1.f);
 	for (int i = 0; i < mesh.size(); ++i) {
-		if (mesh[i]->tex_id != NULL) {
+		if (App->object_manager->GetTexture() != nullptr) {
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glBindTexture(GL_TEXTURE_2D, App->object_manager->GetTexture()->id);
 		}
 		else {
 			glColor3fv(color);
@@ -68,6 +70,8 @@ void GameObject::Draw()
 		glDrawElements(GL_TRIANGLES, mesh[i]->index.size, GL_UNSIGNED_INT, NULL);
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 

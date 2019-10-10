@@ -290,3 +290,23 @@ const std::vector<GameObject*>* ModuleObjectManager::GetObjects() const
 {
 	return &objects;
 }
+
+std::vector<Texture>* ModuleObjectManager::GetTextures()
+{
+	return &textures;
+}
+
+const Texture * ModuleObjectManager::GetTexture(const int & id) const
+{
+	return &textures[id];
+}
+
+Texture * ModuleObjectManager::GetTexture() const
+{
+	return tex_select;
+}
+
+void ModuleObjectManager::SelectTexture(Texture & tex)
+{
+	tex_select = &tex;
+}
