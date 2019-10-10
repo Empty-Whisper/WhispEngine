@@ -31,6 +31,8 @@ bool ModuleSceneIntro::Start()
 	
 	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
+
+	GenerateGrid(10);
 	
 	return ret;
 }
@@ -39,44 +41,19 @@ bool ModuleSceneIntro::Start()
 update_status ModuleSceneIntro::Update()
 {
 	if (show_grid)
-		DrawGrid(50);	
-
-	/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	glBindTexture(GL_TEXTURE_2D, id);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0); glVertex3f(-2.0, -1.0, 0.0);
-	glTexCoord2f(0.0, 1.0); glVertex3f(-2.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 1.0); glVertex3f(0.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 0.0); glVertex3f(0.0, -1.0, 0.0);
-
-	glTexCoord2f(0.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
-	glTexCoord2f(0.0, 1.0); glVertex3f(1.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 1.0); glVertex3f(2.41421, 1.0, -1.41421);
-	glTexCoord2f(1.0, 0.0); glVertex3f(2.41421, -1.0, -1.41421);
-	glEnd();
-	glFlush();
-	glDisable(GL_TEXTURE_2D);*/
+		DrawGrid();
 
 	return UPDATE_CONTINUE;
 }
 
-void ModuleSceneIntro::DrawGrid(int width)
+void ModuleSceneIntro::DrawGrid()
 {
 	glColor3f(1.f, 1.f, 1.f);
-	glBegin(GL_LINES);
-	for (int i = -width; i <= width; ++i)
-	{
-
-		glVertex3f(i, 0, -width);
-		glVertex3f(i, 0, width);
-
-		glVertex3f(width, 0, i);
-		glVertex3f(-width, 0, i);
-		
-	}
-	glEnd();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, grid_id);
+	glVertexPointer(3, GL_INT, 0, NULL);
+	glDrawArrays(GL_LINES, 0, grid_vertex_size);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 
@@ -85,7 +62,27 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
-	glDeleteTextures(1, &id);
+	glDeleteBuffers(1, &grid_id);
 
 	return true;
+}
+
+void ModuleSceneIntro::GenerateGrid(const int & width)
+{
+	grid_vertex_size = (width + 1) * 4 * 3; // width + 1(for the middle line) * 4(4 points by line) * 3(3 numbers per point)
+	int * grid = new int[grid_vertex_size];
+
+	for (int i = 0; i <= width *3*4; i += 12)
+	{
+		grid[i]		= i / 6 - width; grid[i + 1] = 0; grid[i + 2] =  - width;
+		grid[i + 3] = i / 6 - width; grid[i + 4] = 0; grid[i + 5] =    width;
+
+		grid[i + 6] =     width; grid[i + 7]  = 0; grid[i + 8]  = i / 6 - width;
+		grid[i + 9] =   - width; grid[i + 10] = 0; grid[i + 11] = i / 6 - width;
+	}
+	glGenBuffers(1, &grid_id);
+	glBindBuffer(GL_ARRAY_BUFFER, grid_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(int) * grid_vertex_size, grid, GL_STATIC_DRAW);
+	
+	delete[] grid;
 }

@@ -13,13 +13,14 @@ public:
 
 	bool Start();
 	update_status Update();
-	void DrawGrid(int width);
+	void DrawGrid();
 	bool CleanUp();
 
+	void GenerateGrid(const int &width);
+
 public:
-	uint id;
-	int CHECKERS_WIDTH = 100;
-	int CHECKERS_HEIGHT = 100;
+	uint grid_id = 0;
+	uint grid_vertex_size = 0;
 	bool show_grid = true;
 
 };
