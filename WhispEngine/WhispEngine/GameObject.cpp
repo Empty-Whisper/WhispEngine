@@ -43,10 +43,12 @@ void GameObject::Draw()
 {
 	for (int i = 0; i < mesh.size(); ++i) {
 		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex.id);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->index.id);
-
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->tex_coords.id);
 		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->index.id);
 		glDrawElements(GL_TRIANGLES, mesh[i]->index.size, GL_UNSIGNED_INT, NULL);
 	}
 }
