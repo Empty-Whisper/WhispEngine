@@ -34,6 +34,11 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 	
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigDockingWithShift == true;
+
+	//ImGui::DockSpace();
+
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION));
 	ImGui::StyleColorsDark();
