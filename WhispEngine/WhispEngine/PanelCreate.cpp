@@ -153,6 +153,7 @@ void PanelCreate::Update()
 		}
 
 
-		ImGui::End();
 	}
+	ImGui::End();
+
 }

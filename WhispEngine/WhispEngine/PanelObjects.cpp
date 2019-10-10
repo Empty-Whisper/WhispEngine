@@ -27,6 +27,7 @@ void PanelObjects::Update()
 			}
 			ImGui::PopID();
 		}
-		ImGui::End();
 	}
+	ImGui::End();
+
 }
