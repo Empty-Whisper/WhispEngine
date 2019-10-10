@@ -170,7 +170,7 @@ static bool ImGui_ImplSDL2_Init(SDL_Window* window)
     SDL_SysWMinfo wmInfo;
     SDL_VERSION(&wmInfo.version);
     SDL_GetWindowWMInfo(window, &wmInfo);
-    io.ImeWindowHandle = wmInfo.info.win.window;
+    //io.ImeWindowHandle = wmInfo.info.win.window;
 #else
     (void)window;
 #endif
