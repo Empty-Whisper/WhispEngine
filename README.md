@@ -41,6 +41,7 @@ Extract .zip files inside a folder and open the .exe file.
 * [Glew v2](https://github.com/nigels-com/glew)
 * [par_shape.h](https://prideout.net/shapes)
 * [Assimp v4.1](http://www.assimp.org/)
+*[DevIL v1.8](http://openil.sourceforge.net/)
 
 
 Github [repository](https://github.com/Empty-Whisper/WhispEngine)

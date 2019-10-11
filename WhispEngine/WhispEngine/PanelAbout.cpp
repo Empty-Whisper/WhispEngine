@@ -35,12 +35,13 @@ void PanelAbout::Update()
 		ImGui::BulletText("JSON parser v3.7");
 		ImGui::BulletText("par_shaper.h");
 		ImGui::BulletText("Assimp v4.1");
+		ImGui::BulletText("DevIL v1.8");
 
 		ImGui::NewLine();
 		ImGui::Checkbox("Show MIT LICENSE", &checkbox_mit_license_window);
 		if (checkbox_mit_license_window)
 		{
-			ImGui::SetWindowSize(ImVec2(580, 730));
+			ImGui::SetWindowSize(ImVec2(580, 740));
 			ImGui::Text("MIT LICENSE");	ImGui::NewLine();
 			ImGui::Text("Copyright (c) 2019 Empty-Whisper"); ImGui::NewLine();
 			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files(the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :"); ImGui::NewLine();
@@ -49,7 +50,7 @@ void PanelAbout::Update()
 		}
 		else
 		{
-			ImGui::SetWindowSize(ImVec2(580, 430));
+			ImGui::SetWindowSize(ImVec2(580, 440));
 		}
 	}
 	ImGui::End();
