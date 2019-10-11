@@ -26,16 +26,17 @@ void PanelAbout::Update()
 		ImGui::NewLine();
 		ImGui::Text("3rd Party Libraries used:");
 		ImGui::BulletText("SDL.2.0.6");
-		ImGui::BulletText("Gleww.2.0");
+		ImGui::BulletText("Glew.2.0");
 		ImGui::BulletText("OpenGL3");
 		ImGui::BulletText("MathGeoLib v1.5");
 		ImGui::BulletText("PCG v0.9");
 		ImGui::BulletText("Mmgr");
 		ImGui::BulletText("ImGui v1.73");
 		ImGui::BulletText("JSON parser v3.7");
-		ImGui::BulletText("par_shaper.h");
+		ImGui::BulletText("par_shape.h");
 		ImGui::BulletText("Assimp v4.1");
 		ImGui::BulletText("DevIL v1.8");
+		ImGui::BulletText("GPU detect v1.1");
 
 		ImGui::NewLine();
 		ImGui::Checkbox("Show MIT LICENSE", &checkbox_mit_license_window);

@@ -42,7 +42,7 @@ Extract .zip files inside a folder and open the .exe file.
 * [par_shape.h](https://prideout.net/shapes)
 * [Assimp v4.1](http://www.assimp.org/)
 *[DevIL v1.8](http://openil.sourceforge.net/)
-
+*[GPU detect v1.1](https://github.com/MatthewKing/DeviceId)
 
 Github [repository](https://github.com/Empty-Whisper/WhispEngine)
 See also our organization, [EmptyWhispers](https://github.com/Empty-Whisper)
