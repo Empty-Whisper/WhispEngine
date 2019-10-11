@@ -4,7 +4,7 @@
 #include "SDL/include/SDL_config.h"
 #include <vector>
 
-template <class T>
+template <typename T>
 struct Buffer {
 	uint id = 0;
 	uint size = 0;
