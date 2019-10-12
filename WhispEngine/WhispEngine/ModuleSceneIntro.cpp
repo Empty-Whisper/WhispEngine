@@ -3,7 +3,7 @@
 #include "ModuleSceneIntro.h"
 
 #include "Imgui/imgui.h"
-#include "GameObject.h"
+#include "ComponentMesh.h"
 
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"

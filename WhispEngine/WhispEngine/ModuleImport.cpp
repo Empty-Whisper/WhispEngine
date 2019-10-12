@@ -61,13 +61,13 @@ bool ModuleImport::ImportFbx(const char * path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObject *obj = new GameObject();
+		Mesh *obj = new Mesh();
 
 		aiMesh* it = nullptr;
 		for (uint i = 0; i < scene->mNumMeshes; ++i)
 		{
 			it = scene->mMeshes[i];
-			Mesh* mesh = App->object_manager->CreateMesh(it);
+			Mesh_info* mesh = App->object_manager->CreateMesh(it);
 			obj->mesh.push_back(mesh);
 			it = nullptr;
 		}

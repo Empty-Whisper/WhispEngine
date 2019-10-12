@@ -261,9 +261,6 @@
     <ClCompile Include="PanelObjects.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="PanelCreate.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
@@ -276,6 +273,12 @@
     </ClCompile>
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMesh.cpp">
+      <Filter>GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -585,9 +588,6 @@
     <ClInclude Include="PanelObjects.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="PanelCreate.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
@@ -609,6 +609,12 @@
     </ClInclude>
     <ClInclude Include="ComponentTransform.h">
       <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMesh.h">
+      <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

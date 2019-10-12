@@ -12,9 +12,17 @@ ModuleObjectManager::~ModuleObjectManager()
 {
 }
 
+bool ModuleObjectManager::Start()
+{
+	root = new GameObject();
+
+	return true;
+}
+
 update_status ModuleObjectManager::Update()
 {
-	glColor3f(0.f, 0.f, 0.f);
+	UpdateGameObject(root);
+	/*glColor3f(0.f, 0.f, 0.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		if ((*i)->active) {
@@ -34,9 +42,19 @@ update_status ModuleObjectManager::Update()
 		}
 		glColor3f(0.f, 0.f, 0.f);
 	}
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);*/
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
+{
+	obj->Update();
+	if (!obj->children.empty()) {
+		for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
+			UpdateGameObject(*i);
+		}
+	}
 }
 
 bool ModuleObjectManager::CleanUp()
@@ -54,7 +72,7 @@ bool ModuleObjectManager::CleanUp()
 	return true;
 }
 
-void ModuleObjectManager::AddObject(GameObject * obj)
+void ModuleObjectManager::AddObject(Mesh * obj)
 {
 	objects.push_back(obj);
 }
@@ -64,9 +82,9 @@ void ModuleObjectManager::AddTexture(const Texture & tex)
 	textures.push_back(tex);
 }
 
-Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords)
+Mesh_info * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords)
 {
-	Mesh *mesh = new Mesh();
+	Mesh_info *mesh = new Mesh_info();
 
 	FillVertex(mesh, n_vertex, vertex);
 
@@ -82,9 +100,9 @@ Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vert
 	return mesh;
 }
 
-Mesh * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
+Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 {
-	Mesh *ret = new Mesh();
+	Mesh_info *ret = new Mesh_info();
 
 	FillVertex(ret, mesh->mNumVertices, (float*)mesh->mVertices);
 
@@ -107,7 +125,7 @@ Mesh * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 	return ret;
 }
 
-void ModuleObjectManager::FillNormals(Mesh * ret, const float * normals)
+void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 {
 	float magnitude = 0.3f; // To multiply normalized vectors
 
@@ -145,7 +163,7 @@ void ModuleObjectManager::FillNormals(Mesh * ret, const float * normals)
 	}
 }
 
-void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const aiFace* faces)
+void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces)
 {
 	ret->index.size = n_index * 3 * 3;
 	ret->index.data = new uint[ret->index.size];
@@ -164,7 +182,7 @@ void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const aiFa
 	LOG("New mesh with %i faces", ret->index.size / 3);
 }
 
-void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const uint * index)
+void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const uint * index)
 {
 	ret->index.size = n_index * 3;
 	ret->index.data = new uint[ret->index.size];
@@ -172,7 +190,7 @@ void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const uint
 	LOG("New mesh with %i faces", ret->index.size / 3);
 }
 
-void ModuleObjectManager::FillVertex(Mesh * ret, const uint & n_vertex, const float* vertex)
+void ModuleObjectManager::FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex)
 {
 	ret->vertex.size = n_vertex;
 	ret->vertex.data = new float[ret->vertex.size * 3];
@@ -180,7 +198,7 @@ void ModuleObjectManager::FillVertex(Mesh * ret, const uint & n_vertex, const fl
 	LOG("New mesh with %d vertex", ret->vertex.size);
 }
 
-void ModuleObjectManager::FillTextureCoords(Mesh * mesh, const float * textureCoords)
+void ModuleObjectManager::FillTextureCoords(Mesh_info * mesh, const float * textureCoords)
 {
 	mesh->tex_coords.size = mesh->vertex.size;
 	mesh->tex_coords.data = new float[mesh->tex_coords.size * 3];
@@ -241,8 +259,8 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 
 	par_shapes_scale(prim, data.scale.x, data.scale.y, data.scale.z);
 
-	GameObject* obj = new GameObject();
-	Mesh* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	Mesh* obj = new Mesh();
+	Mesh_info* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
 	obj->mesh.push_back(mesh);
 	obj->SetColors(data.face_color, data.wire_color);
 	objects.push_back(obj);
@@ -271,8 +289,8 @@ void ModuleObjectManager::Demo()
 	int posx = -10;
 	for (auto i = prim.begin(); i != prim.end(); ++i) {
 		par_shapes_translate(*i, posx, 0.f, 3);
-		GameObject* obj = new GameObject();
-		Mesh* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
+		Mesh* obj = new Mesh();
+		Mesh_info* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
 		obj->mesh.push_back(mesh);
 
 		float rnd_color[3] = { App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f) };
@@ -286,7 +304,7 @@ void ModuleObjectManager::Demo()
 	prim.clear();	
 }
 
-const std::vector<GameObject*>* ModuleObjectManager::GetObjects() const
+const std::vector<Mesh*>* ModuleObjectManager::GetObjects() const
 {
 	return &objects;
 }

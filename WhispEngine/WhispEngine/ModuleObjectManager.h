@@ -1,9 +1,11 @@
 #pragma once
 #include "Module.h"
-#include "GameObject.h"
+#include "ComponentMesh.h"
 #include "Assimp/include/mesh.h"
 
 #include "Texture.h"
+
+#include "GameObject.h"
 
 enum class Primitives {
 	NONE = -1,
@@ -43,26 +45,28 @@ public:
 	ModuleObjectManager();
 	~ModuleObjectManager();
 
+	bool Start();
 	update_status Update();
+	void UpdateGameObject(GameObject* &i);
 	bool CleanUp();
 
-	void AddObject(GameObject* obj);
+	void AddObject(Mesh* obj);
 	void AddTexture(const Texture &tex);
 
-	Mesh* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
-	Mesh* CreateMesh(const aiMesh *mesh);
+	Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
+	Mesh_info* CreateMesh(const aiMesh *mesh);
 
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 
-	void FillNormals(Mesh * ret, const float * normals = nullptr);
-	void FillIndex(Mesh * ret, const uint & n_index, const aiFace* faces);
-	void FillIndex(Mesh * ret, const uint & n_index, const uint* index);
-	void FillVertex(Mesh * ret, const uint & n_vertex, const float* vertex);
-	void FillTextureCoords(Mesh* mesh, const float* textureCoords);
+	void FillNormals(Mesh_info * ret, const float * normals = nullptr);
+	void FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces);
+	void FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
+	void FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
+	void FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
 	
 	void Demo();
 
-	const std::vector<GameObject*>* GetObjects() const;
+	const std::vector<Mesh*>* GetObjects() const;
 	std::vector<Texture>* GetTextures();
 	const Texture* GetTexture(const int &id) const;
 	/*Return Selected texture*/
@@ -71,8 +75,9 @@ public:
 	void SelectTexture(Texture &tex);
 
 private:
+	GameObject* root = nullptr;
 	
-	std::vector<GameObject*> objects;
+	std::vector<Mesh*> objects;
 
 	std::vector<Texture> textures; //TEMPORARY
 	Texture* tex_select = nullptr;

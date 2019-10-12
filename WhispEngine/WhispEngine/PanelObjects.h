@@ -1,6 +1,6 @@
 #pragma once
 #include "Panel.h"
-#include "GameObject.h"
+#include "ComponentMesh.h"
 class PanelObjects :
 	public Panel
 {

@@ -3,7 +3,7 @@
 #include "Imgui/imgui.h"
 
 #include "par_shapes.h"
-#include "GameObject.h"
+#include "ComponentMesh.h"
 
 class ModuleSceneIntro : public Module
 {

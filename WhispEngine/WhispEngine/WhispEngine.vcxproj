@@ -24,6 +24,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="GPUdetect\DeviceId.cpp" />
@@ -101,6 +102,7 @@
     <ClInclude Include="DevIL\include\IL\ilu.h" />
     <ClInclude Include="DevIL\include\IL\ilut.h" />
     <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
