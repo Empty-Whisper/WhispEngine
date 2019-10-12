@@ -61,17 +61,16 @@ bool ModuleImport::ImportFbx(const char * path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		ComponentMesh *obj = new ComponentMesh();
+		GameObject * container = App->object_manager->CreateGameObject(nullptr);
+		container->SetName(path); //TODO extract name file from path
 
-		aiMesh* it = nullptr;
-		for (uint i = 0; i < scene->mNumMeshes; ++i)
-		{
-			it = scene->mMeshes[i];
-			Mesh_info* mesh = App->object_manager->CreateMesh(it);
-			obj->mesh.push_back(mesh);
-			it = nullptr;
+		for (int i = 0; i < scene->mNumMeshes; ++i) {
+			GameObject* obj = App->object_manager->CreateGameObject(container);
+			
+			ComponentMesh* mesh = static_cast<ComponentMesh*>(obj->CreateComponent(ComponentType::MESH));
+			mesh->mesh = App->object_manager->CreateMesh(scene->mMeshes[i]);
+			obj->SetName(scene->mMeshes[i]->mName.C_Str());
 		}
-		App->object_manager->AddObject(obj);
 
 		aiReleaseImport(scene);
 	}

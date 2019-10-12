@@ -1,7 +1,9 @@
 #pragma once
-
+#include "Component.h"
 #include "Globals.h"
 #include "SDL/include/SDL_config.h"
+
+class GameObject;
 
 template <typename T>
 struct Buffer {
@@ -11,7 +13,7 @@ struct Buffer {
 };
 
 struct Mesh_info {
-	void DeleteBuffers();
+	~Mesh_info();
 
 	void SetGLBuffers();
 
@@ -38,7 +40,7 @@ private:
 public:
 	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
 
-	void Update() {}
+	void Update();
 
 	void Draw();
 	void DrawWireFrame();
@@ -46,7 +48,7 @@ public:
 	void DrawNormals();
 
 public:
-	Mesh_info mesh;
+	Mesh_info* mesh = nullptr;
 
 	Normals normals_state = Normals::NONE;
 

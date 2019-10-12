@@ -50,6 +50,10 @@ public:
 	void UpdateGameObject(GameObject* &i);
 	bool CleanUp();
 
+	GameObject* CreateGameObject(GameObject* parent);
+
+	// ========================================== old
+
 	void AddObject(ComponentMesh* obj);
 	void AddTexture(const Texture &tex);
 
@@ -73,13 +77,18 @@ public:
 	Texture* GetTexture() const;
 
 	void SelectTexture(Texture &tex);
+	// =========================================================== !old
 
 private:
 	GameObject* root = nullptr;
+
+	// ==========================================================
 	
 	std::vector<ComponentMesh*> objects;
 
 	std::vector<Texture> textures; //TEMPORARY
 	Texture* tex_select = nullptr;
+
+	// ========================================================
 };
 

@@ -31,9 +31,31 @@ void ComponentMesh::SetColors(const float * face_color, const float * wire_c)
 	}
 }
 
+void ComponentMesh::Update()
+{
+	glColor3f(0.f, 0.f, 0.f);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	if (App->renderer3D->fill) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		Draw();
+	}
+	if (App->renderer3D->wireframe) {
+		glColor3fv(wire_color);
+		glEnable(GL_POLYGON_OFFSET_LINE);
+		glPolygonOffset(-1.f, 1.f);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		DrawWireFrame();
+		glDisable(GL_POLYGON_OFFSET_LINE);
+	}
+	DrawNormals();
+	glColor3f(0.f, 0.f, 0.f);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
 ComponentMesh::~ComponentMesh()
 {
-	mesh.DeleteBuffers();
+	delete mesh;
 	
 	delete[] color;
 	delete[] wire_color;
@@ -51,21 +73,21 @@ void ComponentMesh::Draw()
 		glColor3fv(color);
 	}
 
-	glBindBuffer(GL_ARRAY_BUFFER, mesh.vertex.id);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	if (mesh.tex_coords.data != nullptr) {
-		glBindBuffer(GL_ARRAY_BUFFER, mesh.tex_coords.id);
+	if (mesh->tex_coords.data != nullptr) {
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords.id);
 		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 	}
-	if (mesh.vertex_normals.data != nullptr) {
+	if (mesh->vertex_normals.data != nullptr) {
 		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh.vertex_normals.id);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex_normals.id);
 		glNormalPointer(GL_FLOAT, 0, NULL);
 	}
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.index.id);
-	glDrawElements(GL_TRIANGLES, mesh.index.size, GL_UNSIGNED_INT, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
+	glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -74,34 +96,34 @@ void ComponentMesh::Draw()
 
 void ComponentMesh::DrawWireFrame() {
 	glColor3fv(wire_color);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh.vertex.id);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.index.id);
-	glDrawElements(GL_TRIANGLES, mesh.index.size, GL_UNSIGNED_INT, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
+	glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
 }
 
 void ComponentMesh::DrawNormals()
 {
 
 	if (normals_state == Normals::FACE) {
-		if (mesh.face_normals.data != nullptr) {
+		if (mesh->face_normals.data != nullptr) {
 			glColor3f(0.f, 1.f, 0.f);
 			glLineWidth(3.f);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh.face_normals.id);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->face_normals.id);
 			glVertexPointer(3, GL_FLOAT, 0, NULL);
-			glDrawArrays(GL_LINES, 0, mesh.face_normals.size);
+			glDrawArrays(GL_LINES, 0, mesh->face_normals.size);
 			glLineWidth(1.f);
 		}
 	}
 	if (normals_state == Normals::VERTEX) {
 		glColor3f(0.f, 0.f, 1.f);
 
-		if (mesh.vertex_normals.data != nullptr) {
+		if (mesh->vertex_normals.data != nullptr) {
 			glBegin(GL_LINES);
-			for (int j = 0; j < mesh.vertex.size * 2; j += 3) {
-				glVertex3f(mesh.vertex.data[j], mesh.vertex.data[j + 1], mesh.vertex.data[j + 2]);
-				glVertex3f(mesh.vertex_normals.data[j], mesh.vertex_normals.data[j + 1], mesh.vertex_normals.data[j + 2]);
+			for (int j = 0; j < mesh->vertex.size * 2; j += 3) {
+				glVertex3f(mesh->vertex.data[j], mesh->vertex.data[j + 1], mesh->vertex.data[j + 2]);
+				glVertex3f(mesh->vertex_normals.data[j], mesh->vertex_normals.data[j + 1], mesh->vertex_normals.data[j + 2]);
 			}
 			glEnd();
 		}
@@ -109,7 +131,7 @@ void ComponentMesh::DrawNormals()
 }
 
 
-void Mesh_info::DeleteBuffers()
+Mesh_info::~Mesh_info()
 {
 	delete[] vertex.data;
 	delete[] index.data;

@@ -14,7 +14,7 @@ ModuleObjectManager::~ModuleObjectManager()
 
 bool ModuleObjectManager::Start()
 {
-	root = new GameObject();
+	root = new GameObject(nullptr);
 
 	return true;
 }
@@ -22,27 +22,6 @@ bool ModuleObjectManager::Start()
 update_status ModuleObjectManager::Update()
 {
 	UpdateGameObject(root);
-	/*glColor3f(0.f, 0.f, 0.f);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		if ((*i)->active) {
-			if (App->renderer3D->fill) {
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				(*i)->Draw();
-			}
-			if (App->renderer3D->wireframe) {
-				glColor3fv((*i)->wire_color);
-				glEnable(GL_POLYGON_OFFSET_LINE);
-				glPolygonOffset(-1.f, 1.f);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				(*i)->DrawWireFrame();
-				glDisable(GL_POLYGON_OFFSET_LINE);
-			}
-			(*i)->DrawNormals();
-		}
-		glColor3f(0.f, 0.f, 0.f);
-	}
-	glDisableClientState(GL_VERTEX_ARRAY);*/
 
 	return UPDATE_CONTINUE;
 }
@@ -70,6 +49,16 @@ bool ModuleObjectManager::CleanUp()
 	textures.clear();
 
 	return true;
+}
+
+GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
+{
+	if (parent == nullptr)
+		parent = root;
+
+	GameObject* ret = new GameObject(parent);
+
+	return ret;
 }
 
 void ModuleObjectManager::AddObject(ComponentMesh * obj)
@@ -211,68 +200,68 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 
 	par_shapes_mesh* prim = nullptr;
 
-	switch (type)
-	{
-	case Primitives::CUBE:
-		prim = par_shapes_create_cube();
-		break;
-	case Primitives::TETRAHEDRON:
-		prim = par_shapes_create_tetrahedron();
-		break;
-	case Primitives::OCTAHEDRON:
-		prim = par_shapes_create_octahedron();
-		break;
-	case Primitives::DODECAHEDRON:
-		prim = par_shapes_create_dodecahedron();
-		break;
-	case Primitives::ICOSAHEDRON:
-		prim = par_shapes_create_icosahedron();
-		break;
-	case Primitives::SPHERE:
-		//TODO Create a sphere with radious, rings and sectors, not by subdivisions https://stackoverflow.com/questions/5988686/creating-a-3d-sphere-in-opengl-using-visual-c/5989676#5989676
-		prim = par_shapes_create_subdivided_sphere(data.slices);
-		break;
-	case Primitives::HEMISPHERE:
-		prim = par_shapes_create_hemisphere(data.slices, data.rings);
-		break;
-	case Primitives::TORUS:
-		prim = par_shapes_create_torus(data.slices, data.rings, data.radius);
-		break;
-	case Primitives::CONE:
-		prim = par_shapes_create_cone(data.slices, data.rings);
-		break;
-	case Primitives::CYLINDER:
-		prim = par_shapes_create_cylinder(data.slices, data.rings);
-		break;
-	default:
-		LOG("Primitive not found to create. id: %i", (int)type);
-		break;
-	}
+	//switch (type)
+	//{
+	//case Primitives::CUBE:
+	//	prim = par_shapes_create_cube();
+	//	break;
+	//case Primitives::TETRAHEDRON:
+	//	prim = par_shapes_create_tetrahedron();
+	//	break;
+	//case Primitives::OCTAHEDRON:
+	//	prim = par_shapes_create_octahedron();
+	//	break;
+	//case Primitives::DODECAHEDRON:
+	//	prim = par_shapes_create_dodecahedron();
+	//	break;
+	//case Primitives::ICOSAHEDRON:
+	//	prim = par_shapes_create_icosahedron();
+	//	break;
+	//case Primitives::SPHERE:
+	//	//TODO Create a sphere with radious, rings and sectors, not by subdivisions https://stackoverflow.com/questions/5988686/creating-a-3d-sphere-in-opengl-using-visual-c/5989676#5989676
+	//	prim = par_shapes_create_subdivided_sphere(data.slices);
+	//	break;
+	//case Primitives::HEMISPHERE:
+	//	prim = par_shapes_create_hemisphere(data.slices, data.rings);
+	//	break;
+	//case Primitives::TORUS:
+	//	prim = par_shapes_create_torus(data.slices, data.rings, data.radius);
+	//	break;
+	//case Primitives::CONE:
+	//	prim = par_shapes_create_cone(data.slices, data.rings);
+	//	break;
+	//case Primitives::CYLINDER:
+	//	prim = par_shapes_create_cylinder(data.slices, data.rings);
+	//	break;
+	//default:
+	//	LOG("Primitive not found to create. id: %i", (int)type);
+	//	break;
+	//}
 
-	par_shapes_translate(prim, data.pos.x, data.pos.y, data.pos.z);
+	//par_shapes_translate(prim, data.pos.x, data.pos.y, data.pos.z);
 
-	if (data.rotate.axis[0] != 0 || data.rotate.axis[1] != 0 || data.rotate.axis[2] != 0) {
-		float mgn = std::sqrt(data.rotate.axis[0] * data.rotate.axis[0] + data.rotate.axis[1] * data.rotate.axis[1] + data.rotate.axis[2] * data.rotate.axis[2]); // normalize rotation axis
-		float rot[3] = { data.rotate.axis[0] / mgn,data.rotate.axis[1] / mgn ,data.rotate.axis[2] / mgn };
-		par_shapes_rotate(prim, data.rotate.angle, rot);
-	}
+	//if (data.rotate.axis[0] != 0 || data.rotate.axis[1] != 0 || data.rotate.axis[2] != 0) {
+	//	float mgn = std::sqrt(data.rotate.axis[0] * data.rotate.axis[0] + data.rotate.axis[1] * data.rotate.axis[1] + data.rotate.axis[2] * data.rotate.axis[2]); // normalize rotation axis
+	//	float rot[3] = { data.rotate.axis[0] / mgn,data.rotate.axis[1] / mgn ,data.rotate.axis[2] / mgn };
+	//	par_shapes_rotate(prim, data.rotate.angle, rot);
+	//}
 
-	par_shapes_scale(prim, data.scale.x, data.scale.y, data.scale.z);
+	//par_shapes_scale(prim, data.scale.x, data.scale.y, data.scale.z);
 
-	ComponentMesh* obj = new ComponentMesh();
-	Mesh_info* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
-	obj->mesh.push_back(mesh);
-	obj->SetColors(data.face_color, data.wire_color);
-	objects.push_back(obj);
+	//ComponentMesh* obj = new ComponentMesh();
+	//Mesh_info* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	//obj->mesh.push_back(mesh);
+	//obj->SetColors(data.face_color, data.wire_color);
+	//objects.push_back(obj);
 
-	par_shapes_free_mesh(prim);
+	//par_shapes_free_mesh(prim);
 
 	return ret;
 }
 
 void ModuleObjectManager::Demo()
 {
-	std::vector<par_shapes_mesh*> prim;
+	/*std::vector<par_shapes_mesh*> prim;
 	prim.resize((int)Primitives::MAX);
 	prim[0] = par_shapes_create_cube();
 	prim[1] = par_shapes_create_tetrahedron();
@@ -301,7 +290,7 @@ void ModuleObjectManager::Demo()
 		posx += 3;
 	}
 
-	prim.clear();	
+	prim.clear();	*/
 }
 
 const std::vector<ComponentMesh*>* ModuleObjectManager::GetObjects() const

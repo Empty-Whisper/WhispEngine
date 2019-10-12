@@ -1,11 +1,13 @@
 #include "GameObject.h"
+#include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 
-GameObject::GameObject()
+GameObject::GameObject(GameObject * parent) : parent(parent)
 {
+	if (parent != nullptr)
+		parent->children.push_back(this);
 }
-
 
 GameObject::~GameObject()
 {
@@ -22,15 +24,17 @@ Component * GameObject::CreateComponent(const ComponentType & type)
 {
 	switch (type)
 	{
-	case TRANSFORM:
+	case TRANSFORM: {
 		ComponentTransform * comp = new ComponentTransform(this);
 		components.push_back(comp);
 		return comp;
+	}
 		break;
-	case MESH:
+	case MESH: {
 		ComponentMesh* comp = new ComponentMesh(this);
 		components.push_back(comp);
 		return comp;
+	}
 		break;
 	case MATERIAL:
 		break;
@@ -52,4 +56,14 @@ bool GameObject::IsActive() const
 void GameObject::SetActive(const bool & to_active)
 {
 	active = to_active; //TODO Set all its childs to to_active
+}
+
+const char * GameObject::GetName() const
+{
+	return name.data();
+}
+
+void GameObject::SetName(const char * name)
+{
+	this->name.assign(name);
 }
