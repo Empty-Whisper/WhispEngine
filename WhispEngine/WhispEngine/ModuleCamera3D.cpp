@@ -49,8 +49,9 @@ update_status ModuleCamera3D::Update()
 	// Now we can make this movememnt frame rate independant!
 
 	vec3 newPos(0, 0, 0);
-
 	float speed = movement_speed * App->GetDeltaTime();
+
+	//  Triplicate Speed ----------------
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = movement_speed * 3 * App->GetDeltaTime();
 
@@ -113,10 +114,17 @@ update_status ModuleCamera3D::Update()
 	if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
 		App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
+		// TODO: ZOOM IN/OUT with the mouse movement (right -> out, left -> in)
+		Position -= Reference;
+	}
+
+	if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
+		App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	{
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
-		Position -= Reference;
+		//  TODO: Change Reference and Create LookAround Function
 
 		//LookAround(Reference, (float)dx * speed, (float)dy * speed);
 	}
@@ -125,6 +133,7 @@ update_status ModuleCamera3D::Update()
 		LookAt(Reference);
 
 	// Recalculate matrix -------------
+	
 	CalculateViewMatrix();
 
 	return UPDATE_CONTINUE;

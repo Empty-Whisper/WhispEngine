@@ -22,6 +22,7 @@ public:
 private:
 
 	void CalculateViewMatrix();
+	void CalculateViewMatrixWithoutZ();
 
 public:
 	
