@@ -1,33 +1,52 @@
 #include "PanelObjects.h"
 #include "Application.h"
-#include "Imgui/imgui.h"
 
 
-PanelObjects::PanelObjects()
+PanelHierarchy::PanelHierarchy()
 {
-} 
+	leaf_flag = node_flag;
+	leaf_flag |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+	current_flag = node_flag;
+}
 
 
-PanelObjects::~PanelObjects()
+PanelHierarchy::~PanelHierarchy()
 {
 }
 
-void PanelObjects::Update()
+void PanelHierarchy::Update()
 {
-	if (ImGui::Begin("Inspector", &active)) {
-		auto vec = App->object_manager->GetObjects();
-		for (auto i = vec->begin(); i != vec->end(); ++i) {
-			ImGui::PushID(*i);
-			ImGui::Checkbox("", &(*i)->active); ImGui::SameLine(); 
-			if (ImGui::CollapsingHeader("Color")) {
-				ImGui::ColorEdit3("Face color", (*i)->color);
-				ImGui::ColorEdit3("Wire color", (*i)->wire_color);
+	if (ImGui::Begin("Hierarchy", &active)) {
+		GameObject* root = App->object_manager->GetRoot();
+		for (auto i = root->children.begin(); i != root->children.end(); ++i) {
+			if(ImGui::TreeNodeEx((void*)(intptr_t)*i, node_flag, (*i)->GetName())) {
+				DrawNode(*i);
 
-				ImGui::SliderInt("Set Normals", (int*)&(*i)->normals_state, 0, (int)Normals::MAX - 1, normal_name[(int)(*i)->normals_state]);
+				ImGui::TreePop();
 			}
-			ImGui::PopID();
 		}
+		ImGui::End();
 	}
-	ImGui::End();
+}
 
+void PanelHierarchy::DrawNode(GameObject* &obj) {
+	for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
+
+		if ((*i)->children.empty())
+			current_flag = leaf_flag;
+		else {
+			current_flag = node_flag;
+		}
+
+		bool open = ImGui::TreeNodeEx((void*)(intptr_t)*i, current_flag, (*i)->GetName());
+
+		if (!(*i)->children.empty() && open)
+		{
+			DrawNode(*i);
+			if (open)
+				ImGui::TreePop();
+			current_flag = node_flag;
+		}
+		
+	}
 }
