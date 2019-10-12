@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "GameObject.h"
 
-Component::Component(GameObject * parent, ComponentType type)
+Component::Component(GameObject * parent, ComponentType type) : parent(parent), type(type)
 {
 }
 
@@ -27,12 +27,12 @@ void Component::Disable()
 		is_active = false;
 }
 
-const bool Component::IsActive()
+const bool Component::IsActive() const
 {
 	return is_active;
 }
 
-const ComponentType Component::GetType()
+const ComponentType Component::GetType() const
 {
 	return type;
 }

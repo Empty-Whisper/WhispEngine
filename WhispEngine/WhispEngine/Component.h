@@ -5,39 +5,38 @@
 
 #pragma once
 
+class GameObject;
+
 enum ComponentType
 {
-	NONE,
+	NONE = -1,
 	TRANSFORM,
 	MESH,
 	MATERIAL,
 	LIGHT
 };
 
-
-class GameObject;
-
 class Component
 {
 public:
-	Component(GameObject* parent, ComponentType type = ComponentType::NONE);
+	Component(GameObject* parent, ComponentType type);
 	virtual ~Component();
 
-	virtual void Update();
+	virtual void Update() = 0;
 	virtual void Init();
 
 	virtual void Enable();
 	virtual void Disable();
 
-	const bool IsActive();
-	const ComponentType GetType();
+	const bool IsActive() const;
+	const ComponentType GetType() const;
 
 
 public:
-	GameObject* parent;
+	GameObject* parent = nullptr;
 
 private:
-	ComponentType type;
-	bool is_active;
+	ComponentType type = ComponentType::NONE;
+	bool is_active = false;
 };
-#endif
+#endif // __COMPONENT_H__
