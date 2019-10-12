@@ -52,6 +52,8 @@ public:
 
 	GameObject* CreateGameObject(GameObject* parent);
 
+	GameObject* GetRoot() const;
+
 	// ========================================== old
 
 	void AddObject(ComponentMesh* obj);

@@ -61,6 +61,11 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 	return ret;
 }
 
+GameObject * ModuleObjectManager::GetRoot() const
+{
+	return root;
+}
+
 void ModuleObjectManager::AddObject(ComponentMesh * obj)
 {
 	objects.push_back(obj);

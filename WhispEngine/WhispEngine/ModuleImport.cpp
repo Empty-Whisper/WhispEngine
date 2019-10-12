@@ -61,16 +61,11 @@ bool ModuleImport::ImportFbx(const char * path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		
 		GameObject * container = App->object_manager->CreateGameObject(nullptr);
 		container->SetName(path); //TODO extract name file from path
-
-		for (int i = 0; i < scene->mNumMeshes; ++i) {
-			GameObject* obj = App->object_manager->CreateGameObject(container);
-			
-			ComponentMesh* mesh = static_cast<ComponentMesh*>(obj->CreateComponent(ComponentType::MESH));
-			mesh->mesh = App->object_manager->CreateMesh(scene->mMeshes[i]);
-			obj->SetName(scene->mMeshes[i]->mName.C_Str());
-		}
+		aiNode *node = scene->mRootNode;
+		LoadNode(node, container, scene);
 
 		aiReleaseImport(scene);
 	}
@@ -78,6 +73,37 @@ bool ModuleImport::ImportFbx(const char * path)
 		LOG("Error loading scene: %s", aiGetErrorString());
 
 	return ret;
+}
+
+void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * scene)
+{
+	for (int i = 0; i < node->mNumChildren; ++i) {
+		aiNode* child = node->mChildren[i];
+
+		GameObject* obj = App->object_manager->CreateGameObject(parent);
+		obj->SetName(child->mName.C_Str());
+
+		if (child->mNumMeshes == 1) {
+			ComponentMesh* mesh = static_cast<ComponentMesh*>(obj->CreateComponent(ComponentType::MESH));
+			aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
+			mesh->mesh = App->object_manager->CreateMesh(amesh);
+		}
+		else {
+			for (int j = 0; j < child->mNumMeshes; ++j) {
+				GameObject * child_m = App->object_manager->CreateGameObject(obj);
+
+				ComponentMesh* mesh = static_cast<ComponentMesh*>(child_m->CreateComponent(ComponentType::MESH));
+				aiMesh* amesh = scene->mMeshes[child->mMeshes[j]];
+				mesh->mesh = App->object_manager->CreateMesh(amesh);
+
+				child_m->SetName(amesh->mName.C_Str());
+			}
+		}
+
+		if (child->mNumChildren > 0) {
+			LoadNode(child, obj, scene);
+		}
+	}
 }
 
 bool ModuleImport::ImportTexture(const char * path)
