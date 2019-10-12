@@ -268,9 +268,7 @@
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Component.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
+    <ClCompile Include="Component.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -598,9 +596,7 @@
       <Filter>Tools\DevIL</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Component.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
+    <ClInclude Include="Component.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
