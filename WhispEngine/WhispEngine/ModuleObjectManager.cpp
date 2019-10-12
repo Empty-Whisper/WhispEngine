@@ -120,11 +120,9 @@ void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 
 	if (normals != nullptr) {
 		// Vertex Normals --------------------------------------------------
-		ret->vertex_normals.size = ret->vertex.size;
-		ret->vertex_normals.data = new float[ret->vertex_normals.size * 3];
-		memcpy(ret->vertex_normals.data, normals, sizeof(float) * ret->vertex_normals.size * 3);
-		for (int l = 0; l < ret->vertex_normals.size * 3; ++l)
-			ret->vertex_normals.data[l] = ret->vertex_normals.data[l] * magnitude + ret->vertex.data[l];
+		ret->vertex_normals.size = ret->vertex.size * 3;
+		ret->vertex_normals.data = new float[ret->vertex_normals.size];
+		memcpy(ret->vertex_normals.data, normals, sizeof(float) * ret->vertex_normals.size);
 	}
 
 	// Face Normals ----------------------------------------------------
