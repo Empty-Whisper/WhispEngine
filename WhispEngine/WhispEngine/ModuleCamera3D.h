@@ -14,6 +14,7 @@ public:
 	bool CleanUp();
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
+	//void LookAround(const math::float3 &Reference, float DeltaX, float DeltaY);
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();

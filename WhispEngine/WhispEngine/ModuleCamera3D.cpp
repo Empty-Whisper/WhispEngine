@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "MathGeoLib/include/Math/Quat.h"
+#include "MathGeoLib/include/Math/float3.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -53,22 +55,21 @@ update_status ModuleCamera3D::Update()
 		speed = movement_speed * 3 * App->GetDeltaTime();
 
 	// Mouse Wheel ----------------
-	int mouse_wheel = App->input->GetMouseZ();
+	if (!ImGui::IsAnyWindowHovered())
+	{
+		int mouse_wheel = App->input->GetMouseZ();
 
-	if (mouse_wheel != 0)
-		newPos -= mouse_wheel * Z * wheel_speed;
-
+		if (mouse_wheel != 0)
+			newPos -= mouse_wheel * Z * wheel_speed;
+	}
+	
 	
 	Position += newPos;
 	Reference += newPos;
 
 	// Mouse motion ----------------
 	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-	{
-		
-
-		/*if(App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-		if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;*/
+	{		
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
@@ -108,8 +109,6 @@ update_status ModuleCamera3D::Update()
 	
 		Position = Reference + Z * length(Position);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
-		LookAt(Reference);
 
 	if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
 		App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
@@ -117,8 +116,13 @@ update_status ModuleCamera3D::Update()
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
-		Look(Reference, (float)dy * sensiblity, (float)dx * sensiblity);
+		Position -= Reference;
+
+		//LookAround(Reference, (float)dx * speed, (float)dy * speed);
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		LookAt(Reference);
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
@@ -144,6 +148,19 @@ void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool Rota
 
 	CalculateViewMatrix();
 }
+
+//void ModuleCamera3D::LookAround(const math::float3 & Reference, float DeltaX, float DeltaY)
+//{
+//	math::Quat rotationX = math::Quat::RotateAxisAngle({ 0.0f,1.0f,0.0f }, DeltaX * DEGTORAD);
+//	math::Quat rotationY = math::Quat::RotateAxisAngle(Position, DeltaY * DEGTORAD);
+//	math::Quat finalRotation = rotationX * rotationY;
+//
+//	//camera->frustum.up = finalRotation * camera->frustum.up;
+//	//camera->frustum.front = finalRotation * camera->frustum.front;
+//
+//	float distance = (Position.Length() - Reference.Length());
+//	Position = Reference * distance;
+//}
 
 // -----------------------------------------------------------------
 void ModuleCamera3D::LookAt( const vec3 &Spot)
