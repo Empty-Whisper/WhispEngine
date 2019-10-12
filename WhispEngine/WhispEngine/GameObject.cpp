@@ -2,6 +2,9 @@
 #include "Application.h"
 #include "Globals.h"
 
+#include "Component.h"
+#include "ComponentTransform.h"
+
 GameObject::GameObject()
 {
 	InitColors();
