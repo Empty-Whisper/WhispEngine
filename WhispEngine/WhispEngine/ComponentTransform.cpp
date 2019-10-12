@@ -27,6 +27,9 @@ math::float4x4 ComponentTransform::GetLocalMatrix() const
 math::float4x4 ComponentTransform::GetGlobalMatrix() const
 {
 	math::float4x4 globalMatrix = math::float4x4::identity;
-
+	GameObject* parentObject = this->parent;
+	//TODO: Set all parents on a list/vector/array/slack (i think list is the best option)
+	//TODO: get GameObject parent Matrix from trasform and equal to globalMatrix * parentMatrix 
+	
 	return globalMatrix * GetLocalMatrix();
 }
