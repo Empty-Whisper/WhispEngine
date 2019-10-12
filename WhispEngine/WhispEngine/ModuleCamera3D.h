@@ -29,4 +29,7 @@ public:
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
+	float sensiblity = 0.f;
+	float movement_speed = 0.f;
+	float wheel_speed = 0.f;
 };
