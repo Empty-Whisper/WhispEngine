@@ -2,7 +2,6 @@
 
 #include "Globals.h"
 #include "SDL/include/SDL_config.h"
-#include <vector>
 
 template <typename T>
 struct Buffer {
@@ -12,7 +11,7 @@ struct Buffer {
 };
 
 struct Mesh_info {
-	~Mesh_info();
+	void DeleteBuffers();
 
 	void SetGLBuffers();
 
@@ -21,21 +20,17 @@ struct Mesh_info {
 	Buffer<float> face_normals;
 	Buffer<float> vertex_normals;
 	Buffer<float> tex_coords;
-
-	uint tex_id = 0;
 };
 
 enum class Normals {
 	NONE = 0, FACE, VERTEX, MAX
 };
 
-class Mesh
+class ComponentMesh : public Component
 {
 public:
-	Mesh();
-	//GameObject(const int &n_vertex, float* vertex, const int &n_index, uint* index, float* normals = nullptr);
-
-	~Mesh();
+	ComponentMesh(GameObject *parent);
+	~ComponentMesh();
 
 private:
 	void InitColors();
@@ -43,13 +38,15 @@ private:
 public:
 	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
 
+	void Update() {}
+
 	void Draw();
 	void DrawWireFrame();
 
 	void DrawNormals();
 
 public:
-	std::vector<Mesh_info*> mesh;
+	Mesh_info mesh;
 
 	Normals normals_state = Normals::NONE;
 

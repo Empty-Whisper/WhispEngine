@@ -16,6 +16,7 @@ public:
 	~ComponentTransform();
 
 	void PreUpdate(); //TODO: 1. Recalculate all the global matrices at the beginning of the frame
+	void Update() {}
 
 	math::float4x4 GetLocalMatrix() const;
 	math::float4x4 GetGlobalMatrix() const; //parent’s global matrix * your local Matrix

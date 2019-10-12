@@ -50,7 +50,7 @@ public:
 	void UpdateGameObject(GameObject* &i);
 	bool CleanUp();
 
-	void AddObject(Mesh* obj);
+	void AddObject(ComponentMesh* obj);
 	void AddTexture(const Texture &tex);
 
 	Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
@@ -66,7 +66,7 @@ public:
 	
 	void Demo();
 
-	const std::vector<Mesh*>* GetObjects() const;
+	const std::vector<ComponentMesh*>* GetObjects() const;
 	std::vector<Texture>* GetTextures();
 	const Texture* GetTexture(const int &id) const;
 	/*Return Selected texture*/
@@ -77,7 +77,7 @@ public:
 private:
 	GameObject* root = nullptr;
 	
-	std::vector<Mesh*> objects;
+	std::vector<ComponentMesh*> objects;
 
 	std::vector<Texture> textures; //TEMPORARY
 	Texture* tex_select = nullptr;

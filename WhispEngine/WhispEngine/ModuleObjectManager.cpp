@@ -72,7 +72,7 @@ bool ModuleObjectManager::CleanUp()
 	return true;
 }
 
-void ModuleObjectManager::AddObject(Mesh * obj)
+void ModuleObjectManager::AddObject(ComponentMesh * obj)
 {
 	objects.push_back(obj);
 }
@@ -259,7 +259,7 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 
 	par_shapes_scale(prim, data.scale.x, data.scale.y, data.scale.z);
 
-	Mesh* obj = new Mesh();
+	ComponentMesh* obj = new ComponentMesh();
 	Mesh_info* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
 	obj->mesh.push_back(mesh);
 	obj->SetColors(data.face_color, data.wire_color);
@@ -289,7 +289,7 @@ void ModuleObjectManager::Demo()
 	int posx = -10;
 	for (auto i = prim.begin(); i != prim.end(); ++i) {
 		par_shapes_translate(*i, posx, 0.f, 3);
-		Mesh* obj = new Mesh();
+		ComponentMesh* obj = new ComponentMesh();
 		Mesh_info* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
 		obj->mesh.push_back(mesh);
 
@@ -304,7 +304,7 @@ void ModuleObjectManager::Demo()
 	prim.clear();	
 }
 
-const std::vector<Mesh*>* ModuleObjectManager::GetObjects() const
+const std::vector<ComponentMesh*>* ModuleObjectManager::GetObjects() const
 {
 	return &objects;
 }

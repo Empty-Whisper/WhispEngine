@@ -2,15 +2,12 @@
 #include "Application.h"
 #include "Globals.h"
 
-#include "Component.h"
-#include "ComponentTransform.h"
-
-Mesh::Mesh()
+ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
 	InitColors();
 }
 
-void Mesh::InitColors()
+void ComponentMesh::InitColors()
 {
 	color = new float[3];
 	color[0] = 1.f;
@@ -22,7 +19,7 @@ void Mesh::InitColors()
 	wire_color[2] = 0.f;
 }
 
-void Mesh::SetColors(const float * face_color, const float * wire_c)
+void ComponentMesh::SetColors(const float * face_color, const float * wire_c)
 {
 	if (face_color != nullptr) {
 		for (int i = 0; i < 3; ++i)
@@ -34,92 +31,85 @@ void Mesh::SetColors(const float * face_color, const float * wire_c)
 	}
 }
 
-Mesh::~Mesh()
+ComponentMesh::~ComponentMesh()
 {
-	for (int i = 0; i < mesh.size(); ++i) {
-		delete mesh[i];
-	}
+	mesh.DeleteBuffers();
 	
 	delete[] color;
 	delete[] wire_color;
 }
 
-void Mesh::Draw()
+void ComponentMesh::Draw()
 {
 	glColor3f(1.f, 1.f, 1.f);
-	for (int i = 0; i < mesh.size(); ++i) {
-		if (App->object_manager->GetTexture() != nullptr) {
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glBindTexture(GL_TEXTURE_2D, App->object_manager->GetTexture()->id);
-		}
-		else {
-			glColor3fv(color);
-		}
 
-		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex.id);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-		if (mesh[i]->tex_coords.data != nullptr) {
-			glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->tex_coords.id);
-			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-		}
-		if (mesh[i]->vertex_normals.data != nullptr) {
-			glEnableClientState(GL_NORMAL_ARRAY);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex_normals.id);
-			glNormalPointer(GL_FLOAT, 0, NULL);
-		}
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->index.id);
-		glDrawElements(GL_TRIANGLES, mesh[i]->index.size, GL_UNSIGNED_INT, NULL);
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
+	if (App->object_manager->GetTexture() != nullptr) {
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindTexture(GL_TEXTURE_2D, App->object_manager->GetTexture()->id);
 	}
+	else {
+		glColor3fv(color);
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh.vertex.id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	if (mesh.tex_coords.data != nullptr) {
+		glBindBuffer(GL_ARRAY_BUFFER, mesh.tex_coords.id);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+	}
+	if (mesh.vertex_normals.data != nullptr) {
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh.vertex_normals.id);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+	}
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.index.id);
+	glDrawElements(GL_TRIANGLES, mesh.index.size, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Mesh::DrawWireFrame() {
+void ComponentMesh::DrawWireFrame() {
 	glColor3fv(wire_color);
-	for (int i = 0; i < mesh.size(); ++i) {
-		glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->vertex.id);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh.vertex.id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh[i]->index.id);
-		glDrawElements(GL_TRIANGLES, mesh[i]->index.size, GL_UNSIGNED_INT, NULL);
-	}
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.index.id);
+	glDrawElements(GL_TRIANGLES, mesh.index.size, GL_UNSIGNED_INT, NULL);
 }
 
-void Mesh::DrawNormals()
+void ComponentMesh::DrawNormals()
 {
 
-	for (int i = 0; i < mesh.size(); ++i) {
-		if (normals_state == Normals::FACE) {
-			if (mesh[i]->face_normals.data != nullptr) {
-				glColor3f(0.f, 1.f, 0.f);
-				glLineWidth(3.f);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh[i]->face_normals.id);
-				glVertexPointer(3, GL_FLOAT, 0, NULL);
-				glDrawArrays(GL_LINES, 0, mesh[i]->face_normals.size);
-				glLineWidth(1.f);
-			}
+	if (normals_state == Normals::FACE) {
+		if (mesh.face_normals.data != nullptr) {
+			glColor3f(0.f, 1.f, 0.f);
+			glLineWidth(3.f);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh.face_normals.id);
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
+			glDrawArrays(GL_LINES, 0, mesh.face_normals.size);
+			glLineWidth(1.f);
 		}
-		if (normals_state == Normals::VERTEX) {
-			glColor3f(0.f, 0.f, 1.f);
+	}
+	if (normals_state == Normals::VERTEX) {
+		glColor3f(0.f, 0.f, 1.f);
 
-			if (mesh[i]->vertex_normals.data != nullptr) {
-				glBegin(GL_LINES);
-				for (int j = 0; j < mesh[i]->vertex.size * 2; j += 3) {
-					glVertex3f(mesh[i]->vertex.data[j], mesh[i]->vertex.data[j + 1], mesh[i]->vertex.data[j + 2]);
-					glVertex3f(mesh[i]->vertex_normals.data[j], mesh[i]->vertex_normals.data[j + 1], mesh[i]->vertex_normals.data[j + 2]);
-				}
-				glEnd();
+		if (mesh.vertex_normals.data != nullptr) {
+			glBegin(GL_LINES);
+			for (int j = 0; j < mesh.vertex.size * 2; j += 3) {
+				glVertex3f(mesh.vertex.data[j], mesh.vertex.data[j + 1], mesh.vertex.data[j + 2]);
+				glVertex3f(mesh.vertex_normals.data[j], mesh.vertex_normals.data[j + 1], mesh.vertex_normals.data[j + 2]);
 			}
+			glEnd();
 		}
 	}
 }
 
 
-Mesh_info::~Mesh_info()
+void Mesh_info::DeleteBuffers()
 {
 	delete[] vertex.data;
 	delete[] index.data;
