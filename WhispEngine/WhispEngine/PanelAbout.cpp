@@ -25,24 +25,52 @@ void PanelAbout::Update()
 		if (ImGui::Button("Github @optus23")) 	ShellExecuteA(NULL, "open", "https://github.com/optus23", NULL, NULL, SW_SHOWNORMAL);
 		ImGui::NewLine();
 		ImGui::Text("3rd Party Libraries used:");
-		ImGui::BulletText("SDL.2.0.6");
-		ImGui::BulletText("Glew.2.0");
-		ImGui::BulletText("OpenGL3");
-		ImGui::BulletText("MathGeoLib v1.5");
-		ImGui::BulletText("PCG v0.9");
-		ImGui::BulletText("Mmgr");
-		ImGui::BulletText("ImGui v1.73");
-		ImGui::BulletText("JSON parser v3.7");
-		ImGui::BulletText("par_shape.h");
-		ImGui::BulletText("Assimp v4.1");
-		ImGui::BulletText("DevIL v1.8");
-		ImGui::BulletText("GPU detect v1.1");
+
+		ImGui::BulletText("SDL v2.0.6"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://www.libsdl.org/license.php", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("STL"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://docs.oracle.com/database/bdb181/html/installation/win_build_stl.html", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("Glew.2.0"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/nigels-com/glew", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("OpenGL3"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://opengl.org/", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("MathGeoLib v1.5"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/juj/MathGeoLib", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("PCG v0.9"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "http://www.pcg-random.org/", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("Mmgr"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("ImGui v1.73"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/ocornut/imgui", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("JSON parser v3.7"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/nlohmann/json", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("par_shape.h"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://prideout.net/shapes", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("Assimp v4.1"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "http://www.assimp.org/", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("DevIL v1.8"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "http://openil.sourceforge.net/", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::BulletText("GPU detect v1.1"); ImGui::SameLine();
+		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/MatthewKing/DeviceId", NULL, NULL, SW_SHOWNORMAL);
+
 
 		ImGui::NewLine();
 		ImGui::Checkbox("Show MIT LICENSE", &checkbox_mit_license_window);
 		if (checkbox_mit_license_window)
 		{
-			ImGui::SetWindowSize(ImVec2(580, 740));
+			ImGui::SetWindowSize(ImVec2(580, 830));
 			ImGui::Text("MIT LICENSE");	ImGui::NewLine();
 			ImGui::Text("Copyright (c) 2019 Empty-Whisper"); ImGui::NewLine();
 			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files(the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :"); ImGui::NewLine();
@@ -51,7 +79,7 @@ void PanelAbout::Update()
 		}
 		else
 		{
-			ImGui::SetWindowSize(ImVec2(580, 440));
+			ImGui::SetWindowSize(ImVec2(580, 530));
 		}
 	}
 	ImGui::End();
