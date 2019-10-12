@@ -58,6 +58,9 @@
     <Filter Include="Tools\DevIL">
       <UniqueIdentifier>{01812f74-7971-4dc1-a6b3-07fd69105c8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Components">
+      <UniqueIdentifier>{d334a48d-a01b-421c-9d0d-4b7a75e39e8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -268,7 +271,12 @@
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Component.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTransform.cpp">
+      <Filter>GameObject\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -596,7 +604,12 @@
       <Filter>Tools\DevIL</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Component.h" />
+    <ClInclude Include="Component.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>GameObject\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

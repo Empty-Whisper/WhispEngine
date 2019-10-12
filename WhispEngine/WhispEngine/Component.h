@@ -23,8 +23,6 @@ public:
 	Component(GameObject* parent, ComponentType type = ComponentType::NONE);
 	virtual ~Component();
 
-public:
-
 	virtual void Update();
 	virtual void Init();
 
