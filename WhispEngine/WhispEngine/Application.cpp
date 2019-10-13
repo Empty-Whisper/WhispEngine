@@ -56,7 +56,8 @@ bool Application::Init()
 {
 	bool ret = true;
 
-	nlohmann::json load = file_system->OpenFile("configuration.json");
+	nlohmann::json load = file_system->OpenFile("Configuration/configuration.json");
+	if(load == nullptr) load = file_system->OpenFile("Configuration/conf_default.json");
 
 	engine_name = load["Configuration"]["App"]["name"].get<std::string>();
 	organization = load["Configuration"]["App"]["organization"].get<std::string>();

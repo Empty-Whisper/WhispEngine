@@ -16,6 +16,8 @@ nlohmann::json FileSystem::OpenFile(const char * path)
 {
 	nlohmann::json file;
 	std::ifstream i(path);
+	if (i.fail())
+		return nullptr;
 
 	i >> file;
 
