@@ -3,6 +3,7 @@
 #include "ModuleCamera3D.h"
 #include "MathGeoLib/include/Math/Quat.h"
 #include "MathGeoLib/include/Math/float3.h"
+#include "MathGeoLib/include/Math/float2.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -30,7 +31,8 @@ bool ModuleCamera3D::Start()
 
 	sensiblity = 0.25f;  //  TODO: Save and Load this data in JSON
 	movement_speed = 15.f;  //  TODO: Save and Load this data in JSON
-	wheel_speed = 10.f;  //  TODO: Save and Load this data in JSON
+	wheel_speed = 70.f;  //  TODO: Save and Load this data in JSON
+	offset_mouse_movement = 1.f;  //  TODO: Save and Load this data in JSON
 	return ret;
 }
 
@@ -61,7 +63,7 @@ update_status ModuleCamera3D::Update()
 		int mouse_wheel = App->input->GetMouseZ();
 
 		if (mouse_wheel != 0)
-			newPos -= mouse_wheel * Z * wheel_speed;
+			newPos -= mouse_wheel * Z * wheel_speed * App->GetDeltaTime();
 	}
 	
 	
@@ -127,6 +129,31 @@ update_status ModuleCamera3D::Update()
 		//  TODO: Change Reference and Create LookAround Function
 
 		//LookAround(Reference, (float)dx * speed, (float)dy * speed);
+	}
+
+	// Middle Mouse Button Movement
+	static math::float2 initial_mouse_position = initial_mouse_position.zero;
+	static math::float2 last_mouse_position = last_mouse_position.zero;
+
+	
+	
+
+	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
+	{
+		
+		last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+		math::float2 mouse_vec = last_mouse_position - initial_mouse_position;		
+
+		
+		if (App->input->GetMouseXMotion() > offset_mouse_movement) newPos -= X * mouse_vec.x / 100;
+		if (App->input->GetMouseXMotion() < -offset_mouse_movement) newPos -= X * mouse_vec.x / 100;
+		if (App->input->GetMouseYMotion() < offset_mouse_movement) newPos += Y * mouse_vec.y / 100;
+		if (App->input->GetMouseYMotion() > -offset_mouse_movement) newPos += Y * mouse_vec.y / 100;
+		
+		Position += newPos;
+		Reference += newPos;
+		initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)

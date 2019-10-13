@@ -22,7 +22,6 @@ public:
 private:
 
 	void CalculateViewMatrix();
-	void CalculateViewMatrixWithoutZ();
 
 public:
 	
@@ -34,4 +33,6 @@ private:
 	float sensiblity = 0.f;
 	float movement_speed = 0.f;
 	float wheel_speed = 0.f;
+	float offset_mouse_movement = 0.f;
+
 };
