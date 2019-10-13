@@ -71,11 +71,26 @@ std::string FileSystem::GetFileNameFromPath(const char * file)
 				dot_found = true;
 		}
 		else {
-			if (*i == '\\')
+			if (*i == '\\' || *i == '/')
 				break;
 			buffer.push_back(*i);
 		}
 	}
 	std::reverse(buffer.begin(), buffer.end());
+	return buffer.data();
+}
+
+std::string FileSystem::GetFileFromPath(const char * file)
+{
+	std::string f(file);
+	std::string buffer;
+
+	for (auto i = f.rbegin(); i != f.rend(); i++) {
+		if (*i == '\\' || *i == '/')
+			break;
+		buffer.push_back(*i);
+	}
+	std::reverse(buffer.begin(), buffer.end());
+
 	return buffer.data();
 }

@@ -1,6 +1,19 @@
 #pragma once
 #include "Component.h"
-#include "Texture.h"
+#include <string>
+
+struct Texture
+{
+	Texture(const uint &id, const char* path, const int& width, const int& height);
+
+	uint id = 0;
+	std::string name;
+	std::string path;
+
+	int width = -1;
+	int height = -1;
+};
+
 class ComponentMaterial :
 	public Component
 {

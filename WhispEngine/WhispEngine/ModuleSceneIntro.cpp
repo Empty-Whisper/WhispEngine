@@ -33,6 +33,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
 	GenerateGrid(10);
+
+	App->importer->ImportFbx("Assets/Models/BakerHouse.fbx");
 	
 	return ret;
 }

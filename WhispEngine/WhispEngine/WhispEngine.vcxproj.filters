@@ -276,9 +276,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentMaterial.cpp">
       <Filter>GameObject\Components</Filter>
     </ClCompile>
@@ -615,9 +612,6 @@
       <Filter>GameObject\Components</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ComponentMaterial.h">

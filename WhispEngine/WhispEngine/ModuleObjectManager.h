@@ -3,8 +3,6 @@
 #include "ComponentMesh.h"
 #include "Assimp/include/mesh.h"
 
-#include "Texture.h"
-
 #include "GameObject.h"
 
 enum class Primitives {

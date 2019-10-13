@@ -1,8 +1,7 @@
 #include "ComponentMaterial.h"
 #include "GameObject.h"
 #include "ComponentMesh.h"
-
-
+#include "Application.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* parent) : Component(parent, ComponentType::MATERIAL)
 {
@@ -63,4 +62,9 @@ const float * ComponentMaterial::GetFaceColor() const
 const float * ComponentMaterial::GetWireColor() const
 {
 	return &wire_color[0];
+}
+
+Texture::Texture(const uint &id, const char* path, const int& width, const int& height)
+	: id(id), path(path), name(App->file_system->GetFileNameFromPath(path)), width(width), height(height)
+{
 }

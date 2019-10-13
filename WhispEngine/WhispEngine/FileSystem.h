@@ -20,5 +20,5 @@ public:
 
 	FileSystem::Format GetFormat(const char* file);
 	std::string GetFileNameFromPath(const char* file);
+	std::string GetFileFromPath(const char* file);
 };
-
