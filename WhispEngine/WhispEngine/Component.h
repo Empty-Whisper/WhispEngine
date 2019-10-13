@@ -31,6 +31,9 @@ public:
 	virtual void OnInspector() = 0;
 
 	const bool IsActive() const;
+	void SetActive(bool to_active);
+	void ActiveImGui();
+
 	const ComponentType GetType() const;
 
 
@@ -40,7 +43,7 @@ public:
 private:
 	ComponentType type = ComponentType::NONE;
 
-protected:
-	bool is_active = false;
+private:
+	bool is_active = true;
 };
 #endif // __COMPONENT_H__

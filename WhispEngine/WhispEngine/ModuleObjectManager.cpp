@@ -28,10 +28,12 @@ update_status ModuleObjectManager::Update()
 
 void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
-	obj->Update();
-	if (!obj->children.empty()) {
-		for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
-			UpdateGameObject(*i);
+	if (obj->IsActive()) {
+		obj->Update();
+		if (!obj->children.empty()) {
+			for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
+				UpdateGameObject(*i);
+			}
 		}
 	}
 }

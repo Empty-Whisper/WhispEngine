@@ -32,6 +32,16 @@ const bool Component::IsActive() const
 	return is_active;
 }
 
+void Component::SetActive(bool to_active)
+{
+	is_active = to_active;
+}
+
+void Component::ActiveImGui()
+{
+	ImGui::Checkbox("", &is_active);
+}
+
 const ComponentType Component::GetType() const
 {
 	return type;

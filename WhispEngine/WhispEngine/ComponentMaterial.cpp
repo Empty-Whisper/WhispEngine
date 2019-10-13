@@ -31,7 +31,8 @@ const uint ComponentMaterial::GetIDTexture() const
 void ComponentMaterial::OnInspector()
 {
 	if (ImGui::CollapsingHeader("Material")) {
-		ImGui::Checkbox("Active", &is_active);
+		bool to_active = IsActive();
+		ActiveImGui();
 		ImGui::Text("%s", texture->path.data());
 		ImGui::Button("Change Texture");
 

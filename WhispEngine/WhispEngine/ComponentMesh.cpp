@@ -44,12 +44,14 @@ void ComponentMesh::Draw()
 	glColor3f(1.f, 1.f, 1.f);
 
 	if (material != nullptr) {
-		if (material->HasTexture()) {
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glBindTexture(GL_TEXTURE_2D, material->GetIDTexture());
-		}
-		else {
-			glColor3fv(material->GetFaceColor());
+		if (material->IsActive()) {
+			if (material->HasTexture()) {
+				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+				glBindTexture(GL_TEXTURE_2D, material->GetIDTexture());
+			}
+			else {
+				glColor3fv(material->GetFaceColor());
+			}
 		}
 	}
 
@@ -116,7 +118,7 @@ void ComponentMesh::SetMaterial(ComponentMaterial  * mat)
 void ComponentMesh::OnInspector()
 {
 	if (ImGui::CollapsingHeader("Mesh")) {
-		ImGui::Checkbox("Active", &is_active);
+		ActiveImGui();
 
 		/*ImGui::Checkbox("UVs", &view_uv);
 		ImGui::Checkbox("Face Normals", &view_face_normals);
