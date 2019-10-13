@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Texture.h"
 class ComponentMaterial :
 	public Component
 {
@@ -8,8 +9,12 @@ public:
 	~ComponentMaterial();
 
 public:
+
+	void			SetTexture(Texture *texture);
 	const bool		HasTexture() const;
 	const uint		GetIDTexture() const;
+
+	void Update() {}
 
 	void			SetFaceColor(const float &r, const float &g, const float &b, const float &a);
 	void			SetFaceColor(const float* &c);
@@ -22,6 +27,6 @@ private:
 	float face_color[4]{ 1.f, 1.f, 1.f, 1.f };
 	float wire_color[4]{ 0.f, 0.f, 0.f, 0.f };
 
-	uint id_tex = 0;
+	Texture* texture = nullptr;
 };
 

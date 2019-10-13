@@ -44,7 +44,11 @@ Component * GameObject::CreateComponent(const ComponentType & type)
 		return comp;
 	}
 		break;
-	case MATERIAL:
+	case MATERIAL: {
+		ComponentMaterial* comp = new ComponentMaterial(this);
+		components.push_back(comp);
+		return comp;
+	}
 		break;
 	case LIGHT:
 		break;

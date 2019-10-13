@@ -4,6 +4,7 @@
 struct aiNode;
 struct aiScene;
 class GameObject;
+class Texture;
 
 class ModuleImport :
 	public Module
@@ -17,7 +18,7 @@ public:
 	bool CleanUp();
 
 	bool ImportFbx(const char* path);
-	bool ImportTexture(const char* path);
+	Texture* ImportTexture(const char* path);
 
 private:
 	void LoadNode(aiNode * node, GameObject * container, const aiScene * scene);

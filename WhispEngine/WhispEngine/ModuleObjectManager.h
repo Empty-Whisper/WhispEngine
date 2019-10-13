@@ -57,7 +57,7 @@ public:
 
 	// ========================================== old
 
-	void AddTexture(const Texture &tex);
+	void AddTexture(Texture *tex);
 
 	Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
 	Mesh_info* CreateMesh(const aiMesh *mesh);
@@ -72,8 +72,6 @@ public:
 	
 	void Demo();
 
-	std::vector<Texture>* GetTextures();
-	const Texture* GetTexture(const int &id) const;
 	// =========================================================== !old
 
 private:
@@ -81,7 +79,7 @@ private:
 
 	// ==========================================================
 
-	std::vector<Texture> textures; //TEMPORARY
+	std::vector<Texture*> textures; //TEMPORARY
 
 	// ========================================================
 };

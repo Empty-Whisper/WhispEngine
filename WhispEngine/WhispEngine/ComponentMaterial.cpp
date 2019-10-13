@@ -14,14 +14,19 @@ ComponentMaterial::~ComponentMaterial()
 {
 }
 
+void ComponentMaterial::SetTexture(Texture * texture)
+{
+	this->texture = texture;
+}
+
 const bool ComponentMaterial::HasTexture() const
 {
-	return false;
+	return texture != nullptr;
 }
 
 const uint ComponentMaterial::GetIDTexture() const
 {
-	return id_tex;
+	return texture->id;
 }
 
 void ComponentMaterial::SetFaceColor(const float & r, const float & g, const float & b, const float & a)

@@ -84,14 +84,17 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 		obj->SetName(child->mName.C_Str());
 
 		if (child->mNumMeshes == 1) {
-			ComponentMesh* mesh = static_cast<ComponentMesh*>(obj->CreateComponent(ComponentType::MESH));
+			ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
 			aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
 			mesh->mesh = App->object_manager->CreateMesh(amesh);
 
 			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
 			aiString path;
 			aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
-			ImportTexture(std::string(std::string("Assets/Textures/") + path.C_Str()).data());
+
+			ComponentMaterial* material = (ComponentMaterial*)obj->CreateComponent(ComponentType::MATERIAL);
+			material->SetTexture(ImportTexture(std::string(std::string("Assets/Textures/") + path.C_Str()).data()));
+
 		}
 		else {
 			for (int j = 0; j < child->mNumMeshes; ++j) {
@@ -111,9 +114,9 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 	}
 }
 
-bool ModuleImport::ImportTexture(const char * path)
+Texture* ModuleImport::ImportTexture(const char * path)
 {
-	bool ret = true;
+	Texture* ret = nullptr;
 
 	ILuint devilID = 0;
 
@@ -125,20 +128,19 @@ bool ModuleImport::ImportTexture(const char * path)
 	if (!ilLoad(IL_DDS, path)) {
 		auto error = ilGetError();
 		LOG("Failed to load texture with path: %s. Error: %s", path, ilGetString(error));
-		ret = false;
 	}
 	else {
-		Texture texture(ilutGLBindTexImage(), path, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
+		ret = new Texture(ilutGLBindTexImage(), path, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glBindTexture(GL_TEXTURE_2D, texture.id);
+		glBindTexture(GL_TEXTURE_2D, ret->id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-		App->object_manager->AddTexture(texture);
+		App->object_manager->AddTexture(ret);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}

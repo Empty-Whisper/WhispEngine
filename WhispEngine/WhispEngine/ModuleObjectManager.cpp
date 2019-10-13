@@ -41,7 +41,8 @@ bool ModuleObjectManager::CleanUp()
 	delete root;
 
 	for (auto t = textures.begin(); t != textures.end(); t++) {
-		glDeleteTextures(1, &(*t).id);
+		glDeleteTextures(1, &(*t)->id);
+		delete *t;
 	}
 	textures.clear();
 
@@ -69,7 +70,7 @@ GameObject * ModuleObjectManager::GetRoot() const
 	return root;
 }
 
-void ModuleObjectManager::AddTexture(const Texture & tex)
+void ModuleObjectManager::AddTexture(Texture * tex)
 {
 	textures.push_back(tex);
 }
@@ -292,14 +293,4 @@ void ModuleObjectManager::Demo()
 	}
 
 	prim.clear();	*/
-}
-
-std::vector<Texture>* ModuleObjectManager::GetTextures()
-{
-	return &textures;
-}
-
-const Texture * ModuleObjectManager::GetTexture(const int & id) const
-{
-	return &textures[id];
 }
