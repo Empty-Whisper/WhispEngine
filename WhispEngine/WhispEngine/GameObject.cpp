@@ -11,6 +11,14 @@ GameObject::GameObject(GameObject * parent) : parent(parent)
 
 GameObject::~GameObject()
 {
+	for (auto comp = components.begin(); comp != components.end(); ++comp) {
+		delete *comp;
+	}
+
+	for (auto i = children.begin(); i != children.end(); i++) {
+		delete *i;
+	}
+	children.clear();
 }
 
 void GameObject::Update()

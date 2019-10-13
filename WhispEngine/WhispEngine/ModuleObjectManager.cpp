@@ -38,10 +38,7 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 
 bool ModuleObjectManager::CleanUp()
 {
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		delete *i;
-	}
-	objects.clear();
+	delete root;
 
 	for (auto t = textures.begin(); t != textures.end(); t++) {
 		glDeleteTextures(1, &(*t).id);
@@ -61,14 +58,15 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 	return ret;
 }
 
+void ModuleObjectManager::DestroyGameObject(GameObject * obj)
+{
+	obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
+	delete obj;
+}
+
 GameObject * ModuleObjectManager::GetRoot() const
 {
 	return root;
-}
-
-void ModuleObjectManager::AddObject(ComponentMesh * obj)
-{
-	objects.push_back(obj);
 }
 
 void ModuleObjectManager::AddTexture(const Texture & tex)
@@ -296,11 +294,6 @@ void ModuleObjectManager::Demo()
 	prim.clear();	*/
 }
 
-const std::vector<ComponentMesh*>* ModuleObjectManager::GetObjects() const
-{
-	return &objects;
-}
-
 std::vector<Texture>* ModuleObjectManager::GetTextures()
 {
 	return &textures;
@@ -309,14 +302,4 @@ std::vector<Texture>* ModuleObjectManager::GetTextures()
 const Texture * ModuleObjectManager::GetTexture(const int & id) const
 {
 	return &textures[id];
-}
-
-Texture * ModuleObjectManager::GetTexture() const
-{
-	return tex_select;
-}
-
-void ModuleObjectManager::SelectTexture(Texture & tex)
-{
-	tex_select = &tex;
 }

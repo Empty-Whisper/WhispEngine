@@ -23,14 +23,13 @@ public:
 
 public:
 	std::vector<GameObject*> children;
+	GameObject* parent = nullptr;
 
 private:
 	bool active = true;
 
 	std::string name;
 	std::vector<Component*> components;
-
-	GameObject* parent = nullptr;
 	
 };
 

@@ -251,7 +251,7 @@ void PanelConfiguration::Textures()
 	auto textures = App->object_manager->GetTextures();
 	for (auto i = textures->begin(); i != textures->end(); ++i) {
 		if (ImGui::ImageButton((ImTextureID)(*i).id, ImVec2((*i).width / 4, (*i).height / 4))) {
-			App->object_manager->SelectTexture(*i);
+			/*App->object_manager->SelectTexture(*i);*/
 		}
 		ImGui::SameLine();
 	}

@@ -51,12 +51,12 @@ public:
 	bool CleanUp();
 
 	GameObject* CreateGameObject(GameObject* parent);
+	void		DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
 
 	// ========================================== old
 
-	void AddObject(ComponentMesh* obj);
 	void AddTexture(const Texture &tex);
 
 	Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
@@ -72,24 +72,16 @@ public:
 	
 	void Demo();
 
-	const std::vector<ComponentMesh*>* GetObjects() const;
 	std::vector<Texture>* GetTextures();
 	const Texture* GetTexture(const int &id) const;
-	/*Return Selected texture*/
-	Texture* GetTexture() const;
-
-	void SelectTexture(Texture &tex);
 	// =========================================================== !old
 
 private:
 	GameObject* root = nullptr;
 
 	// ==========================================================
-	
-	std::vector<ComponentMesh*> objects;
 
 	std::vector<Texture> textures; //TEMPORARY
-	Texture* tex_select = nullptr;
 
 	// ========================================================
 };
