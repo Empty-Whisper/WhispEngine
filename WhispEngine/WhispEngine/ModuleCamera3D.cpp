@@ -32,7 +32,6 @@ bool ModuleCamera3D::Start()
 	sensiblity = 0.25f;  //  TODO: Save and Load this data in JSON
 	movement_speed = 15.f;  //  TODO: Save and Load this data in JSON
 	wheel_speed = 70.f;  //  TODO: Save and Load this data in JSON
-	offset_mouse_movement = 1.f;  //  TODO: Save and Load this data in JSON
 	return ret;
 }
 
@@ -71,7 +70,7 @@ update_status ModuleCamera3D::Update()
 	Reference += newPos;
 
 	// Mouse motion ----------------
-	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && !alt)
 	{		
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
@@ -80,7 +79,8 @@ update_status ModuleCamera3D::Update()
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
 		Position += newPos;
-		Reference += newPos;
+		//Reference += newPos;
+		Reference = Position;
 
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
@@ -112,55 +112,100 @@ update_status ModuleCamera3D::Update()
 	
 		Position = Reference + Z * length(Position);
 	}
+	//if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
+	//	App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	//{
+	//	//  TODO: Change Reference and Create LookAround Function
+	//	Reference = { 0, 0, 0 };
+	//	Position += newPos;
+	//	Reference += newPos;
+
+	//	int dx = -App->input->GetMouseXMotion();
+	//	int dy = -App->input->GetMouseYMotion();
+
+	//	Position -= Reference;
+
+	//	if (dx != 0)
+	//	{
+	//		float DeltaX = (float)dx * sensiblity;
+
+	//		X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+	//		Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+	//		Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+	//	}
+
+	//	if (dy != 0)
+	//	{
+	//		float DeltaY = (float)dy * sensiblity;
+
+	//		Y = rotate(Y, DeltaY, X);
+	//		Z = rotate(Z, DeltaY, X);
+
+	//		if (Y.y < 0.0f)
+	//		{
+	//			Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+	//			Y = cross(Z, X);
+	//		}
+	//	}
+
+	//	Position = Reference + Z * length(Position);
+	//}
+
+
+	static math::float2 initial_mouse_position = initial_mouse_position.zero;
+	static math::float2 last_mouse_position = last_mouse_position.zero;
+
+
+	if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
+		App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN)
+		initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 
 	if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
 		App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		// TODO: ZOOM IN/OUT with the mouse movement (right -> out, left -> in)
-		Position -= Reference;
-	}
-
-	if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
-		App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
-	{
-		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
-
-		//  TODO: Change Reference and Create LookAround Function
-
-		//LookAround(Reference, (float)dx * speed, (float)dy * speed);
-	}
-
-	// Middle Mouse Button Movement
-	static math::float2 initial_mouse_position = initial_mouse_position.zero;
-	static math::float2 last_mouse_position = last_mouse_position.zero;
-
-	
-	
-
-	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
-	{
-		
 		last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
-		math::float2 mouse_vec = last_mouse_position - initial_mouse_position;		
+		math::float2 mouse_vec = last_mouse_position - initial_mouse_position;
 
-		
-		if (App->input->GetMouseXMotion() > offset_mouse_movement) newPos -= X * mouse_vec.x / 100;
-		if (App->input->GetMouseXMotion() < -offset_mouse_movement) newPos -= X * mouse_vec.x / 100;
-		if (App->input->GetMouseYMotion() < offset_mouse_movement) newPos += Y * mouse_vec.y / 100;
-		if (App->input->GetMouseYMotion() > -offset_mouse_movement) newPos += Y * mouse_vec.y / 100;
-		
+		if (App->input->GetMouseXMotion() > 0) newPos += Z * mouse_vec.x / 100;
+		if (App->input->GetMouseXMotion() < 0) newPos += Z * mouse_vec.x / 100;
+		if (App->input->GetMouseYMotion() < 0) newPos -= Z * mouse_vec.y / 100;
+		if (App->input->GetMouseYMotion() > 0) newPos -= Z * mouse_vec.y / 100;
+
 		Position += newPos;
 		Reference += newPos;
 		initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 
+		alt = true;
+	}
+	if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
+		App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_UP)
+		alt = false;
+	// Middle Mouse Button Movement
+	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN)
+		initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+	
+	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
+	{
+
+		last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+		math::float2 mouse_vec = last_mouse_position - initial_mouse_position;		
+
+		if (App->input->GetMouseXMotion() > 0) newPos -= X * mouse_vec.x / 100;
+		if (App->input->GetMouseXMotion() < 0) newPos -= X * mouse_vec.x / 100;
+		if (App->input->GetMouseYMotion() < 0) newPos += Y * mouse_vec.y / 100;
+		if (App->input->GetMouseYMotion() > 0) newPos += Y * mouse_vec.y / 100;
+		
+		Position += newPos;
+		Reference += newPos;
+		initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 	}
 
+	// Focus Object
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		LookAt(Reference);
 
 	// Recalculate matrix -------------
-	
 	CalculateViewMatrix();
 
 	return UPDATE_CONTINUE;
@@ -218,6 +263,33 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 	Reference += Movement;
 
 	CalculateViewMatrix();
+}
+
+void ModuleCamera3D::MoveCameraByMouse(vec3 A, vec3 B)
+{
+
+	// Middle Mouse Button Movement
+	static math::float2 initial_mouse_position = initial_mouse_position.zero;
+	static math::float2 last_mouse_position = last_mouse_position.zero;
+
+	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN)
+		initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+
+	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
+	{
+
+		last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+		math::float2 mouse_vec = last_mouse_position - initial_mouse_position;
+
+		//if (App->input->GetMouseXMotion() > 0) newPos -= X * mouse_vec.x / 100;
+		//if (App->input->GetMouseXMotion() < 0) newPos -= X * mouse_vec.x / 100;
+		//if (App->input->GetMouseYMotion() < 0) newPos += Y * mouse_vec.y / 100;
+		//if (App->input->GetMouseYMotion() > 0) newPos += Y * mouse_vec.y / 100;
+
+		//Position += newPos;
+		//Reference += newPos;
+		initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+	}
 }
 
 // -----------------------------------------------------------------

@@ -17,6 +17,7 @@ public:
 	//void LookAround(const math::float3 &Reference, float DeltaX, float DeltaY);
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
+	void MoveCameraByMouse(vec3 DirectionA, vec3 DirectionB);
 	float* GetViewMatrix();
 
 private:
@@ -33,6 +34,6 @@ private:
 	float sensiblity = 0.f;
 	float movement_speed = 0.f;
 	float wheel_speed = 0.f;
-	float offset_mouse_movement = 0.f;
+	bool alt = false;
 
 };
