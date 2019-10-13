@@ -37,9 +37,9 @@ void Component::SetActive(bool to_active)
 	is_active = to_active;
 }
 
-void Component::ActiveImGui()
+void Component::ActiveImGui(const char* checkbox_name)
 {
-	ImGui::Checkbox("", &is_active);
+	ImGui::Checkbox(checkbox_name, &is_active);
 }
 
 const ComponentType Component::GetType() const

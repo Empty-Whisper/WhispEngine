@@ -38,7 +38,7 @@ FileSystem::Format FileSystem::GetFormat(const char * file)
 
 	for (auto i = f.rbegin(); i != f.rend(); i++) {
 		if (*i != '.')
-			buffer.push_back(*i);
+			buffer.push_back(std::tolower(*i));
 		else
 			break;
 	}
