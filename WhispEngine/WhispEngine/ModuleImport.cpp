@@ -87,6 +87,11 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 			ComponentMesh* mesh = static_cast<ComponentMesh*>(obj->CreateComponent(ComponentType::MESH));
 			aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
 			mesh->mesh = App->object_manager->CreateMesh(amesh);
+
+			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
+			aiString path;
+			aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
+			ImportTexture(std::string(std::string("Assets/Textures/") + path.C_Str()).data());
 		}
 		else {
 			for (int j = 0; j < child->mNumMeshes; ++j) {
