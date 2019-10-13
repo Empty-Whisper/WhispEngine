@@ -18,8 +18,9 @@ void PanelHierarchy::Update()
 {
 	if (ImGui::Begin("Hierarchy", &active)) {
 		DrawNode(App->object_manager->GetRoot());
-		ImGui::End();
 	}
+	ImGui::End();
+
 }
 
 void PanelHierarchy::DrawNode(GameObject* const &obj) {

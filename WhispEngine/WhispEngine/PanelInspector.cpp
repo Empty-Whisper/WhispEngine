@@ -37,6 +37,7 @@ void PanelInspector::Update()
 			}
 		}
 
-		ImGui::End();
 	}
+	ImGui::End();
+
 }
