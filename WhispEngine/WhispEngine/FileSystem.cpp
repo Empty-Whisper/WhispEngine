@@ -56,3 +56,24 @@ FileSystem::Format FileSystem::GetFormat(const char * file)
 
 	return FileSystem::Format::NONE;
 }
+
+std::string FileSystem::GetFileNameFromPath(const char * file)
+{
+	std::string f(file);
+	std::string buffer;
+
+	bool dot_found = false;
+	for (auto i = f.rbegin(); i != f.rend(); i++) {
+		if (!dot_found) {
+			if (*i == '.')
+				dot_found = true;
+		}
+		else {
+			if (*i == '\\')
+				break;
+			buffer.push_back(*i);
+		}
+	}
+	std::reverse(buffer.begin(), buffer.end());
+	return buffer.data();
+}

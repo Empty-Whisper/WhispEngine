@@ -63,7 +63,7 @@ bool ModuleImport::ImportFbx(const char * path)
 	{
 		
 		GameObject * container = App->object_manager->CreateGameObject(nullptr);
-		container->SetName(path); //TODO extract name file from path
+		container->SetName(App->file_system->GetFileNameFromPath(path).data());
 		aiNode *node = scene->mRootNode;
 		LoadNode(node, container, scene);
 

@@ -19,5 +19,6 @@ public:
 	void			SaveFile(const char* path, const nlohmann::json &to_save);
 
 	FileSystem::Format GetFormat(const char* file);
+	std::string GetFileNameFromPath(const char* file);
 };
 
