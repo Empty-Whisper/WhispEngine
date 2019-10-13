@@ -17,36 +17,37 @@ PanelHierarchy::~PanelHierarchy()
 void PanelHierarchy::Update()
 {
 	if (ImGui::Begin("Hierarchy", &active)) {
-		GameObject* root = App->object_manager->GetRoot();
-		for (auto i = root->children.begin(); i != root->children.end(); ++i) {
-			if(ImGui::TreeNodeEx((void*)(intptr_t)*i, node_flag, (*i)->GetName())) {
-				DrawNode(*i);
-
-				ImGui::TreePop();
-			}
-		}
+		DrawNode(App->object_manager->GetRoot());
 		ImGui::End();
 	}
 }
 
-void PanelHierarchy::DrawNode(GameObject* &obj) {
+void PanelHierarchy::DrawNode(GameObject* const &obj) {
+	
 	for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 
-		if ((*i)->children.empty())
+		if ((*i)->children.empty()) {
 			current_flag = leaf_flag;
+		}
 		else {
 			current_flag = node_flag;
 		}
 
+		if (selected == *i) {
+			current_flag |= select_flag;
+		}
+
 		bool open = ImGui::TreeNodeEx((void*)(intptr_t)*i, current_flag, (*i)->GetName());
+
+		if (ImGui::IsItemClicked()) {
+			selected = *i;
+		}
 
 		if (!(*i)->children.empty() && open)
 		{
 			DrawNode(*i);
-			if (open)
-				ImGui::TreePop();
+			ImGui::TreePop();
 			current_flag = node_flag;
 		}
-		
 	}
 }
