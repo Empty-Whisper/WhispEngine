@@ -258,9 +258,6 @@
     <ClCompile Include="ModuleObjectManager.cpp">
       <Filter>Main Modules</Filter>
     </ClCompile>
-    <ClCompile Include="PanelObjects.cpp">
-      <Filter>UI_Elements</Filter>
-    </ClCompile>
     <ClCompile Include="PanelCreate.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
@@ -281,6 +278,13 @@
     </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelHierarchy.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelInspector.cpp" />
+    <ClCompile Include="Imgui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Tools\Imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -587,9 +591,6 @@
     <ClInclude Include="ModuleImport.h">
       <Filter>Main Modules</Filter>
     </ClInclude>
-    <ClInclude Include="PanelObjects.h">
-      <Filter>UI_Elements</Filter>
-    </ClInclude>
     <ClInclude Include="PanelCreate.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
@@ -619,6 +620,13 @@
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelHierarchy.h">
+      <Filter>UI_Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelInspector.h" />
+    <ClInclude Include="Imgui\misc\cpp\imgui_stdlib.h">
+      <Filter>Tools\Imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

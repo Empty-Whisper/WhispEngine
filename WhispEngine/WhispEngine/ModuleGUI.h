@@ -9,6 +9,7 @@ class PanelAbout;
 class PanelRender;
 class PanelHierarchy;
 class PanelCreate;
+class PanelInspector;
 
 #define IMGUI_COLOR_BLUE ImVec4(0.2f,0.2f,1.f,1.f)
 #define IMGUI_COLOR_GREEN ImVec4(0.f,1.f,0.f,1.f)
@@ -50,6 +51,7 @@ private:
 	PanelAbout* about = nullptr;
 	PanelConsole* console = nullptr;
 	PanelRender* render = nullptr;
-	PanelHierarchy* inspector = nullptr;
+	PanelHierarchy* hierarchy = nullptr;
 	PanelCreate* create = nullptr;
+	PanelInspector* inspector = nullptr;
 };

@@ -70,6 +70,16 @@ GameObject * ModuleObjectManager::GetRoot() const
 	return root;
 }
 
+GameObject * ModuleObjectManager::GetSelected() const
+{
+	return selected;
+}
+
+void ModuleObjectManager::SetSelected(GameObject * select)
+{
+	selected = select;
+}
+
 void ModuleObjectManager::AddTexture(Texture * tex)
 {
 	textures.push_back(tex);
@@ -170,7 +180,7 @@ void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const
 			memcpy(&ret->index.data[j * 3], faces[j].mIndices, sizeof(uint) * 3);
 		}
 	}
-	LOG("New mesh with %i faces", ret->index.size / 3);
+	LOG("New mesh with %i faces", ret->index.size / 6);
 }
 
 void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const uint * index)

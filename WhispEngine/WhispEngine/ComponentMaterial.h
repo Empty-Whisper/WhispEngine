@@ -27,7 +27,7 @@ public:
 	const bool		HasTexture() const;
 	const uint		GetIDTexture() const;
 
-	void Update() {}
+	void OnInspector();
 
 	void			SetFaceColor(const float &r, const float &g, const float &b, const float &a);
 	void			SetFaceColor(const float* &c);

@@ -7,6 +7,8 @@ GameObject::GameObject(GameObject * parent) : parent(parent)
 {
 	if (parent != nullptr)
 		parent->children.push_back(this);
+
+	CreateComponent(ComponentType::TRANSFORM);
 }
 
 GameObject::~GameObject()

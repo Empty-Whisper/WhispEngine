@@ -1,4 +1,4 @@
-#include "PanelObjects.h"
+#include "PanelHierarchy.h"
 #include "Application.h"
 
 
@@ -33,14 +33,14 @@ void PanelHierarchy::DrawNode(GameObject* const &obj) {
 			current_flag = node_flag;
 		}
 
-		if (selected == *i) {
+		if (App->object_manager->GetSelected() == *i) {
 			current_flag |= select_flag;
 		}
 
 		bool open = ImGui::TreeNodeEx((void*)(intptr_t)*i, current_flag, (*i)->GetName());
 
 		if (ImGui::IsItemClicked()) {
-			selected = *i;
+			App->object_manager->SetSelected(*i);
 		}
 
 		if (!(*i)->children.empty() && open)

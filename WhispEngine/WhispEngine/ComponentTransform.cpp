@@ -1,5 +1,5 @@
 #include "ComponentTransform.h"
-
+#include "Imgui/imgui.h"
 
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
@@ -15,6 +15,15 @@ ComponentTransform::~ComponentTransform()
 void ComponentTransform::PreUpdate()
 {
 
+}
+
+void ComponentTransform::OnInspector()
+{
+	if (ImGui::CollapsingHeader("Transform")) {
+		ImGui::InputFloat3("Position", position.ptr(), 3);
+		ImGui::DragFloat3("Rotation", rotation.ToEulerXYZ().ptr(), 1.f, -360.f, 360.f);
+		ImGui::InputFloat3("Scale", scale.ptr(), 3);
+	}
 }
 
 math::float4x4 ComponentTransform::GetLocalMatrix() const

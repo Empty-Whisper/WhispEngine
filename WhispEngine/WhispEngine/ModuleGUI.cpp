@@ -15,8 +15,9 @@
 #include "PanelConfiguration.h"
 #include "PanelConsole.h"
 #include "PanelAbout.h"
-#include "PanelObjects.h"
+#include "PanelHierarchy.h"
 #include "PanelCreate.h"
+#include "PanelInspector.h"
 
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
@@ -76,8 +77,9 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
 	panels.push_back(about = new PanelAbout(node["panels"]["about"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
 	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
-	panels.push_back(inspector = new PanelHierarchy());
+	panels.push_back(hierarchy = new PanelHierarchy()); //TODO COMPLETE THIS
 	panels.push_back(create = new PanelCreate());
+	panels.push_back(inspector = new PanelInspector());
 	//panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_4));
 
 	return true;

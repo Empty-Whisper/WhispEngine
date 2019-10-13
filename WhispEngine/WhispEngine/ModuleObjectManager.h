@@ -53,6 +53,9 @@ public:
 
 	GameObject* GetRoot() const;
 
+	GameObject*	GetSelected() const;
+	void				SetSelected(GameObject* select);
+
 	// ========================================== old
 
 	void AddTexture(Texture *tex);
@@ -74,6 +77,8 @@ public:
 
 private:
 	GameObject* root = nullptr;
+
+	GameObject* selected = nullptr;
 
 	// ==========================================================
 

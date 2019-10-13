@@ -28,6 +28,18 @@ const uint ComponentMaterial::GetIDTexture() const
 	return texture->id;
 }
 
+void ComponentMaterial::OnInspector()
+{
+	if (ImGui::CollapsingHeader("Material")) {
+		ImGui::Checkbox("Active", &is_active);
+		ImGui::Text("%s", texture->path.data());
+		ImGui::Button("Change Texture");
+
+		ImGui::Text("(%d, %d)", texture->width, texture->height);
+		ImGui::Image((ImTextureID)texture->id, ImVec2(128.f, 128.f));
+	}
+}
+
 void ComponentMaterial::SetFaceColor(const float & r, const float & g, const float & b, const float & a)
 {
 	face_color[0] = r;

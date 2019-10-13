@@ -19,7 +19,5 @@ private:
 	ImGuiTreeNodeFlags leaf_flag = ImGuiBackendFlags_::ImGuiBackendFlags_None;
 	ImGuiTreeNodeFlags select_flag = ImGuiTreeNodeFlags_Selected;
 	ImGuiTreeNodeFlags current_flag = ImGuiBackendFlags_::ImGuiBackendFlags_None;
-
-	GameObject* selected = nullptr;
 };
 

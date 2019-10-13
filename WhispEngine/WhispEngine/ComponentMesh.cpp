@@ -113,6 +113,17 @@ void ComponentMesh::SetMaterial(ComponentMaterial  * mat)
 	material = mat;
 }
 
+void ComponentMesh::OnInspector()
+{
+	if (ImGui::CollapsingHeader("Mesh")) {
+		ImGui::Checkbox("Active", &is_active);
+
+		/*ImGui::Checkbox("UVs", &view_uv);
+		ImGui::Checkbox("Face Normals", &view_face_normals);
+		ImGui::Checkbox("Vertex Normals", &view_vertex_normals);*/
+	}
+}
+
 
 Mesh_info::~Mesh_info()
 {

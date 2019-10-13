@@ -38,7 +38,6 @@ public:
 private:
 
 public:
-	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
 
 	void Update();
 
@@ -48,6 +47,8 @@ public:
 	void DrawNormals();
 
 	void SetMaterial(ComponentMaterial * mat);
+
+	void OnInspector();
 
 public:
 	Mesh_info* mesh = nullptr;

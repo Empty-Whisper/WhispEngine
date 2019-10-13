@@ -22,11 +22,13 @@ public:
 	Component(GameObject* parent, ComponentType type);
 	virtual ~Component();
 
-	virtual void Update() = 0;
+	virtual void Update();
 	virtual void Init();
 
 	virtual void Enable();
 	virtual void Disable();
+
+	virtual void OnInspector() = 0;
 
 	const bool IsActive() const;
 	const ComponentType GetType() const;
@@ -37,6 +39,8 @@ public:
 
 private:
 	ComponentType type = ComponentType::NONE;
+
+protected:
 	bool is_active = false;
 };
 #endif // __COMPONENT_H__

@@ -125,7 +125,7 @@ Texture* ModuleImport::ImportTexture(const char * path)
 
 	ilutRenderer(ILUT_OPENGL);  // Switch the renderer
 
-	if (!ilLoad(IL_DDS, path)) {
+	if (!ilLoadImage(path)) {
 		auto error = ilGetError();
 		LOG("Failed to load texture with path: %s. Error: %s", path, ilGetString(error));
 	}
