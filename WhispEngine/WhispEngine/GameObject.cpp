@@ -48,6 +48,15 @@ Component * GameObject::CreateComponent(const ComponentType & type)
 	return nullptr;
 }
 
+Component * GameObject::GetComponent(const ComponentType & type)
+{
+	for (auto i = components.cbegin(); i != components.cend(); ++i) {
+		if ((*i)->GetType() == type)
+			return *i;
+	}
+	return nullptr;
+}
+
 bool GameObject::IsActive() const
 {
 	return active;

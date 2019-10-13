@@ -267,9 +267,6 @@
     <ClCompile Include="Random.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>GameObject\Components</Filter>
     </ClCompile>
@@ -283,6 +280,9 @@
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
       <Filter>GameObject\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -608,9 +608,6 @@
     <ClInclude Include="DevIL\include\IL\ilut.h">
       <Filter>Tools\DevIL</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentTransform.h">
       <Filter>GameObject\Components</Filter>
     </ClInclude>
@@ -624,6 +621,9 @@
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ComponentMaterial.h">
+      <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
       <Filter>GameObject\Components</Filter>
     </ClInclude>
   </ItemGroup>

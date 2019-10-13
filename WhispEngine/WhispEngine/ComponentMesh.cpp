@@ -4,43 +4,24 @@
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
-	InitColors();
-}
-
-void ComponentMesh::InitColors()
-{
-	color = new float[3];
-	color[0] = 1.f;
-	color[1] = 1.f;
-	color[2] = 1.f;
-	wire_color = new float[3];
-	wire_color[0] = 0.f;
-	wire_color[1] = 0.f;
-	wire_color[2] = 0.f;
-}
-
-void ComponentMesh::SetColors(const float * face_color, const float * wire_c)
-{
-	if (face_color != nullptr) {
-		for (int i = 0; i < 3; ++i)
-			color[i] = face_color[i];
-	}
-	if (wire_c != nullptr) {
-		for (int i = 0; i < 3; ++i)
-			this->wire_color[i] = wire_c[i];
-	}
+	material = (ComponentMaterial*)parent->GetComponent(ComponentType::MATERIAL);
 }
 
 void ComponentMesh::Update()
 {
-	glColor3f(0.f, 0.f, 0.f);
+	glColor3f(1.f, 1.f, 1.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	if (App->renderer3D->fill) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		Draw();
 	}
 	if (App->renderer3D->wireframe) {
-		glColor3fv(wire_color);
+		if (material != nullptr) {
+			glColor4fv(material->GetWireColor());
+		}
+		else {
+			glColor3i(0, 0, 0);
+		}
 		glEnable(GL_POLYGON_OFFSET_LINE);
 		glPolygonOffset(-1.f, 1.f);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -56,21 +37,20 @@ void ComponentMesh::Update()
 ComponentMesh::~ComponentMesh()
 {
 	delete mesh;
-	
-	delete[] color;
-	delete[] wire_color;
 }
 
 void ComponentMesh::Draw()
 {
 	glColor3f(1.f, 1.f, 1.f);
 
-	if (App->object_manager->GetTexture() != nullptr) {
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindTexture(GL_TEXTURE_2D, App->object_manager->GetTexture()->id);
-	}
-	else {
-		glColor3fv(color);
+	if (material != nullptr) {
+		if (material->HasTexture()) {
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glBindTexture(GL_TEXTURE_2D, material->GetIDTexture());
+		}
+		else {
+			glColor3fv(material->GetFaceColor());
+		}
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
@@ -90,12 +70,10 @@ void ComponentMesh::Draw()
 	glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ComponentMesh::DrawWireFrame() {
-	glColor3fv(wire_color);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
@@ -130,6 +108,11 @@ void ComponentMesh::DrawNormals()
 	}
 }
 
+void ComponentMesh::SetMaterial(ComponentMaterial  * mat)
+{
+	material = mat;
+}
+
 
 Mesh_info::~Mesh_info()
 {
@@ -138,7 +121,8 @@ Mesh_info::~Mesh_info()
 	delete[] face_normals.data;
 	if (vertex_normals.data != nullptr)
 		delete[] vertex_normals.data;
-	delete[] tex_coords.data;
+	if (tex_coords.data != nullptr)
+		delete[] tex_coords.data;
 
 	glDeleteBuffers(1, &vertex.id);
 	glDeleteBuffers(1, &index.id);
@@ -168,7 +152,7 @@ void Mesh_info::SetGLBuffers()
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * tex_coords.size * 3, tex_coords.data, GL_STATIC_DRAW);
 	}
 
-	if (vertex_normals.data != nullptr) { // TODO Set Vertex mesh with a buffer and draw with it
+	if (vertex_normals.data != nullptr) { // TODO Correct draw
 		glGenBuffers(1, &vertex_normals.id);
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_normals.id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertex_normals.size, vertex_normals.data, GL_STATIC_DRAW);

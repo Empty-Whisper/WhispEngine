@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "ComponentMaterial.h"
 #include "Globals.h"
 #include "SDL/include/SDL_config.h"
 
@@ -35,7 +36,6 @@ public:
 	~ComponentMesh();
 
 private:
-	void InitColors();
 
 public:
 	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
@@ -47,6 +47,8 @@ public:
 
 	void DrawNormals();
 
+	void SetMaterial(ComponentMaterial * mat);
+
 public:
 	Mesh_info* mesh = nullptr;
 
@@ -54,7 +56,8 @@ public:
 
 	bool active = true;
 
-	float* color = nullptr;
-	float* wire_color = nullptr;
+	/*Linked to a material to know if it has to use a color or a texture.
+	  Check every frame if exist a material in GameObject will consume a lot of resources*/
+	ComponentMaterial * material = nullptr;
 };
 

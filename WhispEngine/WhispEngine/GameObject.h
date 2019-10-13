@@ -13,6 +13,7 @@ public:
 public:
 	void Update();
 	Component* CreateComponent(const ComponentType &type);
+	Component* GetComponent(const ComponentType &type);
 
 	bool IsActive() const;
 	void SetActive(const bool &to_active);
