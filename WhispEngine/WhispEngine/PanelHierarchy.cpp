@@ -23,7 +23,8 @@ void PanelHierarchy::Update()
 }
 
 void PanelHierarchy::DrawNode(GameObject* const &obj) {
-	
+	if (!obj->IsActive())
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
 	for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 
 		if ((*i)->children.empty()) {
@@ -50,4 +51,6 @@ void PanelHierarchy::DrawNode(GameObject* const &obj) {
 			current_flag = node_flag;
 		}
 	}
+	if (!obj->IsActive())
+		ImGui::PopStyleColor();
 }
