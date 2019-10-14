@@ -19,15 +19,24 @@ public:
 
 	void OnInspector();
 
+	void SetPosition(const float& x, const float& y, const float& z);
+	void SetRotation(const float& w, const float& x, const float& y, const float& z);
+	void SetScale(const float& x, const float& y, const float& z);
+	
+	void CalculateLocalMatrix();
+	void CalculateGlobalMatrix();
+
 	math::float4x4 GetLocalMatrix() const;
-	math::float4x4 GetGlobalMatrix() const; //parent’s global matrix * your local Matrix
+	math::float4x4 GetGlobalMatrix() const;
+	const float* GetPtrGlobalMatrix() const;
 
-public:
-
+private:
 	math::float3 position = math::float3::zero;
 	math::Quat rotation = math::Quat::identity;
-	math::float3 scale = math::float3::zero;
+	math::float3 scale = math::float3::one;
 
+	math::float4x4 local_matrix = math::float4x4::identity;
+	math::float4x4 global_matrix = math::float4x4::identity;
 
 };
 #endif
