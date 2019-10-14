@@ -32,6 +32,7 @@ bool ModuleCamera3D::Start()
 	sensiblity = 0.25f;  //  TODO: Save and Load this data in JSON
 	movement_speed = 15.f;  //  TODO: Save and Load this data in JSON
 	wheel_speed = 70.f;  //  TODO: Save and Load this data in JSON
+	offset_reference = 10.f;  //  TODO: Save and Load this data in JSON
 	return ret;
 }
 
@@ -203,7 +204,37 @@ update_status ModuleCamera3D::Update()
 
 	// Focus Object
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
-		LookAt(Reference);
+	{
+		is_focusing = true;
+	}
+	if (is_focusing)
+	{
+		static vec3 actual_camera_position(0, 0, 0);
+		static vec3 reference_position(0, 0, 0);
+
+		actual_camera_position = Position;
+		reference_position = { 0,0,0 }; // Reference 
+
+		LookAt({ reference_position });
+
+		vec3 diff = reference_position - actual_camera_position;
+		diff = { abs(diff.x),
+				 abs(diff.y),
+				 abs(diff.z)
+		};
+
+		float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
+
+		if (mag_diff >= offset_reference)
+		{
+			newPos -= Z * movement_speed * 3 * App->GetDeltaTime();
+		}
+		else
+			is_focusing = false;
+
+		Position += newPos;
+		Reference += newPos;
+	}
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();

@@ -34,6 +34,9 @@ private:
 	float sensiblity = 0.f;
 	float movement_speed = 0.f;
 	float wheel_speed = 0.f;
+	float offset_reference = 0.f;
 	bool alt = false;
+	bool is_focusing = false;
+
 
 };
