@@ -5,6 +5,7 @@
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
 {
+	CalculeLocalMatrix();
 }
 
 
@@ -22,16 +23,15 @@ void ComponentTransform::OnInspector()
 {
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::InputFloat3("Position", position.ptr(), 3)) {
-			CalculateLocalMatrix();
+			CalculeLocalMatrix();
 		}
-		math::float3 to_rot = RadToDeg(rotation.ToEulerXYZ());
-		if (ImGui::SliderFloat3("Rotation", to_rot.ptr(), -360, 360)) {
-			to_rot = DegToRad(to_rot*0.5f);
+		math::float3 to_rot = (rotation.ToEulerXYZ());
+		if (ImGui::SliderFloat3("Rotation", to_rot.ptr(), -PI, PI)) {
 			rotation.Set(math::float4x4::FromEulerXYZ(to_rot.x, to_rot.y, to_rot.z));
-			CalculateLocalMatrix();
+			CalculeLocalMatrix();
 		}
 		if (ImGui::InputFloat3("Scale", scale.ptr(), 3)) {
-			CalculateLocalMatrix();
+			CalculeLocalMatrix();
 		}
 	}
 }
@@ -41,7 +41,7 @@ void ComponentTransform::SetPosition(const float & x, const float & y, const flo
 	position.Set(x, y, z);
 }
 
-void ComponentTransform::SetRotation(const float & x, const float & y, const float & z, const float & w)
+void ComponentTransform::SetRotation(const float & w, const float & x, const float & y, const float & z)
 {
 	rotation.Set(x, y, z, w);
 }
@@ -51,15 +51,21 @@ void ComponentTransform::SetScale(const float & x, const float & y, const float 
 	scale.Set(x, y, z);
 }
 
-void ComponentTransform::CalculateLocalMatrix()
+void ComponentTransform::SetLocalMatrix(const math::float4x4 & matrix)
+{
+	local_matrix = matrix;
+	local_matrix.Decompose(position, rotation, scale);
+}
+
+void ComponentTransform::CalculeLocalMatrix()
 {
 	local_matrix = math::float4x4::FromTRS(position, rotation, scale);
 }
 
 void ComponentTransform::CalculateGlobalMatrix()
 {
+	global_matrix = local_matrix;
 	if (parent != nullptr) {
-		global_matrix = local_matrix;
 		global_matrix = ((ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM))->global_matrix * local_matrix;
 	}
 }

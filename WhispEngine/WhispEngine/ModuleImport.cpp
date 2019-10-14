@@ -66,7 +66,19 @@ bool ModuleImport::ImportFbx(const char * path)
 		
 		GameObject * container = App->object_manager->CreateGameObject(nullptr);
 		container->SetName(App->file_system->GetFileNameFromPath(path).data());
+		
 		aiNode *node = scene->mRootNode;
+
+		aiVector3D position, scale;
+		aiQuaternion rotation;
+		node->mTransformation.Decompose(scale, rotation, position);
+		ComponentTransform* transform = ((ComponentTransform*)container->GetComponent(ComponentType::TRANSFORM));
+		transform->SetPosition(position.x, position.y, position.z);
+		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
+		transform->SetScale(scale.x, scale.y, scale.z);
+
+		transform->CalculeLocalMatrix();
+
 		LoadNode(node, container, scene);
 
 		aiReleaseImport(scene);
@@ -95,7 +107,7 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 		scale /= 100;
 		transform->SetScale(scale.x, scale.y, scale.z);
 
-		transform->CalculateLocalMatrix();
+		transform->CalculeLocalMatrix();
 
 		if (child->mNumMeshes == 1) {
 			ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);

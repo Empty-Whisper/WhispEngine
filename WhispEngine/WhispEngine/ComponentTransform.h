@@ -22,8 +22,10 @@ public:
 	void SetPosition(const float& x, const float& y, const float& z);
 	void SetRotation(const float& w, const float& x, const float& y, const float& z);
 	void SetScale(const float& x, const float& y, const float& z);
+
+	void SetLocalMatrix(const math::float4x4 &matrix);
 	
-	void CalculateLocalMatrix();
+	void CalculeLocalMatrix();
 	void CalculateGlobalMatrix();
 
 	math::float4x4 GetLocalMatrix() const;
