@@ -3,6 +3,8 @@
 #include "Application.h"
 #include "ModuleObjectManager.h"
 
+#include "ComponentTransform.h"
+
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
@@ -64,7 +66,19 @@ bool ModuleImport::ImportFbx(const char * path)
 		
 		GameObject * container = App->object_manager->CreateGameObject(nullptr);
 		container->SetName(App->file_system->GetFileNameFromPath(path).data());
+		
 		aiNode *node = scene->mRootNode;
+
+		aiVector3D position, scale;
+		aiQuaternion rotation;
+		node->mTransformation.Decompose(scale, rotation, position);
+		ComponentTransform* transform = ((ComponentTransform*)container->GetComponent(ComponentType::TRANSFORM));
+		transform->SetPosition(position.x, position.y, position.z);
+		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
+		transform->SetScale(scale.x, scale.y, scale.z);
+
+		transform->CalculeLocalMatrix();
+
 		LoadNode(node, container, scene);
 
 		aiReleaseImport(scene);
@@ -82,6 +96,18 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 
 		GameObject* obj = App->object_manager->CreateGameObject(parent);
 		obj->SetName(child->mName.C_Str());
+
+		ComponentTransform *transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
+		aiVector3D position, scale;
+		aiQuaternion rotation;
+		child->mTransformation.Decompose(scale, rotation, position);
+
+		transform->SetPosition(position.x, position.y, position.z);
+		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
+		scale /= 100;
+		transform->SetScale(scale.x, scale.y, scale.z);
+
+		transform->CalculeLocalMatrix();
 
 		if (child->mNumMeshes == 1) {
 			ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);

@@ -282,9 +282,11 @@
     <ClCompile Include="PanelHierarchy.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
-    <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="Imgui\misc\cpp\imgui_stdlib.cpp">
       <Filter>Tools\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelInspector.cpp">
+      <Filter>UI_Elements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -624,9 +626,11 @@
     <ClInclude Include="PanelHierarchy.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
-    <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="Imgui\misc\cpp\imgui_stdlib.h">
       <Filter>Tools\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelInspector.h">
+      <Filter>UI_Elements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

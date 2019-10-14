@@ -30,13 +30,15 @@ const uint ComponentMaterial::GetIDTexture() const
 
 void ComponentMaterial::OnInspector()
 {
-	if (ImGui::CollapsingHeader("Material")) {
+	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
 		ActiveImGui();
-		ImGui::Text("%s", texture->path.data());
-		ImGui::Button("Change Texture");
+		if (texture != nullptr) {
+			ImGui::Text("%s", texture->path.data());
+			ImGui::Button("Change Texture");
 
-		ImGui::Text("(%d, %d)", texture->width, texture->height);
-		ImGui::Image((ImTextureID)texture->id, ImVec2(128.f, 128.f));
+			ImGui::Text("(%d, %d)", texture->width, texture->height);
+			ImGui::Image((ImTextureID)texture->id, ImVec2(128.f, 128.f));
+		}
 	}
 }
 

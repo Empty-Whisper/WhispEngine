@@ -32,7 +32,7 @@ public:
 
 	const bool IsActive() const;
 	void SetActive(bool to_active);
-	void ActiveImGui(const char* checkbox_name = '\0'); // Just to print in UI checkbox to active/deactive the component and don't have to set is_active a public var
+	void ActiveImGui(const char* checkbox_name = ""); // Just to print in UI checkbox to active/deactive the component and don't have to set is_active a public var
 
 	const ComponentType GetType() const;
 

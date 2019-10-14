@@ -163,7 +163,7 @@ void ComponentMesh::SetMaterial(ComponentMaterial  * mat)
 
 void ComponentMesh::OnInspector()
 {
-	if (ImGui::CollapsingHeader("Mesh")) {
+	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
 		ActiveImGui();
 
 		/*ImGui::Checkbox("UVs", &view_uv);

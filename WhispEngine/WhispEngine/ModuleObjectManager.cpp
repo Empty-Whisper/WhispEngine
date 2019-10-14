@@ -1,5 +1,5 @@
 #include "ModuleObjectManager.h"
-#include "glew/glew.h"
+#include "ComponentTransform.h"
 #include "Application.h"
 
 ModuleObjectManager::ModuleObjectManager()
@@ -28,6 +28,9 @@ update_status ModuleObjectManager::Update()
 
 void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
+	((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
+	glPushMatrix();
+	glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetPtrGlobalMatrix());
 	if (obj->IsActive()) {
 		obj->Update();
 		if (!obj->children.empty()) {
@@ -36,6 +39,7 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 			}
 		}
 	}
+	glPopMatrix();
 }
 
 bool ModuleObjectManager::CleanUp()
