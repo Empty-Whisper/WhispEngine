@@ -11,6 +11,8 @@ class PanelHierarchy;
 class PanelCreate;
 class PanelInspector;
 
+#define IMGUI_IMPL_OPENGL_LOADER_GLEW
+
 #define IMGUI_COLOR_BLUE ImVec4(0.2f,0.2f,1.f,1.f)
 #define IMGUI_COLOR_GREEN ImVec4(0.f,1.f,0.f,1.f)
 #define IMGUI_COLOR_PINK ImVec4(1.0f,0.0f,1.0f,1.0f)

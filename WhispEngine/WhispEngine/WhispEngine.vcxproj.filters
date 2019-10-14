@@ -66,9 +66,6 @@
     <ClCompile Include="Imgui\imgui.cpp">
       <Filter>Tools\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Imgui\imgui_impl_sdl.cpp">
-      <Filter>Tools\Imgui</Filter>
-    </ClCompile>
     <ClCompile Include="Imgui\imgui_demo.cpp">
       <Filter>Tools\Imgui</Filter>
     </ClCompile>
@@ -201,9 +198,6 @@
     <ClCompile Include="MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>Tools\MathGeoLib\Algorithm\Random</Filter>
     </ClCompile>
-    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
-      <Filter>Tools\Imgui</Filter>
-    </ClCompile>
     <ClCompile Include="HardwareInfo.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
@@ -282,18 +276,19 @@
     <ClCompile Include="PanelHierarchy.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
+    <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="Imgui\misc\cpp\imgui_stdlib.cpp">
       <Filter>Tools\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="PanelInspector.cpp">
-      <Filter>UI_Elements</Filter>
+    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
+      <Filter>Tools\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_sdl.cpp">
+      <Filter>Tools\Imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
-      <Filter>Tools\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Imgui\imgui_impl_sdl.h">
       <Filter>Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imconfig.h">
@@ -518,9 +513,6 @@
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h">
       <Filter>Tools\MathGeoLib\Algorithm\Random</Filter>
     </ClInclude>
-    <ClInclude Include="Imgui\imgui_impl_opengl3.h">
-      <Filter>Tools\Imgui</Filter>
-    </ClInclude>
     <ClInclude Include="PCG\pcg_random.hpp">
       <Filter>Tools\PCG</Filter>
     </ClInclude>
@@ -626,11 +618,15 @@
     <ClInclude Include="PanelHierarchy.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
+    <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="Imgui\misc\cpp\imgui_stdlib.h">
       <Filter>Tools\Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="PanelInspector.h">
-      <Filter>UI_Elements</Filter>
+    <ClInclude Include="Imgui\imgui_impl_opengl3.h">
+      <Filter>Tools\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_sdl.h">
+      <Filter>Tools\Imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

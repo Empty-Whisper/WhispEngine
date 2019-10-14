@@ -31,46 +31,14 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init(nlohmann::json &node)
 {
+	glewInit();
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	
 	// Docking -----------------------------------------------------------
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform 
-
-	//io.ConfigDockingWithShift = true;
-
-	//static bool opt_fullscreen_persistant = true;
-	//bool opt_fullscreen = opt_fullscreen_persistant;
-	//static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
-	//// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-	//// because it would be confusing to have two docking targets within each others.
-	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-	//if (opt_fullscreen)
-	//{
-	//	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	//	ImGui::SetNextWindowPos(viewport->Pos);
-	//	ImGui::SetNextWindowSize(viewport->Size);
-	//	ImGui::SetNextWindowViewport(viewport->ID);
-	//	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-	//	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-	//	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-	//	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-	//}
-
-	//// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-	//if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-	//	window_flags |= ImGuiWindowFlags_NoBackground;
-
-	//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	//ImGui::PopStyleVar();
-
-	//if (opt_fullscreen)
-	//	ImGui::PopStyleVar(2);
-
-	// No more Docking here -----------------------------------------------------------
+	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform 
 
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION));
@@ -143,6 +111,7 @@ update_status ModuleGUI::MainMenuBar()
 				ret = update_status::UPDATE_STOP;
 			}
 			ImGui::EndMenu();
+
 		}
 
 		if (ImGui::BeginMenu("View"))
@@ -151,7 +120,9 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Configuration", "LShift+2", &config->active);
 			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
 			ImGui::EndMenu();
+
 		}
+
 		if (ImGui::BeginMenu("Shape"))
 		{
 			ImGui::MenuItem("Create", "LShift+4", &create->active);
@@ -161,7 +132,9 @@ update_status ModuleGUI::MainMenuBar()
 				App->object_manager->Demo();
 			}
 			ImGui::EndMenu();
+
 		}
+
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Demo", NULL, show_demo_window))
@@ -181,9 +154,10 @@ update_status ModuleGUI::MainMenuBar()
 				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine/issues", NULL, NULL, SW_SHOWNORMAL);
 			}
 			ImGui::MenuItem("About", "LControl+LShift+A", &about->active);
-
 			ImGui::EndMenu();
+
 		}		
+
 	}
 	ImGui::EndMainMenuBar();
 

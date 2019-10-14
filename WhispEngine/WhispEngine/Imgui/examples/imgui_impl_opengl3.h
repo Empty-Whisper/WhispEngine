@@ -44,8 +44,6 @@ IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
 // If auto-detection fails or doesn't select the same GL loader file as used by your application, 
 // you are likely to get a crash in ImGui_ImplOpenGL3_Init(). 
 // You can explicitly select a loader by using '#define IMGUI_IMPL_OPENGL_LOADER_XXX' in imconfig.h or compiler command-line.
-#define IMGUI_IMPL_OPENGL_LOADER_GLEW
-
 #if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W) \
  && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW) \
  && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD) \
