@@ -97,18 +97,48 @@ void ComponentMesh::DrawOutline()
 {
 	if (glIsEnabled(GL_STENCIL_TEST))
 	{
+
+		glClearStencil(0);
+		glClear(GL_STENCIL_BUFFER_BIT);
+
+		// Render the mesh into the stencil buffer.
+
+		glEnable(GL_STENCIL_TEST);
+
+		glStencilFunc(GL_ALWAYS, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+		Draw();
+
+		// Render the thick wireframe version.
+
+		glStencilFunc(GL_NOTEQUAL, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+
 		if (parent->GetSelect() == ObjectSelected::SELECTED)
 		{
 			glColor3f(1.f, 0.7f, 0.f);
-			glLineWidth(2);
+			glLineWidth(3);
 		}
 		else if (parent->GetSelect() == ObjectSelected::CHILD_FROM_PARENT_SELECTED)
 		{
 			glColor3f(0.f, 1.f, 1.f);
-			glLineWidth(1);
+			glLineWidth(5);
 		}		
+		glPolygonMode(GL_FRONT, GL_LINE);
 
-		glEnable(GL_STENCIL_TEST);
+		DrawWireFrame();
+
+
+		/*--------------------------------------*/
+		glDisable(GL_STENCIL_TEST);
+		glDisable(GL_POLYGON_OFFSET_FILL);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glLineWidth(1);
+
+
+		/*glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 1, -1);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
@@ -124,7 +154,7 @@ void ComponentMesh::DrawOutline()
 		glDisable(GL_STENCIL_TEST);
 		glDisable(GL_POLYGON_OFFSET_FILL);
 		glDisableClientState(GL_VERTEX_ARRAY);
-		glLineWidth(1);
+		glLineWidth(1);*/
 	}
 
 }
