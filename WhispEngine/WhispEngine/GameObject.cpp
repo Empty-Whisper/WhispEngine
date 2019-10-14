@@ -91,3 +91,35 @@ void GameObject::SetName(const char * name)
 {
 	this->name.assign(name);
 }
+
+
+ObjectSelected GameObject::GetSelect() const
+{
+	return obj_selected;
+}
+
+void GameObject::Select()
+{
+	obj_selected = ObjectSelected::SELECTED;
+
+	if (parent != nullptr)
+	{
+		if (parent->obj_selected != ObjectSelected::NONE)
+			obj_selected = ObjectSelected::CHILD_FROM_PARENT_SELECTED;		
+	}
+	
+	for (auto i = children.begin(); i != children.end(); ++i)
+	{
+		(*i)->Select();
+	}
+}
+
+void GameObject::Deselect()
+{
+	obj_selected = ObjectSelected::NONE;
+
+	for (auto i = children.begin(); i != children.end(); ++i)
+	{
+		(*i)->Deselect();
+	}
+}

@@ -15,6 +15,21 @@ void ComponentMesh::Update()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		Draw();
 	}
+	if (parent->GetSelect() != ObjectSelected::NONE)
+	{
+		glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_ALWAYS, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		DrawOutline();
+		glDisable(GL_STENCIL_TEST);
+	}
+	/*if (parent->GetSelect() == ObjectSelected::CHILD_FROM_PARENT_SELECTED)
+	{
+
+	}*/
+
+	
+
 	if (App->renderer3D->wireframe) {
 		if (material != nullptr) {
 			glColor4fv(material->GetWireColor());
@@ -22,11 +37,13 @@ void ComponentMesh::Update()
 		else {
 			glColor3i(0, 0, 0);
 		}
+		glClearStencil(0);
+		glClear(GL_STENCIL_BUFFER_BIT);
+
 		glEnable(GL_POLYGON_OFFSET_LINE);
 		glPolygonOffset(-1.f, 1.f);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		DrawWireFrame();
-		glDisable(GL_POLYGON_OFFSET_LINE);
 	}
 	DrawNormals();
 	glColor3f(0.f, 0.f, 0.f);
@@ -42,6 +59,8 @@ ComponentMesh::~ComponentMesh()
 void ComponentMesh::Draw()
 {
 	glColor3f(1.f, 1.f, 1.f);
+
+	
 
 	if (material != nullptr) {
 		if (material->IsActive()) {
@@ -81,6 +100,36 @@ void ComponentMesh::DrawWireFrame() {
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
 	glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+}
+
+void ComponentMesh::DrawOutline()
+{
+	if (!glIsEnabled(GL_STENCIL_TEST))
+		return;
+
+	glColor3f(1.f, 0.7f,0.f);
+	glStencilFunc(GL_ALWAYS, 1, -1);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	glLineWidth(2);
+	glPolygonMode(GL_FRONT, GL_LINE);
+
+	//ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
+	//glMultMatrixf(transform->global_transformation.Transposed().ptr());
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+
+	glDrawElements(GL_TRIANGLES, mesh->index.size * 3, GL_UNSIGNED_INT, 0);
+
+	glDisable(GL_STENCIL_TEST);
+	glDisable(GL_POLYGON_OFFSET_FILL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glLineWidth(1);
+
 }
 
 void ComponentMesh::DrawNormals()

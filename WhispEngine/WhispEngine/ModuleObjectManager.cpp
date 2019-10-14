@@ -79,7 +79,16 @@ GameObject * ModuleObjectManager::GetSelected() const
 
 void ModuleObjectManager::SetSelected(GameObject * select)
 {
-	selected = select;
+
+	if (selected != select)
+	{
+		if (selected != nullptr)
+			selected->Deselect();
+		
+		select->Select();
+		selected = select;
+	}
+
 }
 
 void ModuleObjectManager::AddTexture(Texture * tex)

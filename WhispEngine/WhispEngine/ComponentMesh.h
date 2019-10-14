@@ -43,7 +43,7 @@ public:
 
 	void Draw();
 	void DrawWireFrame();
-
+	void DrawOutline();
 	void DrawNormals();
 
 	void SetMaterial(ComponentMaterial * mat);

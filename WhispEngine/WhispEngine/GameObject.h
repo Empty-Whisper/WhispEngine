@@ -4,6 +4,13 @@
 
 #include "Component.h"
 
+enum class ObjectSelected
+{
+	NONE = -1,
+	SELECTED, // Orange outline
+	CHILD_FROM_PARENT_SELECTED, // Blue outline
+};
+
 class GameObject
 {
 public:
@@ -21,6 +28,10 @@ public:
 	const char* GetName() const;
 	void SetName(const char* name);
 
+	ObjectSelected GetSelect() const;
+	void Select();
+	void Deselect();
+
 public:
 	std::vector<GameObject*> children;
 	std::vector<Component*> components;
@@ -30,5 +41,7 @@ public:
 private:
 	bool active = true;
 	std::string name;
+	ObjectSelected obj_selected = ObjectSelected::NONE;
+
 };
 
