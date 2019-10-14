@@ -21,14 +21,7 @@ void ComponentMesh::Update()
 		glStencilFunc(GL_ALWAYS, 1, -1);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		DrawOutline();
-		glDisable(GL_STENCIL_TEST);
 	}
-	/*if (parent->GetSelect() == ObjectSelected::CHILD_FROM_PARENT_SELECTED)
-	{
-
-	}*/
-
-	
 
 	if (App->renderer3D->wireframe) {
 		if (material != nullptr) {
@@ -59,8 +52,6 @@ ComponentMesh::~ComponentMesh()
 void ComponentMesh::Draw()
 {
 	glColor3f(1.f, 1.f, 1.f);
-
-	
 
 	if (material != nullptr) {
 		if (material->IsActive()) {
@@ -104,31 +95,37 @@ void ComponentMesh::DrawWireFrame() {
 
 void ComponentMesh::DrawOutline()
 {
-	if (!glIsEnabled(GL_STENCIL_TEST))
-		return;
+	if (glIsEnabled(GL_STENCIL_TEST))
+	{
+		if (parent->GetSelect() == ObjectSelected::SELECTED)
+		{
+			glColor3f(1.f, 0.7f, 0.f);
+			glLineWidth(2);
+		}
+		else if (parent->GetSelect() == ObjectSelected::CHILD_FROM_PARENT_SELECTED)
+		{
+			glColor3f(0.f, 1.f, 1.f);
+			glLineWidth(1);
+		}		
 
-	glColor3f(1.f, 0.7f,0.f);
-	glStencilFunc(GL_ALWAYS, 1, -1);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_ALWAYS, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	glLineWidth(2);
-	glPolygonMode(GL_FRONT, GL_LINE);
+		glPolygonMode(GL_FRONT, GL_LINE);
 
-	//ComponentTransform* transform = (ComponentTransform*)game_object_attached->GetComponent(ComponentType::TRANSFORM);
-	//glMultMatrixf(transform->global_transformation.Transposed().ptr());
+		
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
+		glVertexPointer(3, GL_FLOAT, 0, 0);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
+		glDrawElements(GL_LINES, mesh->index.size, GL_UNSIGNED_INT, 0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
-
-	glDrawElements(GL_TRIANGLES, mesh->index.size * 3, GL_UNSIGNED_INT, 0);
-
-	glDisable(GL_STENCIL_TEST);
-	glDisable(GL_POLYGON_OFFSET_FILL);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glLineWidth(1);
+		glDisable(GL_STENCIL_TEST);
+		glDisable(GL_POLYGON_OFFSET_FILL);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glLineWidth(1);
+	}
 
 }
 

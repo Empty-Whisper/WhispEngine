@@ -88,7 +88,6 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 		select->Select();
 		selected = select;
 	}
-
 }
 
 void ModuleObjectManager::AddTexture(Texture * tex)

@@ -31,7 +31,7 @@ public:
 	GLenum vision_mode = GL_FILL;
 	float* background_color = nullptr;
 
-	bool wireframe = true;
+	bool wireframe = false;
 	bool fill = true;
 
 	bool vsync = true;

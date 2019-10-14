@@ -37,6 +37,8 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	
 	// Docking -----------------------------------------------------------
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform 
+
 	//io.ConfigDockingWithShift = true;
 
 	//static bool opt_fullscreen_persistant = true;
