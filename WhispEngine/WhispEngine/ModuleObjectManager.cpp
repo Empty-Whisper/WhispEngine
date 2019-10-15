@@ -28,9 +28,10 @@ update_status ModuleObjectManager::Update()
 
 void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
-	((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
+	ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
+	transform->CalculateGlobalMatrix();
 	glPushMatrix();
-	glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetPtrGlobalMatrix());
+	glMultMatrixf(transform->global_matrix.Transposed().ptr());
 	if (obj->IsActive()) {
 		obj->Update();
 		if (!obj->children.empty()) {

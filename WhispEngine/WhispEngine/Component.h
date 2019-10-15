@@ -38,7 +38,7 @@ public:
 
 
 public:
-	GameObject* parent = nullptr;
+	GameObject* object = nullptr;
 
 private:
 	ComponentType type = ComponentType::NONE;

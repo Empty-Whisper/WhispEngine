@@ -65,8 +65,8 @@ void ComponentTransform::CalculeLocalMatrix()
 void ComponentTransform::CalculateGlobalMatrix()
 {
 	global_matrix = local_matrix;
-	if (parent != nullptr) {
-		global_matrix = ((ComponentTransform*)parent->GetComponent(ComponentType::TRANSFORM))->global_matrix * local_matrix;
+	if (object->parent != nullptr) {
+		global_matrix = ((ComponentTransform*)object->parent->GetComponent(ComponentType::TRANSFORM))->global_matrix * local_matrix;
 	}
 }
 

@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "GameObject.h"
 
-Component::Component(GameObject * parent, ComponentType type) : parent(parent), type(type)
+Component::Component(GameObject * parent, ComponentType type) : object(parent), type(type)
 {
 }
 

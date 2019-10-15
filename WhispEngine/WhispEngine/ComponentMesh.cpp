@@ -15,7 +15,7 @@ void ComponentMesh::Update()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		Draw();
 	}
-	if (parent->GetSelect() != ObjectSelected::NONE)
+	if (object->GetSelect() != ObjectSelected::NONE)
 	{
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 1, -1);
@@ -116,12 +116,12 @@ void ComponentMesh::DrawOutline()
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 
-		if (parent->GetSelect() == ObjectSelected::SELECTED)
+		if (object->GetSelect() == ObjectSelected::SELECTED)
 		{
 			glColor3f(1.f, 0.7f, 0.f);
 			glLineWidth(3);
 		}
-		else if (parent->GetSelect() == ObjectSelected::CHILD_FROM_PARENT_SELECTED)
+		else if (object->GetSelect() == ObjectSelected::CHILD_FROM_PARENT_SELECTED)
 		{
 			glColor3f(0.f, 1.f, 1.f);
 			glLineWidth(5);
