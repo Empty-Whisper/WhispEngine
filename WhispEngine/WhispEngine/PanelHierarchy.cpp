@@ -17,41 +17,46 @@ PanelHierarchy::~PanelHierarchy()
 void PanelHierarchy::Update()
 {
 	if (ImGui::Begin("Hierarchy", &active)) {
-		DrawNode(App->object_manager->GetRoot());
+		for (auto i = App->object_manager->GetRoot()->children.begin(); i != App->object_manager->GetRoot()->children.end(); i++) {
+			DrawNode(*i);
+		}
 	}
 	ImGui::End();
 
 }
 
 void PanelHierarchy::DrawNode(GameObject* const &obj) {
-	if (!obj->IsActive())
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
-	for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 
-		if ((*i)->children.empty()) {
-			current_flag = leaf_flag;
-		}
-		else {
-			current_flag = node_flag;
-		}
+	current_flag = node_flag;
 
-		if (App->object_manager->GetSelected() == *i) {
-			current_flag |= select_flag;
-		}
+	if (obj->children.empty())
+		current_flag = leaf_flag;
+	else
+		current_flag = node_flag;
 
-		bool open = ImGui::TreeNodeEx((void*)(intptr_t)*i, current_flag, (*i)->GetName());
+	if (App->object_manager->GetSelected() == obj)
+		current_flag |= select_flag;
 
-		if (ImGui::IsItemClicked()) {
-			App->object_manager->SetSelected(*i);
-		}
+	bool is_open = ImGui::TreeNodeEx(obj, current_flag, obj->GetName());
 
-		if (!(*i)->children.empty() && open)
-		{
-			DrawNode(*i);
-			ImGui::TreePop();
-			current_flag = node_flag;
-		}
+	ImGui::PushID(obj);
+	if (ImGui::BeginPopupContextItem("I am a popu")) {
+		ImGui::Button("Button");
+
+		ImGui::EndPopup();
 	}
-	if (!obj->IsActive())
-		ImGui::PopStyleColor();
+	ImGui::PopID();
+
+	if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) {
+		App->object_manager->SetSelected(obj);
+	}
+
+	if (!obj->children.empty() && is_open) {
+		for (auto i = obj->children.begin(); i != obj->children.end(); i++) {
+			DrawNode(*i);
+		}
+
+		ImGui::TreePop();
+	}
+
 }
