@@ -69,10 +69,15 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 	return ret;
 }
 
-void ModuleObjectManager::DestroyGameObject(GameObject * obj)
+std::vector<GameObject*>::iterator ModuleObjectManager::DestroyGameObject(GameObject * obj)
 {
-	obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
+	if (obj == selected)
+		selected = nullptr;
+
+	std::vector<GameObject*>::iterator ret = obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
 	delete obj;
+
+	return ret;
 }
 
 GameObject * ModuleObjectManager::GetRoot() const

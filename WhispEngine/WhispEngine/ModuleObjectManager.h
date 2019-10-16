@@ -49,7 +49,7 @@ public:
 	bool CleanUp();
 
 	GameObject* CreateGameObject(GameObject* parent);
-	void		DestroyGameObject(GameObject* obj);
+	std::vector<GameObject*>::iterator DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
 
