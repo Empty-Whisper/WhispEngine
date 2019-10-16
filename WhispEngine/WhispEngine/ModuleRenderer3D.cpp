@@ -140,7 +140,6 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate()
 {
-	
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
@@ -156,10 +155,10 @@ update_status ModuleRenderer3D::PreUpdate()
 
 update_status ModuleRenderer3D::Update()
 {
-	/*glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, App->renderer3D->render_texture);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);*/
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	return UPDATE_CONTINUE;
 }
