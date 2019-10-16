@@ -28,19 +28,22 @@ update_status ModuleObjectManager::Update()
 
 void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
-	ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
-	transform->CalculateGlobalMatrix();
-	glPushMatrix();
-	glMultMatrixf(transform->global_matrix.Transposed().ptr());
+	
 	if (obj->IsActive()) {
+		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
+		transform->CalculateGlobalMatrix();
+		glPushMatrix();
+		glMultMatrixf(transform->global_matrix.Transposed().ptr());
+
 		obj->Update();
+
+		glPopMatrix();
 		if (!obj->children.empty()) {
 			for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 				UpdateGameObject(*i);
 			}
 		}
 	}
-	glPopMatrix();
 }
 
 bool ModuleObjectManager::CleanUp()

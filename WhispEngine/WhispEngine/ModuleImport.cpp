@@ -105,10 +105,10 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 		aiQuaternion rotation;
 		child->mTransformation.Decompose(scale, rotation, position);
 
-		position *= 0.01f;
+		//position *= 0.01f;
 		transform->SetPosition(position.x, position.y, position.z);
 		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
-		scale *= 0.01f;
+		//scale *= 0.01f;
 		transform->SetScale(scale.x, scale.y, scale.z);
 		//transform->SetScale(1, 1, 1);
 
