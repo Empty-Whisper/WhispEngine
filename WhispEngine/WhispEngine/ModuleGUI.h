@@ -10,6 +10,7 @@ class PanelRender;
 class PanelHierarchy;
 class PanelCreate;
 class PanelInspector;
+class PanelScene;
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
@@ -38,6 +39,7 @@ public:
 
 public:
 	void Log(const char* str);
+	void Dockspace();
 
 private:
 	bool show_demo_window = false;
@@ -56,4 +58,7 @@ private:
 	PanelHierarchy* hierarchy = nullptr;
 	PanelCreate* create = nullptr;
 	PanelInspector* inspector = nullptr;
+
+public:
+	PanelScene* scene = nullptr;
 };

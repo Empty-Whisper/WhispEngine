@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "SDL/include/SDL_opengl.h"
+#include "PanelScene.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -111,6 +112,8 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 		
 		if (fill)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -128,17 +131,16 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 	}
 
 	// Projection matrix for
-	OnResize(App->window->screen_width, App->window->screen_height);
+	//OnResize(App->window->screen_width, App->window->screen_height);
 
+	InitTextureBuffers();
 	return ret;
 }
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate()
 {
-	glClearColor(background_color[0], background_color[1], background_color[2], 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
+	
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
@@ -152,10 +154,49 @@ update_status ModuleRenderer3D::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
+update_status ModuleRenderer3D::Update()
+{
+	/*glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, App->renderer3D->render_texture);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);*/
+
+	return UPDATE_CONTINUE;
+}
+
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate()
 {
 	SDL_GL_SwapWindow(App->window->window);
+
+	// DockSpace
+	if (can_resize)
+	{
+		ImVec2 size = App->gui->scene->GetPanelSize();
+
+		glViewport(0, 0, size.x, size.y);
+
+		glMatrixMode(GL_PROJECTION);
+		ProjectionMatrix = perspective(60.0f, (float)size.x / (float)size.y, 0.125f, 512.0f);
+		glLoadMatrixf(&ProjectionMatrix);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		UpdateTextureBuffers(size.x, size.y);
+		can_resize = false;
+	}
+
+	//glClearColor(background_color[0], background_color[1], background_color[2], 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glLoadIdentity();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(App->camera->GetViewMatrix());
+
+	//glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->frame_buffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearColor(0.1, 0.1, 0.1, 1.f);
+
 	return UPDATE_CONTINUE;
 }
 
@@ -190,15 +231,56 @@ bool ModuleRenderer3D::Load(nlohmann::json & node)
 	return true;
 }
 
+bool ModuleRenderer3D::CanResize()
+{
+	can_resize = true;
+	return can_resize;
+}
+
 void ModuleRenderer3D::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
-
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 }
+
+void ModuleRenderer3D::InitTextureBuffers()
+{
+	glGenRenderbuffers(1, &depth_render_buffer);
+	glGenTextures(1, &render_texture);
+	glGenFramebuffers(1, &frame_buffer);
+}
+
+void ModuleRenderer3D::UpdateTextureBuffers(int width, int height)
+{
+	// Depth
+	glBindRenderbuffer(GL_RENDERBUFFER, depth_render_buffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	// Texture
+	glBindTexture(GL_TEXTURE_2D, render_texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// Depth and Texture to Frame buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depth_render_buffer);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
+
+	// If program can generate the texture 
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		LOG("[Error] creating screen buffer");
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+

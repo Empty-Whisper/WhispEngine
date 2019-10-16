@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
+#include "ComponentMaterial.h"
 
 #define MAX_LIGHTS 8
 
@@ -14,14 +15,19 @@ public:
 
 	bool Init(nlohmann::json &node);
 	update_status PreUpdate();
+	update_status Update();
 	update_status PostUpdate();
+	update_status Draw();
 	bool CleanUp();
 
 	bool Save(nlohmann::json &node) const;
 	bool Load(nlohmann::json &node);
 
+	bool CanResize();
 	void OnResize(int width, int height);
 
+	void InitTextureBuffers();
+	void UpdateTextureBuffers(int width, int height);
 public:
 
 	Light lights[MAX_LIGHTS];
@@ -35,4 +41,11 @@ public:
 	bool fill = true;
 
 	bool vsync = true;
+
+	uint frame_buffer = 0;
+	uint render_texture = 0;
+	uint depth_render_buffer = 0;
+	uint stencil_buffer = 0;
+
+	bool can_resize = false;
 };

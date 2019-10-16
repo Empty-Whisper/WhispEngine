@@ -48,6 +48,7 @@
     <ClCompile Include="PanelCreate.cpp" />
     <ClCompile Include="PanelHierarchy.cpp" />
     <ClCompile Include="PanelInspector.cpp" />
+    <ClCompile Include="PanelScene.cpp" />
     <ClCompile Include="par_shapes.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="PanelCreate.h" />
     <ClInclude Include="PanelHierarchy.h" />
     <ClInclude Include="PanelInspector.h" />
+    <ClInclude Include="PanelScene.h" />
     <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="JSON\json.hpp" />

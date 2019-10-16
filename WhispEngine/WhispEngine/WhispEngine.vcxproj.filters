@@ -286,6 +286,7 @@
     <ClCompile Include="Imgui\imgui_impl_sdl.cpp">
       <Filter>Tools\Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="PanelScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -628,6 +629,7 @@
     <ClInclude Include="Imgui\imgui_impl_sdl.h">
       <Filter>Tools\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="PanelScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

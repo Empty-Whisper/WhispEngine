@@ -9,6 +9,7 @@ ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentTy
 
 void ComponentMesh::Update()
 {
+
 	glColor3f(1.f, 1.f, 1.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	if (App->renderer3D->fill) {
