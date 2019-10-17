@@ -24,7 +24,7 @@ void PanelInspector::Update()
 			ImGui::PopID();
 			ImGui::SameLine();
 
-			char a[32];
+			char a[100];
 			sprintf_s(a, sel->GetName());
 			if (ImGui::InputText("", a, 32, ImGuiInputTextFlags_EnterReturnsTrue)) {
 				sel->SetName(a);

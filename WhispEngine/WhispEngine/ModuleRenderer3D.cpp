@@ -232,8 +232,7 @@ bool ModuleRenderer3D::Load(nlohmann::json & node)
 
 bool ModuleRenderer3D::CanResize()
 {
-	can_resize = true;
-	return can_resize;
+	return can_resize = true;
 }
 
 void ModuleRenderer3D::OnResize(int width, int height)

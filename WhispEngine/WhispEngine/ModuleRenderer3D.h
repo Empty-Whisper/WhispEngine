@@ -28,8 +28,8 @@ public:
 
 	void InitTextureBuffers();
 	void UpdateTextureBuffers(int width, int height);
-public:
 
+public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;

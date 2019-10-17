@@ -13,7 +13,7 @@ PanelScene::~PanelScene()
 
 void PanelScene::Update()
 {
-	if (ImGui::Begin("Scene", &active))
+	if (ImGui::Begin("Scene", 0, ImGuiWindowFlags_NoCollapse))
 	{
 		ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
 		ImGui::Image((ImTextureID)App->renderer3D->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));

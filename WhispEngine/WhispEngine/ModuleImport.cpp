@@ -60,7 +60,7 @@ bool ModuleImport::ImportFbx(const char * path)
 	bool ret = true;
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
-
+	
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		
@@ -77,6 +77,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
 		//scale *= 0.01f;
 		transform->SetScale(scale.x, scale.y, scale.z);
+		
 		//transform->SetScale(1,1,1);
 
 		transform->CalculeLocalMatrix();
@@ -105,12 +106,13 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 		aiQuaternion rotation;
 		child->mTransformation.Decompose(scale, rotation, position);
 
-		//position *= 0.01f;
 		transform->SetPosition(position.x, position.y, position.z);
 		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
+		// FBX exporters have some options that will change the scale of the models, be sure you export your models in Apply Scale FBX All mode
+
 		//scale *= 0.01f;
+		//scale /= std::max(std::max(scale.x, scale.y),scale.z); 
 		transform->SetScale(scale.x, scale.y, scale.z);
-		//transform->SetScale(1, 1, 1);
 
 		transform->CalculeLocalMatrix();
 		transform->CalculateGlobalMatrix();
