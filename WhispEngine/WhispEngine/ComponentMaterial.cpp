@@ -41,7 +41,7 @@ void ComponentMaterial::OnInspector()
 			if (select_tex) {
 				float width = 128.f;
 				float height = 128.f;
-				if (ImGui::Begin("Selecte Texture", &select_tex)) {
+				if (ImGui::Begin("Select Texture", &select_tex)) {
 					std::vector<Texture*>* tex = App->object_manager->GetTextures();
 					int warp = 1;
 					for (auto i = tex->begin(); i != tex->end(); i++) {

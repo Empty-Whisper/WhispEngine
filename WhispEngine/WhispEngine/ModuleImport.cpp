@@ -152,6 +152,20 @@ Texture* ModuleImport::ImportTexture(const char * path)
 {
 	Texture* ret = nullptr;
 
+	std::string tmp = App->file_system->GetFileNameFromPath(path); // Lazy way to compare if the texture already exists, will work for now TODO: improve it
+	std::vector<Texture*>* vtex = App->object_manager->GetTextures();
+	for (auto i = vtex->begin(); i != vtex->end(); i++) {
+		if (tmp.compare((*i)->name) == 0)
+			if (App->file_system->GetFormat(path) == App->file_system->GetFormat((*i)->path.data())) {
+				LOG("Texture already loaded, returning the texture already loaded...");
+				if (App->object_manager->GetSelected() != nullptr) {// Assign new texture to object selected (ONLY FOR THE FIRST ASSIGNMENT) TODO: Delete this after first delivery
+					ComponentMaterial* mat = (ComponentMaterial*)App->object_manager->GetSelected()->GetComponent(ComponentType::MATERIAL);
+					if (mat != nullptr)	mat->SetTexture(*i);
+				}
+				return *i;
+			}
+	}
+
 	ILuint devilID = 0;
 
 	ilGenImages(1, &devilID);
@@ -174,6 +188,10 @@ Texture* ModuleImport::ImportTexture(const char * path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
+		if (App->object_manager->GetSelected() != nullptr) {// Assign new texture to object selected (ONLY FOR THE FIRST ASSIGNMENT) TODO: Delete this after first delivery
+			ComponentMaterial* mat = (ComponentMaterial*)App->object_manager->GetSelected()->GetComponent(ComponentType::MATERIAL);
+			if (mat != nullptr)	mat->SetTexture(ret);
+		}
 		App->object_manager->AddTexture(ret);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
