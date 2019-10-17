@@ -121,7 +121,6 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		//Attributes --------------------------------------------------
-		//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -131,8 +130,6 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 	}
 
 	// Projection matrix for
-	//OnResize(App->window->screen_width, App->window->screen_height);
-
 	InitTextureBuffers();
 	return ret;
 }
@@ -185,14 +182,12 @@ update_status ModuleRenderer3D::PostUpdate()
 		can_resize = false;
 	}
 
-	//glClearColor(background_color[0], background_color[1], background_color[2], 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
-	//glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->frame_buffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearColor(0.1, 0.1, 0.1, 1.f);
 

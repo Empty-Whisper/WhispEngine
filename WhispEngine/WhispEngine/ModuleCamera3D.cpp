@@ -66,7 +66,9 @@ update_status ModuleCamera3D::Update()
 	scene_size = App->gui->scene->GetPanelSize();
 	scene_size = { scene_position.x + scene_size.x, scene_position.y + scene_size.y };
 
-	if (ImGui::IsMouseHoveringRect(scene_position, scene_size, false))
+	ResetIsMovingCamera();
+
+	if (ImGui::IsMouseHoveringRect(scene_position, scene_size, false) || is_moving_camera)
 	{
 		// Mouse Zoom in/out with wheel ----------------
 		int mouse_wheel = App->input->GetMouseZ();
@@ -86,7 +88,6 @@ update_status ModuleCamera3D::Update()
 			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
 			Position += newPos;
-			//Reference += newPos;
 			Reference = Position;
 
 			int dx = -App->input->GetMouseXMotion();
@@ -118,6 +119,8 @@ update_status ModuleCamera3D::Update()
 			}
 
 			Position = Reference + Z * length(Position);
+
+			is_moving_camera = true;
 		}
 		if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
 			App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
@@ -156,6 +159,8 @@ update_status ModuleCamera3D::Update()
 			}
 
 			Position = Reference + Z * length(Position);
+			is_moving_camera = true;
+
 		}
 
 
@@ -190,6 +195,8 @@ update_status ModuleCamera3D::Update()
 		// Middle Mouse Button Movement
 		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN)
 			initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+			
+		
 
 		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
 		{
@@ -205,6 +212,7 @@ update_status ModuleCamera3D::Update()
 			Position += newPos;
 			Reference += newPos;
 			initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+			is_moving_camera = true;
 		}
 
 		// Focus Object
@@ -220,7 +228,7 @@ update_status ModuleCamera3D::Update()
 			actual_camera_position = Position;
 			reference_position = { 0,0,0 }; // Reference 
 
-			LookAt({ reference_position });
+			LookAt(reference_position);
 
 			vec3 diff = reference_position - actual_camera_position;
 			diff = { abs(diff.x),
@@ -268,18 +276,6 @@ void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool Rota
 	CalculateViewMatrix();
 }
 
-//void ModuleCamera3D::LookAround(const math::float3 & Reference, float DeltaX, float DeltaY)
-//{
-//	math::Quat rotationX = math::Quat::RotateAxisAngle({ 0.0f,1.0f,0.0f }, DeltaX * DEGTORAD);
-//	math::Quat rotationY = math::Quat::RotateAxisAngle(Position, DeltaY * DEGTORAD);
-//	math::Quat finalRotation = rotationX * rotationY;
-//
-//	//camera->frustum.up = finalRotation * camera->frustum.up;
-//	//camera->frustum.front = finalRotation * camera->frustum.front;
-//
-//	float distance = (Position.Length() - Reference.Length());
-//	Position = Reference * distance;
-//}
 
 // -----------------------------------------------------------------
 void ModuleCamera3D::LookAt( const vec3 &Spot)
@@ -341,4 +337,10 @@ void ModuleCamera3D::CalculateViewMatrix()
 {
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
+}
+
+void ModuleCamera3D::ResetIsMovingCamera()
+{
+	if(App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_UP || App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_UP || App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+		is_moving_camera = false;
 }

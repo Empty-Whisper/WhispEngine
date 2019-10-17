@@ -23,6 +23,7 @@ public:
 private:
 
 	void CalculateViewMatrix();
+	void ResetIsMovingCamera();
 
 public:
 	
@@ -37,6 +38,7 @@ private:
 	float offset_reference = 0.f;
 	bool alt = false;
 	bool is_focusing = false;
+	bool is_moving_camera = false;
 
 
 };
