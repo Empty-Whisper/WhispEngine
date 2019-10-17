@@ -69,15 +69,13 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 	return ret;
 }
 
-std::vector<GameObject*>::iterator ModuleObjectManager::DestroyGameObject(GameObject * obj)
+void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 {
 	if (obj == selected)
 		selected = nullptr;
 
 	std::vector<GameObject*>::iterator ret = obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
 	delete obj;
-
-	return ret;
 }
 
 GameObject * ModuleObjectManager::GetRoot() const
@@ -101,6 +99,11 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 		select->Select();
 		selected = select;
 	}
+}
+
+std::vector<Texture*>* ModuleObjectManager::GetTextures()
+{
+	return &textures;
 }
 
 void ModuleObjectManager::AddTexture(Texture * tex)

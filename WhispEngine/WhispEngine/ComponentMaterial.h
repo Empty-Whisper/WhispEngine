@@ -40,6 +40,8 @@ private:
 	float face_color[4]{ 1.f, 1.f, 1.f, 1.f };
 	float wire_color[4]{ 0.f, 0.f, 0.f, 0.f };
 
+	bool select_tex = false;
+
 	Texture* texture = nullptr;
 };
 

@@ -34,7 +34,28 @@ void ComponentMaterial::OnInspector()
 		ActiveImGui();
 		if (texture != nullptr) {
 			ImGui::Text("%s", texture->path.data());
-			ImGui::Button("Change Texture");
+			if (ImGui::Button("Change Texture")) {
+				select_tex = true;
+			}
+
+			if (select_tex) {
+				float width = 128.f;
+				float height = 128.f;
+				if (ImGui::Begin("Selecte Texture", &select_tex)) {
+					std::vector<Texture*>* tex = App->object_manager->GetTextures();
+					int warp = 1;
+					for (auto i = tex->begin(); i != tex->end(); i++) {
+						if (ImGui::ImageButton((ImTextureID)(*i)->id, ImVec2(width, height))) {
+							texture = *i;
+						}
+						if (warp % 3 != 0)
+							ImGui::SameLine();
+						warp++;
+					}
+
+					ImGui::End();
+				}
+			}
 
 			ImGui::Text("(%d, %d)", texture->width, texture->height);
 			ImGui::Image((ImTextureID)texture->id, ImVec2(128.f, 128.f));

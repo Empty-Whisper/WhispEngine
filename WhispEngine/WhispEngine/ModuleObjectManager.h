@@ -49,12 +49,14 @@ public:
 	bool CleanUp();
 
 	GameObject* CreateGameObject(GameObject* parent);
-	std::vector<GameObject*>::iterator DestroyGameObject(GameObject* obj);
+	void DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
 
 	GameObject*	GetSelected() const;
-	void				SetSelected(GameObject* select);
+	void		SetSelected(GameObject* select);
+
+	std::vector<Texture*>* GetTextures();
 
 	// ========================================== old
 
