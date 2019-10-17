@@ -40,7 +40,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	
 	// Docking -----------------------------------------------------------
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable keyboard controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable keyboard controls
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform 
 	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 

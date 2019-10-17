@@ -230,7 +230,7 @@ bool ModuleRenderer3D::Load(nlohmann::json & node)
 	return true;
 }
 
-bool ModuleRenderer3D::CanResize()
+const bool ModuleRenderer3D::CanResize()
 {
 	return can_resize = true;
 }
