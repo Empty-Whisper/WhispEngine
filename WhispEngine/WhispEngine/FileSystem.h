@@ -6,7 +6,7 @@ class FileSystem
 public:
 	enum class Format {
 		NONE = -1,
-		JSON, FBX, DDS,
+		JSON, FBX, DDS, PNG,
 		MAX
 	};
 
@@ -19,5 +19,6 @@ public:
 	void			SaveFile(const char* path, const nlohmann::json &to_save);
 
 	FileSystem::Format GetFormat(const char* file);
+	std::string GetFileNameFromPath(const char* file);
+	std::string GetFileFromPath(const char* file);
 };
-

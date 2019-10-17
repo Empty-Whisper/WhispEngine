@@ -1,61 +1,47 @@
 #pragma once
-
-#include "Globals.h"
-#include "SDL/include/SDL_config.h"
+#include <string>
 #include <vector>
 
-template <typename T>
-struct Buffer {
-	uint id = 0;
-	uint size = 0;
-	T* data = nullptr;
-};
+#include "Component.h"
 
-struct Mesh {
-	~Mesh();
-
-	void SetGLBuffers();
-
-	Buffer<float> vertex;
-	Buffer<uint> index;
-	Buffer<float> face_normals;
-	Buffer<float> vertex_normals;
-	Buffer<float> tex_coords;
-
-	uint tex_id = 0;
-};
-
-enum class Normals {
-	NONE = 0, FACE, VERTEX, MAX
+enum class ObjectSelected
+{
+	NONE = -1,
+	SELECTED, // Orange outline
+	CHILD_FROM_PARENT_SELECTED, // Blue outline
 };
 
 class GameObject
 {
 public:
-	GameObject();
-	//GameObject(const int &n_vertex, float* vertex, const int &n_index, uint* index, float* normals = nullptr);
-
+	GameObject(GameObject *parent);
 	~GameObject();
 
+public:
+	void Update();
+	Component* CreateComponent(const ComponentType &type);
+	Component* GetComponent(const ComponentType &type);
+
+	bool IsActive() const;
+	void SetActive(const bool &to_active);
+
+	const char* GetName() const;
+	void SetName(const char* name);
+
+	ObjectSelected GetSelect() const;
+	void Select();
+	void Deselect();
+
+public:
+	std::vector<GameObject*> children;
+	std::vector<Component*> components;
+
+	GameObject* parent = nullptr;
+
 private:
-	void InitColors();
-
-public:
-	void SetColors(const float* face_color = nullptr, const float* wire_color = nullptr);
-
-	void Draw();
-	void DrawWireFrame();
-
-	void DrawNormals();
-
-public:
-	std::vector<Mesh*> mesh;
-
-	Normals normals_state = Normals::NONE;
-
 	bool active = true;
+	std::string name;
+	ObjectSelected obj_selected = ObjectSelected::NONE;
 
-	float* color = nullptr;
-	float* wire_color = nullptr;
 };
 

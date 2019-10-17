@@ -22,8 +22,10 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="GPUdetect\DeviceId.cpp" />
@@ -34,6 +36,7 @@
     <ClCompile Include="Imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="ModuleObjectManager.cpp" />
@@ -43,7 +46,9 @@
     <ClCompile Include="PanelConfiguration.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PanelCreate.cpp" />
-    <ClCompile Include="PanelObjects.cpp" />
+    <ClCompile Include="PanelHierarchy.cpp" />
+    <ClCompile Include="PanelInspector.cpp" />
+    <ClCompile Include="PanelScene.cpp" />
     <ClCompile Include="par_shapes.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -89,18 +94,19 @@
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="ShortCut.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="DevIL\include\IL\il.h" />
     <ClInclude Include="DevIL\include\IL\ilu.h" />
     <ClInclude Include="DevIL\include\IL\ilut.h" />
     <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
@@ -115,6 +121,7 @@
     <ClInclude Include="Imgui\imstb_rectpack.h" />
     <ClInclude Include="Imgui\imstb_textedit.h" />
     <ClInclude Include="Imgui\imstb_truetype.h" />
+    <ClInclude Include="Imgui\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="mmgr\mmgr.h" />
     <ClInclude Include="mmgr\nommgr.h" />
     <ClInclude Include="ModuleImport.h" />
@@ -125,7 +132,9 @@
     <ClInclude Include="PanelConfiguration.h" />
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="PanelCreate.h" />
-    <ClInclude Include="PanelObjects.h" />
+    <ClInclude Include="PanelHierarchy.h" />
+    <ClInclude Include="PanelInspector.h" />
+    <ClInclude Include="PanelScene.h" />
     <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="JSON\json.hpp" />
@@ -202,7 +211,6 @@
     <ClInclude Include="PCG\pcg_uint128.hpp" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="ShortCut.h" />
-    <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>

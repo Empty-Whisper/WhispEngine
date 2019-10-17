@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "GameObject.h"
 
-Component::Component(GameObject * parent, ComponentType type)
+Component::Component(GameObject * parent, ComponentType type) : object(parent), type(type)
 {
 }
 
@@ -27,12 +27,22 @@ void Component::Disable()
 		is_active = false;
 }
 
-const bool Component::IsActive()
+const bool Component::IsActive() const
 {
 	return is_active;
 }
 
-const ComponentType Component::GetType()
+void Component::SetActive(bool to_active)
+{
+	is_active = to_active;
+}
+
+void Component::ActiveImGui(const char* checkbox_name)
+{
+	ImGui::Checkbox(checkbox_name, &is_active);
+}
+
+const ComponentType Component::GetType() const
 {
 	return type;
 }

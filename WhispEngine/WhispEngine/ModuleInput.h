@@ -50,6 +50,16 @@ public:
 		return mouse_buttons[id];
 	}
 
+	bool GetMouseButtonDown(int id) const
+	{
+		return mouse_buttons[id] == KEY_DOWN;
+	}
+
+	bool GetMouseButtonUp(int id) const
+	{
+		return mouse_buttons[id] == KEY_UP;
+	}
+
 	int GetMouseX() const
 	{
 		return mouse_x;

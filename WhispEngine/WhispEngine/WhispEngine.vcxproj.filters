@@ -66,9 +66,6 @@
     <ClCompile Include="Imgui\imgui.cpp">
       <Filter>Tools\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Imgui\imgui_impl_sdl.cpp">
-      <Filter>Tools\Imgui</Filter>
-    </ClCompile>
     <ClCompile Include="Imgui\imgui_demo.cpp">
       <Filter>Tools\Imgui</Filter>
     </ClCompile>
@@ -201,9 +198,6 @@
     <ClCompile Include="MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>Tools\MathGeoLib\Algorithm\Random</Filter>
     </ClCompile>
-    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
-      <Filter>Tools\Imgui</Filter>
-    </ClCompile>
     <ClCompile Include="HardwareInfo.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
@@ -258,31 +252,48 @@
     <ClCompile Include="ModuleObjectManager.cpp">
       <Filter>Main Modules</Filter>
     </ClCompile>
-    <ClCompile Include="PanelObjects.cpp">
-      <Filter>UI_Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="PanelCreate.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Component.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMesh.cpp">
+      <Filter>GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelHierarchy.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Tools\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
+      <Filter>Tools\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_sdl.cpp">
+      <Filter>Tools\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelInspector.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelScene.cpp">
+      <Filter>UI_Elements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
-      <Filter>Tools\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Imgui\imgui_impl_sdl.h">
       <Filter>Tools\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imconfig.h">
@@ -507,9 +518,6 @@
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h">
       <Filter>Tools\MathGeoLib\Algorithm\Random</Filter>
     </ClInclude>
-    <ClInclude Include="Imgui\imgui_impl_opengl3.h">
-      <Filter>Tools\Imgui</Filter>
-    </ClInclude>
     <ClInclude Include="PCG\pcg_random.hpp">
       <Filter>Tools\PCG</Filter>
     </ClInclude>
@@ -582,12 +590,6 @@
     <ClInclude Include="ModuleImport.h">
       <Filter>Main Modules</Filter>
     </ClInclude>
-    <ClInclude Include="PanelObjects.h">
-      <Filter>UI_Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="PanelCreate.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
@@ -603,12 +605,38 @@
     <ClInclude Include="DevIL\include\IL\ilut.h">
       <Filter>Tools\DevIL</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Component.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentTransform.h">
       <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMesh.h">
+      <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMaterial.h">
+      <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelHierarchy.h">
+      <Filter>UI_Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\misc\cpp\imgui_stdlib.h">
+      <Filter>Tools\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_opengl3.h">
+      <Filter>Tools\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_sdl.h">
+      <Filter>Tools\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelScene.h">
+      <Filter>UI_Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelInspector.h">
+      <Filter>UI_Elements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,8 @@ nlohmann::json FileSystem::OpenFile(const char * path)
 {
 	nlohmann::json file;
 	std::ifstream i(path);
+	if (i.fail())
+		return nullptr;
 
 	i >> file;
 
@@ -36,7 +38,7 @@ FileSystem::Format FileSystem::GetFormat(const char * file)
 
 	for (auto i = f.rbegin(); i != f.rend(); i++) {
 		if (*i != '.')
-			buffer.push_back(*i);
+			buffer.push_back(std::tolower(*i));
 		else
 			break;
 	}
@@ -51,8 +53,47 @@ FileSystem::Format FileSystem::GetFormat(const char * file)
 	else if (buffer.compare("dds") == 0) {
 		return FileSystem::Format::DDS;
 	}
+	else if (buffer.compare("png") == 0) {
+		return FileSystem::Format::PNG;
+	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());
 
 	return FileSystem::Format::NONE;
+}
+
+std::string FileSystem::GetFileNameFromPath(const char * file)
+{
+	std::string f(file);
+	std::string buffer;
+
+	bool dot_found = false;
+	for (auto i = f.rbegin(); i != f.rend(); i++) {
+		if (!dot_found) {
+			if (*i == '.')
+				dot_found = true;
+		}
+		else {
+			if (*i == '\\' || *i == '/')
+				break;
+			buffer.push_back(*i);
+		}
+	}
+	std::reverse(buffer.begin(), buffer.end());
+	return buffer.data();
+}
+
+std::string FileSystem::GetFileFromPath(const char * file)
+{
+	std::string f(file);
+	std::string buffer;
+
+	for (auto i = f.rbegin(); i != f.rend(); i++) {
+		if (*i == '\\' || *i == '/')
+			break;
+		buffer.push_back(*i);
+	}
+	std::reverse(buffer.begin(), buffer.end());
+
+	return buffer.data();
 }

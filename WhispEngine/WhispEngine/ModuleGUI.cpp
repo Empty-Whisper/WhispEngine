@@ -15,8 +15,10 @@
 #include "PanelConfiguration.h"
 #include "PanelConsole.h"
 #include "PanelAbout.h"
-#include "PanelObjects.h"
+#include "PanelHierarchy.h"
 #include "PanelCreate.h"
+#include "PanelInspector.h"
+#include "PanelScene.h"
 
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
@@ -30,44 +32,19 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init(nlohmann::json &node)
 {
+	glewInit();
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	
 	// Docking -----------------------------------------------------------
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	//io.ConfigDockingWithShift = true;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable keyboard controls
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform 
+	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 
-	//static bool opt_fullscreen_persistant = true;
-	//bool opt_fullscreen = opt_fullscreen_persistant;
-	//static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
-	//// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-	//// because it would be confusing to have two docking targets within each others.
-	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-	//if (opt_fullscreen)
-	//{
-	//	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	//	ImGui::SetNextWindowPos(viewport->Pos);
-	//	ImGui::SetNextWindowSize(viewport->Size);
-	//	ImGui::SetNextWindowViewport(viewport->ID);
-	//	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-	//	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-	//	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-	//	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-	//}
-
-	//// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-	//if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-	//	window_flags |= ImGuiWindowFlags_NoBackground;
-
-	//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	//ImGui::PopStyleVar();
-
-	//if (opt_fullscreen)
-	//	ImGui::PopStyleVar(2);
-
-	// No more Docking here -----------------------------------------------------------
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
+	ImGui_ImplOpenGL3_Init();
 
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION));
@@ -76,9 +53,10 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
 	panels.push_back(about = new PanelAbout(node["panels"]["about"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
 	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
-	panels.push_back(inspector = new PanelObjects());
+	panels.push_back(hierarchy = new PanelHierarchy()); //TODO COMPLETE THIS
 	panels.push_back(create = new PanelCreate());
-	//panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_4));
+	panels.push_back(inspector = new PanelInspector());
+	panels.push_back(scene = new PanelScene());
 
 	return true;
 }
@@ -102,7 +80,7 @@ update_status ModuleGUI::PreUpdate()
 update_status ModuleGUI::Update()
 {
 	update_status ret = MainMenuBar();
-
+	Dockspace();
 	for (auto i = panels.begin(); i != panels.end(); ++i) {
 		if ((*i)->IsActive()) {
 			(*i)->Update();
@@ -139,6 +117,7 @@ update_status ModuleGUI::MainMenuBar()
 				ret = update_status::UPDATE_STOP;
 			}
 			ImGui::EndMenu();
+
 		}
 
 		if (ImGui::BeginMenu("View"))
@@ -147,7 +126,9 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Configuration", "LShift+2", &config->active);
 			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
 			ImGui::EndMenu();
+
 		}
+
 		if (ImGui::BeginMenu("Shape"))
 		{
 			ImGui::MenuItem("Create", "LShift+4", &create->active);
@@ -157,7 +138,9 @@ update_status ModuleGUI::MainMenuBar()
 				App->object_manager->Demo();
 			}
 			ImGui::EndMenu();
+
 		}
+
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Demo", NULL, show_demo_window))
@@ -177,9 +160,10 @@ update_status ModuleGUI::MainMenuBar()
 				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine/issues", NULL, NULL, SW_SHOWNORMAL);
 			}
 			ImGui::MenuItem("About", "LControl+LShift+A", &about->active);
-
 			ImGui::EndMenu();
+
 		}		
+
 	}
 	ImGui::EndMainMenuBar();
 
@@ -190,6 +174,18 @@ update_status ModuleGUI::PostUpdate()
 {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+		SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+	}
+
 
 	return UPDATE_CONTINUE;
 }
@@ -213,5 +209,39 @@ void ModuleGUI::Log(const char * str)
 	if (console != nullptr) {
 		console->Log(str);
 	}
+}
+
+void ModuleGUI::Dockspace()
+{
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+	// Seeting Docking to fit the window and preferences
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+	/*if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+		window_flags |= ImGuiWindowFlags_NoBackground;*/
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::Begin("DockSpace BackGround", (bool*)0, window_flags);
+	ImGui::PopStyleVar(3);
+
+	// DockSpace
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("Dockspace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+
+	ImGui::End();
 }
 

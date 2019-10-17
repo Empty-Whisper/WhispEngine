@@ -3,7 +3,7 @@
 #include "HardwareInfo.h"
 #include "SDL/include/SDL_cpuinfo.h"
 #include "Globals.h"
-#include "glew/glew.h"
+#include "glew-2.1.0/include/GL/glew.h"
 #include "GPUdetect/DeviceId.h"
 
 

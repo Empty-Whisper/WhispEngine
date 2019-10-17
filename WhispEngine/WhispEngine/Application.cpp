@@ -19,9 +19,9 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
-	AddModule(input);
 	AddModule(window);
 	AddModule(camera);
+	AddModule(input);
 	AddModule(shortcut);
 	AddModule(importer);
 	AddModule(object_manager);
@@ -29,9 +29,9 @@ Application::Application()
 	// Scenes
 	AddModule(scene_intro);
 
-	AddModule(gui);
 
 	// Renderer last!
+	AddModule(gui);
 	AddModule(renderer3D);
 
 	hardware = new HardwareInfo();
@@ -56,7 +56,8 @@ bool Application::Init()
 {
 	bool ret = true;
 
-	nlohmann::json load = file_system->OpenFile("configuration.json");
+	nlohmann::json load = file_system->OpenFile("Configuration/configuration.json");
+	if(load == nullptr) load = file_system->OpenFile("Configuration/conf_default.json");
 
 	engine_name = load["Configuration"]["App"]["name"].get<std::string>();
 	organization = load["Configuration"]["App"]["organization"].get<std::string>();

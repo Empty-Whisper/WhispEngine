@@ -1,5 +1,5 @@
 #include "ModuleObjectManager.h"
-#include "glew/glew.h"
+#include "ComponentTransform.h"
 #include "Application.h"
 
 ModuleObjectManager::ModuleObjectManager()
@@ -12,61 +12,152 @@ ModuleObjectManager::~ModuleObjectManager()
 {
 }
 
+bool ModuleObjectManager::Start()
+{
+	root = new GameObject(nullptr);
+	App->importer->ImportTexture("Assets/Textures/Checker.dds");
+
+	return true;
+}
+
 update_status ModuleObjectManager::Update()
 {
-	glColor3f(0.f, 0.f, 0.f);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		if ((*i)->active) {
-			if (App->renderer3D->fill) {
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				(*i)->Draw();
-			}
-			if (App->renderer3D->wireframe) {
-				glColor3fv((*i)->wire_color);
-				glEnable(GL_POLYGON_OFFSET_LINE);
-				glPolygonOffset(-1.f, 1.f);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				(*i)->DrawWireFrame();
-				glDisable(GL_POLYGON_OFFSET_LINE);
-			}
-			(*i)->DrawNormals();
-		}
-		glColor3f(0.f, 0.f, 0.f);
-	}
-	glDisableClientState(GL_VERTEX_ARRAY);
+	UpdateGameObject(root);
 
 	return UPDATE_CONTINUE;
 }
 
+void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
+{
+	
+	if (obj->IsActive()) {
+		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
+		transform->CalculateGlobalMatrix();
+		glPushMatrix();
+		glMultMatrixf(transform->global_matrix.Transposed().ptr());
+
+		obj->Update();
+
+		glPopMatrix();
+		if (!obj->children.empty()) {
+			for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
+				UpdateGameObject(*i);
+			}
+		}
+	}
+}
+
 bool ModuleObjectManager::CleanUp()
 {
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		delete *i;
-	}
-	objects.clear();
+	delete root;
 
 	for (auto t = textures.begin(); t != textures.end(); t++) {
-		glDeleteTextures(1, &(*t).id);
+		glDeleteTextures(1, &(*t)->id);
+		delete *t;
 	}
 	textures.clear();
 
 	return true;
 }
 
-void ModuleObjectManager::AddObject(GameObject * obj)
+GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 {
-	objects.push_back(obj);
+	if (parent == nullptr)
+		parent = root;
+
+	GameObject* ret = new GameObject(parent);
+
+	return ret;
 }
 
-void ModuleObjectManager::AddTexture(const Texture & tex)
+void ModuleObjectManager::DestroyGameObject(GameObject * obj)
+{
+	if (obj == selected)
+		selected = nullptr;
+
+	std::vector<GameObject*>::iterator ret = obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
+	delete obj;
+}
+
+GameObject * ModuleObjectManager::GetRoot() const
+{
+	return root;
+}
+
+GameObject * ModuleObjectManager::GetSelected() const
+{
+	return selected;
+}
+
+void ModuleObjectManager::SetSelected(GameObject * select)
+{
+
+	if (selected != select)
+	{
+		if (selected != nullptr)
+			selected->Deselect();
+		
+		select->Select();
+		selected = select;
+	}
+}
+
+std::vector<Texture*>* ModuleObjectManager::GetTextures()
+{
+	return &textures;
+}
+
+const char * ModuleObjectManager::PrimitivesToString(const Primitives prim)
+{
+	const char* name = nullptr;
+	switch (prim)
+	{
+	case Primitives::CUBE:
+		name = "Cube";
+		break;
+	case Primitives::TETRAHEDRON:
+		name = "Tetrahedron";
+		break;
+	case Primitives::OCTAHEDRON:
+		name = "Octahedron";
+		break;
+	case Primitives::DODECAHEDRON:
+		name = "Dodecahedron";
+		break;
+	case Primitives::ICOSAHEDRON:
+		name = "Icosahedron";
+		break;
+	case Primitives::SPHERE:
+		name = "Sphere";
+		break;
+	case Primitives::HEMISPHERE:
+		name = "Hemisphere";
+		break;
+	case Primitives::TORUS:
+		name = "Torus";
+		break;
+	case Primitives::CONE:
+		name = "Cone";
+		break;
+	case Primitives::CYLINDER:
+		name = "Cylinder";
+		break;
+	default:
+		LOG("Added more primitives than expected, add the missing primitives to the for");
+		break;
+	}
+
+	return name;
+}
+
+void ModuleObjectManager::AddTexture(Texture * tex)
 {
 	textures.push_back(tex);
 }
 
-Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords)
+Mesh_info * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords)
 {
-	Mesh *mesh = new Mesh();
+	Mesh_info *mesh = new Mesh_info();
 
 	FillVertex(mesh, n_vertex, vertex);
 
@@ -82,9 +173,9 @@ Mesh * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vert
 	return mesh;
 }
 
-Mesh * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
+Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 {
-	Mesh *ret = new Mesh();
+	Mesh_info *ret = new Mesh_info();
 
 	FillVertex(ret, mesh->mNumVertices, (float*)mesh->mVertices);
 
@@ -107,17 +198,15 @@ Mesh * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 	return ret;
 }
 
-void ModuleObjectManager::FillNormals(Mesh * ret, const float * normals)
+void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 {
 	float magnitude = 0.3f; // To multiply normalized vectors
 
 	if (normals != nullptr) {
 		// Vertex Normals --------------------------------------------------
-		ret->vertex_normals.size = ret->vertex.size;
-		ret->vertex_normals.data = new float[ret->vertex_normals.size * 3];
-		memcpy(ret->vertex_normals.data, normals, sizeof(float) * ret->vertex_normals.size * 3);
-		for (int l = 0; l < ret->vertex_normals.size * 3; ++l)
-			ret->vertex_normals.data[l] = ret->vertex_normals.data[l] * magnitude + ret->vertex.data[l];
+		ret->vertex_normals.size = ret->vertex.size * 3;
+		ret->vertex_normals.data = new float[ret->vertex_normals.size];
+		memcpy(ret->vertex_normals.data, normals, sizeof(float) * ret->vertex_normals.size);
 	}
 
 	// Face Normals ----------------------------------------------------
@@ -145,7 +234,7 @@ void ModuleObjectManager::FillNormals(Mesh * ret, const float * normals)
 	}
 }
 
-void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const aiFace* faces)
+void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces)
 {
 	ret->index.size = n_index * 3 * 3;
 	ret->index.data = new uint[ret->index.size];
@@ -161,10 +250,10 @@ void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const aiFa
 			memcpy(&ret->index.data[j * 3], faces[j].mIndices, sizeof(uint) * 3);
 		}
 	}
-	LOG("New mesh with %i faces", ret->index.size / 3);
+	LOG("New mesh with %i faces", ret->index.size / 6);
 }
 
-void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const uint * index)
+void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const uint * index)
 {
 	ret->index.size = n_index * 3;
 	ret->index.data = new uint[ret->index.size];
@@ -172,7 +261,7 @@ void ModuleObjectManager::FillIndex(Mesh * ret, const uint & n_index, const uint
 	LOG("New mesh with %i faces", ret->index.size / 3);
 }
 
-void ModuleObjectManager::FillVertex(Mesh * ret, const uint & n_vertex, const float* vertex)
+void ModuleObjectManager::FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex)
 {
 	ret->vertex.size = n_vertex;
 	ret->vertex.data = new float[ret->vertex.size * 3];
@@ -180,7 +269,7 @@ void ModuleObjectManager::FillVertex(Mesh * ret, const uint & n_vertex, const fl
 	LOG("New mesh with %d vertex", ret->vertex.size);
 }
 
-void ModuleObjectManager::FillTextureCoords(Mesh * mesh, const float * textureCoords)
+void ModuleObjectManager::FillTextureCoords(Mesh_info * mesh, const float * textureCoords)
 {
 	mesh->tex_coords.size = mesh->vertex.size;
 	mesh->tex_coords.data = new float[mesh->tex_coords.size * 3];
@@ -241,11 +330,15 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 
 	par_shapes_scale(prim, data.scale.x, data.scale.y, data.scale.z);
 
-	GameObject* obj = new GameObject();
-	Mesh* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
-	obj->mesh.push_back(mesh);
-	obj->SetColors(data.face_color, data.wire_color);
-	objects.push_back(obj);
+	GameObject* obj = CreateGameObject(nullptr);
+	obj->SetName(PrimitivesToString(type));
+
+	ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
+	mesh->mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	
+	ComponentMaterial* mat = (ComponentMaterial*)obj->CreateComponent(ComponentType::MATERIAL);
+	mat->SetFaceColor(data.face_color[0],data.face_color[1],data.face_color[2],1.f); 
+	mat->SetWireColor(data.wire_color[0], data.wire_color[1], data.wire_color[2], 1.f);
 
 	par_shapes_free_mesh(prim);
 
@@ -271,42 +364,22 @@ void ModuleObjectManager::Demo()
 	int posx = -10;
 	for (auto i = prim.begin(); i != prim.end(); ++i) {
 		par_shapes_translate(*i, posx, 0.f, 3);
-		GameObject* obj = new GameObject();
-		Mesh* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
-		obj->mesh.push_back(mesh);
 
-		float rnd_color[3] = { App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f) };
+		GameObject* obj = CreateGameObject(nullptr);
+		obj->SetName(PrimitivesToString((Primitives)std::distance(prim.begin(), i)));
 
-		obj->SetColors(rnd_color);
-		objects.push_back(obj);
+		ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
+		mesh->mesh = CreateMesh((*i)->npoints, (*i)->points, (*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
+
+		ComponentMaterial* mat = (ComponentMaterial*)obj->CreateComponent(ComponentType::MATERIAL);
+
+		float rnd_color[4] = { App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), 1.f };
+
+		mat->SetFaceColor(&rnd_color[0]);
+
 		par_shapes_free_mesh((*i));
 		posx += 3;
 	}
 
 	prim.clear();	
-}
-
-const std::vector<GameObject*>* ModuleObjectManager::GetObjects() const
-{
-	return &objects;
-}
-
-std::vector<Texture>* ModuleObjectManager::GetTextures()
-{
-	return &textures;
-}
-
-const Texture * ModuleObjectManager::GetTexture(const int & id) const
-{
-	return &textures[id];
-}
-
-Texture * ModuleObjectManager::GetTexture() const
-{
-	return tex_select;
-}
-
-void ModuleObjectManager::SelectTexture(Texture & tex)
-{
-	tex_select = &tex;
 }

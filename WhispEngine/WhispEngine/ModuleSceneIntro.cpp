@@ -3,7 +3,7 @@
 #include "ModuleSceneIntro.h"
 
 #include "Imgui/imgui.h"
-#include "GameObject.h"
+#include "ComponentMesh.h"
 
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"
@@ -33,8 +33,21 @@ bool ModuleSceneIntro::Start()
 	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
 	GenerateGrid(10);
+
+	App->importer->ImportFbx("Assets/Models/BakerHouse.fbx");
 	
 	return ret;
+}
+
+update_status ModuleSceneIntro::PreUpdate()
+{
+	//Start Buffer Frame ----------------------------------
+	glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->frame_buffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.1, 0.1, 0.1, 1.f);
+	//-----------------------------------------------------
+
+	return UPDATE_CONTINUE;
 }
 
 // Update
@@ -42,6 +55,18 @@ update_status ModuleSceneIntro::Update()
 {
 	if (show_grid)
 		DrawGrid();
+
+	return UPDATE_CONTINUE;
+}
+
+update_status ModuleSceneIntro::PostUpdate()
+{
+	// Start Buffer Frame ----------------------------------
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, App->renderer3D->render_texture);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	// -----------------------------------------------------
 
 	return UPDATE_CONTINUE;
 }

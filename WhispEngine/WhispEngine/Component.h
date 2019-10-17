@@ -5,22 +5,21 @@
 
 #pragma once
 
+class GameObject;
+
 enum ComponentType
 {
-	NONE,
+	NONE = -1,
 	TRANSFORM,
 	MESH,
 	MATERIAL,
 	LIGHT
 };
 
-
-class GameObject;
-
 class Component
 {
 public:
-	Component(GameObject* parent, ComponentType type = ComponentType::NONE);
+	Component(GameObject* parent, ComponentType type);
 	virtual ~Component();
 
 	virtual void Update();
@@ -29,15 +28,22 @@ public:
 	virtual void Enable();
 	virtual void Disable();
 
-	const bool IsActive();
-	const ComponentType GetType();
+	virtual void OnInspector() = 0;
+
+	const bool IsActive() const;
+	void SetActive(bool to_active);
+	void ActiveImGui(const char* checkbox_name = ""); // Just to print in UI checkbox to active/deactive the component and don't have to set is_active a public var
+
+	const ComponentType GetType() const;
 
 
 public:
-	GameObject* parent;
+	GameObject* object = nullptr;
 
 private:
-	ComponentType type;
-	bool is_active;
+	ComponentType type = ComponentType::NONE;
+
+private:
+	bool is_active = true;
 };
-#endif
+#endif // __COMPONENT_H__

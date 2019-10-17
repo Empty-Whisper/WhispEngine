@@ -7,8 +7,12 @@ class PanelConsole;
 class PanelConfiguration;
 class PanelAbout;
 class PanelRender;
-class PanelObjects;
+class PanelHierarchy;
 class PanelCreate;
+class PanelInspector;
+class PanelScene;
+
+#define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
 #define IMGUI_COLOR_BLUE ImVec4(0.2f,0.2f,1.f,1.f)
 #define IMGUI_COLOR_GREEN ImVec4(0.f,1.f,0.f,1.f)
@@ -35,6 +39,7 @@ public:
 
 public:
 	void Log(const char* str);
+	void Dockspace();
 
 private:
 	bool show_demo_window = false;
@@ -50,6 +55,10 @@ private:
 	PanelAbout* about = nullptr;
 	PanelConsole* console = nullptr;
 	PanelRender* render = nullptr;
-	PanelObjects* inspector = nullptr;
+	PanelHierarchy* hierarchy = nullptr;
 	PanelCreate* create = nullptr;
+	PanelInspector* inspector = nullptr;
+
+public:
+	PanelScene* scene = nullptr;
 };
