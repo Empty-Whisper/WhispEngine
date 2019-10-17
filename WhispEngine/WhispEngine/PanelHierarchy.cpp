@@ -33,6 +33,8 @@ void PanelHierarchy::Update()
 }
 
 void PanelHierarchy::DrawNode(GameObject* const &obj) {
+	if(obj->IsActive() == false)
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
 
 	current_flag = node_flag;
 
@@ -68,4 +70,6 @@ void PanelHierarchy::DrawNode(GameObject* const &obj) {
 		ImGui::TreePop();
 	}
 
+	if (obj->IsActive() == false)
+		ImGui::PopStyleColor();
 }
