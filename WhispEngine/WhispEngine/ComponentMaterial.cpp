@@ -71,7 +71,7 @@ void ComponentMaterial::SetFaceColor(const float & r, const float & g, const flo
 	face_color[3] = a;
 }
 
-void ComponentMaterial::SetFaceColor(const float *& c)
+void ComponentMaterial::SetFaceColor(const float * c)
 {
 	memcpy(face_color, c, sizeof(float) * 4);
 }
@@ -84,7 +84,7 @@ void ComponentMaterial::SetWireColor(const float & r, const float & g, const flo
 	wire_color[3] = a;
 }
 
-void ComponentMaterial::SetWireColor(const float *& c)
+void ComponentMaterial::SetWireColor(const float * c)
 {
 	memcpy(wire_color, c, sizeof(float) * 4);
 }

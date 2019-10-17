@@ -75,10 +75,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		ComponentTransform* transform = ((ComponentTransform*)container->GetComponent(ComponentType::TRANSFORM));
 		transform->SetPosition(position.x, position.y, position.z);
 		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
-		//scale *= 0.01f;
 		transform->SetScale(scale.x, scale.y, scale.z);
-		
-		//transform->SetScale(1,1,1);
 
 		transform->CalculeLocalMatrix();
 		transform->CalculateGlobalMatrix();

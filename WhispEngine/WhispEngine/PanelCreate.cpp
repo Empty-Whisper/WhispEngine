@@ -66,8 +66,8 @@ void PanelCreate::Update()
 				if (ImGui::Selectable(items[n].data(), iterator - items.begin() == n))
 					iterator = items.begin() + n;
 			}
-		}
 		ImGui::EndCombo();
+		}
 
 
 		ImGui::NewLine();

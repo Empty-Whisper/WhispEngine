@@ -78,6 +78,9 @@ public:
 	// =========================================================== !old
 
 private:
+	const char* PrimitivesToString(const Primitives prim);
+
+private:
 	GameObject* root = nullptr;
 
 	GameObject* selected = nullptr;

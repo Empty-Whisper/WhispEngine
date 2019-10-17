@@ -107,6 +107,49 @@ std::vector<Texture*>* ModuleObjectManager::GetTextures()
 	return &textures;
 }
 
+const char * ModuleObjectManager::PrimitivesToString(const Primitives prim)
+{
+	const char* name = nullptr;
+	switch (prim)
+	{
+	case Primitives::CUBE:
+		name = "Cube";
+		break;
+	case Primitives::TETRAHEDRON:
+		name = "Tetrahedron";
+		break;
+	case Primitives::OCTAHEDRON:
+		name = "Octahedron";
+		break;
+	case Primitives::DODECAHEDRON:
+		name = "Dodecahedron";
+		break;
+	case Primitives::ICOSAHEDRON:
+		name = "Icosahedron";
+		break;
+	case Primitives::SPHERE:
+		name = "Sphere";
+		break;
+	case Primitives::HEMISPHERE:
+		name = "Hemisphere";
+		break;
+	case Primitives::TORUS:
+		name = "Torus";
+		break;
+	case Primitives::CONE:
+		name = "Cone";
+		break;
+	case Primitives::CYLINDER:
+		name = "Cylinder";
+		break;
+	default:
+		LOG("Added more primitives than expected, add the missing primitives to the for");
+		break;
+	}
+
+	return name;
+}
+
 void ModuleObjectManager::AddTexture(Texture * tex)
 {
 	textures.push_back(tex);
@@ -239,68 +282,72 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 
 	par_shapes_mesh* prim = nullptr;
 
-	//switch (type)
-	//{
-	//case Primitives::CUBE:
-	//	prim = par_shapes_create_cube();
-	//	break;
-	//case Primitives::TETRAHEDRON:
-	//	prim = par_shapes_create_tetrahedron();
-	//	break;
-	//case Primitives::OCTAHEDRON:
-	//	prim = par_shapes_create_octahedron();
-	//	break;
-	//case Primitives::DODECAHEDRON:
-	//	prim = par_shapes_create_dodecahedron();
-	//	break;
-	//case Primitives::ICOSAHEDRON:
-	//	prim = par_shapes_create_icosahedron();
-	//	break;
-	//case Primitives::SPHERE:
-	//	//TODO Create a sphere with radious, rings and sectors, not by subdivisions https://stackoverflow.com/questions/5988686/creating-a-3d-sphere-in-opengl-using-visual-c/5989676#5989676
-	//	prim = par_shapes_create_subdivided_sphere(data.slices);
-	//	break;
-	//case Primitives::HEMISPHERE:
-	//	prim = par_shapes_create_hemisphere(data.slices, data.rings);
-	//	break;
-	//case Primitives::TORUS:
-	//	prim = par_shapes_create_torus(data.slices, data.rings, data.radius);
-	//	break;
-	//case Primitives::CONE:
-	//	prim = par_shapes_create_cone(data.slices, data.rings);
-	//	break;
-	//case Primitives::CYLINDER:
-	//	prim = par_shapes_create_cylinder(data.slices, data.rings);
-	//	break;
-	//default:
-	//	LOG("Primitive not found to create. id: %i", (int)type);
-	//	break;
-	//}
+	switch (type)
+	{
+	case Primitives::CUBE:
+		prim = par_shapes_create_cube();
+		break;
+	case Primitives::TETRAHEDRON:
+		prim = par_shapes_create_tetrahedron();
+		break;
+	case Primitives::OCTAHEDRON:
+		prim = par_shapes_create_octahedron();
+		break;
+	case Primitives::DODECAHEDRON:
+		prim = par_shapes_create_dodecahedron();
+		break;
+	case Primitives::ICOSAHEDRON:
+		prim = par_shapes_create_icosahedron();
+		break;
+	case Primitives::SPHERE:
+		//TODO Create a sphere with radious, rings and sectors, not by subdivisions https://stackoverflow.com/questions/5988686/creating-a-3d-sphere-in-opengl-using-visual-c/5989676#5989676
+		prim = par_shapes_create_subdivided_sphere(data.slices);
+		break;
+	case Primitives::HEMISPHERE:
+		prim = par_shapes_create_hemisphere(data.slices, data.rings);
+		break;
+	case Primitives::TORUS:
+		prim = par_shapes_create_torus(data.slices, data.rings, data.radius);
+		break;
+	case Primitives::CONE:
+		prim = par_shapes_create_cone(data.slices, data.rings);
+		break;
+	case Primitives::CYLINDER:
+		prim = par_shapes_create_cylinder(data.slices, data.rings);
+		break;
+	default:
+		LOG("Primitive not found to create. id: %i", (int)type);
+		break;
+	}
 
-	//par_shapes_translate(prim, data.pos.x, data.pos.y, data.pos.z);
+	par_shapes_translate(prim, data.pos.x, data.pos.y, data.pos.z);
 
-	//if (data.rotate.axis[0] != 0 || data.rotate.axis[1] != 0 || data.rotate.axis[2] != 0) {
-	//	float mgn = std::sqrt(data.rotate.axis[0] * data.rotate.axis[0] + data.rotate.axis[1] * data.rotate.axis[1] + data.rotate.axis[2] * data.rotate.axis[2]); // normalize rotation axis
-	//	float rot[3] = { data.rotate.axis[0] / mgn,data.rotate.axis[1] / mgn ,data.rotate.axis[2] / mgn };
-	//	par_shapes_rotate(prim, data.rotate.angle, rot);
-	//}
+	if (data.rotate.axis[0] != 0 || data.rotate.axis[1] != 0 || data.rotate.axis[2] != 0) {
+		float mgn = std::sqrt(data.rotate.axis[0] * data.rotate.axis[0] + data.rotate.axis[1] * data.rotate.axis[1] + data.rotate.axis[2] * data.rotate.axis[2]); // normalize rotation axis
+		float rot[3] = { data.rotate.axis[0] / mgn,data.rotate.axis[1] / mgn ,data.rotate.axis[2] / mgn };
+		par_shapes_rotate(prim, data.rotate.angle, rot);
+	}
 
-	//par_shapes_scale(prim, data.scale.x, data.scale.y, data.scale.z);
+	par_shapes_scale(prim, data.scale.x, data.scale.y, data.scale.z);
 
-	//ComponentMesh* obj = new ComponentMesh();
-	//Mesh_info* mesh = CreateMesh((uint)prim->npoints, prim->points, (uint)prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
-	//obj->mesh.push_back(mesh);
-	//obj->SetColors(data.face_color, data.wire_color);
-	//objects.push_back(obj);
+	GameObject* obj = CreateGameObject(nullptr);
+	obj->SetName(PrimitivesToString(type));
 
-	//par_shapes_free_mesh(prim);
+	ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
+	mesh->mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	
+	ComponentMaterial* mat = (ComponentMaterial*)obj->CreateComponent(ComponentType::MATERIAL);
+	mat->SetFaceColor(data.face_color[0],data.face_color[1],data.face_color[2],1.f); 
+	mat->SetWireColor(data.wire_color[0], data.wire_color[1], data.wire_color[2], 1.f);
+
+	par_shapes_free_mesh(prim);
 
 	return ret;
 }
 
 void ModuleObjectManager::Demo()
 {
-	/*std::vector<par_shapes_mesh*> prim;
+	std::vector<par_shapes_mesh*> prim;
 	prim.resize((int)Primitives::MAX);
 	prim[0] = par_shapes_create_cube();
 	prim[1] = par_shapes_create_tetrahedron();
@@ -317,17 +364,22 @@ void ModuleObjectManager::Demo()
 	int posx = -10;
 	for (auto i = prim.begin(); i != prim.end(); ++i) {
 		par_shapes_translate(*i, posx, 0.f, 3);
-		ComponentMesh* obj = new ComponentMesh();
-		Mesh_info* mesh = CreateMesh((uint)(*i)->npoints, (*i)->points, (uint)(*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
-		obj->mesh.push_back(mesh);
 
-		float rnd_color[3] = { App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f) };
+		GameObject* obj = CreateGameObject(nullptr);
+		obj->SetName(PrimitivesToString((Primitives)std::distance(prim.begin(), i)));
 
-		obj->SetColors(rnd_color);
-		objects.push_back(obj);
+		ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
+		mesh->mesh = CreateMesh((*i)->npoints, (*i)->points, (*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
+
+		ComponentMaterial* mat = (ComponentMaterial*)obj->CreateComponent(ComponentType::MATERIAL);
+
+		float rnd_color[4] = { App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), 1.f };
+
+		mat->SetFaceColor(&rnd_color[0]);
+
 		par_shapes_free_mesh((*i));
 		posx += 3;
 	}
 
-	prim.clear();	*/
+	prim.clear();	
 }

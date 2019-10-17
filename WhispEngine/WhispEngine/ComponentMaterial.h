@@ -30,9 +30,9 @@ public:
 	void OnInspector();
 
 	void			SetFaceColor(const float &r, const float &g, const float &b, const float &a);
-	void			SetFaceColor(const float* &c);
+	void			SetFaceColor(const float* c);
 	void			SetWireColor(const float &r, const float &g, const float &b, const float &a);
-	void			SetWireColor(const float* &c);
+	void			SetWireColor(const float* c);
 	const float*	GetFaceColor() const;
 	const float*	GetWireColor() const;
 
