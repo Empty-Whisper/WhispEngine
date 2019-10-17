@@ -39,8 +39,7 @@ bool ModuleSceneIntro::Start()
 	return ret;
 }
 
-// Update
-update_status ModuleSceneIntro::Update()
+update_status ModuleSceneIntro::PreUpdate()
 {
 	//Start Buffer Frame ----------------------------------
 	glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->frame_buffer);
@@ -48,15 +47,27 @@ update_status ModuleSceneIntro::Update()
 	glClearColor(0.1, 0.1, 0.1, 1.f);
 	//-----------------------------------------------------
 
+	return UPDATE_CONTINUE;
+}
+
+// Update
+update_status ModuleSceneIntro::Update()
+{
 	if (show_grid)
 		DrawGrid();
 
+	return UPDATE_CONTINUE;
+}
+
+update_status ModuleSceneIntro::PostUpdate()
+{
 	// Start Buffer Frame ----------------------------------
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, App->renderer3D->render_texture);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	// -----------------------------------------------------
+
 	return UPDATE_CONTINUE;
 }
 
