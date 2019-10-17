@@ -37,6 +37,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	
+	
 	// Docking -----------------------------------------------------------
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable keyboard controls

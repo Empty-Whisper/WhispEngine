@@ -7210,6 +7210,7 @@ bool ImGui::IsWindowHovered(ImGuiHoveredFlags flags)
         case ImGuiHoveredFlags_RootWindow:
             if (g.HoveredWindow != g.CurrentWindow->RootWindowDockStop)
                 return false;
+            
             break;
         case ImGuiHoveredFlags_ChildWindows:
             if (g.HoveredWindow == NULL || !IsWindowChildOf(g.HoveredWindow, g.CurrentWindow))

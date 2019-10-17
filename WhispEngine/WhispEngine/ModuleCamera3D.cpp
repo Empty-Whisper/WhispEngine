@@ -4,6 +4,7 @@
 #include "MathGeoLib/include/Math/Quat.h"
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/float2.h"
+#include "PanelScene.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -30,7 +31,7 @@ bool ModuleCamera3D::Start()
 	bool ret = true;
 
 	sensiblity = 0.25f;  //  TODO: Save and Load this data in JSON
-	movement_speed = 15.f;  //  TODO: Save and Load this data in JSON
+	movement_speed = 10.f;  //  TODO: Save and Load this data in JSON
 	wheel_speed = 70.f;  //  TODO: Save and Load this data in JSON
 	offset_reference = 10.f;  //  TODO: Save and Load this data in JSON
 	return ret;
@@ -57,16 +58,23 @@ update_status ModuleCamera3D::Update()
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = movement_speed * 3 * App->GetDeltaTime();
 
-	// Mouse Wheel ----------------
-	if (!ImGui::IsAnyWindowHovered())
+	// Mouse OnHover scene rect ----------------
+	static ImVec2 scene_position;
+	static ImVec2 scene_size;
+
+	scene_position = App->gui->scene->GetPanelPos();
+	scene_size = App->gui->scene->GetPanelSize();
+	scene_size = { scene_position.x + scene_size.x, scene_position.y + scene_size.y };
+
+	if (ImGui::IsMouseHoveringRect(scene_position, scene_size, false))
 	{
+		// Mouse Zoom in/out with wheel ----------------
 		int mouse_wheel = App->input->GetMouseZ();
 
 		if (mouse_wheel != 0)
 			newPos -= mouse_wheel * Z * wheel_speed * App->GetDeltaTime();
 	}
-	
-	
+
 	Position += newPos;
 	Reference += newPos;
 
@@ -164,7 +172,6 @@ update_status ModuleCamera3D::Update()
 	if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
 		App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
-		// TODO: ZOOM IN/OUT with the mouse movement (right -> out, left -> in)
 		last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 		math::float2 mouse_vec = last_mouse_position - initial_mouse_position;
 
