@@ -253,7 +253,7 @@ void ModuleGUI::HelpMarker(const char* disable_txt,const char * shown_text)
 	{
 		ImGui::BeginTooltip();
 		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-		ImGui::TextUnformatted(shown_text);
+		ImGui::TextColored({ 0, 50, 50, 255 }, shown_text);
 		ImGui::PopTextWrapPos();
 		ImGui::EndTooltip();
 	}
