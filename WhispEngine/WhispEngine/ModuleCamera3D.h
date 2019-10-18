@@ -16,6 +16,7 @@ public:
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	//void LookAround(const math::float3 &Reference, float DeltaX, float DeltaY);
 	void LookAt(const vec3 &Spot);
+	void FocusObject(vec3 newPos, bool is_focusing);
 	void Move(const vec3 &Movement);
 	void MoveCameraByMouse(vec3 newPos, float speed);
 	void MoveCameraOffsetByMouse(vec3 newPos, float speed);

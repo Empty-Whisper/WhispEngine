@@ -18,7 +18,6 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 
 	Position = vec3(0.0f, 0.0f, 0.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
-
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -147,36 +146,8 @@ update_status ModuleCamera3D::Update()
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		{
 			is_focusing = true;
-		}
-		if (is_focusing)
-		{
-			static vec3 actual_camera_position(0, 0, 0);
-			static vec3 reference_position(0, 0, 0);
-
-			actual_camera_position = Position;
-			reference_position = { /*App->object_manager->GetSelected()*/ 0,0,0 }; // Reference 
-
-			LookAt(reference_position);
-
-			vec3 diff = reference_position - actual_camera_position;
-			diff = { abs(diff.x),
-					 abs(diff.y),
-					 abs(diff.z)
-			};
-
-			float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
-
-			if (mag_diff >= offset_reference)
-			{
-				newPos -= Z * focus_speed * App->GetDeltaTime();
-			}
-			else
-				is_focusing = false;
-
-			Position += newPos;
-			Reference += newPos;
-		}
-
+		}	
+		FocusObject(newPos, is_focusing);	
 	}
 	
 	// Recalculate matrix -------------
@@ -215,6 +186,38 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 	Y = cross(Z, X);
 
 	CalculateViewMatrix();
+}
+
+void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
+{
+	static vec3 actual_camera_position(0, 0, 0);
+	static vec3 reference_position(0, 0, 0);
+
+	if (is_focusing)
+	{
+		actual_camera_position = Position;
+		reference_position = { /*App->object_manager->GetSelected()*/ 0,0,0 }; // Reference 
+
+		LookAt(reference_position);
+
+		vec3 diff = reference_position - actual_camera_position;
+		diff = { abs(diff.x),
+				 abs(diff.y),
+				 abs(diff.z)
+		};
+
+		float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
+
+		if (mag_diff >= offset_reference)
+		{
+			newPos -= Z * focus_speed * App->GetDeltaTime();
+		}
+		else
+			this->is_focusing = false;
+
+		Position += newPos;
+		Reference += newPos;
+	}
 }
 
 
