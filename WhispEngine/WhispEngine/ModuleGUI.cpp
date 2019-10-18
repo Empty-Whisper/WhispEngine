@@ -246,3 +246,16 @@ void ModuleGUI::Dockspace()
 	ImGui::End();
 }
 
+void ModuleGUI::HelpMarker(const char* disable_txt,const char * shown_text)
+{
+	ImGui::TextDisabled(disable_txt);
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		ImGui::TextUnformatted(shown_text);
+		ImGui::PopTextWrapPos();
+		ImGui::EndTooltip();
+	}
+}
+
