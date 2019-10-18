@@ -30,12 +30,12 @@ bool ModuleCamera3D::Start()
 	bool ret = true;
 
 	sensiblity = 0.25f;  //  TODO: Save and Load this data in JSON
-	movement_speed = 10.f;  //  TODO: Save and Load this data in JSON
-	focus_speed = 100.f;  //  TODO: Save and Load this data in JSON
-	wheel_speed = 70.f;  //  TODO: Save and Load this data in JSON
-	offset_reference = 10.f;  //  TODO: Save and Load this data in JSON
-	slowness_middle_mouse = 50.f;  //  TODO: Save and Load this data in JSON
-	slowness_zoom_in_out = 50.f;  //  TODO: Save and Load this data in JSON
+	movement_speed = 10;  //  TODO: Save and Load this data in JSON
+	focus_speed = 100;  //  TODO: Save and Load this data in JSON
+	wheel_speed = 70;  //  TODO: Save and Load this data in JSON
+	offset_reference = 10;  //  TODO: Save and Load this data in JSON
+	slowness_middle_mouse = 50;  //  TODO: Save and Load this data in JSON
+	slowness_zoom_in_out = 50;  //  TODO: Save and Load this data in JSON
 	return ret;
 }
 

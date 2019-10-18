@@ -32,17 +32,17 @@ public:
 	
 	vec3 X, Y, Z, Position, Reference;
 
+	float sensiblity = 0.f;
+	int movement_speed = 0;
+	int focus_speed = 0;
+	int wheel_speed = 0;
+	int offset_reference = 0;
+	int slowness_middle_mouse = 0;
+	int slowness_zoom_in_out = 0;
+
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
-
-	float sensiblity = 0.f;
-	float movement_speed = 0.f;
-	float focus_speed = 0.f;
-	float wheel_speed = 0.f;
-	float offset_reference = 0.f;
-	float slowness_middle_mouse = 0.f;
-	float slowness_zoom_in_out = 0.f;
 
 	bool is_focusing = false;
 	bool is_moving_camera = false;

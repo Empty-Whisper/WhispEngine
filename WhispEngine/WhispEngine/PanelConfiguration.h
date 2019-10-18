@@ -19,6 +19,7 @@ private:
 	void Window();
 	void Render();
 	void Application();
+	void Viewport();
 	void Textures();
 
 private:

@@ -32,6 +32,10 @@ void PanelConfiguration::Update()
 		{
 			Application();
 		}
+		if (ImGui::CollapsingHeader("Viewport options"))
+		{
+			Viewport();
+		}
 		if (ImGui::CollapsingHeader("Window"))
 		{
 			Window();
@@ -244,6 +248,21 @@ void PanelConfiguration::Application()
 	ImGui::Text("Accumulated Alloc Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.accumulated_alloc_unit);
 	ImGui::Text("Total Alloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.total_alloc_unity_count);
 	ImGui::Text("PeakAlloc Unit Mem: "); ImGui::SameLine(); ImGui::Text("%i", App->hardware->config.peak_alloc_unit_count);
+}
+
+void PanelConfiguration::Viewport()
+{
+
+	
+	ImGui::SliderFloat("Sensibility", (float*)&App->camera->sensiblity, 0, 1);
+	ImGui::SliderInt("Movement speed", (int*)&App->camera->movement_speed, 0, 200);
+	ImGui::SliderInt("Focus speed", (int*)&App->camera->focus_speed, 0, 1000);
+	ImGui::SliderInt("Offset focus", (int*)&App->camera->offset_reference, 0, 150);
+	ImGui::SliderInt("Scroll Zoom speed", (int*)&App->camera->wheel_speed, 0, 300);
+	ImGui::SliderInt("Zoom Slowness", (int*)&App->camera->slowness_zoom_in_out, 0, 200);
+	ImGui::SliderInt("Middle mouse Move Slowness ", (int*)&App->camera->slowness_middle_mouse, 0, 200);
+
+
 }
 
 void PanelConfiguration::Textures()
