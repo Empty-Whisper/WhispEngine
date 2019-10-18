@@ -14,7 +14,11 @@ void PanelAbout::Update()
 {
 	if (ImGui::Begin("About Whisp Engine", &active))
 	{
-		ImGui::Text("Version 0.1-alpha");
+		static ImVec2 logo_size(106, 163);
+		static Texture* logo_txt = App->importer->ImportTexture("Assets/logo.png");
+		ImGui::Text("Version 0.3-alpha");
+		ImGui::Image((ImTextureID)logo_txt->id, logo_size);
+
 		ImGui::Separator();
 		ImGui::NewLine();
 		ImGui::Text("By Christian Martinez @christt105 and Marc Galvez @optus23 for learning purposes.");
@@ -70,7 +74,7 @@ void PanelAbout::Update()
 		ImGui::Checkbox("Show MIT LICENSE", &checkbox_mit_license_window);
 		if (checkbox_mit_license_window)
 		{
-			ImGui::SetWindowSize(ImVec2(580, 830));
+			ImGui::SetWindowSize(ImVec2(580, 1000));
 			ImGui::Text("MIT LICENSE");	ImGui::NewLine();
 			ImGui::Text("Copyright (c) 2019 Empty-Whisper"); ImGui::NewLine();
 			ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files(the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :"); ImGui::NewLine();
@@ -79,7 +83,7 @@ void PanelAbout::Update()
 		}
 		else
 		{
-			ImGui::SetWindowSize(ImVec2(580, 530));
+			ImGui::SetWindowSize(ImVec2(580, 700));
 		}
 	}
 	ImGui::End();

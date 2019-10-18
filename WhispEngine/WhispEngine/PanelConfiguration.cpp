@@ -260,7 +260,7 @@ void PanelConfiguration::Viewport()
 	ImGui::SliderInt("Offset focus", (int*)&App->camera->offset_reference, 0, 150);
 	ImGui::SliderInt("Scroll Zoom speed", (int*)&App->camera->wheel_speed, 0, 300);
 	ImGui::SliderInt("Zoom Slowness", (int*)&App->camera->slowness_zoom_in_out, 0, 200);
-	ImGui::SliderInt("Middle mouse Move Slowness ", (int*)&App->camera->slowness_middle_mouse, 0, 200);
+	ImGui::SliderInt("Middle mouse move Slowness ", (int*)&App->camera->slowness_middle_mouse, 0, 200);
 
 
 }
