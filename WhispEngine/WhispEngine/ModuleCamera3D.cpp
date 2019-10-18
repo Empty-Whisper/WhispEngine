@@ -32,8 +32,11 @@ bool ModuleCamera3D::Start()
 
 	sensiblity = 0.25f;  //  TODO: Save and Load this data in JSON
 	movement_speed = 10.f;  //  TODO: Save and Load this data in JSON
+	focus_speed = 100.f;  //  TODO: Save and Load this data in JSON
 	wheel_speed = 70.f;  //  TODO: Save and Load this data in JSON
 	offset_reference = 10.f;  //  TODO: Save and Load this data in JSON
+	slowness_middle_mouse = 50.f;  //  TODO: Save and Load this data in JSON
+	slowness_zoom_in_out = 50.f;  //  TODO: Save and Load this data in JSON
 	return ret;
 }
 
@@ -80,93 +83,22 @@ update_status ModuleCamera3D::Update()
 		Reference += newPos;
 
 		// Mouse motion ----------------
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && !alt)
+		
+		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && !App->input->GetKey(SDL_SCANCODE_LALT))
 		{
-			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
-			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
-
-			Position += newPos;
-			Reference = Position;
-
-			int dx = -App->input->GetMouseXMotion();
-			int dy = -App->input->GetMouseYMotion();
-
-			Position -= Reference;
-
-			if (dx != 0)
-			{
-				float DeltaX = (float)dx * sensiblity;
-
-				X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-				Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-				Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			}
-
-			if (dy != 0)
-			{
-				float DeltaY = (float)dy * sensiblity;
-
-				Y = rotate(Y, DeltaY, X);
-				Z = rotate(Z, DeltaY, X);
-
-				if (Y.y < 0.0f)
-				{
-					Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-					Y = cross(Z, X);
-				}
-			}
-
-			Position = Reference + Z * length(Position);
-
+			MoveCameraByMouse(newPos, speed);
 			is_moving_camera = true;
 		}
 		if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
 			App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		{
-			//  TODO: Change Reference and Create LookAround Function
-			Reference = { 0, 0, 0 };
-			Position += newPos;
-			Reference += newPos;
-
-			int dx = -App->input->GetMouseXMotion();
-			int dy = -App->input->GetMouseYMotion();
-
-			Position -= Reference;
-
-			if (dx != 0)
-			{
-				float DeltaX = (float)dx * sensiblity;
-
-				X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-				Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-				Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			}
-
-			if (dy != 0)
-			{
-				float DeltaY = (float)dy * sensiblity;
-
-				Y = rotate(Y, DeltaY, X);
-				Z = rotate(Z, DeltaY, X);
-
-				if (Y.y < 0.0f)
-				{
-					Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-					Y = cross(Z, X);
-				}
-			}
-
-			Position = Reference + Z * length(Position);
+			MoveCameraOffsetByMouse(newPos, speed);
 			is_moving_camera = true;
-
 		}
 
-
+		// Mouse Zoom in/out
 		static math::float2 initial_mouse_position = initial_mouse_position.zero;
 		static math::float2 last_mouse_position = last_mouse_position.zero;
-
 
 		if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
 			App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN)
@@ -178,36 +110,32 @@ update_status ModuleCamera3D::Update()
 			last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 			math::float2 mouse_vec = last_mouse_position - initial_mouse_position;
 
-			if (App->input->GetMouseXMotion() > 0) newPos += Z * mouse_vec.x / 100;
-			if (App->input->GetMouseXMotion() < 0) newPos += Z * mouse_vec.x / 100;
-			if (App->input->GetMouseYMotion() < 0) newPos -= Z * mouse_vec.y / 100;
-			if (App->input->GetMouseYMotion() > 0) newPos -= Z * mouse_vec.y / 100;
+			if (App->input->GetMouseXMotion() > 0) newPos += Z * mouse_vec.x / slowness_zoom_in_out;
+			if (App->input->GetMouseXMotion() < 0) newPos += Z * mouse_vec.x / slowness_zoom_in_out;
+			if (App->input->GetMouseYMotion() < 0) newPos -= Z * mouse_vec.y / slowness_zoom_in_out;
+			if (App->input->GetMouseYMotion() > 0) newPos -= Z * mouse_vec.y / slowness_zoom_in_out;
 
 			Position += newPos;
 			Reference += newPos;
 			initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
-
-			alt = true;
+			is_moving_camera = true;
 		}
-		if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
-			App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_UP)
-			alt = false;
+
 		// Middle Mouse Button Movement
 		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN)
 			initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 			
 		
-
 		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
 		{
 
 			last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 			math::float2 mouse_vec = last_mouse_position - initial_mouse_position;
 
-			if (App->input->GetMouseXMotion() > 0) newPos -= X * mouse_vec.x / 100;
-			if (App->input->GetMouseXMotion() < 0) newPos -= X * mouse_vec.x / 100;
-			if (App->input->GetMouseYMotion() < 0) newPos += Y * mouse_vec.y / 100;
-			if (App->input->GetMouseYMotion() > 0) newPos += Y * mouse_vec.y / 100;
+			if (App->input->GetMouseXMotion() > 0) newPos -= X * mouse_vec.x / slowness_middle_mouse;
+			if (App->input->GetMouseXMotion() < 0) newPos -= X * mouse_vec.x / slowness_middle_mouse;
+			if (App->input->GetMouseYMotion() < 0) newPos += Y * mouse_vec.y / slowness_middle_mouse;
+			if (App->input->GetMouseYMotion() > 0) newPos += Y * mouse_vec.y / slowness_middle_mouse;
 
 			Position += newPos;
 			Reference += newPos;
@@ -226,7 +154,7 @@ update_status ModuleCamera3D::Update()
 			static vec3 reference_position(0, 0, 0);
 
 			actual_camera_position = Position;
-			reference_position = { 0,0,0 }; // Reference 
+			reference_position = { /*App->object_manager->GetSelected()*/ 0,0,0 }; // Reference 
 
 			LookAt(reference_position);
 
@@ -240,7 +168,7 @@ update_status ModuleCamera3D::Update()
 
 			if (mag_diff >= offset_reference)
 			{
-				newPos -= Z * movement_speed * 3 * App->GetDeltaTime();
+				newPos -= Z * focus_speed * App->GetDeltaTime();
 			}
 			else
 				is_focusing = false;
@@ -299,32 +227,30 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::MoveCameraByMouse(vec3 A, vec3 B)
+void ModuleCamera3D::MoveCameraByMouse(vec3 newPos, float speed)
 {
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
-	// Middle Mouse Button Movement
-	static math::float2 initial_mouse_position = initial_mouse_position.zero;
-	static math::float2 last_mouse_position = last_mouse_position.zero;
+	Position += newPos;
+	Reference = Position;
+	Position -= Reference;
 
-	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN)
-		initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
-
-	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
-	{
-
-		last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
-		math::float2 mouse_vec = last_mouse_position - initial_mouse_position;
-
-		//if (App->input->GetMouseXMotion() > 0) newPos -= X * mouse_vec.x / 100;
-		//if (App->input->GetMouseXMotion() < 0) newPos -= X * mouse_vec.x / 100;
-		//if (App->input->GetMouseYMotion() < 0) newPos += Y * mouse_vec.y / 100;
-		//if (App->input->GetMouseYMotion() > 0) newPos += Y * mouse_vec.y / 100;
-
-		//Position += newPos;
-		//Reference += newPos;
-		initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
-	}
+	Position = Reference + CalculateMouseMotion() * length(Position);
 }
+
+void ModuleCamera3D::MoveCameraOffsetByMouse(vec3 newPos, float speed)
+{
+	Reference = { 0, 0, 0 }; //Get GameObject selected position
+	Position += newPos;
+	Reference += newPos;
+	Position -= Reference;
+
+	Position = Reference + CalculateMouseMotion() * length(Position);
+}
+
 
 // -----------------------------------------------------------------
 float* ModuleCamera3D::GetViewMatrix()
@@ -337,6 +263,37 @@ void ModuleCamera3D::CalculateViewMatrix()
 {
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
+}
+
+vec3 ModuleCamera3D::CalculateMouseMotion()
+{
+	int dx = -App->input->GetMouseXMotion();
+	int dy = -App->input->GetMouseYMotion();
+
+	if (dx != 0)
+	{
+		float DeltaX = (float)dx * sensiblity;
+
+		X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+		Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+		Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+	}
+
+	if (dy != 0)
+	{
+		float DeltaY = (float)dy * sensiblity;
+
+		Y = rotate(Y, DeltaY, X);
+		Z = rotate(Z, DeltaY, X);
+
+		if (Y.y < 0.0f)
+		{
+			Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+			Y = cross(Z, X);
+		}
+	}
+
+	return Z;
 }
 
 void ModuleCamera3D::ResetIsMovingCamera()
