@@ -90,7 +90,7 @@ public:
 		return mouse_z;
 	}
 
-
+	bool IsAltPressed();
 
 private:
 	KEY_STATE* keyboard;
