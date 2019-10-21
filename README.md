@@ -1,7 +1,7 @@
-﻿# 3D Game Engine Title: WhispEngine
+﻿# 3D Game Engine: WhispEngine
 
 ## Current Version
-v0.1
+v0.3
 
 ## Description
 This is a 3D Game Engine made by Students at CITM (UPC) from Spain. 
@@ -24,7 +24,7 @@ Extract .zip files inside a folder and open the .exe file.
 * Zoom in/ Zoom out:     Mouse Wheel
 * Go Up and Dow:           R / F
 
-## Authors & Links
+## Authors
 * **Christian Martínez** [christt105](https://github.com/christt105)
 * **Marc Galvez** [optus23](https://github.com/optus23)
 
@@ -41,19 +41,14 @@ Extract .zip files inside a folder and open the .exe file.
 * [Glew v2](https://github.com/nigels-com/glew)
 * [par_shape.h](https://prideout.net/shapes)
 * [Assimp v4.1](http://www.assimp.org/)
-*[DevIL v1.8](http://openil.sourceforge.net/)
-*[GPU detect v1.1](https://github.com/MatthewKing/DeviceId)
+* [DevIL v1.8](http://openil.sourceforge.net/)
+* [GPU detect v1.1](https://github.com/MatthewKing/DeviceId)
 
 Github [repository](https://github.com/Empty-Whisper/WhispEngine)
-See also our organization, [EmptyWhispers](https://github.com/Empty-Whisper)
 
-And finnaly take a look at, Teacher's github  [Ric](https://github.com/d0n3val) and [Marc](https://github.com/markitus18)
+Under supervision of lecturers [Ricard Pillosu](https://www.linkedin.com/in/ricardpillosu/) and [Marc Garrigó](https://www.linkedin.com/in/mgarrigo/)
 
-
-# We hope you Enjoy! Thanks for playing.
-
-
-MIT License
+## License
 
 Copyright (c) 2018 @christt105 (Christian Martínez De la Rosa) and @optus23 (Marc Gálvez Llorens)
 
