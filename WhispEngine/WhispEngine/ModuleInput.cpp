@@ -182,6 +182,18 @@ void ModuleInput::UpdateKeyStates()
 				keyboard[i] = KEY_IDLE;
 		}
 	}
+	
+	AllowLeftAndRightKeys(SDL_SCANCODE_LSHIFT);
+	AllowLeftAndRightKeys(SDL_SCANCODE_LALT);
+	AllowLeftAndRightKeys(SDL_SCANCODE_LCTRL);
+}
+
+void ModuleInput::AllowLeftAndRightKeys(const SDL_Scancode key)
+{
+	if (keyboard[key] != KEY_IDLE)
+		keyboard[key + 4] = keyboard[key]; // +4 because all right keys are at that distance from its left
+	if (keyboard[key + 4] != KEY_IDLE)
+		keyboard[key] = keyboard[key + 4];
 }
 
 // Called before quitting
