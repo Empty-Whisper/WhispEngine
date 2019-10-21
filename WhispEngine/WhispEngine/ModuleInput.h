@@ -28,6 +28,8 @@ public:
 	void UpdateInput();
 	void UpdateButtonStates();
 	void UpdateKeyStates();
+	//Always use the left key
+	void AllowLeftAndRightKeys(const SDL_Scancode key);
 	bool CleanUp();
 
 	KEY_STATE GetKey(int id) const

@@ -13,11 +13,11 @@ Go to our github release page and download the las version .zip :
 Extract .zip files inside a folder and open the .exe file.
 
 #### Short Cuts
-* Console:                 LShift + 1
-* Configuration:         LShift + 2
-* Show Style Editor:  LShift + 3
-* Create Shape:         LShift + 4
-* About: 	                 LShift + LControl + A
+* Console:                 Shift + 1
+* Configuration:         Shift + 2
+* Show Style Editor:  Shift + 3
+* Create Shape:         Shift + 4
+* About: 	                 Shift + Control + A
 
 #### Contols
 * Camera Movement:     WASD
