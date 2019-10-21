@@ -37,9 +37,10 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	
+	
 	// Docking -----------------------------------------------------------
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable keyboard controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable keyboard controls
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform 
 	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 
@@ -243,5 +244,18 @@ void ModuleGUI::Dockspace()
 	}
 
 	ImGui::End();
+}
+
+void ModuleGUI::HelpMarker(const char* disable_txt,const char * shown_text)
+{
+	ImGui::TextDisabled(disable_txt);
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		ImGui::TextColored({ 0, 50, 50, 255 }, shown_text);
+		ImGui::PopTextWrapPos();
+		ImGui::EndTooltip();
+	}
 }
 

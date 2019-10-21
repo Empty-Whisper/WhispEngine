@@ -15,9 +15,11 @@ public:
 	void Update() override;
 
 	const ImVec2 GetPanelSize();
+	const ImVec2 GetPanelPos();
 	
 private:
 	ImVec2 panel_size = { 0.f, 0.f};
+	ImVec2 panel_pos = { 0.f, 0.f};
 
 };
 

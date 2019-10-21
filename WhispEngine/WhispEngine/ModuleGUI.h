@@ -40,6 +40,7 @@ public:
 public:
 	void Log(const char* str);
 	void Dockspace();
+	void HelpMarker(const char* disable_txt, const char * shown_text);
 
 private:
 	bool show_demo_window = false;

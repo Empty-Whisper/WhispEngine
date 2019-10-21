@@ -23,7 +23,7 @@ public:
 	bool Save(nlohmann::json &node) const;
 	bool Load(nlohmann::json &node);
 
-	bool CanResize();
+	const bool CanResize();
 	void OnResize(int width, int height);
 
 	void InitTextureBuffers();
