@@ -3,7 +3,7 @@
 #include "ModuleRenderer3D.h"
 
 PanelScene::PanelScene(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3) 
-	: Panel("Configuration", start_active, shortcut1, shortcut2, shortcut3)
+	: Panel("Scene", start_active, shortcut1, shortcut2, shortcut3)
 {
 }
 

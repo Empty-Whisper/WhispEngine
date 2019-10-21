@@ -2,7 +2,8 @@
 #include "Application.h"
 
 
-PanelHierarchy::PanelHierarchy()
+PanelHierarchy::PanelHierarchy(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
+	:Panel("Hierarchy", start_active, shortcut1, shortcut2, shortcut3)
 {
 	leaf_flag = node_flag;
 	leaf_flag |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;

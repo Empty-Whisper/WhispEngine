@@ -4,8 +4,8 @@
 #include "Application.h"
 #include "Globals.h"
 
-PanelCreate::PanelCreate(/*const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
-	:Panel("Create", start_active, shortcut1, shortcut2, shortcut3*/)
+PanelCreate::PanelCreate(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
+	:Panel("Create", start_active, shortcut1, shortcut2, shortcut3)
 {
 	items.resize((int)Primitives::MAX);
 	for (int i = 0; i < (int)Primitives::MAX; ++i) {

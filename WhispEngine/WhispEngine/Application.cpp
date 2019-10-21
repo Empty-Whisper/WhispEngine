@@ -247,17 +247,17 @@ bool Application::SaveConfNow()
 {
 	bool ret = true;
 
-	nlohmann::json save = file_system->OpenFile("configuration.json");
+	nlohmann::json save = file_system->OpenFile("Configuration/configuration.json");
 	
 	save["Configuration"]["App"]["name"] = engine_name.data();
 	save["Configuration"]["App"]["organization"] = organization.data();
-	save["Configuration"]["App"]["version"] = 0;
+	save["Configuration"]["App"]["version"] = version.data();
 	
 	for (auto i = list_modules.begin(); i != list_modules.end(); ++i) {
 		(*i)->Save(save["Configuration"][(*i)->name.data()]);
 	}
 
-	file_system->SaveFile("configuration.json", save);
+	file_system->SaveFile("Configuration/configuration.json", save);
 
 	want_to_save = false;
 
@@ -271,13 +271,13 @@ bool Application::LoadConfNow()
 	nlohmann::json load;
 
 	if (want_to_load)
-		load = file_system->OpenFile("configuration.json");
+		load = file_system->OpenFile("Configuration/configuration.json");
 	else if(want_to_load_def)
-		load = file_system->OpenFile("conf_default.json");
+		load = file_system->OpenFile("Configuration/conf_default.json");
 
 	engine_name = load["Configuration"]["App"]["name"].get<std::string>();
 	organization = load["Configuration"]["App"]["organization"].get<std::string>();
-	//version = load["Configuration"]["App"]["version"].get<std::string>();
+	version = load["Configuration"]["App"]["version"].get<std::string>();
 
 	for (auto i = list_modules.begin(); i != list_modules.end(); ++i) {
 		(*i)->Load(load["Configuration"][(*i)->name.data()]);

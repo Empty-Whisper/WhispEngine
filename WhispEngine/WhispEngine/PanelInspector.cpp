@@ -2,7 +2,8 @@
 #include "Application.h"
 #include "Imgui/imgui.h"
 
-PanelInspector::PanelInspector()
+PanelInspector::PanelInspector(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
+	:Panel("Inspector", start_active, shortcut1, shortcut2, shortcut3)
 {
 }
 

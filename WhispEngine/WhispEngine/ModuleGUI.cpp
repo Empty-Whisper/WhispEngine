@@ -51,13 +51,13 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION));
 	ImGui::StyleColorsDark();
 
-	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
 	panels.push_back(about = new PanelAbout(node["panels"]["about"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
-	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
-	panels.push_back(hierarchy = new PanelHierarchy()); //TODO COMPLETE THIS
-	panels.push_back(create = new PanelCreate());
-	panels.push_back(inspector = new PanelInspector());
-	panels.push_back(scene = new PanelScene());
+	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_1));
+	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_2));
+	panels.push_back(hierarchy = new PanelHierarchy(node["panels"]["hierarchy"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_3));
+	panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_4));
+	panels.push_back(inspector = new PanelInspector(node["panels"]["inspector"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_5));
+	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_6));
 
 	return true;
 }
@@ -68,12 +68,6 @@ update_status ModuleGUI::PreUpdate()
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	
 	ImGui::NewFrame();
-
-	//  Input Shortcut Keys
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_3))
-	{
-		show_style_window = !show_style_window;
-	}
 
 	return UPDATE_CONTINUE;
 }
