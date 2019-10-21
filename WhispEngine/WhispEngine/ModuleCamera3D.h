@@ -27,6 +27,7 @@ private:
 	void CalculateViewMatrix();
 	vec3 CalculateMouseMotion();
 	void ResetIsMovingCamera();
+	const vec3 GetTransformPosition();
 
 public:
 	
