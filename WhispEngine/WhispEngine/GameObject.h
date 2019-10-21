@@ -32,6 +32,10 @@ public:
 	void Select();
 	void Deselect();
 
+	void Detach();
+	void Attach(GameObject* parent);
+	bool HasChild(GameObject* child);
+
 public:
 	std::vector<GameObject*> children;
 	std::vector<Component*> components;

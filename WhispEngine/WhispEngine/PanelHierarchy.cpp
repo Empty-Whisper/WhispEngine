@@ -28,12 +28,27 @@ void PanelHierarchy::Update()
 			}
 			to_delete.clear();
 		}
+		if (!to_change.empty()) {
+			for (auto chng = to_change.begin(); chng != to_change.end(); chng++) {
+				if ((*chng).child->HasChild((*chng).parent)) { // if we change the parent-child to child-parent, causes interferences
+					//(*chng).parent->Detach();					//so first detach the parent and set to the childs parent
+					//(*chng).parent->Attach((*chng).child->parent);
+					//(*chng).child->Detach();					//now attach the child to the new parent in the new position
+					//(*chng).child->Attach((*chng).parent);
+				}
+				else {
+					(*chng).child->Detach();
+					(*chng).child->Attach((*chng).parent);
+				}
+			}
+			to_change.clear();
+		}
 	}
 	ImGui::End();
 
 }
 
-void PanelHierarchy::DrawNode(GameObject* const &obj) {
+void PanelHierarchy::DrawNode(GameObject* obj) {
 	if(obj->IsActive() == false)
 		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.f));
 
@@ -63,6 +78,20 @@ void PanelHierarchy::DrawNode(GameObject* const &obj) {
 	}
 	ImGui::PopID();
 
+	if (ImGui::BeginDragDropSource()) {
+		ImGui::SetDragDropPayload("CHILD_POINTER", &obj, sizeof(int));
+		ImGui::EndDragDropSource();
+	}
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) {
+			ToChange tmp;
+			tmp.parent = obj;
+			tmp.child = *(GameObject**)payload->Data;
+			to_change.push_back(tmp);
+		}
+		ImGui::EndDragDropTarget();
+	}
+	
 	if (!obj->children.empty() && is_open) {
 		for (auto i = obj->children.begin(); i != obj->children.end(); i++) {
 			DrawNode(*i);

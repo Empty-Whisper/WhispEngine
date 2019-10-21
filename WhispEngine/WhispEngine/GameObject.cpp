@@ -123,3 +123,29 @@ void GameObject::Deselect()
 		(*i)->Deselect();
 	}
 }
+
+void GameObject::Detach()
+{
+	parent->children.erase(std::find(parent->children.begin(), parent->children.end(), this));
+	parent = nullptr;
+}
+
+void GameObject::Attach(GameObject * parent)
+{
+	this->parent = parent;
+	parent->children.push_back(this);
+}
+
+bool GameObject::HasChild(GameObject * child)
+{
+	bool ret = false;
+	for (auto it_child = children.begin(); it_child != children.end(); it_child++) {
+		if ((*it_child) == child)
+			ret = true;
+		if (!(*it_child)->children.empty())
+			ret = (*it_child)->HasChild(child);
+		if (ret)
+			break;
+	}
+	return ret;
+}
