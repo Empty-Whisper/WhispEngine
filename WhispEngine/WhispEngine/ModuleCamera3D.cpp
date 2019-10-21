@@ -5,7 +5,7 @@
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/float2.h"
 #include "PanelScene.h"
-
+#include "ComponentTransform.h"
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Camera3D");
@@ -196,7 +196,9 @@ void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
 	if (is_focusing)
 	{
 		actual_camera_position = Position;
-		reference_position = { /*App->object_manager->GetSelected()*/ 0,0,0 }; // Reference 
+		ComponentTransform* trans = (ComponentTransform*)App->object_manager->GetSelected()->GetComponent(ComponentType::TRANSFORM);
+		vec3 position = vec3(trans->position.x, trans->position.y, trans->position.z);
+		reference_position = position; // Reference 
 
 		LookAt(reference_position);
 
