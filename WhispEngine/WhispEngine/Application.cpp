@@ -61,7 +61,7 @@ bool Application::Init()
 
 	engine_name = load["Configuration"]["App"]["name"].get<std::string>();
 	organization = load["Configuration"]["App"]["organization"].get<std::string>();
-	//version = load["Configuration"]["App"]["version"].get<std::string>();
+	version = load["Configuration"]["App"]["version"].get<std::string>();
 
 	// Call Init() in all modules
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret; item++) {
@@ -175,6 +175,11 @@ const char * Application::GetAppName() const
 const char * Application::GetOrganizationName() const
 {
 	return organization.data();
+}
+
+const char * Application::GetVersion() const
+{
+	return version.data();
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules

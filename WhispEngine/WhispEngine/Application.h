@@ -48,6 +48,7 @@ public:
 private:
 	std::string engine_name;
 	std::string organization;
+	std::string version;
 
 	bool    first_frame = true;
 	float	dt = 0.0f;
@@ -86,6 +87,7 @@ public:
 	void SetOrganizationName(const char* name);
 	const char* GetAppName() const;
 	const char* GetOrganizationName() const;
+	const char* GetVersion() const;
 
 	HardwareInfo *hardware = nullptr;
 	FileSystem *file_system = nullptr;

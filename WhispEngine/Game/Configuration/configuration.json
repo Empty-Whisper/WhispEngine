@@ -3,7 +3,7 @@
         "App": {
             "name": "Whisp Engine",
             "organization": "Empty Whisper",
-            "version": 0
+            "version": "0.3"
         },
         "Camera3D": null,
         "Input": null,

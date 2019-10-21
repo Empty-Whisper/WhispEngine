@@ -16,7 +16,7 @@ void PanelAbout::Update()
 	{
 		static ImVec2 logo_size(106, 163);
 		static Texture* logo_txt = App->importer->ImportTexture("Assets/logo.png");
-		ImGui::Text("Version 0.3-alpha");
+		ImGui::Text("Version"); ImGui::SameLine(); ImGui::Text(App->GetVersion());
 		ImGui::Image((ImTextureID)logo_txt->id, logo_size);
 
 		ImGui::Separator();
@@ -30,44 +30,57 @@ void PanelAbout::Update()
 		ImGui::NewLine();
 		ImGui::Text("3rd Party Libraries used:");
 
-		ImGui::BulletText("SDL v2.0.6"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://www.libsdl.org/license.php", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("SDL v2.0.6");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://www.libsdl.org/license.php", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("STL"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://docs.oracle.com/database/bdb181/html/installation/win_build_stl.html", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("STL");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://docs.oracle.com/database/bdb181/html/installation/win_build_stl.html", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("Glew.2.0"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/nigels-com/glew", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("Glew.2.0");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://github.com/nigels-com/glew", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("OpenGL3"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://opengl.org/", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("OpenGL3");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://opengl.org/", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("MathGeoLib v1.5"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/juj/MathGeoLib", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("MathGeoLib v1.5");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://github.com/juj/MathGeoLib", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("PCG v0.9"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "http://www.pcg-random.org/", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("PCG v0.9");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "http://www.pcg-random.org/", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("Mmgr"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("Mmgr");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("ImGui v1.73"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/ocornut/imgui", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("ImGui v1.73");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://github.com/ocornut/imgui", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("JSON parser v3.7"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/nlohmann/json", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("JSON parser v3.7");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://github.com/nlohmann/json", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("par_shape.h"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://prideout.net/shapes", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("par_shape.h");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://prideout.net/shapes", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("Assimp v4.1"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "http://www.assimp.org/", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("Assimp v4.1");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "http://www.assimp.org/", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("DevIL v1.8"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "http://openil.sourceforge.net/", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("DevIL v1.8");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "http://openil.sourceforge.net/", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
-		ImGui::BulletText("GPU detect v1.1"); ImGui::SameLine();
-		if (ImGui::Button("Link")) 	ShellExecuteA(NULL, "open", "https://github.com/MatthewKing/DeviceId", NULL, NULL, SW_SHOWNORMAL);
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("GPU detect v1.1");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://github.com/MatthewKing/DeviceId", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
 
 		ImGui::NewLine();
