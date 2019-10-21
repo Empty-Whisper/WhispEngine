@@ -196,9 +196,8 @@ void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
 	if (is_focusing)
 	{
 		actual_camera_position = Position;
-		ComponentTransform* trans = (ComponentTransform*)App->object_manager->GetSelected()->GetComponent(ComponentType::TRANSFORM);
-		vec3 position = vec3(trans->position.x, trans->position.y, trans->position.z);
-		reference_position = position; // Reference 
+		if (App->object_manager->GetSelected() != nullptr)
+			reference_position = GetTransformPosition(); // Reference 
 
 		LookAt(reference_position);
 
@@ -248,7 +247,8 @@ void ModuleCamera3D::MoveCameraByMouse(vec3 newPos, float speed)
 
 void ModuleCamera3D::MoveCameraOffsetByMouse(vec3 newPos, float speed)
 {
-	Reference = { 0, 0, 0 }; //Get GameObject selected position
+	if(App->object_manager->GetSelected() != nullptr)
+		Reference = GetTransformPosition(); //Get GameObject selected position
 	Position += newPos;
 	Reference += newPos;
 	Position -= Reference;
@@ -305,4 +305,12 @@ void ModuleCamera3D::ResetIsMovingCamera()
 {
 	if(App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_UP || App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_UP || App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 		is_moving_camera = false;
+}
+
+const vec3 ModuleCamera3D::GetTransformPosition()
+{
+	ComponentTransform* trans = (ComponentTransform*)App->object_manager->GetSelected()->GetComponent(ComponentType::TRANSFORM);
+	vec3 position = vec3(trans->position.x, trans->position.y, trans->position.z);
+
+	return position;
 }
