@@ -117,8 +117,10 @@ update_status ModuleCamera3D::Update()
 		}
 
 		// Middle Mouse Button Movement
-		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN)
+		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_DOWN) {
 			initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
+			ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
+		}
 			
 		
 		if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
@@ -136,6 +138,8 @@ update_status ModuleCamera3D::Update()
 			Reference += newPos;
 			initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 			is_moving_camera = true;
+
+			ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
 		}
 
 		// Focus Object
