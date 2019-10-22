@@ -12,17 +12,6 @@ void ComponentMesh::Update()
 
 	glColor3f(1.f, 1.f, 1.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	if (App->renderer3D->fill) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		Draw();
-	}
-	if (object->GetSelect() != ObjectSelected::NONE)
-	{
-		glEnable(GL_STENCIL_TEST);
-		glStencilFunc(GL_ALWAYS, 1, -1);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-		DrawOutline();
-	}
 
 	if (App->renderer3D->wireframe) {
 		if (material != nullptr) {
@@ -38,6 +27,17 @@ void ComponentMesh::Update()
 		glPolygonOffset(-1.f, 1.f);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		DrawWireFrame();
+	}
+	if (object->GetSelect() != ObjectSelected::NONE)
+	{
+		glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_ALWAYS, 1, -1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		DrawOutline();
+	}
+	if(App->renderer3D->fill) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		Draw();
 	}
 	DrawNormals();
 	glColor3f(0.f, 0.f, 0.f);
@@ -81,6 +81,7 @@ void ComponentMesh::Draw()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
 	glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -137,25 +138,6 @@ void ComponentMesh::DrawOutline()
 		glDisable(GL_POLYGON_OFFSET_FILL);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glLineWidth(1);
-
-
-		/*glEnable(GL_STENCIL_TEST);
-		glStencilFunc(GL_ALWAYS, 1, -1);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-		glPolygonMode(GL_FRONT, GL_LINE);
-
-		
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
-		glVertexPointer(3, GL_FLOAT, 0, 0);
-
-		glDrawElements(GL_LINES, mesh->index.size, GL_UNSIGNED_INT, 0);
-
-		glDisable(GL_STENCIL_TEST);
-		glDisable(GL_POLYGON_OFFSET_FILL);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glLineWidth(1);*/
 	}
 
 }

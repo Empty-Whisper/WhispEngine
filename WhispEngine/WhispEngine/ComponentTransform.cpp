@@ -61,6 +61,8 @@ void ComponentTransform::OnInspector()
 		}
 		ImGui::PopID();
 
+		ImGui::Separator();
+
 		ImGui::PushID("SCALE");
 		ImGui::Text("Scale");
 
