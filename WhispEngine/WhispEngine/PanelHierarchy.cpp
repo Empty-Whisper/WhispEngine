@@ -1,5 +1,6 @@
 #include "PanelHierarchy.h"
 #include "Application.h"
+#include "Imgui/imgui_internal.h"
 
 
 PanelHierarchy::PanelHierarchy(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
@@ -82,10 +83,20 @@ void PanelHierarchy::DrawNode(GameObject* obj) {
 		ImGui::SetDragDropPayload("CHILD_POINTER", &obj, sizeof(int));
 		ImGui::EndDragDropSource();
 	}
+
 	if (ImGui::BeginDragDropTarget()) {
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) {
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) { // Other GameObject
 			ToChange tmp;
 			tmp.parent = obj;
+			tmp.child = *(GameObject**)payload->Data;
+			to_change.push_back(tmp);
+		}
+		ImGui::EndDragDropTarget();
+	}
+	if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Hierarchy"))) { //Window
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) {
+			ToChange tmp;
+			tmp.parent = App->object_manager->GetRoot();
 			tmp.child = *(GameObject**)payload->Data;
 			to_change.push_back(tmp);
 		}
