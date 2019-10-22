@@ -1,6 +1,7 @@
 #include "ComponentTransform.h"
 #include "Imgui/imgui.h"
 #include "GameObject.h"
+#include "Application.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
@@ -22,17 +23,59 @@ void ComponentTransform::PreUpdate()
 void ComponentTransform::OnInspector()
 {
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
-		if (ImGui::InputFloat3("Position", position.ptr(), 3)) {
+		ImGui::PushID("POSITION");
+		ImGui::Text("Position"); ImGui::SameLine(); App->gui->HelpMarker("(?)", "Ctrl + Click to turn drag box into an input box");
+
+		ImGui::SetNextItemWidth(75.f);
+		bool change_pos = ImGui::DragFloat("X", &position.x, 1.f, -50.f, 50.f); //In different lines ('|=') because if just || did not print the next sliders
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(75.f);
+		change_pos		|= ImGui::DragFloat("Y", &position.y, 1.f, -50.f, 50.f);
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(75.f);
+		change_pos		|= ImGui::DragFloat("Z", &position.z, 1.f, -50.f, 50.f);
+
+		if (change_pos) {
 			CalculeLocalMatrix();
 		}
-		math::float3 to_rot = (rotation.ToEulerXYZ());
-		if (ImGui::SliderFloat3("Rotation", to_rot.ptr(), -PI, PI)) {
-			rotation.Set(math::float4x4::FromEulerXYZ(to_rot.x, to_rot.y, to_rot.z));
+		ImGui::PopID();
+
+		ImGui::Separator();
+
+		ImGui::PushID("ROTATION");
+		ImGui::Text("Rotation");
+
+		ImGui::SetNextItemWidth(75.f);
+		bool change_rot = ImGui::DragFloat("X", &euler_rot.x, 1.f, -360.f, 360.f);
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(75.f);
+		change_rot		|= ImGui::DragFloat("Y", &euler_rot.y, 1.f, -360.f, 360.f);
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(75.f);
+		change_rot		|= ImGui::DragFloat("Z", &euler_rot.z, 1.f, -360.f, 360.f);
+
+		if(change_rot){
+			float3 to_rot = math::DegToRad(euler_rot);
+			rotation = math::Quat::FromEulerXYZ(to_rot.x, to_rot.y, to_rot.z);
 			CalculeLocalMatrix();
 		}
-		if (ImGui::InputFloat3("Scale", scale.ptr(), 3)) {
+		ImGui::PopID();
+
+		ImGui::PushID("SCALE");
+		ImGui::Text("Scale");
+
+		ImGui::SetNextItemWidth(75);
+		bool change_scale	 = ImGui::DragFloat("X", &scale.x, 0.5f, 0.f, 100.f);
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(75.f);
+		change_scale		|= ImGui::DragFloat("Y", &scale.y, 0.5f, 0.f, 100.f);
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(75.f);
+		change_scale		|= ImGui::DragFloat("Z", &scale.z, 0.5f, 0.f, 100.f);
+		if (change_scale) {
 			CalculeLocalMatrix();
 		}
+		ImGui::PopID();
 	}
 }
 

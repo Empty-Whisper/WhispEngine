@@ -35,6 +35,7 @@ public:
 public:
 	math::float3 position = math::float3::zero;
 	math::Quat rotation = math::Quat::identity;
+	math::float3 euler_rot = math::float3::zero;
 	math::float3 scale = math::float3::one;
 
 	math::float4x4 local_matrix = math::float4x4::identity;

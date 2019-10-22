@@ -142,10 +142,10 @@ bool GameObject::HasChild(GameObject * child)
 	for (auto it_child = children.begin(); it_child != children.end(); it_child++) {
 		if ((*it_child) == child)
 			ret = true;
-		if (!(*it_child)->children.empty())
-			ret = (*it_child)->HasChild(child);
 		if (ret)
 			break;
+		if (!(*it_child)->children.empty())
+			ret = (*it_child)->HasChild(child);
 	}
 	return ret;
 }
