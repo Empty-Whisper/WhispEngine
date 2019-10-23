@@ -212,11 +212,11 @@ void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 	ret->face_normals.data = new float[ret->face_normals.size];
 
 	for (int k = 0; k < ret->index.size/3; k += 3) {
-		vec3 p1(ret->vertex.data[ret->index.data[k] * 3], ret->vertex.data[ret->index.data[k] * 3 + 1], ret->vertex.data[ret->index.data[k] * 3 + 2]);
+		vec3 p1(ret->vertex.data[ret->index.data[k] * 3],     ret->vertex.data[ret->index.data[k] * 3 + 1],     ret->vertex.data[ret->index.data[k] * 3 + 2]);
 		vec3 p2(ret->vertex.data[ret->index.data[k + 1] * 3], ret->vertex.data[ret->index.data[k + 1] * 3 + 1], ret->vertex.data[ret->index.data[k + 1] * 3 + 2]);
 		vec3 p3(ret->vertex.data[ret->index.data[k + 2] * 3], ret->vertex.data[ret->index.data[k + 2] * 3 + 1], ret->vertex.data[ret->index.data[k + 2] * 3 + 2]);
 
-		ret->face_normals.data[k * 2] = (p1.x + p2.x + p3.x) / 3.f;
+		ret->face_normals.data[k * 2]	  = (p1.x + p2.x + p3.x) / 3.f;
 		ret->face_normals.data[k * 2 + 1] = (p1.y + p2.y + p3.y) / 3.f;
 		ret->face_normals.data[k * 2 + 2] = (p1.z + p2.z + p3.z) / 3.f;
 
@@ -226,7 +226,7 @@ void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 		vec3 v_norm = cross(v1, v2);
 		v_norm = normalize(v_norm);
 
-		ret->face_normals.data[k * 2 + 3] = ret->face_normals.data[k * 2] + v_norm.x * magnitude;
+		ret->face_normals.data[k * 2 + 3] = ret->face_normals.data[k * 2]     + v_norm.x * magnitude;
 		ret->face_normals.data[k * 2 + 4] = ret->face_normals.data[k * 2 + 1] + v_norm.y * magnitude;
 		ret->face_normals.data[k * 2 + 5] = ret->face_normals.data[k * 2 + 2] + v_norm.z * magnitude;
 	}

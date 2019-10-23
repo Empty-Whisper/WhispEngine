@@ -145,24 +145,26 @@ void ComponentMesh::DrawOutline()
 void ComponentMesh::DrawNormals()
 {
 
-	if (normals_state == Normals::FACE) {
+	if (view_face_normals) {
 		if (mesh->face_normals.data != nullptr) {
 			glColor3f(0.f, 1.f, 0.f);
 			glLineWidth(3.f);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->face_normals.id);
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
-			glDrawArrays(GL_LINES, 0, mesh->face_normals.size);
+			glBegin(GL_LINES);
+			for (int i = 0; i < mesh->face_normals.size; i += 6) {
+				glVertex3f(mesh->face_normals.data[i], mesh->face_normals.data[i + 1], mesh->face_normals.data[i + 2]);
+				glVertex3f(mesh->face_normals.data[i + 3], mesh->face_normals.data[i + 4], mesh->face_normals.data[i + 5]);
+			}
+			glEnd();
 			glLineWidth(1.f);
 		}
 	}
-	if (normals_state == Normals::VERTEX) {
+	if (view_vertex_normals) {
 		glColor3f(0.f, 0.f, 1.f);
-
 		if (mesh->vertex_normals.data != nullptr) {
 			glBegin(GL_LINES);
-			for (int j = 0; j < mesh->vertex.size * 2; j += 3) {
+			for (int j = 0; j < mesh->vertex.size * 3; j += 3) {
 				glVertex3f(mesh->vertex.data[j], mesh->vertex.data[j + 1], mesh->vertex.data[j + 2]);
-				glVertex3f(mesh->vertex_normals.data[j], mesh->vertex_normals.data[j + 1], mesh->vertex_normals.data[j + 2]);
+				glVertex3f(mesh->vertex.data[j] + mesh->vertex_normals.data[j], mesh->vertex.data[j + 1] + mesh->vertex_normals.data[j + 1], mesh->vertex.data[j + 2] + mesh->vertex_normals.data[j + 2]);
 			}
 			glEnd();
 		}
@@ -179,9 +181,10 @@ void ComponentMesh::OnInspector()
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
 		ActiveImGui();
 
-		/*ImGui::Checkbox("UVs", &view_uv);
+		ImGui::Text("%i triangles (%i vertices, %i indices)", mesh->index.size/9, mesh->vertex.size, mesh->index.size/3);
+
 		ImGui::Checkbox("Face Normals", &view_face_normals);
-		ImGui::Checkbox("Vertex Normals", &view_vertex_normals);*/
+		ImGui::Checkbox("Vertex Normals", &view_vertex_normals);
 	}
 }
 
