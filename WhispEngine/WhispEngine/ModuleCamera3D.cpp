@@ -309,8 +309,6 @@ void ModuleCamera3D::ResetIsMovingCamera()
 
 const vec3 ModuleCamera3D::GetTransformPosition()
 {
-	ComponentTransform* trans = (ComponentTransform*)App->object_manager->GetSelected()->GetComponent(ComponentType::TRANSFORM);
-	vec3 position = vec3(trans->position.x, trans->position.y, trans->position.z);
-
-	return position;
+	float3 obj_pos = ((ComponentTransform*)App->object_manager->GetSelected()->GetComponent(ComponentType::TRANSFORM))->GetPosition();
+	return vec3(obj_pos.x,obj_pos.y,obj_pos.z); //TODO set vec3 to math::float3
 }

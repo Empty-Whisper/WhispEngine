@@ -31,10 +31,8 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
 	
 	if (obj->IsActive()) {
-		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
-		transform->CalculateGlobalMatrix();
 		glPushMatrix();
-		glMultMatrixf(transform->global_matrix.Transposed().ptr());
+		glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());
 
 		obj->Update();
 

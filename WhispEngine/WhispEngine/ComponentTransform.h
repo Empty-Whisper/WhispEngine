@@ -30,9 +30,10 @@ public:
 
 	math::float4x4 GetLocalMatrix() const;
 	math::float4x4 GetGlobalMatrix() const;
-	const float* GetPtrGlobalMatrix() const;
 
-public:
+	math::float3 GetPosition() const;
+
+private:
 	math::float3 position = math::float3::zero;
 	math::Quat rotation = math::Quat::identity;
 	math::float3 euler_rot = math::float3::zero;
