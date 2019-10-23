@@ -32,5 +32,8 @@ private:
 	std::vector<GameObject*> to_delete; // In order to don't cause crash while iterating the tree, we keep the pointers in a vector to later iterate and delete that objects
 	std::map<GameObject*, GameObject*> to_change; //Same as above but for change parent and childs with Drag'n drop
 	std::vector<ToMove>to_move;
+	GameObject* to_create = nullptr;
+
+	bool popup_window = false;
 };
 

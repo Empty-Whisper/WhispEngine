@@ -9,6 +9,7 @@ GameObject::GameObject(GameObject * parent) : parent(parent)
 		parent->children.push_back(this);
 
 	CreateComponent(ComponentType::TRANSFORM);
+	SetName("GameObject");
 }
 
 GameObject::~GameObject()

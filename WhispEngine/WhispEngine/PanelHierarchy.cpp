@@ -51,6 +51,23 @@ void PanelHierarchy::Update()
 			}
 			to_move.clear();
 		}
+		if (to_create != nullptr) {
+			App->object_manager->CreateGameObject(to_create);
+			to_create = nullptr;
+		}
+
+		if(App->input->GetMouseButtonDown(0))
+			popup_window = false;
+		if(!ImGui::IsAnyItemHovered() || popup_window)
+			if (ImGui::BeginPopupContextWindow("HierarchyPopup",1,false)) {
+				popup_window = true;
+				if (ImGui::Button("Create Empty")) {
+					App->object_manager->CreateGameObject(nullptr);
+					ImGui::CloseCurrentPopup();
+					popup_window = false;
+				}
+				ImGui::EndPopup();
+			}
 	}
 	ImGui::End();
 
@@ -78,6 +95,12 @@ void PanelHierarchy::DrawNode(GameObject* obj) {
 
 	ImGui::PushID(obj);
 	if (ImGui::BeginPopupContextItem("object")) {
+
+		if (ImGui::Button("Create Empty")) {
+			to_create = obj;
+			ImGui::CloseCurrentPopup();
+		}
+
 		ToMove tmp;
 		tmp.object = std::find(obj->parent->children.begin(), obj->parent->children.end(), obj);
 		bool refuse_move = tmp.object == obj->parent->children.begin() || obj->parent->children.empty();
@@ -115,6 +138,7 @@ void PanelHierarchy::DrawNode(GameObject* obj) {
 			ImGui::PopItemFlag();
 			ImGui::PopStyleVar();
 		}
+
 
 		if (ImGui::Button("Delete")) {
 			to_delete.push_back(obj);
