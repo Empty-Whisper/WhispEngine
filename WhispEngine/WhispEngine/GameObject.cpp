@@ -17,6 +17,7 @@ GameObject::~GameObject()
 	for (auto comp = components.begin(); comp != components.end(); ++comp) {
 		delete *comp;
 	}
+	components.clear();
 
 	for (auto i = children.begin(); i != children.end(); i++) {
 		delete *i;

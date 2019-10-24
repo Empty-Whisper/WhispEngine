@@ -73,7 +73,7 @@ void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 	if (obj == selected)
 		selected = nullptr;
 
-	std::vector<GameObject*>::iterator ret = obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
+	obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
 	delete obj;
 }
 
