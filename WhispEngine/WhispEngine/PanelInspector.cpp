@@ -25,11 +25,13 @@ void PanelInspector::Update()
 			ImGui::PopID();
 			ImGui::SameLine();
 
+			ImGui::PushID("GameObject_name");
 			char a[100];
 			sprintf_s(a, sel->GetName());
-			if (ImGui::InputText("", a, 32, ImGuiInputTextFlags_EnterReturnsTrue)) {
+			if (ImGui::InputText("", a, 32)) {
 				sel->SetName(a);
 			}
+			ImGui::PopID();
 
 			for (auto i = sel->components.begin(); i != sel->components.end(); i++) {
 				ImGui::PushID(*i);

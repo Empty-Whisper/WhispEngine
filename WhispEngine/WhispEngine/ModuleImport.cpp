@@ -59,6 +59,8 @@ bool ModuleImport::ImportFbx(const char * path)
 {
 	bool ret = true;
 
+	LOG("Importing fbx with path: %s", path);
+
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	if (scene != nullptr && scene->HasMeshes())
@@ -97,6 +99,7 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 
 		GameObject* obj = App->object_manager->CreateGameObject(parent);
 		obj->SetName(child->mName.C_Str());
+		LOG("Created %s GameObject", obj->GetName());
 
 		ComponentTransform *transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
 		aiVector3D position, scale;
@@ -122,7 +125,7 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
 			aiString path;
 			aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
-
+			LOG("Diffuse texture found: %s", path.C_Str());
 			ComponentMaterial* material = (ComponentMaterial*)obj->CreateComponent(ComponentType::MATERIAL);
 			material->SetTexture(ImportTexture(std::string(std::string("Assets/Textures/") + App->file_system->GetFileFromPath(path.C_Str())).data()));
 
@@ -149,7 +152,7 @@ Texture* ModuleImport::ImportTexture(const char * path)
 {
 	Texture* ret = nullptr;
 
-	std::string tmp = App->file_system->GetFileNameFromPath(path); // Lazy way to compare if the texture already exists, will work for now TODO: improve it
+	std::string tmp = App->file_system->GetFileNameFromPath(path); // Lazy way to compare if the texture already exists, will work for now TODO: improve it (std::filesystem?)
 	std::vector<Texture*>* vtex = App->object_manager->GetTextures();
 	for (auto i = vtex->begin(); i != vtex->end(); i++) {
 		if (tmp.compare((*i)->name) == 0)
