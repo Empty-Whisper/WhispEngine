@@ -65,6 +65,7 @@ public:
 	Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
 	Mesh_info* CreateMesh(const aiMesh *mesh);
 
+	Mesh_info* CreateMeshPrimitive(const Primitives &type);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 
 	void FillNormals(Mesh_info * ret, const float * normals = nullptr);

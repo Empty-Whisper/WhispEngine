@@ -25,18 +25,33 @@ void PanelInspector::Update()
 			ImGui::PopID();
 			ImGui::SameLine();
 
-			ImGui::PushID("GameObject_name");
-			char a[100];
+			char a[32];
 			sprintf_s(a, sel->GetName());
-			if (ImGui::InputText("", a, 32)) {
+			if (ImGui::InputText("##Name", a, 32)) {
 				sel->SetName(a);
 			}
-			ImGui::PopID();
+
+			ImGui::SameLine(); App->gui->HelpMarker("(?)", "Right Click on header to Delete");
 
 			for (auto i = sel->components.begin(); i != sel->components.end(); i++) {
 				ImGui::PushID(*i);
 				(*i)->OnInspector();
+				ImGui::Separator();
 				ImGui::PopID();
+			}
+			ImGui::NewLine();
+
+			if (ImGui::Button("Add Component"))
+				ImGui::OpenPopup("components_popup");
+			if (ImGui::BeginPopup("components_popup")) {
+				if (ImGui::Selectable("Mesh")) // TODO: Do a for loop or a ImGui::Combo
+					if (!sel->HasComponent(ComponentType::MESH))
+						sel->CreateComponent(ComponentType::MESH);
+				if (ImGui::Selectable("Material"))
+					if (!sel->HasComponent(ComponentType::MATERIAL))
+						sel->CreateComponent(ComponentType::MATERIAL);
+
+				ImGui::EndPopup();
 			}
 		}
 

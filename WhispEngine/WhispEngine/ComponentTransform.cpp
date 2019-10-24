@@ -27,13 +27,13 @@ void ComponentTransform::OnInspector()
 		ImGui::Text("Position"); ImGui::SameLine(); App->gui->HelpMarker("(?)", "Double Click to turn drag box into an input box");
 
 		ImGui::SetNextItemWidth(75.f);
-		bool change_pos = ImGui::DragFloat("X", &position.x, 1.f, -50.f, 50.f); //In different lines ('|=') because if just || did not print the next sliders
+		bool change_pos = ImGui::DragFloat("X", &position.x, 0.2f, -50.f, 50.f); //In different lines ('|=') because if just || did not print the next sliders
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(75.f);
-		change_pos		|= ImGui::DragFloat("Y", &position.y, 1.f, -50.f, 50.f);
+		change_pos		|= ImGui::DragFloat("Y", &position.y, 0.2f, -50.f, 50.f);
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(75.f);
-		change_pos		|= ImGui::DragFloat("Z", &position.z, 1.f, -50.f, 50.f);
+		change_pos		|= ImGui::DragFloat("Z", &position.z, 0.2f, -50.f, 50.f);
 
 		if (change_pos) {
 			CalculeLocalMatrix();

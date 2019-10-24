@@ -5,12 +5,17 @@
 
 ComponentMaterial::ComponentMaterial(GameObject* parent) : Component(parent, ComponentType::MATERIAL)
 {
-	((ComponentMesh*)parent->GetComponent(ComponentType::MESH))->SetMaterial(this);
+	ComponentMesh* mesh = (ComponentMesh*)parent->GetComponent(ComponentType::MESH);
+	if (mesh != nullptr)
+		mesh->SetMaterial(this);
 }
 
 
 ComponentMaterial::~ComponentMaterial()
 {
+	ComponentMesh* mesh = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
+	if (mesh != nullptr)
+		mesh->SetMaterial(this);
 }
 
 void ComponentMaterial::SetTexture(Texture * texture)
@@ -30,7 +35,15 @@ const uint ComponentMaterial::GetIDTexture() const
 
 void ComponentMaterial::OnInspector()
 {
-	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
+	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::BeginPopupContextItem("Material")) {
+			if (ImGui::Button("Delete")){
+				object->DeleteComponent(this);
+			}
+			ImGui::EndPopup();
+		}
+
+		ImGui::SameLine();
 		ActiveImGui();
 
 		ImGui::ColorEdit4("Face Color", face_color);

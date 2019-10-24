@@ -274,6 +274,55 @@ void ModuleObjectManager::FillTextureCoords(Mesh_info * mesh, const float * text
 	memcpy(mesh->tex_coords.data, textureCoords, sizeof(float) * mesh->tex_coords.size * 3);
 }
 
+Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type)
+{
+	Object_data data = Object_data();
+	par_shapes_mesh* prim = nullptr;
+
+	switch (type)
+	{
+	case Primitives::CUBE:
+		prim = par_shapes_create_cube();
+		break;
+	case Primitives::TETRAHEDRON:
+		prim = par_shapes_create_tetrahedron();
+		break;
+	case Primitives::OCTAHEDRON:
+		prim = par_shapes_create_octahedron();
+		break;
+	case Primitives::DODECAHEDRON:
+		prim = par_shapes_create_dodecahedron();
+		break;
+	case Primitives::ICOSAHEDRON:
+		prim = par_shapes_create_icosahedron();
+		break;
+	case Primitives::SPHERE:
+		//TODO Create a sphere with radious, rings and sectors, not by subdivisions https://stackoverflow.com/questions/5988686/creating-a-3d-sphere-in-opengl-using-visual-c/5989676#5989676
+		prim = par_shapes_create_subdivided_sphere(data.slices);
+		break;
+	case Primitives::HEMISPHERE:
+		prim = par_shapes_create_hemisphere(data.slices, data.rings);
+		break;
+	case Primitives::TORUS:
+		prim = par_shapes_create_torus(data.slices, data.rings, data.radius);
+		break;
+	case Primitives::CONE:
+		prim = par_shapes_create_cone(data.slices, data.rings);
+		break;
+	case Primitives::CYLINDER:
+		prim = par_shapes_create_cylinder(data.slices, data.rings);
+		break;
+	default:
+		LOG("Primitive not found to create. id: %i", (int)type);
+		break;
+	}
+
+	Mesh_info* mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	par_shapes_free_mesh(prim);
+
+	return mesh;
+}
+
 bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_data &data)
 {
 	bool ret = true;

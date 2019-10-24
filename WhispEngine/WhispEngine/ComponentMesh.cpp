@@ -9,6 +9,8 @@ ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentTy
 
 void ComponentMesh::Update()
 {
+	if (mesh == nullptr)
+		return;
 
 	glColor3f(1.f, 1.f, 1.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -66,21 +68,23 @@ void ComponentMesh::Draw()
 		}
 	}
 
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	if (mesh->vertex.data != nullptr) {
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	if (mesh->tex_coords.data != nullptr) {
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords.id);
-		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-	}
-	if (mesh->vertex_normals.data != nullptr) {
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex_normals.id);
-		glNormalPointer(GL_FLOAT, 0, NULL);
-	}
+		if (mesh->tex_coords.data != nullptr) {
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords.id);
+			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		}
+		if (mesh->vertex_normals.data != nullptr) {
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex_normals.id);
+			glNormalPointer(GL_FLOAT, 0, NULL);
+		}
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
-	glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
+		glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+	}
 
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -178,13 +182,50 @@ void ComponentMesh::SetMaterial(ComponentMaterial  * mat)
 
 void ComponentMesh::OnInspector()
 {
+	ActiveImGui();
+	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
-		ActiveImGui();
+		if (ImGui::BeginPopupContextItem("Mesh")) {
+			if (ImGui::Button("Delete")) {
+				object->DeleteComponent(this);
+			}
+			ImGui::EndPopup();
+		}
 
-		ImGui::Text("%i triangles (%i vertices, %i indices)", mesh->index.size/9, mesh->vertex.size, mesh->index.size/3);
+		if (mesh != nullptr) {
+			ImGui::Text("%i triangles (%i vertices, %i indices)", mesh->index.size / 9, mesh->vertex.size, mesh->index.size / 3);
 
-		ImGui::Checkbox("Face Normals", &view_face_normals);
-		ImGui::Checkbox("Vertex Normals", &view_vertex_normals);
+			ImGui::Checkbox("Face Normals", &view_face_normals);
+			ImGui::Checkbox("Vertex Normals", &view_vertex_normals);
+		}
+		else {
+			if (ImGui::Button("Set Resource"))
+				ImGui::OpenPopup("primitive_popup");
+			if (ImGui::BeginPopup("primitive_popup")) {
+				if (ImGui::Selectable("Cube")) // TODO: Do a for loop or a ImGui::Combo
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CUBE);
+				if (ImGui::Selectable("Tetrahedron"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::TETRAHEDRON);
+				if (ImGui::Selectable("Octahedron"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::OCTAHEDRON);
+				if (ImGui::Selectable("Dodecahedron"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::DODECAHEDRON);
+				if (ImGui::Selectable("Icosahedron"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::ICOSAHEDRON);
+				if (ImGui::Selectable("Sphere"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::SPHERE);
+				if (ImGui::Selectable("Hemisphere"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::HEMISPHERE);
+				if (ImGui::Selectable("Torus"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::TORUS);
+				if (ImGui::Selectable("Cone"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CONE);
+				if (ImGui::Selectable("Cylinder"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CYLINDER);
+
+				ImGui::EndPopup();
+			}
+		}
 	}
 }
 
