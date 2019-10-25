@@ -4,6 +4,7 @@
 PanelAbout::PanelAbout(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	: Panel("Configuration", start_active, shortcut1, shortcut2, shortcut3)
 {
+
 }
 
 PanelAbout::~PanelAbout()
@@ -15,9 +16,9 @@ void PanelAbout::Update()
 	if (ImGui::Begin("About Whisp Engine", &active))
 	{
 		static ImVec2 logo_size(106, 163);
-		static Texture* logo_txt = App->importer->ImportTexture("Assets/logo.png");
+
 		ImGui::Text("Version"); ImGui::SameLine(); ImGui::Text(App->GetVersion());
-		ImGui::Image((ImTextureID)logo_txt->id, logo_size);
+		ImGui::Image((ImTextureID)App->importer->logo_txt->id, logo_size);
 
 		ImGui::Separator();
 		ImGui::NewLine();
