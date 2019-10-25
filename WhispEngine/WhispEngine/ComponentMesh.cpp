@@ -1,6 +1,9 @@
 #include "ComponentMesh.h"
 #include "Application.h"
 #include "Globals.h"
+#include "MathGeoLib/include/Math/float3.h"
+#include "MathGeoLib/include/Math/MathFunc.h"
+#include "MathGeoLib/include/Geometry/AABB.h""
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
@@ -9,7 +12,7 @@ ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentTy
 
 void ComponentMesh::Update()
 {
-
+	
 	glColor3f(1.f, 1.f, 1.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -85,6 +88,12 @@ void ComponentMesh::Draw()
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	/*if (mesh != nullptr)
+	{
+		CreateAABB();
+		CalculateRadius();
+	}*/
 }
 
 void ComponentMesh::DrawWireFrame() {
@@ -121,12 +130,12 @@ void ComponentMesh::DrawOutline()
 		if (object->GetSelect() == ObjectSelected::SELECTED)
 		{
 			glColor3f(1.f, 0.7f, 0.f);
-			glLineWidth(3);
+			glLineWidth(7);
 		}
 		else if (object->GetSelect() == ObjectSelected::CHILD_FROM_PARENT_SELECTED)
 		{
 			glColor3f(0.f, 1.f, 1.f);
-			glLineWidth(5);
+			glLineWidth(4);
 		}		
 		glPolygonMode(GL_FRONT, GL_LINE);
 
@@ -184,6 +193,20 @@ void ComponentMesh::OnInspector()
 		ImGui::Checkbox("Vertex Normals", &view_vertex_normals);*/
 	}
 }
+
+math::float3 ComponentMesh::CalculateRadius()
+{
+	math::float3 mesh_radius = mesh->aabb.Diagonal()/2;
+	return mesh_radius;
+}
+
+void ComponentMesh::InitAABB()
+{
+	mesh->aabb.SetNegativeInfinity();
+	mesh->aabb.Enclose((math::float3*)mesh->vertex.data, (int)mesh->vertex.size);
+}
+
+
 
 
 Mesh_info::~Mesh_info()

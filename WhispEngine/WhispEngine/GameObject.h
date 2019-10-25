@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Component.h"
+#include "MathGeoLib/include/Geometry/AABB.h"
 
 enum class ObjectSelected
 {
@@ -35,6 +36,8 @@ public:
 	void Detach();
 	void Attach(GameObject* parent);
 	bool HasChild(GameObject* child);
+
+	void GetBBox(math::AABB& aabb);
 
 public:
 	std::vector<GameObject*> children;

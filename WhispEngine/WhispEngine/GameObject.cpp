@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
+#include "Application.h"
 
 GameObject::GameObject(GameObject * parent) : parent(parent)
 {
@@ -148,4 +149,17 @@ bool GameObject::HasChild(GameObject * child)
 			ret = (*it_child)->HasChild(child);
 	}
 	return ret;
+}
+
+void GameObject::GetBBox(math::AABB& aabb)
+{
+	ComponentMesh* component_mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	
+	if (component_mesh != nullptr)
+	{
+		component_mesh->InitAABB();
+		aabb = component_mesh->mesh->aabb;
+		aabb.maxPoint = aabb.maxPoint.Max(component_mesh->mesh->aabb.maxPoint);
+		aabb.minPoint = aabb.minPoint.Min(component_mesh->mesh->aabb.minPoint);
+	}
 }

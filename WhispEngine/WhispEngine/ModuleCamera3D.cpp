@@ -33,7 +33,7 @@ bool ModuleCamera3D::Start()
 	movement_speed = 10;  //  TODO: Save and Load this data in JSON
 	focus_speed = 100;  //  TODO: Save and Load this data in JSON
 	wheel_speed = 70;  //  TODO: Save and Load this data in JSON
-	offset_reference = 10;  //  TODO: Save and Load this data in JSON
+	offset_reference = 5;  //  TODO: Save and Load this data in JSON
 	slowness_middle_mouse = 50;  //  TODO: Save and Load this data in JSON
 	slowness_zoom_in_out = 50;  //  TODO: Save and Load this data in JSON
 	return ret;
@@ -145,9 +145,12 @@ update_status ModuleCamera3D::Update()
 		// Focus Object
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		{
-			is_focusing = true;
-		}	
-		FocusObject(newPos, is_focusing);	
+			if (App->object_manager->GetSelected())
+				is_focusing = true;
+		}
+
+		if (App->object_manager->GetSelected())
+			FocusObject(newPos, is_focusing);	
 	}
 	
 	// Recalculate matrix -------------
@@ -195,6 +198,8 @@ void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
 
 	if (is_focusing)
 	{
+		AABB aabb;
+		App->object_manager->GetSelected()->GetBBox(aabb);
 		actual_camera_position = Position;
 		if (App->object_manager->GetSelected() != nullptr)
 			reference_position = GetTransformPosition(); // Reference 
@@ -209,7 +214,8 @@ void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
 
 		float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
 
-		if (mag_diff >= offset_reference)
+		float object_length = aabb.Diagonal().Length();
+		if (mag_diff >= object_length + offset_reference)
 		{
 			newPos -= Z * focus_speed * App->GetDeltaTime();
 		}
