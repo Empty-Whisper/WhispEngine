@@ -56,7 +56,7 @@ void ComponentMesh::Draw()
 {
 	glColor3f(1.f, 1.f, 1.f);
 
-	if (material != nullptr) {
+	if (mesh->tex_coords.data != nullptr) {
 		if (material->IsActive()) {
 			if (material->HasTexture()) {
 				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
