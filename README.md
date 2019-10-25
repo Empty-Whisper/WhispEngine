@@ -46,6 +46,7 @@ Extract .zip files inside a folder and open the .exe file.
 * Outline meshes using StencilBuffer (blue to children objs, yellow to parent objs)
 * Viewport options to configure all Engine Speeds in Configuration panel
 * (?)Info - Help markers
+* Change mouse icon when click middle mouse button
 
 ## Program used
 * [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/es/vs/)
