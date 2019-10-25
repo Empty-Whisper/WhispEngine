@@ -87,7 +87,7 @@ update_status ModuleCamera3D::Update()
 			MoveCameraByMouse(newPos, speed);
 			is_moving_camera = true;
 		}
-		if (App->input->IsAltPressed() && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		{
 			MoveCameraOffsetByMouse(newPos, speed);
 			is_moving_camera = true;
@@ -97,10 +97,10 @@ update_status ModuleCamera3D::Update()
 		static math::float2 initial_mouse_position = initial_mouse_position.zero;
 		static math::float2 last_mouse_position = last_mouse_position.zero;
 
-		if (App->input->IsAltPressed() && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN)
 			initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 
-		if (App->input->IsAltPressed() && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
 			last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 			math::float2 mouse_vec = last_mouse_position - initial_mouse_position;

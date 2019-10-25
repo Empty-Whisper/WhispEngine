@@ -38,13 +38,15 @@ Extract .zip files inside a folder and open the .exe file.
 * Dockspace + Rendering inside a ImGui Window viewport
 * ImGui Panels can exist and work well outside SDL main window
 * Extra inputs movement camera: -Middle mouse button, move around in X/Y axis - Alt+RClick, Zoom in/out dragging with mouse
-* ShortCut system
-* Drag and Drop Game objects inside/outside other objects to transform parents and childs
-* Create an empty Game object with right click in hierarchy
+* Shortcut system
+* Drag and Drop Game objects inside/outside other objects to transform parents and children
+* Create an empty Game object with right click in hierarchy and delete it
 * Transform logic created and working! (but commented PushMatrix in code at the request of the teacher)
+* Add component
 * Outline meshes using StencilBuffer (blue to children objs, yellow to parent objs)
-* Viewport options to confrigure all Engine Speeds in Configuration panel
+* Viewport options to configure all Engine Speeds in Configuration panel
 * (?)Info - Help markers
+* Change mouse icon when click middle mouse button
 
 ## Program used
 * [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/es/vs/)

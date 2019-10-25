@@ -13,7 +13,7 @@ PanelScene::~PanelScene()
 
 void PanelScene::Update()
 {
-	if (ImGui::Begin("#Scene", &active /*ImGuiWindowFlags_NoCollapse  ImGuiNextWindowDataFlags_HasFocus |*/ /*ImGuiHoveredFlags_RootWindow*/)) //ImGuiHoveredFlags_RootWindow  ImGuiFocusedFlags_RootWindow
+	if (ImGui::Begin("#Scene", &active)) 
 	{
 		ImGui::SameLine(ImGui::GetWindowWidth() - 70);
 		App->gui->HelpMarker("(?)Info", "Right click        - View around \nWASD + Right click - Move through viewport\nShift              - Speed up\nAlt + Right click  - Zoom\nScroll wheel       - Fast Zoom\nMiddle mouse       - Move X/Y viewport\nF                  - Focus object\nAlt + Left click   - Orbit object");
