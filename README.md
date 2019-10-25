@@ -12,21 +12,39 @@ Go to our github release page and download the las version .zip :
 
 Extract .zip files inside a folder and open the .exe file.
 
+#### Contols
+* View around:  	         	Right click
+* Move through viewport: 	WASD + Right click
+* Speed up:  	      	Shift	         
+* Zoom:			Alt + Right click
+* Fast Zoom:		Scroll wheel
+* Move X/Y viewport:	Middle mouse
+* Focus object:		F
+* Orbit object:		Alt + Left click
+
 #### Short Cuts
 * Console:                 Shift + 1
 * Configuration:         Shift + 2
 * Show Style Editor:  Shift + 3
 * Create Shape:         Shift + 4
-* About: 	                 Shift + Control + A
-
-#### Contols
-* Camera Movement:     WASD
-* Zoom in/ Zoom out:     Mouse Wheel
-* Go Up and Dow:           R / F
+* About: 	                  Shift + Control + A
 
 ## Authors
 * **Christian Martínez** [christt105](https://github.com/christt105)
 * **Marc Galvez** [optus23](https://github.com/optus23)
+
+## Innovations
+* Docking
+* Dockspace + Rendering inside a ImGui Window viewport
+* ImGui Panels can exist and work well outside SDL main window
+* Extra inputs movement camera: -Middle mouse button, move around in X/Y axis - Alt+RClick, Zoom in/out dragging with mouse
+* ShortCut system
+* Drag and Drop Game objects inside/outside other objects to transform parents and childs
+* Create an empty Game object with right click in hierarchy
+* Transform logic created and working! (but commented PushMatrix in code at the request of the teacher)
+* Outline meshes using StencilBuffer (blue to children objs, yellow to parent objs)
+* Viewport options to confrigure all Engine Speeds in Configuration panel
+* (?)Info - Help markers
 
 ## Program used
 * [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/es/vs/)
