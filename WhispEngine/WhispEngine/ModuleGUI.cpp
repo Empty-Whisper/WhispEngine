@@ -52,12 +52,12 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	ImGui::StyleColorsDark();
 
 	panels.push_back(about = new PanelAbout(node["panels"]["about"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
-	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_1));
-	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_2));
-	panels.push_back(hierarchy = new PanelHierarchy(node["panels"]["hierarchy"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_3));
-	panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_4));
-	panels.push_back(inspector = new PanelInspector(node["panels"]["inspector"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_5));
-	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_6));
+	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
+	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
+	panels.push_back(hierarchy = new PanelHierarchy(node["panels"]["hierarchy"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_3));
+	panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_4));
+	panels.push_back(inspector = new PanelInspector(node["panels"]["inspector"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_5));
+	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
 
 	return true;
 }
