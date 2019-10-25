@@ -20,7 +20,6 @@ private:
 	void Render();
 	void Application();
 	void Viewport();
-	void Textures();
 
 private:
 	void PushBackVectorAsQueue(std::vector<float> &vector, const float &value);

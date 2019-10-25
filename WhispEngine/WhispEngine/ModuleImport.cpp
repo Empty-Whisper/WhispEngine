@@ -74,7 +74,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		
 		aiNode *node = scene->mRootNode;
 
-		aiVector3D position, scale;
+		/*aiVector3D position, scale;			// This will be commented only for assignment 1
 		aiQuaternion rotation;
 		node->mTransformation.Decompose(scale, rotation, position);
 		ComponentTransform* transform = ((ComponentTransform*)container->GetComponent(ComponentType::TRANSFORM));
@@ -83,7 +83,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		transform->SetScale(scale.x, scale.y, scale.z);
 
 		transform->CalculeLocalMatrix();
-		transform->CalculateGlobalMatrix();
+		transform->CalculateGlobalMatrix();*/
 
 		LoadNode(node, container, scene);
 

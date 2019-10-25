@@ -44,10 +44,6 @@ void PanelConfiguration::Update()
 		{
 			Render();
 		}
-		if (ImGui::CollapsingHeader("Textures"))
-		{
-			Textures();
-		}
 		if (ImGui::CollapsingHeader("File System"))
 		{
 			FileSystem();
@@ -263,18 +259,6 @@ void PanelConfiguration::Viewport()
 	ImGui::SliderInt("Middle mouse move Slowness ", (int*)&App->camera->slowness_middle_mouse, 0, 200);
 
 
-}
-
-void PanelConfiguration::Textures()
-{
-	//auto textures = App->object_manager->GetTextures();
-	//for (auto i = textures->begin(); i != textures->end(); ++i) {
-	//	if (ImGui::ImageButton((ImTextureID)(*i).id, ImVec2((*i).width / 4, (*i).height / 4))) {
-	//		/*App->object_manager->SelectTexture(*i);*/
-	//	}
-	//	ImGui::SameLine();
-	//}
-	//ImGui::NewLine();
 }
 
 void PanelConfiguration::PushBackVectorAsQueue(std::vector<float> &vector, const float &value)
