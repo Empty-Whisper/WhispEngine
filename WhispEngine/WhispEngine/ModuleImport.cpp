@@ -44,6 +44,9 @@ bool ModuleImport::Start()
 
 	ilInit();
 
+	// Charge logo texture
+	logo_txt = ImportTexture("Assets/logo.png");
+
 	return true;
 }
 
