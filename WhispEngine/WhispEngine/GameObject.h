@@ -48,6 +48,6 @@ private:
 	bool active = true;
 	std::string name;
 	ObjectSelected obj_selected = ObjectSelected::NONE;
-	std::vector<Component*> component_to_delete;
+	std::vector<Component*> components_to_delete;
 };
 

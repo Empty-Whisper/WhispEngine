@@ -129,7 +129,7 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 			aiString path;
 			aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
 			LOG("Diffuse texture found: %s", path.C_Str());
-			ComponentMaterial* material = (ComponentMaterial*)obj->CreateComponent(ComponentType::MATERIAL);
+			ComponentMaterial* material = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
 			material->SetTexture(ImportTexture(std::string(std::string("Assets/Textures/") + App->file_system->GetFileFromPath(path.C_Str())).data()));
 
 		}

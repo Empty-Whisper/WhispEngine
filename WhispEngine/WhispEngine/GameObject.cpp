@@ -22,6 +22,7 @@ GameObject::~GameObject()
 
 	for (auto i = children.begin(); i != children.end(); i++) {
 		delete *i;
+		*i = nullptr;
 	}
 	children.clear();
 }
@@ -32,12 +33,12 @@ void GameObject::Update()
 		if ((*i)->IsActive())
 			(*i)->Update();
 	}
-	if (components.size() > 0) {
-		for (auto c = component_to_delete.begin(); c != component_to_delete.end(); c++) {
+	if (components_to_delete.size() > 0) {
+		for (auto c = components_to_delete.begin(); c != components_to_delete.end(); c++) {
 			components.erase(std::find(components.begin(), components.end(), *c));
 			delete *c;
 		}
-		component_to_delete.clear();
+		components_to_delete.clear();
 	}
 }
 
@@ -75,7 +76,7 @@ Component * GameObject::CreateComponent(const ComponentType & type)
 
 void GameObject::DeleteComponent(Component * comp)
 {
-	component_to_delete.push_back(comp);
+	components_to_delete.push_back(comp);
 }
 
 Component * GameObject::GetComponent(const ComponentType & type)

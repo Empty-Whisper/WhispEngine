@@ -5,17 +5,11 @@
 
 ComponentMaterial::ComponentMaterial(GameObject* parent) : Component(parent, ComponentType::MATERIAL)
 {
-	ComponentMesh* mesh = (ComponentMesh*)parent->GetComponent(ComponentType::MESH);
-	if (mesh != nullptr)
-		mesh->SetMaterial(this);
 }
 
 
 ComponentMaterial::~ComponentMaterial()
 {
-	ComponentMesh* mesh = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
-	if (mesh != nullptr)
-		mesh->SetMaterial(this);
 }
 
 void ComponentMaterial::SetTexture(Texture * texture)
@@ -36,12 +30,6 @@ const uint ComponentMaterial::GetIDTexture() const
 void ComponentMaterial::OnInspector()
 {
 	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen)) {
-		if (ImGui::BeginPopupContextItem("Material")) {
-			if (ImGui::Button("Delete")){
-				object->DeleteComponent(this);
-			}
-			ImGui::EndPopup();
-		}
 
 		ImGui::SameLine();
 		ActiveImGui();
@@ -54,10 +42,15 @@ void ComponentMaterial::OnInspector()
 			if (ImGui::Button("Change Texture")) {
 				select_tex = true;
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Deselect Texture")) {
+				texture = nullptr;
+			}
 
-
-			ImGui::Text("(%d, %d)", texture->width, texture->height);
-			ImGui::Image((ImTextureID)texture->id, ImVec2(128.f, 128.f));
+			if (texture != nullptr) {
+				ImGui::Text("(%d, %d)", texture->width, texture->height);
+				ImGui::Image((ImTextureID)texture->id, ImVec2(128.f, 128.f));
+			}
 		}
 		else {
 			if (ImGui::Button("Select Texture")) {

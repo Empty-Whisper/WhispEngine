@@ -4,7 +4,7 @@
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
-	material = (ComponentMaterial*)parent->GetComponent(ComponentType::MATERIAL);
+	material = (ComponentMaterial*)parent->CreateComponent(ComponentType::MATERIAL);
 }
 
 void ComponentMesh::Update()
@@ -50,6 +50,13 @@ void ComponentMesh::Update()
 ComponentMesh::~ComponentMesh()
 {
 	delete mesh;
+	if (object->GetComponent(ComponentType::MATERIAL) != nullptr) {
+		if (material != nullptr) {
+			object->components.erase(std::find(object->components.begin(), object->components.end(), material));
+			delete material;
+			material = nullptr;
+		}
+	}
 }
 
 void ComponentMesh::Draw()
@@ -173,11 +180,6 @@ void ComponentMesh::DrawNormals()
 			glEnd();
 		}
 	}
-}
-
-void ComponentMesh::SetMaterial(ComponentMaterial  * mat)
-{
-	material = mat;
 }
 
 void ComponentMesh::OnInspector()
