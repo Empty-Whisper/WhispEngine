@@ -61,10 +61,34 @@ void PanelHierarchy::Update()
 		if(!ImGui::IsAnyItemHovered() || popup_window)
 			if (ImGui::BeginPopupContextWindow("HierarchyPopup",1,false)) {
 				popup_window = true;
-				if (ImGui::Button("Create Empty")) {
+				if (ImGui::Selectable("Create Empty")) {
 					App->object_manager->CreateGameObject(nullptr);
 					ImGui::CloseCurrentPopup();
 					popup_window = false;
+				}
+				ImGui::Separator();
+				if (ImGui::BeginMenu("3D Object")) {
+					if (ImGui::Selectable("Cube")) // TODO: Do a for loop or a ImGui::Combo
+						App->object_manager->CreatePrimitive(Primitives::CUBE, Object_data());
+					if (ImGui::Selectable("Tetrahedron"))
+						App->object_manager->CreatePrimitive(Primitives::TETRAHEDRON, Object_data());
+					if (ImGui::Selectable("Octahedron"))
+						App->object_manager->CreatePrimitive(Primitives::OCTAHEDRON, Object_data());
+					if (ImGui::Selectable("Dodecahedron"))
+						App->object_manager->CreatePrimitive(Primitives::DODECAHEDRON, Object_data());
+					if (ImGui::Selectable("Icosahedron"))
+						App->object_manager->CreatePrimitive(Primitives::ICOSAHEDRON, Object_data());
+					if (ImGui::Selectable("Sphere"))
+						App->object_manager->CreatePrimitive(Primitives::SPHERE, Object_data());
+					if (ImGui::Selectable("Hemisphere"))
+						App->object_manager->CreatePrimitive(Primitives::HEMISPHERE, Object_data());
+					if (ImGui::Selectable("Torus"))
+						App->object_manager->CreatePrimitive(Primitives::TORUS, Object_data());
+					if (ImGui::Selectable("Cone"))
+						App->object_manager->CreatePrimitive(Primitives::CONE, Object_data());
+					if (ImGui::Selectable("Cylinder"))
+						App->object_manager->CreatePrimitive(Primitives::CYLINDER, Object_data());
+					ImGui::EndMenu();
 				}
 				ImGui::EndPopup();
 			}

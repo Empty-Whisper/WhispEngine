@@ -103,7 +103,7 @@ void PanelConfiguration::Input()
 
 void PanelConfiguration::FileSystem()
 {
-	// TODO: Wait for the next class indications
+	// TODO: Expand
 	char path[100];
 	GetModuleFileNameA(NULL, path, 100);
 	ImGui::Text("Base Path:");

@@ -16,7 +16,13 @@ PanelConsole::~PanelConsole()
 
 void PanelConsole::Update()
 {
-	ImGui::Begin(name.data(), &active);
+	ImGui::Begin(name.data(), &active, ImGuiWindowFlags_MenuBar);
+	if (ImGui::BeginMenuBar()) {
+		if (ImGui::Button("Clear")) {
+			buffer.clear();
+		}
+		ImGui::EndMenuBar();
+	}
 	ImGui::TextUnformatted(buffer.begin());
 	if (log_new_line)
 		ImGui::SetScrollHereY(1.0f);
