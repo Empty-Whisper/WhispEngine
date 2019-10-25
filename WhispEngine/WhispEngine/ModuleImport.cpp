@@ -63,9 +63,8 @@ bool ModuleImport::ImportFbx(const char * path)
 {
 	bool ret = true;
 
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
 	LOG("Importing fbx with path: %s", path);
-
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{

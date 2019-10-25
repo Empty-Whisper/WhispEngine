@@ -2,7 +2,9 @@
 Open Asset Import Library (assimp)
 ----------------------------------------------------------------------
 
-Copyright (c) 2006-2016, assimp team
+Copyright (c) 2006-2019, assimp team
+
+
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms,
@@ -41,6 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @file postprocess.h
  *  @brief Definitions for import post processing steps
  */
+#pragma once
 #ifndef AI_POSTPROCESS_H_INC
 #define AI_POSTPROCESS_H_INC
 
@@ -68,7 +71,7 @@ enum aiPostProcessSteps
     // -------------------------------------------------------------------------
     /** <hr>Calculates the tangents and bitangents for the imported meshes.
      *
-     * Does nothing if a mesh does not have normals. You might want this post
+     * Does nothing if a d_mesh does not have normals. You might want this post
      * processing step to be executed if you plan to use tangent space calculations
      * such as normal mapping  applied to the meshes. There's an importer property,
      * <tt>#AI_CONFIG_PP_CT_MAX_SMOOTHING_ANGLE</tt>, which allows you to specify
@@ -81,7 +84,7 @@ enum aiPostProcessSteps
     /** <hr>Identifies and joins identical vertex data sets within all
      *  imported meshes.
      *
-     * After this step is run, each mesh contains unique vertices,
+     * After this step is run, each data contains unique vertices,
      * so a vertex may be used by multiple faces. You usually want
      * to use this post processing step. If your application deals with
      * indexed geometry, this step is compulsory or you'll just waste rendering
@@ -109,7 +112,7 @@ enum aiPostProcessSteps
     // -------------------------------------------------------------------------
     /** <hr>Triangulates all faces of all meshes.
      *
-     * By default the imported mesh data might contain faces with more than 3
+     * By default the imported data data might contain faces with more than 3
      * indices. For rendering you'll usually want all faces to be triangles.
      * This post processing step splits up faces with more than 3 indices into
      * triangles. Line and point primitives are *not* modified! If you want
@@ -163,7 +166,7 @@ enum aiPostProcessSteps
     aiProcess_GenNormals = 0x20,
 
     // -------------------------------------------------------------------------
-    /** <hr>Generates smooth normals for all vertices in the mesh.
+    /** <hr>Generates smooth normals for all vertices in the data.
     *
     * This is ignored if normals are already there at the time this flag
     * is evaluated. Model importers try to load them from the source file, so
@@ -186,7 +189,7 @@ enum aiPostProcessSteps
     * which can be maximally processed in a single draw-call is limited
     * by the video driver/hardware. The maximum vertex buffer is usually limited
     * too. Both requirements can be met with this step: you may specify both a
-    * triangle and vertex limit for a single mesh.
+    * triangle and vertex limit for a single data.
     *
     * The split limits can (and should!) be set through the
     * <tt>#AI_CONFIG_PP_SLM_VERTEX_LIMIT</tt> and <tt>#AI_CONFIG_PP_SLM_TRIANGLE_LIMIT</tt>
@@ -203,13 +206,13 @@ enum aiPostProcessSteps
     * the local transformation matrices of their nodes.
     *
     * The output scene still contains nodes, however there is only a
-    * root node with children, each one referencing only one mesh,
-    * and each mesh referencing one material. For rendering, you can
+    * root node with children, each one referencing only one data,
+    * and each data referencing one material. For rendering, you can
     * simply render all meshes in order - you don't need to pay
     * attention to local transformations and the node hierarchy.
     * Animations are removed during this step.
     * This step is intended for applications without a scenegraph.
-    * The step CAN cause some problems: if e.g. a mesh of the asset
+    * The step CAN cause some problems: if e.g. a data of the asset
     * contains normals and another, using the same material index, does not,
     * they will be brought together, but the first meshes's part of
     * the normal list is zeroed. However, these artifacts are rare.
@@ -358,6 +361,11 @@ enum aiPostProcessSteps
      *       and line meshes from the scene.
      *   </li>
      * </ul>
+     *
+     * This step also removes very small triangles with a surface area smaller
+     * than 10^-6. If you rely on having these small triangles, or notice holes
+     * in your model, set the property <tt>#AI_CONFIG_PP_FD_CHECKAREA</tt> to
+     * false.
      * @note Degenerate polygons are not necessarily evil and that's why
      * they're not removed by default. There are several file formats which
      * don't support lines or points, and some exporters bypass the
@@ -416,7 +424,7 @@ enum aiPostProcessSteps
 
     // -------------------------------------------------------------------------
     /** <hr>This step searches for duplicate meshes and replaces them
-     *  with references to the first mesh.
+     *  with references to the first data.
      *
      *  This step takes a while, so don't use it if speed is a concern.
      *  Its main purpose is to workaround the fact that many export
@@ -430,7 +438,7 @@ enum aiPostProcessSteps
     aiProcess_FindInstances = 0x100000,
 
     // -------------------------------------------------------------------------
-    /** <hr>A postprocessing step to reduce the number of meshes.
+    /** <hr>A post-processing step to reduce the number of meshes.
      *
      *  This will, in fact, reduce the number of draw calls.
      *
@@ -442,7 +450,7 @@ enum aiPostProcessSteps
 
 
     // -------------------------------------------------------------------------
-    /** <hr>A postprocessing step to optimize the scene hierarchy.
+    /** <hr>A post-processing step to optimize the scene hierarchy.
      *
      *  Nodes without animations, bones, lights or cameras assigned are
      *  collapsed and joined.
@@ -506,7 +514,7 @@ enum aiPostProcessSteps
 
     // -------------------------------------------------------------------------
     /** <hr>This step splits meshes with many bones into sub-meshes so that each
-     * su-bmesh has fewer or as many bones as a given limit.
+     * sub-data has fewer or as many bones as a given limit.
     */
     aiProcess_SplitByBoneCount  = 0x2000000,
 
@@ -523,11 +531,54 @@ enum aiPostProcessSteps
      *  Use <tt>#AI_CONFIG_PP_DB_ALL_OR_NONE</tt> if you want bones removed if and
      *  only if all bones within the scene qualify for removal.
     */
-    aiProcess_Debone  = 0x4000000
+    aiProcess_Debone  = 0x4000000,
 
+    // -------------------------------------------------------------------------
+    /** <hr>This step will perform a global scale of the model.
+    *
+    *  Some importers are providing a mechanism to define a scaling unit for the
+    *  model. This post processing step can be used to do so. You need to get the
+    *  global scaling from your importer settings like in FBX. Use the flag
+    *  AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY from the global property table to configure this.
+    *
+    *  Use <tt>#AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY</tt> to setup the global scaling factor.
+    */
+    aiProcess_GlobalScale = 0x8000000,
+
+    // -------------------------------------------------------------------------
+    /** <hr>A postprocessing step to embed of textures.
+     *
+     *  This will remove external data dependencies for textures.
+     *  If a texture's file does not exist at the specified path
+     *  (due, for instance, to an absolute path generated on another system),
+     *  it will check if a file with the same name exists at the root folder
+     *  of the imported model. And if so, it uses that.
+     */
+    aiProcess_EmbedTextures  = 0x10000000,
+        
     // aiProcess_GenEntityMeshes = 0x100000,
     // aiProcess_OptimizeAnimations = 0x200000
     // aiProcess_FixTexturePaths = 0x200000
+
+
+    aiProcess_ForceGenNormals = 0x20000000,
+
+    // -------------------------------------------------------------------------
+    /** <hr>Drops normals for all faces of all meshes.
+     *
+     * This is ignored if no normals are present.
+     * Face normals are shared between all points of a single face,
+     * so a single point can have multiple normals, which
+     * forces the library to duplicate vertices in some cases.
+     * #aiProcess_JoinIdenticalVertices is *senseless* then.
+     * This process gives sense back to aiProcess_JoinIdenticalVertices
+     */
+    aiProcess_DropNormals = 0x40000000,
+
+    // -------------------------------------------------------------------------
+    /**
+     */
+    aiProcess_GenBoundingBoxes = 0x80000000
 };
 
 

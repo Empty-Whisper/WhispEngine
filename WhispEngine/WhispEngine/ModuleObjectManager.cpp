@@ -191,6 +191,18 @@ Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 		FillTextureCoords(ret, (float*)mesh->mTextureCoords[0]);
 	}
 
+	// AABB
+	ret->aabb.SetNegativeInfinity();
+
+	ret->aabb.minPoint.x = mesh->mAABB.mMin.x;
+	ret->aabb.minPoint.y = mesh->mAABB.mMin.y;
+	ret->aabb.minPoint.z = mesh->mAABB.mMin.z;
+
+	ret->aabb.maxPoint.x = mesh->mAABB.mMax.x;
+	ret->aabb.maxPoint.y = mesh->mAABB.mMax.y;
+	ret->aabb.maxPoint.z = mesh->mAABB.mMax.z;
+
+
 	ret->SetGLBuffers();
 
 	return ret;

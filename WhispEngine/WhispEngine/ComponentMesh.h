@@ -3,6 +3,11 @@
 #include "ComponentMaterial.h"
 #include "Globals.h"
 #include "SDL/include/SDL_config.h"
+#include "MathGeoLib/include/Geometry/AABB.h"
+
+#include "glmath.h"
+#include <array>
+
 
 class GameObject;
 
@@ -23,11 +28,13 @@ struct Mesh_info {
 	Buffer<float> face_normals;
 	Buffer<float> vertex_normals;
 	Buffer<float> tex_coords;
+	AABB aabb;
 };
 
 enum class Normals {
 	NONE = 0, FACE, VERTEX, MAX
 };
+
 
 class ComponentMesh : public Component
 {
@@ -47,9 +54,13 @@ public:
 	void SetMaterial(ComponentMaterial * mat);
 
 	void OnInspector();
+	math::float3 CalculateRadius();
+	void InitAABB();
 
 public:
 	Mesh_info* mesh = nullptr;
+	Normals normals_state = Normals::NONE;
+
 
 private:
 	bool active = true;

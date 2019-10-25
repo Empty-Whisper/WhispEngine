@@ -3,7 +3,8 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2016, assimp team
+Copyright (c) 2006-2019, assimp team
+
 
 All rights reserved.
 
@@ -39,14 +40,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-/** @file mesh.h
+/** @file d_mesh.h
  *  @brief Declares the data structures in which the imported geometry is
     returned by ASSIMP: aiMesh, aiFace and aiBone data structures.
  */
-#ifndef INCLUDED_AI_MESH_H
-#define INCLUDED_AI_MESH_H
+#pragma once
+#ifndef AI_MESH_H_INC
+#define AI_MESH_H_INC
 
 #include "types.h"
+#include "aabb.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,7 +57,7 @@ extern "C" {
 
 // ---------------------------------------------------------------------------
 // Limits. These values are required to match the settings Assimp was
-// compiled against. Therfore, do not redefine them unless you build the
+// compiled against. Therefore, do not redefine them unless you build the
 // library from source using the same definitions.
 // ---------------------------------------------------------------------------
 
@@ -73,41 +76,41 @@ extern "C" {
 #endif
 
 /** @def AI_MAX_VERTICES
- *  Maximum number of vertices per mesh.  */
+ *  Maximum number of vertices per data.  */
 
 #ifndef AI_MAX_VERTICES
 #   define AI_MAX_VERTICES 0x7fffffff
 #endif
 
 /** @def AI_MAX_FACES
- *  Maximum number of faces per mesh. */
+ *  Maximum number of faces per data. */
 
 #ifndef AI_MAX_FACES
 #   define AI_MAX_FACES 0x7fffffff
 #endif
 
 /** @def AI_MAX_NUMBER_OF_COLOR_SETS
- *  Supported number of vertex color sets per mesh. */
+ *  Supported number of vertex color sets per data. */
 
 #ifndef AI_MAX_NUMBER_OF_COLOR_SETS
 #   define AI_MAX_NUMBER_OF_COLOR_SETS 0x8
 #endif // !! AI_MAX_NUMBER_OF_COLOR_SETS
 
 /** @def AI_MAX_NUMBER_OF_TEXTURECOORDS
- *  Supported number of texture coord sets (UV(W) channels) per mesh */
+ *  Supported number of texture coord sets (UV(W) channels) per data */
 
 #ifndef AI_MAX_NUMBER_OF_TEXTURECOORDS
 #   define AI_MAX_NUMBER_OF_TEXTURECOORDS 0x8
 #endif // !! AI_MAX_NUMBER_OF_TEXTURECOORDS
 
 // ---------------------------------------------------------------------------
-/** @brief A single face in a mesh, referring to multiple vertices.
+/** @brief A single face in a data, referring to multiple vertices.
  *
  * If mNumIndices is 3, we call the face 'triangle', for mNumIndices > 3
  * it's called 'polygon' (hey, that's just a definition!).
  * <br>
  * aiMesh::mPrimitiveTypes can be queried to quickly examine which types of
- * primitive are actually present in a mesh. The #aiProcess_SortByPType flag
+ * primitive are actually present in a data. The #aiProcess_SortByPType flag
  * executes a special post-processing algorithm which splits meshes with
  * *different* primitive types mixed up (e.g. lines and triangles) in several
  * 'clean' submeshes. Furthermore there is a configuration option (
@@ -134,10 +137,10 @@ struct aiFace
 #ifdef __cplusplus
 
     //! Default constructor
-    aiFace()
-      : mNumIndices( 0 )
-      , mIndices( NULL )
-    {
+    aiFace() AI_NO_EXCEPT
+    : mNumIndices( 0 )
+    , mIndices( nullptr ) {
+        // empty
     }
 
     //! Default destructor. Delete the index array
@@ -148,47 +151,56 @@ struct aiFace
 
     //! Copy constructor. Copy the index array
     aiFace( const aiFace& o)
-      : mIndices( NULL )
-    {
+    : mNumIndices(0)
+    , mIndices( nullptr ) {
         *this = o;
     }
 
     //! Assignment operator. Copy the index array
-    aiFace& operator = ( const aiFace& o)
-    {
-        if (&o == this)
+    aiFace& operator = ( const aiFace& o) {
+        if (&o == this) {
             return *this;
+        }
 
         delete[] mIndices;
         mNumIndices = o.mNumIndices;
         if (mNumIndices) {
             mIndices = new unsigned int[mNumIndices];
             ::memcpy( mIndices, o.mIndices, mNumIndices * sizeof( unsigned int));
+        } else {
+            mIndices = nullptr;
         }
-        else {
-            mIndices = NULL;
-        }
+
         return *this;
     }
 
     //! Comparison operator. Checks whether the index array
     //! of two faces is identical
-    bool operator== (const aiFace& o) const
-    {
-        if (mIndices == o.mIndices)return true;
-        else if (mIndices && mNumIndices == o.mNumIndices)
-        {
-            for (unsigned int i = 0;i < this->mNumIndices;++i)
-                if (mIndices[i] != o.mIndices[i])return false;
+    bool operator== (const aiFace& o) const {
+        if (mIndices == o.mIndices) {
             return true;
         }
-        return false;
+
+        if (nullptr != mIndices && mNumIndices != o.mNumIndices) {
+            return false;
+        }
+
+        if (nullptr == mIndices) {
+            return false;
+        }
+
+        for (unsigned int i = 0; i < this->mNumIndices; ++i) {
+            if (mIndices[i] != o.mIndices[i]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     //! Inverse comparison operator. Checks whether the index
     //! array of two faces is NOT identical
-    bool operator != (const aiFace& o) const
-    {
+    bool operator != (const aiFace& o) const {
         return !(*this == o);
     }
 #endif // __cplusplus
@@ -198,8 +210,7 @@ struct aiFace
 // ---------------------------------------------------------------------------
 /** @brief A single influence of a bone on a vertex.
  */
-struct aiVertexWeight
-{
+struct aiVertexWeight {
     //! Index of the vertex which is influenced by the bone.
     unsigned int mVertexId;
 
@@ -210,67 +221,127 @@ struct aiVertexWeight
 #ifdef __cplusplus
 
     //! Default constructor
-    aiVertexWeight() { }
+    aiVertexWeight() AI_NO_EXCEPT
+    : mVertexId(0)
+    , mWeight(0.0f) {
+        // empty
+    }
 
-    //! Initialisation from a given index and vertex weight factor
+    //! Initialization from a given index and vertex weight factor
     //! \param pID ID
     //! \param pWeight Vertex weight factor
-    aiVertexWeight( unsigned int pID, float pWeight)
-        : mVertexId( pID), mWeight( pWeight)
-    { /* nothing to do here */ }
+    aiVertexWeight( unsigned int pID, float pWeight )
+    : mVertexId( pID )
+    , mWeight( pWeight ) {
+        // empty
+    }
+
+    bool operator == ( const aiVertexWeight &rhs ) const {
+        return ( mVertexId == rhs.mVertexId && mWeight == rhs.mWeight );
+    }
+
+    bool operator != ( const aiVertexWeight &rhs ) const {
+        return ( *this == rhs );
+    }
 
 #endif // __cplusplus
 };
 
 
 // ---------------------------------------------------------------------------
-/** @brief A single bone of a mesh.
+/** @brief A single bone of a data.
  *
  *  A bone has a name by which it can be found in the frame hierarchy and by
  *  which it can be addressed by animations. In addition it has a number of
- *  influences on vertices.
+ *  influences on vertices, and a matrix relating the data position to the
+ *  position of the bone at the time of binding.
  */
-struct aiBone
-{
+struct aiBone {
     //! The name of the bone.
     C_STRUCT aiString mName;
 
-    //! The number of vertices affected by this bone
+    //! The number of vertices affected by this bone.
     //! The maximum value for this member is #AI_MAX_BONE_WEIGHTS.
     unsigned int mNumWeights;
 
-    //! The vertices affected by this bone
+    //! The influence weights of this bone, by vertex index.
     C_STRUCT aiVertexWeight* mWeights;
 
-    //! Matrix that transforms from mesh space to bone space in bind pose
+    /** Matrix that transforms from bone space to data space in bind pose.
+     *
+     * This matrix describes the position of the data
+     * in the local space of this bone when the skeleton was bound.
+     * Thus it can be used directly to determine a desired vertex position,
+     * given the world-space transform of the bone when animated,
+     * and the position of the vertex in data space.
+     *
+     * It is sometimes called an inverse-bind matrix,
+     * or inverse bind pose matrix.
+     */
     C_STRUCT aiMatrix4x4 mOffsetMatrix;
 
 #ifdef __cplusplus
 
     //! Default constructor
-    aiBone()
-        : mName()
-        , mNumWeights( 0 )
-      , mWeights( NULL )
-    {
+    aiBone() AI_NO_EXCEPT
+    : mName()
+    , mNumWeights( 0 )
+    , mWeights( nullptr )
+    , mOffsetMatrix() {
+        // empty
     }
 
     //! Copy constructor
     aiBone(const aiBone& other)
-      : mName( other.mName )
-      , mNumWeights( other.mNumWeights )
-      , mOffsetMatrix( other.mOffsetMatrix )
-    {
-        if (other.mWeights && other.mNumWeights)
-        {
+    : mName( other.mName )
+    , mNumWeights( other.mNumWeights )
+    , mWeights(nullptr)
+    , mOffsetMatrix( other.mOffsetMatrix ) {
+        if (other.mWeights && other.mNumWeights) {
             mWeights = new aiVertexWeight[mNumWeights];
             ::memcpy(mWeights,other.mWeights,mNumWeights * sizeof(aiVertexWeight));
         }
     }
 
+
+    //! Assignment operator
+    aiBone &operator=(const aiBone& other) {
+        if (this == &other) {
+            return *this;
+        }
+
+        mName         = other.mName;
+        mNumWeights   = other.mNumWeights;
+        mOffsetMatrix = other.mOffsetMatrix;
+
+        if (other.mWeights && other.mNumWeights)
+        {
+            if (mWeights) {
+                delete[] mWeights;
+            }
+
+            mWeights = new aiVertexWeight[mNumWeights];
+            ::memcpy(mWeights,other.mWeights,mNumWeights * sizeof(aiVertexWeight));
+        }
+
+        return *this;
+    }
+
+    bool operator == ( const aiBone &rhs ) const {
+        if ( mName != rhs.mName || mNumWeights != rhs.mNumWeights ) {
+            return false;
+        }
+
+        for ( size_t i = 0; i < mNumWeights; ++i ) {
+            if ( mWeights[ i ] != rhs.mWeights[ i ] ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
     //! Destructor - deletes the array of vertex weights
-    ~aiBone()
-    {
+    ~aiBone() {
         delete [] mWeights;
     }
 #endif // __cplusplus
@@ -332,21 +403,24 @@ enum aiPrimitiveType
 
 
 // ---------------------------------------------------------------------------
-/** @brief NOT CURRENTLY IN USE. An AnimMesh is an attachment to an #aiMesh stores per-vertex
+/** @brief An AnimMesh is an attachment to an #aiMesh stores per-vertex
  *  animations for a particular frame.
  *
- *  You may think of an #aiAnimMesh as a `patch` for the host mesh, which
+ *  You may think of an #aiAnimMesh as a `patch` for the host data, which
  *  replaces only certain vertex data streams at a particular time.
- *  Each mesh stores n attached attached meshes (#aiMesh::mAnimMeshes).
+ *  Each data stores n attached attached meshes (#aiMesh::mAnimMeshes).
  *  The actual relationship between the time line and anim meshes is
- *  established by #aiMeshAnim, which references singular mesh attachments
+ *  established by #aiMeshAnim, which references singular data attachments
  *  by their ID and binds them to a time offset.
 */
 struct aiAnimMesh
 {
+    /**Anim Mesh name */
+    C_STRUCT aiString mName;
+
     /** Replacement for aiMesh::mVertices. If this array is non-NULL,
      *  it *must* contain mNumVertices entries. The corresponding
-     *  array in the host mesh must be non-NULL as well - animation
+     *  array in the host data must be non-NULL as well - animation
      *  meshes may neither add or nor remove vertex components (if
      *  a replacement array is NULL and the corresponding source
      *  array is not, the source data is taken instead)*/
@@ -376,22 +450,30 @@ struct aiAnimMesh
      * from language bindings.
      */
     unsigned int mNumVertices;
+    
+    /** 
+     * Weight of the AnimMesh. 
+     */
+    float mWeight;
 
 #ifdef __cplusplus
 
-    aiAnimMesh()
-        : mVertices( NULL )
-        , mNormals( NULL )
-        , mTangents( NULL )
-        , mBitangents( NULL )
+    aiAnimMesh() AI_NO_EXCEPT
+        : mVertices( nullptr )
+        , mNormals(nullptr)
+        , mTangents(nullptr)
+        , mBitangents(nullptr)
+        , mColors()
+        , mTextureCoords()
         , mNumVertices( 0 )
+        , mWeight( 0.0f )
     {
         // fixme consider moving this to the ctor initializer list as well
         for( unsigned int a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++){
-            mTextureCoords[a] = NULL;
+            mTextureCoords[a] = nullptr;
         }
         for( unsigned int a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++) {
-            mColors[a] = NULL;
+            mColors[a] = nullptr;
         }
     }
 
@@ -409,45 +491,66 @@ struct aiAnimMesh
         }
     }
 
-    /** Check whether the anim mesh overrides the vertex positions
-     *  of its host mesh*/
+    /** Check whether the anim data overrides the vertex positions
+     *  of its host data*/
     bool HasPositions() const {
-        return mVertices != NULL;
+        return mVertices != nullptr;
     }
 
-    /** Check whether the anim mesh overrides the vertex normals
-     *  of its host mesh*/
+    /** Check whether the anim data overrides the vertex normals
+     *  of its host data*/
     bool HasNormals() const {
-        return mNormals != NULL;
+        return mNormals != nullptr;
     }
 
-    /** Check whether the anim mesh overrides the vertex tangents
-     *  and bitangents of its host mesh. As for aiMesh,
+    /** Check whether the anim data overrides the vertex tangents
+     *  and bitangents of its host data. As for aiMesh,
      *  tangents and bitangents always go together. */
     bool HasTangentsAndBitangents() const {
-        return mTangents != NULL;
+        return mTangents != nullptr;
     }
 
-    /** Check whether the anim mesh overrides a particular
-     * set of vertex colors on his host mesh.
+    /** Check whether the anim data overrides a particular
+     * set of vertex colors on his host data.
      *  @param pIndex 0<index<AI_MAX_NUMBER_OF_COLOR_SETS */
     bool HasVertexColors( unsigned int pIndex) const    {
-        return pIndex >= AI_MAX_NUMBER_OF_COLOR_SETS ? false : mColors[pIndex] != NULL;
+        return pIndex >= AI_MAX_NUMBER_OF_COLOR_SETS ? false : mColors[pIndex] != nullptr;
     }
 
-    /** Check whether the anim mesh overrides a particular
-     * set of texture coordinates on his host mesh.
+    /** Check whether the anim data overrides a particular
+     * set of texture coordinates on his host data.
      *  @param pIndex 0<index<AI_MAX_NUMBER_OF_TEXTURECOORDS */
     bool HasTextureCoords( unsigned int pIndex) const   {
-        return pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS ? false : mTextureCoords[pIndex] != NULL;
+        return pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS ? false : mTextureCoords[pIndex] != nullptr;
     }
 
 #endif
 };
 
+// ---------------------------------------------------------------------------
+/** @brief Enumerates the methods of data morphing supported by Assimp.
+ */
+enum aiMorphingMethod
+{
+    /** Interpolation between morph targets */
+    aiMorphingMethod_VERTEX_BLEND       = 0x1,
+
+    /** Normalized morphing between morph targets  */
+    aiMorphingMethod_MORPH_NORMALIZED   = 0x2,
+
+    /** Relative morphing between morph targets  */
+    aiMorphingMethod_MORPH_RELATIVE     = 0x3,
+
+    /** This value is not used. It is just here to force the
+     *  compiler to map this enum to a 32 Bit integer.
+     */
+#ifndef SWIG
+    _aiMorphingMethod_Force32Bit = INT_MAX
+#endif
+}; //! enum aiMorphingMethod
 
 // ---------------------------------------------------------------------------
-/** @brief A mesh represents a geometry or model with a single material.
+/** @brief A data represents a geometry or model with a single material.
 *
 * It usually consists of a number of vertices and a series of primitives/faces
 * referencing the vertices. In addition there might be a series of bones, each
@@ -468,26 +571,26 @@ struct aiAnimMesh
 struct aiMesh
 {
     /** Bitwise combination of the members of the #aiPrimitiveType enum.
-     * This specifies which types of primitives are present in the mesh.
+     * This specifies which types of primitives are present in the data.
      * The "SortByPrimitiveType"-Step can be used to make sure the
      * output meshes consist of one primitive type each.
      */
     unsigned int mPrimitiveTypes;
 
-    /** The number of vertices in this mesh.
+    /** The number of vertices in this data.
     * This is also the size of all of the per-vertex data arrays.
     * The maximum value for this member is #AI_MAX_VERTICES.
     */
     unsigned int mNumVertices;
 
-    /** The number of primitives (triangles, polygons, lines) in this  mesh.
+    /** The number of primitives (triangles, polygons, lines) in this  data.
     * This is also the size of the mFaces array.
     * The maximum value for this member is #AI_MAX_FACES.
     */
     unsigned int mNumFaces;
 
     /** Vertex positions.
-    * This array is always present in a mesh. The array is
+    * This array is always present in a data. The array is
     * mNumVertices in size.
     */
     C_STRUCT aiVector3D* mVertices;
@@ -495,7 +598,7 @@ struct aiMesh
     /** Vertex normals.
     * The array contains normalized vectors, NULL if not present.
     * The array is mNumVertices in size. Normals are undefined for
-    * point and line primitives. A mesh consisting of points and
+    * point and line primitives. A data consisting of points and
     * lines only may not have normal vectors. Meshes with mixed
     * primitive types (i.e. lines and triangles) may have normals,
     * but the normals for vertices that are only referenced by
@@ -517,13 +620,13 @@ struct aiMesh
     /** Vertex tangents.
     * The tangent of a vertex points in the direction of the positive
     * X texture axis. The array contains normalized vectors, NULL if
-    * not present. The array is mNumVertices in size. A mesh consisting
+    * not present. The array is mNumVertices in size. A data consisting
     * of points and lines only may not have normal vectors. Meshes with
     * mixed primitive types (i.e. lines and triangles) may have
     * normals, but the normals for vertices that are only referenced by
     * point or line primitives are undefined and set to qNaN.  See
     * the #mNormals member for a detailed discussion of qNaNs.
-    * @note If the mesh contains tangents, it automatically also
+    * @note If the data contains tangents, it automatically also
     * contains bitangents.
     */
     C_STRUCT aiVector3D* mTangents;
@@ -532,20 +635,20 @@ struct aiMesh
     * The bitangent of a vertex points in the direction of the positive
     * Y texture axis. The array contains normalized vectors, NULL if not
     * present. The array is mNumVertices in size.
-    * @note If the mesh contains tangents, it automatically also contains
+    * @note If the data contains tangents, it automatically also contains
     * bitangents.
     */
     C_STRUCT aiVector3D* mBitangents;
 
     /** Vertex color sets.
-    * A mesh may contain 0 to #AI_MAX_NUMBER_OF_COLOR_SETS vertex
+    * A data may contain 0 to #AI_MAX_NUMBER_OF_COLOR_SETS vertex
     * colors per vertex. NULL if not present. Each array is
     * mNumVertices in size if present.
     */
     C_STRUCT aiColor4D* mColors[AI_MAX_NUMBER_OF_COLOR_SETS];
 
     /** Vertex texture coords, also known as UV channels.
-    * A mesh may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per
+    * A data may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per
     * vertex. NULL if not present. The array is mNumVertices in size.
     */
     C_STRUCT aiVector3D* mTextureCoords[AI_MAX_NUMBER_OF_TEXTURECOORDS];
@@ -559,86 +662,99 @@ struct aiMesh
     */
     unsigned int mNumUVComponents[AI_MAX_NUMBER_OF_TEXTURECOORDS];
 
-    /** The faces the mesh is constructed from.
+    /** The faces the data is constructed from.
     * Each face refers to a number of vertices by their indices.
-    * This array is always present in a mesh, its size is given
+    * This array is always present in a data, its size is given
     * in mNumFaces. If the #AI_SCENE_FLAGS_NON_VERBOSE_FORMAT
     * is NOT set each face references an unique set of vertices.
     */
     C_STRUCT aiFace* mFaces;
 
-    /** The number of bones this mesh contains.
+    /** The number of bones this data contains.
     * Can be 0, in which case the mBones array is NULL.
     */
     unsigned int mNumBones;
 
-    /** The bones of this mesh.
+    /** The bones of this data.
     * A bone consists of a name by which it can be found in the
     * frame hierarchy and a set of vertex weights.
     */
     C_STRUCT aiBone** mBones;
 
-    /** The material used by this mesh.
-     * A mesh uses only a single material. If an imported model uses
-     * multiple materials, the import splits up the mesh. Use this value
+    /** The material used by this data.
+     * A data uses only a single material. If an imported model uses
+     * multiple materials, the import splits up the data. Use this value
      * as index into the scene's material list.
      */
     unsigned int mMaterialIndex;
 
-    /** Name of the mesh. Meshes can be named, but this is not a
+    /** Name of the data. Meshes can be named, but this is not a
      *  requirement and leaving this field empty is totally fine.
-     *  There are mainly three uses for mesh names:
+     *  There are mainly three uses for data names:
      *   - some formats name nodes and meshes independently.
      *   - importers tend to split meshes up to meet the
-     *      one-material-per-mesh requirement. Assigning
+     *      one-material-per-data requirement. Assigning
      *      the same (dummy) name to each of the result meshes
-     *      aids the caller at recovering the original mesh
+     *      aids the caller at recovering the original data
      *      partitioning.
      *   - Vertex animations refer to meshes by their names.
      **/
     C_STRUCT aiString mName;
 
 
-    /** NOT CURRENTLY IN USE. The number of attachment meshes */
+    /** The number of attachment meshes. Note! Currently only works with Collada loader. */
     unsigned int mNumAnimMeshes;
 
-    /** NOT CURRENTLY IN USE. Attachment meshes for this mesh, for vertex-based animation.
+    /** Attachment meshes for this data, for vertex-based animation.
      *  Attachment meshes carry replacement data for some of the
-     *  mesh'es vertex components (usually positions, normals). */
+     *  data'es vertex components (usually positions, normals).
+     *  Note! Currently only works with Collada loader.*/
     C_STRUCT aiAnimMesh** mAnimMeshes;
 
+    /** 
+     *  Method of morphing when animeshes are specified. 
+     */
+    unsigned int mMethod;
 
+    /**
+     *
+     */
+    C_STRUCT aiAABB mAABB;
+	
 #ifdef __cplusplus
 
     //! Default constructor. Initializes all members to 0
-    aiMesh()
-        : mPrimitiveTypes( 0 )
-        , mNumVertices( 0 )
-        , mNumFaces( 0 )
-        , mVertices( NULL )
-        , mNormals( NULL )
-        , mTangents( NULL )
-        , mBitangents( NULL )
-        , mFaces( NULL )
-        , mNumBones( 0 )
-        , mBones( NULL )
-        , mMaterialIndex( 0 )
-        , mNumAnimMeshes( 0 )
-        , mAnimMeshes( NULL )
-    {
-        for( unsigned int a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; a++)
-        {
+    aiMesh() AI_NO_EXCEPT
+    : mPrimitiveTypes( 0 )
+    , mNumVertices( 0 )
+    , mNumFaces( 0 )
+    , mVertices( nullptr )
+    , mNormals(nullptr)
+    , mTangents(nullptr)
+    , mBitangents(nullptr)
+    , mColors()
+    , mTextureCoords()
+    , mNumUVComponents()
+    , mFaces(nullptr)
+    , mNumBones( 0 )
+    , mBones(nullptr)
+    , mMaterialIndex( 0 )
+    , mNumAnimMeshes( 0 )
+    , mAnimMeshes(nullptr)
+    , mMethod( 0 )
+    , mAABB() {
+        for( unsigned int a = 0; a < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++a ) {
             mNumUVComponents[a] = 0;
-            mTextureCoords[a] = NULL;
+            mTextureCoords[a] = nullptr;
         }
 
-        for( unsigned int a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; a++)
-            mColors[a] = NULL;
+        for (unsigned int a = 0; a < AI_MAX_NUMBER_OF_COLOR_SETS; ++a) {
+            mColors[a] = nullptr;
+        }
     }
 
-    //! Deletes all storage allocated for the mesh
-    ~aiMesh()
-    {
+    //! Deletes all storage allocated for the data
+    ~aiMesh() {
         delete [] mVertices;
         delete [] mNormals;
         delete [] mTangents;
@@ -668,73 +784,76 @@ struct aiMesh
         delete [] mFaces;
     }
 
-    //! Check whether the mesh contains positions. Provided no special
+    //! Check whether the data contains positions. Provided no special
     //! scene flags are set, this will always be true
     bool HasPositions() const
-        { return mVertices != NULL && mNumVertices > 0; }
+        { return mVertices != nullptr && mNumVertices > 0; }
 
-    //! Check whether the mesh contains faces. If no special scene flags
+    //! Check whether the data contains faces. If no special scene flags
     //! are set this should always return true
     bool HasFaces() const
-        { return mFaces != NULL && mNumFaces > 0; }
+        { return mFaces != nullptr && mNumFaces > 0; }
 
-    //! Check whether the mesh contains normal vectors
+    //! Check whether the data contains normal vectors
     bool HasNormals() const
-        { return mNormals != NULL && mNumVertices > 0; }
+        { return mNormals != nullptr && mNumVertices > 0; }
 
-    //! Check whether the mesh contains tangent and bitangent vectors
+    //! Check whether the data contains tangent and bitangent vectors
     //! It is not possible that it contains tangents and no bitangents
     //! (or the other way round). The existence of one of them
     //! implies that the second is there, too.
     bool HasTangentsAndBitangents() const
-        { return mTangents != NULL && mBitangents != NULL && mNumVertices > 0; }
+        { return mTangents != nullptr && mBitangents != nullptr && mNumVertices > 0; }
 
-    //! Check whether the mesh contains a vertex color set
+    //! Check whether the data contains a vertex color set
     //! \param pIndex Index of the vertex color set
-    bool HasVertexColors( unsigned int pIndex) const
-    {
-        if( pIndex >= AI_MAX_NUMBER_OF_COLOR_SETS)
+    bool HasVertexColors( unsigned int pIndex) const {
+        if (pIndex >= AI_MAX_NUMBER_OF_COLOR_SETS) {
             return false;
-        else
-            return mColors[pIndex] != NULL && mNumVertices > 0;
+        } else {
+            return mColors[pIndex] != nullptr && mNumVertices > 0;
+        }
     }
 
-    //! Check whether the mesh contains a texture coordinate set
+    //! Check whether the data contains a texture coordinate set
     //! \param pIndex Index of the texture coordinates set
-    bool HasTextureCoords( unsigned int pIndex) const
-    {
-        if( pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS)
+    bool HasTextureCoords( unsigned int pIndex) const {
+        if (pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS) {
             return false;
-        else
-            return mTextureCoords[pIndex] != NULL && mNumVertices > 0;
+        } else {
+            return mTextureCoords[pIndex] != nullptr && mNumVertices > 0;
+        }
     }
 
-    //! Get the number of UV channels the mesh contains
-    unsigned int GetNumUVChannels() const
-    {
-        unsigned int n = 0;
-        while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS && mTextureCoords[n])++n;
+    //! Get the number of UV channels the data contains
+    unsigned int GetNumUVChannels() const {
+        unsigned int n( 0 );
+        while (n < AI_MAX_NUMBER_OF_TEXTURECOORDS && mTextureCoords[n]) {
+            ++n;
+        }
+
         return n;
     }
 
-    //! Get the number of vertex color channels the mesh contains
-    unsigned int GetNumColorChannels() const
-    {
-        unsigned int n = 0;
-        while (n < AI_MAX_NUMBER_OF_COLOR_SETS && mColors[n])++n;
+    //! Get the number of vertex color channels the data contains
+    unsigned int GetNumColorChannels() const {
+        unsigned int n(0);
+        while (n < AI_MAX_NUMBER_OF_COLOR_SETS && mColors[n]) {
+            ++n;
+        }
         return n;
     }
 
-    //! Check whether the mesh contains bones
-    inline bool HasBones() const
-        { return mBones != NULL && mNumBones > 0; }
+    //! Check whether the data contains bones
+    bool HasBones() const {
+        return mBones != nullptr && mNumBones > 0;
+    }
 
 #endif // __cplusplus
 };
 
-
 #ifdef __cplusplus
 }
 #endif //! extern "C"
-#endif // __AI_MESH_H_INC
+#endif // AI_MESH_H_INC
 

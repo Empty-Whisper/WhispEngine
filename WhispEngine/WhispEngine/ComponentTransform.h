@@ -15,7 +15,7 @@ public:
 	ComponentTransform(GameObject* parent);
 	~ComponentTransform();
 
-	void PreUpdate(); //TODO: 1. Recalculate all the global matrices at the beginning of the frame
+	void PreUpdate();
 
 	void OnInspector();
 
