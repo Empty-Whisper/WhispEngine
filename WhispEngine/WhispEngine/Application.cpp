@@ -190,14 +190,20 @@ update_status Application::Update()
 	
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
 		ret = (*item)->PreUpdate();
+		if (ret != UPDATE_CONTINUE)
+			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
 	}
 
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
 		ret = (*item)->Update();
+		if (ret != UPDATE_CONTINUE)
+			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
 	}
 
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
 		ret = (*item)->PostUpdate();
+		if (ret != UPDATE_CONTINUE)
+			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
 	}
 
 	FinishUpdate();

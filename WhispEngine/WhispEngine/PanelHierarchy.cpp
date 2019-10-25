@@ -31,19 +31,43 @@ void PanelHierarchy::Update()
 		}
 		if (!to_change.empty()) {
 			for (auto chng = to_change.begin(); chng != to_change.end(); chng++) {
-				if ((*chng).child->HasChild((*chng).parent)) { // if we change the parent-child to child-parent, causes interferences
-					//(*chng).parent->Detach();					//so first detach the parent and set to the childs parent
-					//(*chng).parent->Attach((*chng).child->parent);
-					//(*chng).child->Detach();					//now attach the child to the new parent in the new position
-					//(*chng).child->Attach((*chng).parent);
-				}
-				else {
-					(*chng).child->Detach();
-					(*chng).child->Attach((*chng).parent);
+				if (!(*chng).second->HasChild((*chng).first)) { // if the GameObject we want to change is parent of the other, we will leap that situation
+					(*chng).second->Detach();
+					(*chng).second->Attach((*chng).first);
 				}
 			}
 			to_change.clear();
 		}
+		if (!to_move.empty()) {
+			for (auto it = to_move.begin(); it != to_move.end(); it++) {
+				switch ((*it).direction) {
+				case ToMove::UP:
+					std::iter_swap((*it).object, (*it).object - 1);
+					break;
+				case ToMove::DOWN:
+					std::iter_swap((*it).object, (*it).object + 1);
+					break;
+				}
+			}
+			to_move.clear();
+		}
+		if (to_create != nullptr) {
+			App->object_manager->CreateGameObject(to_create);
+			to_create = nullptr;
+		}
+
+		if(App->input->GetMouseButtonDown(0))
+			popup_window = false;
+		if(!ImGui::IsAnyItemHovered() || popup_window)
+			if (ImGui::BeginPopupContextWindow("HierarchyPopup",1,false)) {
+				popup_window = true;
+				if (ImGui::Button("Create Empty")) {
+					App->object_manager->CreateGameObject(nullptr);
+					ImGui::CloseCurrentPopup();
+					popup_window = false;
+				}
+				ImGui::EndPopup();
+			}
 	}
 	ImGui::End();
 
@@ -71,6 +95,51 @@ void PanelHierarchy::DrawNode(GameObject* obj) {
 
 	ImGui::PushID(obj);
 	if (ImGui::BeginPopupContextItem("object")) {
+
+		if (ImGui::Button("Create Empty")) {
+			to_create = obj;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ToMove tmp;
+		tmp.object = std::find(obj->parent->children.begin(), obj->parent->children.end(), obj);
+		bool refuse_move = tmp.object == obj->parent->children.begin() || obj->parent->children.empty();
+		
+		if (refuse_move) {
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+		
+		if (ImGui::Button("Move Up")) {
+			tmp.direction = tmp.UP;
+			to_move.push_back(tmp);
+			ImGui::CloseCurrentPopup();
+		}
+		
+		if (refuse_move) {
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
+
+		refuse_move = tmp.object == obj->parent->children.end() - 1 || obj->parent->children.empty();
+
+		if (refuse_move) {
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+
+		if (ImGui::Button("Move Down")) {
+			tmp.direction = tmp.DOWN;
+			to_move.push_back(tmp);
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (refuse_move) {
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
+
+
 		if (ImGui::Button("Delete")) {
 			to_delete.push_back(obj);
 		}
@@ -86,19 +155,13 @@ void PanelHierarchy::DrawNode(GameObject* obj) {
 
 	if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) { // Other GameObject
-			ToChange tmp;
-			tmp.parent = obj;
-			tmp.child = *(GameObject**)payload->Data;
-			to_change.push_back(tmp);
+			to_change.emplace(std::pair<GameObject*, GameObject*>(obj, *(GameObject**)payload->Data));
 		}
 		ImGui::EndDragDropTarget();
 	}
 	if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Hierarchy"))) { //Window
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) {
-			ToChange tmp;
-			tmp.parent = App->object_manager->GetRoot();
-			tmp.child = *(GameObject**)payload->Data;
-			to_change.push_back(tmp);
+			to_change.emplace(std::pair<GameObject*, GameObject*>(App->object_manager->GetRoot(), *(GameObject**)payload->Data));
 		}
 		ImGui::EndDragDropTarget();
 	}

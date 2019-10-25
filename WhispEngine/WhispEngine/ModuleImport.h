@@ -20,6 +20,9 @@ public:
 	bool ImportFbx(const char* path);
 	Texture* ImportTexture(const char* path);
 
+public:
+	Texture* logo_txt = nullptr;
+
 private:
 	void LoadNode(aiNode * node, GameObject * container, const aiScene * scene);
 };

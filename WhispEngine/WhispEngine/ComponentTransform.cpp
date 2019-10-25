@@ -24,16 +24,16 @@ void ComponentTransform::OnInspector()
 {
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
 		ImGui::PushID("POSITION");
-		ImGui::Text("Position"); ImGui::SameLine(); App->gui->HelpMarker("(?)", "Ctrl + Click to turn drag box into an input box");
+		ImGui::Text("Position"); ImGui::SameLine(); App->gui->HelpMarker("(?)", "Double Click to turn drag box into an input box");
 
 		ImGui::SetNextItemWidth(75.f);
-		bool change_pos = ImGui::DragFloat("X", &position.x, 1.f, -50.f, 50.f); //In different lines ('|=') because if just || did not print the next sliders
+		bool change_pos = ImGui::DragFloat("X", &position.x, 0.2f, -50.f, 50.f); //In different lines ('|=') because if just || did not print the next sliders
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(75.f);
-		change_pos		|= ImGui::DragFloat("Y", &position.y, 1.f, -50.f, 50.f);
+		change_pos		|= ImGui::DragFloat("Y", &position.y, 0.2f, -50.f, 50.f);
 		ImGui::SameLine();
 		ImGui::SetNextItemWidth(75.f);
-		change_pos		|= ImGui::DragFloat("Z", &position.z, 1.f, -50.f, 50.f);
+		change_pos		|= ImGui::DragFloat("Z", &position.z, 0.2f, -50.f, 50.f);
 
 		if (change_pos) {
 			CalculeLocalMatrix();
@@ -105,6 +105,10 @@ void ComponentTransform::SetLocalMatrix(const math::float4x4 & matrix)
 void ComponentTransform::CalculeLocalMatrix()
 {
 	local_matrix = math::float4x4::FromTRS(position, rotation, scale);
+	CalculateGlobalMatrix();
+	for (auto i = object->children.begin(); i != object->children.end(); i++) {
+		((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
+	}
 }
 
 void ComponentTransform::CalculateGlobalMatrix()
@@ -125,7 +129,7 @@ math::float4x4 ComponentTransform::GetGlobalMatrix() const
 	return global_matrix;
 }
 
-const float* ComponentTransform::GetPtrGlobalMatrix() const
+math::float3 ComponentTransform::GetPosition() const
 {
-	return global_matrix.ptr();
+	return position;
 }

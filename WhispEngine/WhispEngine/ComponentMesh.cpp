@@ -7,12 +7,15 @@
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
-	material = (ComponentMaterial*)parent->GetComponent(ComponentType::MATERIAL);
+	material = (ComponentMaterial*)parent->CreateComponent(ComponentType::MATERIAL);
 }
 
 void ComponentMesh::Update()
 {
-	
+
+	if (mesh == nullptr)
+		return;
+
 	glColor3f(1.f, 1.f, 1.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -51,13 +54,20 @@ void ComponentMesh::Update()
 ComponentMesh::~ComponentMesh()
 {
 	delete mesh;
+	if (object->GetComponent(ComponentType::MATERIAL) != nullptr) {
+		if (material != nullptr) {
+			object->components.erase(std::find(object->components.begin(), object->components.end(), material));
+			delete material;
+			material = nullptr;
+		}
+	}
 }
 
 void ComponentMesh::Draw()
 {
 	glColor3f(1.f, 1.f, 1.f);
 
-	if (material != nullptr) {
+	if (mesh->tex_coords.data != nullptr) {
 		if (material->IsActive()) {
 			if (material->HasTexture()) {
 				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -69,21 +79,23 @@ void ComponentMesh::Draw()
 		}
 	}
 
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	if (mesh->vertex.data != nullptr) {
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	if (mesh->tex_coords.data != nullptr) {
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords.id);
-		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-	}
-	if (mesh->vertex_normals.data != nullptr) {
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex_normals.id);
-		glNormalPointer(GL_FLOAT, 0, NULL);
-	}
+		if (mesh->tex_coords.data != nullptr) {
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords.id);
+			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		}
+		if (mesh->vertex_normals.data != nullptr) {
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex_normals.id);
+			glNormalPointer(GL_FLOAT, 0, NULL);
+		}
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
-	glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
+		glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+	}
 
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -154,43 +166,78 @@ void ComponentMesh::DrawOutline()
 void ComponentMesh::DrawNormals()
 {
 
-	if (normals_state == Normals::FACE) {
+	if (view_face_normals) {
 		if (mesh->face_normals.data != nullptr) {
 			glColor3f(0.f, 1.f, 0.f);
 			glLineWidth(3.f);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->face_normals.id);
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
-			glDrawArrays(GL_LINES, 0, mesh->face_normals.size);
+			glBegin(GL_LINES);
+			for (int i = 0; i < mesh->face_normals.size; i += 6) {
+				glVertex3f(mesh->face_normals.data[i], mesh->face_normals.data[i + 1], mesh->face_normals.data[i + 2]);
+				glVertex3f(mesh->face_normals.data[i + 3], mesh->face_normals.data[i + 4], mesh->face_normals.data[i + 5]);
+			}
+			glEnd();
 			glLineWidth(1.f);
 		}
 	}
-	if (normals_state == Normals::VERTEX) {
+	if (view_vertex_normals) {
 		glColor3f(0.f, 0.f, 1.f);
-
 		if (mesh->vertex_normals.data != nullptr) {
 			glBegin(GL_LINES);
-			for (int j = 0; j < mesh->vertex.size * 2; j += 3) {
+			for (int j = 0; j < mesh->vertex.size * 3; j += 3) {
 				glVertex3f(mesh->vertex.data[j], mesh->vertex.data[j + 1], mesh->vertex.data[j + 2]);
-				glVertex3f(mesh->vertex_normals.data[j], mesh->vertex_normals.data[j + 1], mesh->vertex_normals.data[j + 2]);
+				glVertex3f(mesh->vertex.data[j] + mesh->vertex_normals.data[j], mesh->vertex.data[j + 1] + mesh->vertex_normals.data[j + 1], mesh->vertex.data[j + 2] + mesh->vertex_normals.data[j + 2]);
 			}
 			glEnd();
 		}
 	}
 }
 
-void ComponentMesh::SetMaterial(ComponentMaterial  * mat)
-{
-	material = mat;
-}
-
 void ComponentMesh::OnInspector()
 {
+	ActiveImGui();
+	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
-		ActiveImGui();
+		if (ImGui::BeginPopupContextItem("Mesh")) {
+			if (ImGui::Button("Delete")) {
+				object->DeleteComponent(this);
+			}
+			ImGui::EndPopup();
+		}
 
-		/*ImGui::Checkbox("UVs", &view_uv);
-		ImGui::Checkbox("Face Normals", &view_face_normals);
-		ImGui::Checkbox("Vertex Normals", &view_vertex_normals);*/
+		if (mesh != nullptr) {
+			ImGui::Text("%i triangles (%i vertices, %i indices)", mesh->index.size / 9, mesh->vertex.size, mesh->index.size / 3);
+
+			ImGui::Checkbox("Face Normals", &view_face_normals);
+			ImGui::Checkbox("Vertex Normals", &view_vertex_normals);
+		}
+		else {
+			if (ImGui::Button("Set Resource"))
+				ImGui::OpenPopup("primitive_popup");
+			if (ImGui::BeginPopup("primitive_popup")) {
+				if (ImGui::Selectable("Cube")) // TODO: Do a for loop or a ImGui::Combo
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CUBE);
+				if (ImGui::Selectable("Tetrahedron"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::TETRAHEDRON);
+				if (ImGui::Selectable("Octahedron"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::OCTAHEDRON);
+				if (ImGui::Selectable("Dodecahedron"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::DODECAHEDRON);
+				if (ImGui::Selectable("Icosahedron"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::ICOSAHEDRON);
+				if (ImGui::Selectable("Sphere"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::SPHERE);
+				if (ImGui::Selectable("Hemisphere"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::HEMISPHERE);
+				if (ImGui::Selectable("Torus"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::TORUS);
+				if (ImGui::Selectable("Cone"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CONE);
+				if (ImGui::Selectable("Cylinder"))
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CYLINDER);
+
+				ImGui::EndPopup();
+			}
+		}
 	}
 }
 

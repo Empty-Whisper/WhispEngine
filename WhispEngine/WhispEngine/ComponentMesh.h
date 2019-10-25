@@ -42,8 +42,6 @@ public:
 	ComponentMesh(GameObject *parent);
 	~ComponentMesh();
 
-private:
-
 public:
 
 	void Update();
@@ -62,7 +60,13 @@ public:
 public:
 	Mesh_info* mesh = nullptr;
 	Normals normals_state = Normals::NONE;
+
+
+private:
 	bool active = true;
+
+	bool view_face_normals = false;
+	bool view_vertex_normals = false;
 
 	/*Linked to a material to know if it has to use a color or a texture.
 	  Check every frame if exist a material in GameObject will consume a lot of resources*/

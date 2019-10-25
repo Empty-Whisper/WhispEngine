@@ -31,10 +31,8 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
 	
 	if (obj->IsActive()) {
-		ComponentTransform* transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
-		transform->CalculateGlobalMatrix();
 		glPushMatrix();
-		glMultMatrixf(transform->global_matrix.Transposed().ptr());
+		glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());
 
 		obj->Update();
 
@@ -75,7 +73,7 @@ void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 	if (obj == selected)
 		selected = nullptr;
 
-	std::vector<GameObject*>::iterator ret = obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
+	obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
 	delete obj;
 }
 
@@ -226,11 +224,11 @@ void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 	ret->face_normals.data = new float[ret->face_normals.size];
 
 	for (int k = 0; k < ret->index.size/3; k += 3) {
-		vec3 p1(ret->vertex.data[ret->index.data[k] * 3], ret->vertex.data[ret->index.data[k] * 3 + 1], ret->vertex.data[ret->index.data[k] * 3 + 2]);
+		vec3 p1(ret->vertex.data[ret->index.data[k] * 3],     ret->vertex.data[ret->index.data[k] * 3 + 1],     ret->vertex.data[ret->index.data[k] * 3 + 2]);
 		vec3 p2(ret->vertex.data[ret->index.data[k + 1] * 3], ret->vertex.data[ret->index.data[k + 1] * 3 + 1], ret->vertex.data[ret->index.data[k + 1] * 3 + 2]);
 		vec3 p3(ret->vertex.data[ret->index.data[k + 2] * 3], ret->vertex.data[ret->index.data[k + 2] * 3 + 1], ret->vertex.data[ret->index.data[k + 2] * 3 + 2]);
 
-		ret->face_normals.data[k * 2] = (p1.x + p2.x + p3.x) / 3.f;
+		ret->face_normals.data[k * 2]	  = (p1.x + p2.x + p3.x) / 3.f;
 		ret->face_normals.data[k * 2 + 1] = (p1.y + p2.y + p3.y) / 3.f;
 		ret->face_normals.data[k * 2 + 2] = (p1.z + p2.z + p3.z) / 3.f;
 
@@ -240,7 +238,7 @@ void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 		vec3 v_norm = cross(v1, v2);
 		v_norm = normalize(v_norm);
 
-		ret->face_normals.data[k * 2 + 3] = ret->face_normals.data[k * 2] + v_norm.x * magnitude;
+		ret->face_normals.data[k * 2 + 3] = ret->face_normals.data[k * 2]     + v_norm.x * magnitude;
 		ret->face_normals.data[k * 2 + 4] = ret->face_normals.data[k * 2 + 1] + v_norm.y * magnitude;
 		ret->face_normals.data[k * 2 + 5] = ret->face_normals.data[k * 2 + 2] + v_norm.z * magnitude;
 	}
@@ -286,6 +284,55 @@ void ModuleObjectManager::FillTextureCoords(Mesh_info * mesh, const float * text
 	mesh->tex_coords.size = mesh->vertex.size;
 	mesh->tex_coords.data = new float[mesh->tex_coords.size * 3];
 	memcpy(mesh->tex_coords.data, textureCoords, sizeof(float) * mesh->tex_coords.size * 3);
+}
+
+Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type)
+{
+	Object_data data = Object_data();
+	par_shapes_mesh* prim = nullptr;
+
+	switch (type)
+	{
+	case Primitives::CUBE:
+		prim = par_shapes_create_cube();
+		break;
+	case Primitives::TETRAHEDRON:
+		prim = par_shapes_create_tetrahedron();
+		break;
+	case Primitives::OCTAHEDRON:
+		prim = par_shapes_create_octahedron();
+		break;
+	case Primitives::DODECAHEDRON:
+		prim = par_shapes_create_dodecahedron();
+		break;
+	case Primitives::ICOSAHEDRON:
+		prim = par_shapes_create_icosahedron();
+		break;
+	case Primitives::SPHERE:
+		//TODO Create a sphere with radious, rings and sectors, not by subdivisions https://stackoverflow.com/questions/5988686/creating-a-3d-sphere-in-opengl-using-visual-c/5989676#5989676
+		prim = par_shapes_create_subdivided_sphere(data.slices);
+		break;
+	case Primitives::HEMISPHERE:
+		prim = par_shapes_create_hemisphere(data.slices, data.rings);
+		break;
+	case Primitives::TORUS:
+		prim = par_shapes_create_torus(data.slices, data.rings, data.radius);
+		break;
+	case Primitives::CONE:
+		prim = par_shapes_create_cone(data.slices, data.rings);
+		break;
+	case Primitives::CYLINDER:
+		prim = par_shapes_create_cylinder(data.slices, data.rings);
+		break;
+	default:
+		LOG("Primitive not found to create. id: %i", (int)type);
+		break;
+	}
+
+	Mesh_info* mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	par_shapes_free_mesh(prim);
+
+	return mesh;
 }
 
 bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_data &data)

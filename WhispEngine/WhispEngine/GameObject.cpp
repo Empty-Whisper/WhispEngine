@@ -10,16 +10,20 @@ GameObject::GameObject(GameObject * parent) : parent(parent)
 		parent->children.push_back(this);
 
 	CreateComponent(ComponentType::TRANSFORM);
+	SetName("GameObject");
 }
 
 GameObject::~GameObject()
 {
 	for (auto comp = components.begin(); comp != components.end(); ++comp) {
 		delete *comp;
+		*comp = nullptr;
 	}
+	components.clear();
 
 	for (auto i = children.begin(); i != children.end(); i++) {
 		delete *i;
+		*i = nullptr;
 	}
 	children.clear();
 }
@@ -29,6 +33,13 @@ void GameObject::Update()
 	for (auto i = components.begin(); i != components.end(); ++i) {
 		if ((*i)->IsActive())
 			(*i)->Update();
+	}
+	if (components_to_delete.size() > 0) {
+		for (auto c = components_to_delete.begin(); c != components_to_delete.end(); c++) {
+			components.erase(std::find(components.begin(), components.end(), *c));
+			delete *c;
+		}
+		components_to_delete.clear();
 	}
 }
 
@@ -64,13 +75,28 @@ Component * GameObject::CreateComponent(const ComponentType & type)
 	return nullptr;
 }
 
+void GameObject::DeleteComponent(Component * comp)
+{
+	components_to_delete.push_back(comp);
+}
+
 Component * GameObject::GetComponent(const ComponentType & type)
 {
 	for (auto i = components.cbegin(); i != components.cend(); ++i) {
-		if ((*i)->GetType() == type)
-			return *i;
+		if (*i != nullptr)
+			if ((*i)->GetType() == type)
+				return *i;
 	}
 	return nullptr;
+}
+
+bool GameObject::HasComponent(const ComponentType & type)
+{
+	for (auto comp = components.begin(); comp != components.end(); comp++)
+		if ((*comp)->GetType() == type)
+			return true;
+
+	return false;
 }
 
 bool GameObject::IsActive() const
