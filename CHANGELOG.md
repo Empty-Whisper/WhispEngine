@@ -1,6 +1,33 @@
 # Changelog
 
-## [0.3] - 21/10/2019
+## [Assignment1.1] - 26/10/2019
+### Added
+- Drag and Drop GameObjects in hierarchy
+- Move Up/Down, delete GameObjects in hierarchy
+- Buttons to create Empty GameObjects
+- Inspector improved info
+- Delete components
+- AABB
+- Clear Button console
+
+### Changed
+- Improved recalculation matrix
+- Mesh creates with material and only can delete mesh
+- Shortcuts
+
+### Fixed
+- #4
+- #6
+- Outline improved
+- Draw normals
+- Cannot change GameObject name
+- #8
+- #9
+- Hide texture to show of Engine logo
+- Remaximize window displays scene tab in black
+- Demo shapes crash
+
+## [0.3.0] - 21/10/2019
 ### Added
 - GameObject System with Components
 - Components

@@ -1,7 +1,7 @@
 ﻿# 3D Game Engine: WhispEngine
 
 ## Current Version
-v0.3
+v Assignment1.1
 
 ## Description
 This is a 3D Game Engine made by Students at CITM (UPC) from Spain. 
