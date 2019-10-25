@@ -117,44 +117,75 @@ update_status ModuleGUI::MainMenuBar()
 
 		if (ImGui::BeginMenu("View"))
 		{
-			ImGui::MenuItem("Console", "LShift+1", &console->active);
-			ImGui::MenuItem("Configuration", "LShift+2", &config->active);
-			ImGui::MenuItem("Style Editor", "LShift+3", &show_style_window);
+			ImGui::MenuItem("Console", "Shift+1", &console->active);
+			ImGui::MenuItem("Configuration", "Shift+2", &config->active);
+			ImGui::MenuItem("Style Editor", "Shift+3", &show_style_window);
 			ImGui::EndMenu();
 
 		}
 
-		if (ImGui::BeginMenu("Shape"))
+		if (ImGui::BeginMenu("GameObject"))
 		{
-			ImGui::MenuItem("Create", "LShift+4", &create->active);
-
-			if (ImGui::MenuItem("Demo", NULL, &show_demo_create))
-			{
-				App->object_manager->Demo();
+			ImGui::MenuItem("Panel Create", "Shift+4", &create->active);
+			ImGui::Separator();
+			if (ImGui::Button("Create Empty")) {
+				App->object_manager->CreateGameObject(nullptr);
 			}
+			ImGui::SameLine();
+			if (ImGui::SmallButton("x10")) {
+				for (int i = 0; i < 10; i++)
+					App->object_manager->CreateGameObject(nullptr);
+			}
+			ImGui::Separator();
+			if (ImGui::BeginMenu("3D Object")) {
+				if (ImGui::Selectable("Cube")) // TODO: Do a for loop or a ImGui::Combo
+					App->object_manager->CreatePrimitive(Primitives::CUBE, Object_data());
+				if (ImGui::Selectable("Tetrahedron"))
+					App->object_manager->CreatePrimitive(Primitives::TETRAHEDRON, Object_data());
+				if (ImGui::Selectable("Octahedron"))
+					App->object_manager->CreatePrimitive(Primitives::OCTAHEDRON, Object_data());
+				if (ImGui::Selectable("Dodecahedron"))
+					App->object_manager->CreatePrimitive(Primitives::DODECAHEDRON, Object_data());
+				if (ImGui::Selectable("Icosahedron"))
+					App->object_manager->CreatePrimitive(Primitives::ICOSAHEDRON, Object_data());
+				if (ImGui::Selectable("Sphere"))
+					App->object_manager->CreatePrimitive(Primitives::SPHERE, Object_data());
+				if (ImGui::Selectable("Hemisphere"))
+					App->object_manager->CreatePrimitive(Primitives::HEMISPHERE, Object_data());
+				if (ImGui::Selectable("Torus"))
+					App->object_manager->CreatePrimitive(Primitives::TORUS, Object_data());
+				if (ImGui::Selectable("Cone"))
+					App->object_manager->CreatePrimitive(Primitives::CONE, Object_data());
+				if (ImGui::Selectable("Cylinder"))
+					App->object_manager->CreatePrimitive(Primitives::CYLINDER, Object_data());
+				ImGui::EndMenu();
+			}
+			
+
+
 			ImGui::EndMenu();
 
 		}
 
 		if (ImGui::BeginMenu("Help"))
 		{
-			if (ImGui::MenuItem("Demo", NULL, show_demo_window))
+			if (ImGui::MenuItem("ImGui Demo", NULL, show_demo_window))
 			{
 				show_demo_window = !show_demo_window;
 			}
-			if (ImGui::MenuItem("Documentation", "link"))
+			if (ImGui::MenuItem("Repository", "link"))
 			{
 				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine", NULL, NULL, SW_SHOWNORMAL);
 			}
 			if (ImGui::MenuItem("Download Lastest", "link"))
 			{
-				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine/releases", NULL, NULL, SW_SHOWNORMAL);
+				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine/releases/latest", NULL, NULL, SW_SHOWNORMAL);
 			}
 			if (ImGui::MenuItem("Report a bug", "link"))
 			{
 				ShellExecuteA(NULL, "open", "https://github.com/Empty-Whisper/WhispEngine/issues", NULL, NULL, SW_SHOWNORMAL);
 			}
-			ImGui::MenuItem("About", "LControl+LShift+A", &about->active);
+			ImGui::MenuItem("About", "Control+Shift+A", &about->active);
 			ImGui::EndMenu();
 
 		}		

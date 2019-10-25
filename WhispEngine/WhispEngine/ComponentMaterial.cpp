@@ -29,10 +29,9 @@ const uint ComponentMaterial::GetIDTexture() const
 
 void ComponentMaterial::OnInspector()
 {
-	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen)) {
-
-		ImGui::SameLine();
-		ActiveImGui();
+	ActiveImGui();
+	ImGui::SameLine();
+	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 		ImGui::ColorEdit4("Face Color", face_color);
 		ImGui::ColorEdit4("Wireframe Color", wire_color);

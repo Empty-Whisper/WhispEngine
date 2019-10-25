@@ -106,7 +106,7 @@ bool GameObject::IsActive() const
 
 void GameObject::SetActive(const bool & to_active)
 {
-	active = to_active; //TODO Set all its childs to to_active
+	active = to_active;
 }
 
 const char * GameObject::GetName() const

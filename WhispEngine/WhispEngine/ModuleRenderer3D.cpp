@@ -189,7 +189,7 @@ update_status ModuleRenderer3D::PostUpdate()
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearColor(0.1, 0.1, 0.1, 1.f);
+	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
 
 	return UPDATE_CONTINUE;
 }

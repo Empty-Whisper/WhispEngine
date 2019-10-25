@@ -294,7 +294,7 @@ void Mesh_info::SetGLBuffers()
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * tex_coords.size * 3, tex_coords.data, GL_STATIC_DRAW);
 	}
 
-	if (vertex_normals.data != nullptr) { // TODO Correct draw
+	if (vertex_normals.data != nullptr) {
 		glGenBuffers(1, &vertex_normals.id);
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_normals.id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertex_normals.size, vertex_normals.data, GL_STATIC_DRAW);
