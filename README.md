@@ -23,10 +23,12 @@ Extract .zip files inside a folder and open the .exe file.
 * Orbit object:		Alt + Left click
 
 #### Short Cuts
-* Console:                 Shift + 1
-* Configuration:         Shift + 2
-* Show Style Editor:  Shift + 3
+* Configuration:         Shift + 1
+* Console		  Shift + 2
+* Hierarchy:  	  Shift + 3
 * Create Shape:         Shift + 4
+* Inspector:         	  Shift + 5
+* Sene:         	  Shift + 6
 * About: 	                  Shift + Control + A
 
 ## Authors
