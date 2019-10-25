@@ -395,7 +395,7 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 	ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
 	mesh->mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
 	
-	ComponentMaterial* mat = (ComponentMaterial*)obj->CreateComponent(ComponentType::MATERIAL);
+	ComponentMaterial* mat = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
 	mat->SetFaceColor(data.face_color[0],data.face_color[1],data.face_color[2],1.f); 
 	mat->SetWireColor(data.wire_color[0], data.wire_color[1], data.wire_color[2], 1.f);
 
@@ -430,7 +430,7 @@ void ModuleObjectManager::Demo()
 		ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
 		mesh->mesh = CreateMesh((*i)->npoints, (*i)->points, (*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
 
-		ComponentMaterial* mat = (ComponentMaterial*)obj->CreateComponent(ComponentType::MATERIAL);
+		ComponentMaterial* mat = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
 
 		float rnd_color[4] = { App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), App->random->Randomf(0.f,1.f), 1.f };
 
