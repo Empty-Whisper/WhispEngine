@@ -64,12 +64,14 @@ void ComponentMaterial::OnInspector()
 				std::vector<Texture*>* tex = App->object_manager->GetTextures();
 				int warp = 1;
 				for (auto i = tex->begin(); i != tex->end(); i++) {
-					if (ImGui::ImageButton((ImTextureID)(*i)->id, ImVec2(width, height))) {
-						texture = *i;
+					if ((*i)->visible_on_inspector) {
+						if (ImGui::ImageButton((ImTextureID)(*i)->id, ImVec2(width, height))) {
+							texture = *i;
+						}
+						if (warp % 3 != 0)
+							ImGui::SameLine();
+						warp++;
 					}
-					if (warp % 3 != 0)
-						ImGui::SameLine();
-					warp++;
 				}
 
 				ImGui::End();
