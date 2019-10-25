@@ -50,6 +50,7 @@ private:
 	std::string organization;
 	std::string version;
 
+	bool    first_frame = true;
 	float	dt = 0.0f;
 
 	Timer		last_sec_frame_time;

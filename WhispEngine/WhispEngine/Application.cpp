@@ -37,6 +37,8 @@ Application::Application()
 	hardware = new HardwareInfo();
 	file_system = new FileSystem();
 	random = new Random();
+
+	first_frame = true;
 }
 
 Application::~Application()
@@ -85,13 +87,34 @@ void Application::PrepareUpdate()
 	{
 		dt = 0.0f;
 	}
+	else if (first_frame)
+	{
+		
+		dt = 1.0f / framerate_cap;
+	}
 	else
 	{
-		dt = frame_time.Read();
-		frame_time.Start();
+		double framerate = 1000.00 / perfect_frame_time.ReadMs();
+
+		dt = 1.0f / framerate;
+
+		if (dt > 1.0f / (float)framerate_cap + 0.02f)
+		{
+			dt = 1.0f / (float)framerate_cap + 0.02f;
+		}
 	}
 
 	perfect_frame_time.Start();
+
+	// Change frame cap/Pause Game ========================================
+	if (input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+	{
+		apply_cap_frames = !apply_cap_frames;
+	}
+	if (input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+	{
+		pause_game = !pause_game;
+	}
 }
 
 
@@ -196,6 +219,11 @@ void Application::FinishUpdate()
 
 	if (want_to_load || want_to_load_def) {
 		LoadConfNow();
+	}
+
+	if (first_frame == true)
+	{
+		first_frame = false;
 	}
 
 	if (last_sec_frame_time.Read() >= 1000)
