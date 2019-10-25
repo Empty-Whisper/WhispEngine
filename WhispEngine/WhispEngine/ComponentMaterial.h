@@ -10,6 +10,8 @@ struct Texture
 	std::string name;
 	std::string path;
 
+	bool visible_on_inspector = true;
+
 	int width = -1;
 	int height = -1;
 };

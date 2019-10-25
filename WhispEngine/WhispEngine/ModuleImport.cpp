@@ -46,6 +46,7 @@ bool ModuleImport::Start()
 
 	// Charge logo texture
 	logo_txt = ImportTexture("Assets/logo.png");
+	logo_txt->visible_on_inspector = false;
 
 	return true;
 }
