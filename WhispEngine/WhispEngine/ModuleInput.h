@@ -92,6 +92,8 @@ public:
 		return mouse_z;
 	}
 
+	bool IsAltPressed();
+
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
