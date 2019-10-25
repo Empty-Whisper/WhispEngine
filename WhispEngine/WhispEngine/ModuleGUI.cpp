@@ -32,9 +32,11 @@ ModuleGUI::~ModuleGUI()
 
 bool ModuleGUI::Init(nlohmann::json &node)
 {
+	LOG("Initializing module UI...")
 	glewInit();
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	LOG("Init ImGui v%s", ImGui::GetVersion());
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	
 	
@@ -51,6 +53,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	ImGui_ImplOpenGL3_Init((const char*)glGetString(GL_VERSION));
 	ImGui::StyleColorsDark();
 
+	LOG("Initi panels");
 	panels.push_back(about = new PanelAbout(node["panels"]["about"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
 	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_1));
 	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_P, SDL_SCANCODE_2));

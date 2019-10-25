@@ -42,8 +42,9 @@ bool ModuleImport::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	LOG("Initializing DevIL...");
 	ilInit();
-
+	
 	// Charge logo texture
 	logo_txt = ImportTexture("Assets/logo.png");
 	logo_txt->visible_on_inspector = false;
@@ -68,7 +69,9 @@ bool ModuleImport::ImportFbx(const char * path)
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		
+		uint ticks = SDL_GetTicks(); //timer
+		PerfTimer timer;
+
 		GameObject * container = App->object_manager->CreateGameObject(nullptr);
 		container->SetName(App->file_system->GetFileNameFromPath(path).data());
 		
@@ -88,6 +91,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		LoadNode(node, container, scene);
 
 		aiReleaseImport(scene);
+		LOG("Time to load FBX: %u", SDL_GetTicks() - ticks);
 	}
 	else
 		LOG("Error loading scene: %s", aiGetErrorString());
@@ -200,6 +204,7 @@ Texture* ModuleImport::ImportTexture(const char * path)
 			if (mat != nullptr)	mat->SetTexture(ret);
 		}
 		App->object_manager->AddTexture(ret);
+		LOG("Loaded successfully texture: %s", path);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
