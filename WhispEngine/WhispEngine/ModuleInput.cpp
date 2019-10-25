@@ -204,14 +204,6 @@ bool ModuleInput::CleanUp()
 	return true;
 }
 
-bool ModuleInput::IsAltPressed()
-{
-	if (GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT)
-		return true;
-
-	return false;
-}
-
 void ModuleInput::GetTextBuffer(const std::string &key,const int &key_num, const std::string &key_state)
 {
 	std::string text = key + ": " + std::to_string(key_num) + " - " + key_state + "\n";
