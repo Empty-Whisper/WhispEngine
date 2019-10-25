@@ -215,6 +215,11 @@ void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
 		float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
 
 		float object_length = aabb.Diagonal().Length();
+
+		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
+		if (component_mesh == nullptr)
+			object_length = offset_reference;
+
 		if (mag_diff >= object_length + offset_reference)
 		{
 			newPos -= Z * focus_speed * App->GetDeltaTime();
