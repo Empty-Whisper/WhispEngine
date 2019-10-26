@@ -61,6 +61,27 @@ bool ModuleImport::CleanUp()
 	return true;
 }
 
+bool ModuleImport::Import(const char * path)
+{
+	switch (App->file_system->GetFormat(path))
+	{
+	case FileSystem::Format::JSON:
+		break;
+	case FileSystem::Format::DDS:
+	case FileSystem::Format::PNG:
+	case FileSystem::Format::JPG:
+		App->importer->ImportTexture(path);
+		break;
+	case FileSystem::Format::FBX:
+		App->importer->ImportFbx(path);
+		break;
+	default:
+		LOG("Failed to load %s. Format not seted");
+		break;
+	}
+	return false;
+}
+
 bool ModuleImport::ImportFbx(const char * path)
 {
 	BROFILER_CATEGORY("Import FBX", Profiler::Color::Green);
@@ -80,7 +101,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		
 		aiNode *node = scene->mRootNode;
 
-		/*aiVector3D position, scale;			// This will be commented only for assignment 1
+		aiVector3D position, scale;			// This will be commented only for assignment 1
 		aiQuaternion rotation;
 		node->mTransformation.Decompose(scale, rotation, position);
 		ComponentTransform* transform = ((ComponentTransform*)container->GetComponent(ComponentType::TRANSFORM));
@@ -89,12 +110,14 @@ bool ModuleImport::ImportFbx(const char * path)
 		transform->SetScale(scale.x, scale.y, scale.z);
 
 		transform->CalculeLocalMatrix();
-		transform->CalculateGlobalMatrix();*/
+		transform->CalculateGlobalMatrix();
 
 		LoadNode(node, container, scene);
 
 		aiReleaseImport(scene);
 		LOG("Time to load FBX: %u", SDL_GetTicks() - ticks);
+
+		
 	}
 	else
 		LOG("Error loading scene: %s", scene == nullptr ? aiGetErrorString() : "The FBX has no meshes");

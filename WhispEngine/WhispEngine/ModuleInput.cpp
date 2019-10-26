@@ -85,22 +85,7 @@ update_status ModuleInput::PollEvents()
 		case SDL_DROPFILE:
 			char* file = e.drop.file;
 
-			switch (App->file_system->GetFormat(file))
-			{
-			case FileSystem::Format::JSON:
-				break;
-			case FileSystem::Format::DDS:
-			case FileSystem::Format::PNG:
-			case FileSystem::Format::JPG:
-				App->importer->ImportTexture(file);
-				break;
-			case FileSystem::Format::FBX:
-				App->importer->ImportFbx(file);
-				break;
-			default:
-				LOG("Failed to load %s. Format not seted");
-				break;
-			}
+			App->importer->Import(file);
 
 			SDL_free(file);
 			break;

@@ -61,6 +61,9 @@
     <Filter Include="GameObject\Components">
       <UniqueIdentifier>{d334a48d-a01b-421c-9d0d-4b7a75e39e8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Importer">
+      <UniqueIdentifier>{37e09d0b-3340-472a-8a07-eb653c6b34d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -291,6 +294,11 @@
     <ClCompile Include="PanelScene.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
+    <ClCompile Include="Importer.cpp">
+      <Filter>Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialImporter.cpp" />
+    <ClCompile Include="MeshImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -641,6 +649,11 @@
     <ClInclude Include="Brofiler\Brofiler.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialImporter.h" />
+    <ClInclude Include="MeshImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
