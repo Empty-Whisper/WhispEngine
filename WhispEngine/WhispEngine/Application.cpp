@@ -1,5 +1,5 @@
 #include "Application.h"
-
+#include "Brofiler/Brofiler.h"
 #include <fstream>
 
 Application::Application()
@@ -162,6 +162,7 @@ const char * Application::GetVersion() const
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
+	BROFILER_CATEGORY("Application", Profiler::Color::Blue);
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
 	

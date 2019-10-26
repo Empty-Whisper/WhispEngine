@@ -1,6 +1,7 @@
 #include "ModuleObjectManager.h"
 #include "ComponentTransform.h"
 #include "Application.h"
+#include "Brofiler/Brofiler.h"
 
 ModuleObjectManager::ModuleObjectManager()
 {
@@ -22,6 +23,7 @@ bool ModuleObjectManager::Start()
 
 update_status ModuleObjectManager::Update()
 {
+	BROFILER_CATEGORY("GameObject Manager", Profiler::Color::MediumSpringGreen);
 	UpdateGameObject(root);
 
 	return UPDATE_CONTINUE;

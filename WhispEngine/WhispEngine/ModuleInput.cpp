@@ -4,7 +4,7 @@
 #include "Imgui/imgui.h"
 #include "Imgui/imgui_impl_sdl.h"
 #include "Imgui/imgui_impl_opengl3.h"
-
+#include "Brofiler/Brofiler.h"
 #define MAX_KEYS 300
 
 
@@ -110,6 +110,7 @@ update_status ModuleInput::PollEvents()
 
 void ModuleInput::UpdateInput()
 {
+	BROFILER_CATEGORY("Input", Profiler::Color::DarkSlateBlue);
 	UpdateKeyStates();
 
 	UpdateButtonStates();

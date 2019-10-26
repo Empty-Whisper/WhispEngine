@@ -4,6 +4,7 @@
 
 #include "Imgui/imgui.h"
 #include "ComponentMesh.h"
+#include "Brofiler/Brofiler.h"
 
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"
@@ -53,6 +54,7 @@ update_status ModuleSceneIntro::PreUpdate()
 // Update
 update_status ModuleSceneIntro::Update()
 {
+	BROFILER_CATEGORY("Scene", Profiler::Color::Orange);
 	if (show_grid)
 		DrawGrid();
 
