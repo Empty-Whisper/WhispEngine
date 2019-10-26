@@ -6,6 +6,7 @@
 #include "MathGeoLib/include/Math/float2.h"
 #include "PanelScene.h"
 #include "ComponentTransform.h"
+#include "Brofiler/Brofiler.h"
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Camera3D");
@@ -50,6 +51,8 @@ bool ModuleCamera3D::CleanUp()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update()
 {
+	BROFILER_CATEGORY("Camera", Profiler::Color::Coral);
+
 	// Implement a debug camera with keys and mouse
 	// Now we can make this movememnt frame rate independant!
 
@@ -70,7 +73,7 @@ update_status ModuleCamera3D::Update()
 
 	ResetIsMovingCamera();
 
-	if (ImGui::IsMouseHoveringRect(scene_position, scene_size, false) || is_moving_camera)
+	if ((ImGui::IsMouseHoveringRect(scene_position, scene_size, false) || is_moving_camera) && App->gui->scene->active)
 	{
 		// Mouse Zoom in/out with wheel ----------------
 		int mouse_wheel = App->input->GetMouseZ();

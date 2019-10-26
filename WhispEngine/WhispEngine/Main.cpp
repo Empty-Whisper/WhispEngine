@@ -11,6 +11,8 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
+#include "Brofiler/Brofiler.h"
+#pragma comment( lib, "Brofiler/ProfilerCore32.lib" )
 enum main_states
 {
 	MAIN_CREATION,
@@ -65,6 +67,8 @@ int main(int argc, char ** argv)
 				LOG("Application Update exits with ERROR");
 				state = MAIN_EXIT;
 			}
+			BROFILER_FRAME("WhispEngine");
+			BROFILER_CATEGORY("Main loop", Profiler::Color::Aqua);
 
 			if (update_return == UPDATE_STOP)
 				state = MAIN_FINISH;

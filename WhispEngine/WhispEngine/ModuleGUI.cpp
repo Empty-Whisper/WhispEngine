@@ -42,7 +42,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	
 	// Docking -----------------------------------------------------------
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable keyboard controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;		// Enable keyboard controls
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform 
 	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 
@@ -118,7 +118,7 @@ update_status ModuleGUI::MainMenuBar()
 
 		}
 
-		if (ImGui::BeginMenu("Panels"))
+		if (ImGui::BeginMenu("Windows"))
 		{
 			ImGui::MenuItem("Configuration", "Shift+1", &config->active);
 			ImGui::MenuItem("Console", "Shift+2", &console->active);
@@ -126,7 +126,7 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Create", "Shift+4", &create->active);
 			ImGui::MenuItem("Inspector", "Shift+5", &inspector->active);
 			ImGui::MenuItem("Scene", "Shift+6", &scene->active);
-			ImGui::MenuItem("Style Editor", "Shift+7", &show_style_window);
+			ImGui::MenuItem("Style Editor", "", &show_style_window);
 			ImGui::EndMenu();
 
 		}

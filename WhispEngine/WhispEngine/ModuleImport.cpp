@@ -9,6 +9,7 @@
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
+#include "Brofiler/Brofiler.h"
 
 // Devil ---------------------------------------------------------
 #include "DevIL/include/IL/il.h"
@@ -62,6 +63,7 @@ bool ModuleImport::CleanUp()
 
 bool ModuleImport::ImportFbx(const char * path)
 {
+	BROFILER_CATEGORY("Import FBX", Profiler::Color::Green);
 	bool ret = true;
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
