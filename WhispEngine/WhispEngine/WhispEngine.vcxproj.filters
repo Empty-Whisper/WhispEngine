@@ -638,6 +638,9 @@
     <ClInclude Include="PanelInspector.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
+    <ClInclude Include="Brofiler\Brofiler.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
