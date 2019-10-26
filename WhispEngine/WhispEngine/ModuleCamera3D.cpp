@@ -142,6 +142,8 @@ update_status ModuleCamera3D::Update()
 			ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
 		}
 
+	}
+	if (!ImGui::IsAnyItemActive()) {
 		// Focus Object
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		{
@@ -150,7 +152,7 @@ update_status ModuleCamera3D::Update()
 		}
 
 		if (App->object_manager->GetSelected())
-			FocusObject(newPos, is_focusing);	
+			FocusObject(newPos, is_focusing);
 	}
 	
 	// Recalculate matrix -------------
@@ -258,8 +260,10 @@ void ModuleCamera3D::MoveCameraByMouse(vec3 newPos, float speed)
 
 void ModuleCamera3D::MoveCameraOffsetByMouse(vec3 newPos, float speed)
 {
-	if(App->object_manager->GetSelected() != nullptr)
+	if (App->object_manager->GetSelected() != nullptr)
 		Reference = GetTransformPosition(); //Get GameObject selected position
+	else
+		Reference = vec3(0, 0, 0);
 	Position += newPos;
 	Reference += newPos;
 	Position -= Reference;
