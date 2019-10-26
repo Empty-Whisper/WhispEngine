@@ -70,7 +70,7 @@ update_status ModuleCamera3D::Update()
 
 	ResetIsMovingCamera();
 
-	if (ImGui::IsMouseHoveringRect(scene_position, scene_size, false) || is_moving_camera)
+	if ((ImGui::IsMouseHoveringRect(scene_position, scene_size, false) || is_moving_camera) && App->gui->scene->active)
 	{
 		// Mouse Zoom in/out with wheel ----------------
 		int mouse_wheel = App->input->GetMouseZ();

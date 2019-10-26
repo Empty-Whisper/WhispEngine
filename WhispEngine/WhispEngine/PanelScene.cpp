@@ -30,6 +30,7 @@ void PanelScene::Update()
 			App->renderer3D->CanResize();
 		}
 		panel_pos = ImGui::GetWindowPos();
+
 	}
 	ImGui::End();
 }
