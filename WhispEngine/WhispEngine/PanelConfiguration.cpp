@@ -130,15 +130,15 @@ void PanelConfiguration::Window()
 {
 	ImGui::Text("Icon:"); ImGui::SameLine(); ImGui::Text("*null*");
 
-	if (ImGui::SliderFloat("Brightness", &App->window->bright, 0.0f, 1.0f)) {
+	if (ImGui::SliderFloat("Brightness", &App->window->bright, 0.0F, 1.0F)) {
 		SDL_SetWindowBrightness(App->window->window, App->window->bright);
 	}
 
-	if (ImGui::SliderInt("Width", (int*)&App->window->screen_width, 640, 1920))
+	if (ImGui::InputInt("Width", (int*)&App->window->screen_width, 50))
 	{
 		App->window->SetWindowSize(App->window->screen_width, App->window->screen_height);
 	}
-	if (ImGui::SliderInt("Height", (int*)&App->window->screen_height, 480, 1080))
+	if (ImGui::InputInt("Height", (int*)&App->window->screen_height, 50))
 	{
 		App->window->SetWindowSize(App->window->screen_width, App->window->screen_height);
 	}

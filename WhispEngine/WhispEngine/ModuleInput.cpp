@@ -76,8 +76,8 @@ update_status ModuleInput::PollEvents()
 			break;
 
 		case SDL_WINDOWEVENT:
-			/*if (e.window.event == SDL_WINDOWEVENT_RESIZED) // This causes a issue that do not show scene when remaximize twice, wait until we will remake module camera
-				App->renderer3D->OnResize(e.window.data1, e.window.data2);*/
+			if (e.window.event == SDL_WINDOWEVENT_RESIZED) // This causes a issue that do not show scene when remaximize twice, wait until we will remake module camera
+				App->renderer3D->OnResize(e.window.data1, e.window.data2);
 			if(e.window.event == SDL_WINDOWEVENT_CLOSE)
 				return UPDATE_STOP;
 			break;
