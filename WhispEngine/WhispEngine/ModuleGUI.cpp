@@ -90,13 +90,16 @@ update_status ModuleGUI::Update()
 		ImGui::ShowDemoWindow(&show_demo_window);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_7)) // TODO: Convert this in a ShortCut class or delete style window
+		show_style_window = !show_demo_window;
+
 	if (show_style_window)
 	{
-		if (ImGui::Begin("Style editor"))
+		if (ImGui::Begin("Style editor", &show_style_window))
 		{
 			ImGui::ShowStyleEditor();
+			ImGui::End();
 		}
-		ImGui::End();
 	}
 
 	return ret;
@@ -118,11 +121,15 @@ update_status ModuleGUI::MainMenuBar()
 
 		}
 
-		if (ImGui::BeginMenu("View"))
+		if (ImGui::BeginMenu("Panels"))
 		{
-			ImGui::MenuItem("Console", "Shift+1", &console->active);
-			ImGui::MenuItem("Configuration", "Shift+2", &config->active);
-			ImGui::MenuItem("Style Editor", "Shift+3", &show_style_window);
+			ImGui::MenuItem("Configuration", "Shift+1", &config->active);
+			ImGui::MenuItem("Console", "Shift+2", &console->active);
+			ImGui::MenuItem("Hierarchy", "Shift+3", &hierarchy->active);
+			ImGui::MenuItem("Create", "Shift+4", &create->active);
+			ImGui::MenuItem("Inspector", "Shift+5", &inspector->active);
+			ImGui::MenuItem("Scene", "Shift+6", &scene->active);
+			ImGui::MenuItem("Style Editor", "Shift+7", &show_style_window);
 			ImGui::EndMenu();
 
 		}
