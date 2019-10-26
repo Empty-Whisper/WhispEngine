@@ -121,7 +121,7 @@ update_status ModuleGUI::MainMenuBar()
 
 		}
 
-		if (ImGui::BeginMenu("Panels"))
+		if (ImGui::BeginMenu("Windows"))
 		{
 			ImGui::MenuItem("Configuration", "Shift+1", &config->active);
 			ImGui::MenuItem("Console", "Shift+2", &console->active);
@@ -129,7 +129,7 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Create", "Shift+4", &create->active);
 			ImGui::MenuItem("Inspector", "Shift+5", &inspector->active);
 			ImGui::MenuItem("Scene", "Shift+6", &scene->active);
-			ImGui::MenuItem("Style Editor", "Shift+7", &show_style_window);
+			ImGui::MenuItem("Style Editor", "", &show_style_window);
 			ImGui::EndMenu();
 
 		}
