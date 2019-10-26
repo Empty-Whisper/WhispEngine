@@ -18,20 +18,18 @@ void PanelInspector::Update()
 		GameObject* sel = App->object_manager->GetSelected();
 		if (sel != nullptr) {
 
-			ImGui::PushID(sel);
 			bool to_active = sel->IsActive();
-			if (ImGui::Checkbox("", &to_active))
+			if (ImGui::Checkbox("##Active", &to_active))
 				sel->SetActive(to_active);
-			ImGui::PopID();
 			ImGui::SameLine();
 
-			char a[32];
-			sprintf_s(a, sel->GetName());
-			if (ImGui::InputText("##Name", a, 32)) {
-				sel->SetName(a);
+			char name[100];
+			sprintf_s(name, 100, sel->GetName());
+			if (ImGui::InputText("##Name", name, 100)) {
+				sel->SetName(name);
 			}
 
-			ImGui::SameLine(); App->gui->HelpMarker("(?)", "Right Click on header to Delete");
+			ImGui::SameLine(); App->gui->HelpMarker("(?)", "Right Click on component header to Delete (only not obligatory)");
 
 			for (auto i = sel->components.begin(); i != sel->components.end(); i++) {
 				ImGui::PushID(*i);

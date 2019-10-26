@@ -96,7 +96,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		LOG("Time to load FBX: %u", SDL_GetTicks() - ticks);
 	}
 	else
-		LOG("Error loading scene: %s", aiGetErrorString());
+		LOG("Error loading scene: %s", scene == nullptr ? aiGetErrorString() : "The FBX has no meshes");
 
 	return ret;
 }
