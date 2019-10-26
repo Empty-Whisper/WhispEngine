@@ -21,6 +21,7 @@ Extract .zip files inside a folder and open the .exe file.
 * Move X/Y viewport:	Middle mouse
 * Focus object:		F
 * Orbit object:		Alt + Left click
+* Deselect object	Click on any part of Hierarchy panel
 
 #### Short Cuts
 * Configuration:         Shift + 1

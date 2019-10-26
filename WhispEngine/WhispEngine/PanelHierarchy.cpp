@@ -92,6 +92,10 @@ void PanelHierarchy::Update()
 				}
 				ImGui::EndPopup();
 			}
+		if (!ImGui::IsAnyItemHovered()) {
+			if (App->input->GetMouseButtonDown(1))
+				App->object_manager->SetSelected(nullptr);
+		}
 	}
 	ImGui::End();
 

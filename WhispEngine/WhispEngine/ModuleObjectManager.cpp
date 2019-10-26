@@ -95,7 +95,8 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 		if (selected != nullptr)
 			selected->Deselect();
 		
-		select->Select();
+		if (select != nullptr)
+			select->Select();
 		selected = select;
 	}
 }
