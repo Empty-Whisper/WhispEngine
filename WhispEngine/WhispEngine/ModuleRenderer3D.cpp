@@ -3,9 +3,11 @@
 #include "ModuleRenderer3D.h"
 #include "SDL/include/SDL_opengl.h"
 #include "PanelScene.h"
+#include "Brofiler/Brofiler.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
@@ -137,7 +139,6 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate()
 {
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
@@ -152,6 +153,7 @@ update_status ModuleRenderer3D::PreUpdate()
 
 update_status ModuleRenderer3D::Update()
 {
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, App->renderer3D->render_texture);
 	glGenerateMipmap(GL_TEXTURE_2D);
@@ -163,6 +165,8 @@ update_status ModuleRenderer3D::Update()
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate()
 {
+	BROFILER_CATEGORY("RenderTexture", Profiler::Color::FireBrick);
+
 	SDL_GL_SwapWindow(App->window->window);
 
 	// DockSpace

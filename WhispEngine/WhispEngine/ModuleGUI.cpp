@@ -19,6 +19,7 @@
 #include "PanelCreate.h"
 #include "PanelInspector.h"
 #include "PanelScene.h"
+#include "Brofiler/Brofiler.h"
 
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
@@ -77,6 +78,8 @@ update_status ModuleGUI::PreUpdate()
 
 update_status ModuleGUI::Update()
 {
+	BROFILER_CATEGORY("GUI", Profiler::Color::Purple);
+
 	update_status ret = MainMenuBar();
 	Dockspace();
 	for (auto i = panels.begin(); i != panels.end(); ++i) {
