@@ -87,7 +87,7 @@ void Application::PrepareUpdate()
 	}
 	else
 	{
-		dt = frame_time.Read();
+		dt = frame_time.ReadSec();
 		frame_time.Start();
 	}
 
