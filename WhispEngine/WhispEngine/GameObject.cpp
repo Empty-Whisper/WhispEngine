@@ -26,6 +26,9 @@ GameObject::~GameObject()
 		*i = nullptr;
 	}
 	children.clear();
+
+	if (this == App->object_manager->GetSelected())
+		App->object_manager->SetSelected(nullptr);
 }
 
 void GameObject::Update()

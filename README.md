@@ -1,7 +1,7 @@
 ﻿# 3D Game Engine: WhispEngine
 
 ## Current Version
-v Assignment1.1
+v Assignment1.2
 
 ## Description
 This is a 3D Game Engine made by Students at CITM (UPC) from Spain. 
@@ -44,9 +44,9 @@ Extract .zip files inside a folder and open the .exe file.
 * Shortcut system
 * Drag and Drop Game objects inside/outside other objects to transform parents and children
 * Create an empty Game object with right click in hierarchy and delete it
-* Transform logic created and working! (but commented PushMatrix in code at the request of the teacher)
+* Transform logic created and working! (commented in code for assignment1)
 * Add component
-* Outline meshes using StencilBuffer (blue to children objs, yellow to parent objs)
+* Outline meshes using StencilBuffer (blue to children objs, orange to parent objs)
 * Viewport options to configure all Engine Speeds in Configuration panel
 * (?)Info - Help markers
 * Change mouse icon when click middle mouse button

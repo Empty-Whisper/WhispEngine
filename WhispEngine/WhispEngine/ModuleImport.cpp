@@ -71,6 +71,7 @@ bool ModuleImport::ImportFbx(const char * path)
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		App->object_manager->SetSelected(nullptr);
 		uint ticks = SDL_GetTicks(); //timer
 		PerfTimer timer;
 

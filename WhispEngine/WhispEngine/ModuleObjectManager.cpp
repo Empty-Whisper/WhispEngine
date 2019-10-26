@@ -72,9 +72,6 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 
 void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 {
-	if (obj == selected)
-		selected = nullptr;
-
 	obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
 	delete obj;
 }

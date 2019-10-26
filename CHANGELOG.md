@@ -1,5 +1,17 @@
 # Changelog
 
+## [Assignment1.2] - 26/10/2019
+### Added
+- Can deselect GameObjects clicking in hierarchy window
+- All panels can be access in Windows menu bar
+- Brofiler
+
+### Fixed
+- Dt code
+- Can Focus on an object without need to move mouse to scene panel
+- #11
+- Drag and drop of pictures (png and jpg)
+
 ## [Assignment1.1] - 26/10/2019
 ### Added
 - Drag and Drop GameObjects in hierarchy
