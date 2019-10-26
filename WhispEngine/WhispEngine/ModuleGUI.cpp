@@ -93,9 +93,6 @@ update_status ModuleGUI::Update()
 		ImGui::ShowDemoWindow(&show_demo_window);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKeyDown(SDL_SCANCODE_7)) // TODO: Convert this in a ShortCut class or delete style window
-		show_style_window = !show_demo_window;
-
 	if (show_style_window)
 	{
 		if (ImGui::Begin("Style editor", &show_style_window))

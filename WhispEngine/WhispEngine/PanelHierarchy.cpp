@@ -92,7 +92,7 @@ void PanelHierarchy::Update()
 				}
 				ImGui::EndPopup();
 			}
-		if (!ImGui::IsAnyItemHovered()) {
+		if (!ImGui::IsAnyItemHovered() && ImGui::IsMouseHoveringRect(ImGui::GetWindowPos(), ImGui::GetWindowPos() + ImGui::GetWindowSize(), false)) {
 			if (App->input->GetMouseButtonDown(1))
 				App->object_manager->SetSelected(nullptr);
 		}
