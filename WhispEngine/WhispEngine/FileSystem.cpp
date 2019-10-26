@@ -56,6 +56,9 @@ FileSystem::Format FileSystem::GetFormat(const char * file)
 	else if (buffer.compare("png") == 0) {
 		return FileSystem::Format::PNG;
 	}
+	else if (buffer.compare("jpg") == 0) {
+		return FileSystem::Format::JPG;
+	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());
 

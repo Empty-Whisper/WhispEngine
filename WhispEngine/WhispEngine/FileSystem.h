@@ -6,7 +6,7 @@ class FileSystem
 public:
 	enum class Format {
 		NONE = -1,
-		JSON, FBX, DDS, PNG,
+		JSON, FBX, DDS, PNG, JPG,
 		MAX
 	};
 
