@@ -150,12 +150,18 @@ update_status ModuleCamera3D::Update()
 		// Focus Object
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		{
-			if (App->object_manager->GetSelected())
+			GameObject* sel = App->object_manager->GetSelected();
+			if (sel != nullptr) {
 				is_focusing = true;
+				AABB bbox;
+				sel->GetBBox(bbox);
+				float3 center = bbox.CenterPoint();
+				newPos = vec3(center.x, center.y, center.z);
+			}
 		}
 
-		if (App->object_manager->GetSelected())
-			FocusObject(newPos, is_focusing);
+		if (is_focusing)
+			FocusObject(newPos);
 	}
 	
 	// Recalculate matrix -------------
@@ -196,45 +202,42 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
+void ModuleCamera3D::FocusObject(vec3 newPos)
 {
 	static vec3 actual_camera_position(0, 0, 0);
 	static vec3 reference_position(0, 0, 0);
 
-	if (is_focusing)
+	AABB aabb;
+	App->object_manager->GetSelected()->GetBBox(aabb);
+	actual_camera_position = Position;
+	if (App->object_manager->GetSelected() != nullptr)
+		reference_position = GetTransformPosition(); // Reference 
+
+	LookAt(reference_position);
+
+	vec3 diff = reference_position - actual_camera_position;
+	diff = { abs(diff.x),
+			 abs(diff.y),
+			 abs(diff.z)
+	};
+
+	float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
+
+	float object_length = aabb.Diagonal().Length();
+
+	ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
+	if (component_mesh == nullptr)
+		object_length = offset_reference;
+
+	if (mag_diff >= object_length + offset_reference)
 	{
-		AABB aabb;
-		App->object_manager->GetSelected()->GetBBox(aabb);
-		actual_camera_position = Position;
-		if (App->object_manager->GetSelected() != nullptr)
-			reference_position = GetTransformPosition(); // Reference 
-
-		LookAt(reference_position);
-
-		vec3 diff = reference_position - actual_camera_position;
-		diff = { abs(diff.x),
-				 abs(diff.y),
-				 abs(diff.z)
-		};
-
-		float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
-
-		float object_length = aabb.Diagonal().Length();
-
-		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
-		if (component_mesh == nullptr)
-			object_length = offset_reference;
-
-		if (mag_diff >= object_length + offset_reference)
-		{
-			newPos -= Z * focus_speed * App->GetDeltaTime();
-		}
-		else
-			this->is_focusing = false;
-
-		Position += newPos;
-		Reference += newPos;
+		newPos -= Z * focus_speed * App->GetDeltaTime();
 	}
+	else
+		this->is_focusing = false;
+	
+	Position += newPos;
+	Reference += newPos;
 }
 
 
