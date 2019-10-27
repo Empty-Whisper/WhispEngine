@@ -28,6 +28,7 @@ struct Mesh_info {
 	Buffer<float> face_normals;
 	Buffer<float> vertex_normals;
 	Buffer<float> tex_coords;
+
 	AABB aabb;
 };
 
@@ -55,7 +56,6 @@ public:
 
 	void OnInspector();
 	math::float3 CalculateRadius();
-	void InitAABB();
 
 public:
 	Mesh_info* mesh = nullptr;

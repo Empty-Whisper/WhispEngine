@@ -100,12 +100,6 @@ void ComponentMesh::Draw()
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	/*if (mesh != nullptr)
-	{
-		CreateAABB();
-		CalculateRadius();
-	}*/
 }
 
 void ComponentMesh::DrawWireFrame() {
@@ -240,21 +234,6 @@ void ComponentMesh::OnInspector()
 		}
 	}
 }
-
-math::float3 ComponentMesh::CalculateRadius()
-{
-	math::float3 mesh_radius = mesh->aabb.Diagonal()/2;
-	return mesh_radius;
-}
-
-void ComponentMesh::InitAABB()
-{
-	mesh->aabb.SetNegativeInfinity();
-	mesh->aabb.Enclose((math::float3*)mesh->vertex.data, (int)mesh->vertex.size);
-}
-
-
-
 
 Mesh_info::~Mesh_info()
 {

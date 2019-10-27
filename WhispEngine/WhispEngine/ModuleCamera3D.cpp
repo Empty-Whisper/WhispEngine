@@ -155,7 +155,7 @@ update_status ModuleCamera3D::Update()
 		}
 
 		if (App->object_manager->GetSelected())
-			FocusObject(newPos, is_focusing);
+			FocusObject(newPos);
 	}
 	
 	// Recalculate matrix -------------
@@ -196,18 +196,22 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
+void ModuleCamera3D::FocusObject(vec3 newPos)
 {
 	static vec3 actual_camera_position(0, 0, 0);
 	static vec3 reference_position(0, 0, 0);
 
 	if (is_focusing)
 	{
-		AABB aabb;
-		App->object_manager->GetSelected()->GetBBox(aabb);
+		GameObject* sel = App->object_manager->GetSelected();
+		AABB aabb = AABB(-float3::one, float3::one);
+
+		if (sel != nullptr)
+			aabb = sel->GetAABB();
+		
 		actual_camera_position = Position;
-		if (App->object_manager->GetSelected() != nullptr)
-			reference_position = GetTransformPosition(); // Reference 
+		float3 center = aabb.CenterPoint();
+		reference_position = vec3(center.x, center.y, center.z);
 
 		LookAt(reference_position);
 
@@ -219,11 +223,15 @@ void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
 
 		float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
 
-		float object_length = aabb.Diagonal().Length();
+		vec3 vector = newPos - reference_position;
+		
+		float object_length = length(normalize(vector) * aabb.Diagonal().Length());
 
 		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
 		if (component_mesh == nullptr)
 			object_length = offset_reference;
+
+		
 
 		if (mag_diff >= object_length + offset_reference)
 		{
@@ -231,6 +239,7 @@ void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
 		}
 		else
 			this->is_focusing = false;
+
 
 		Position += newPos;
 		Reference += newPos;
@@ -263,8 +272,11 @@ void ModuleCamera3D::MoveCameraByMouse(vec3 newPos, float speed)
 
 void ModuleCamera3D::MoveCameraOffsetByMouse(vec3 newPos, float speed)
 {
-	if (App->object_manager->GetSelected() != nullptr)
-		Reference = GetTransformPosition(); //Get GameObject selected position
+	GameObject* sel = App->object_manager->GetSelected();
+	if (sel != nullptr) {
+		float3 center = sel->GetAABB().CenterPoint(); //Get GameObject selected position
+		Reference = vec3(center.x, center.y, center.z);
+	}
 	else
 		Reference = vec3(0, 0, 0);
 	Position += newPos;
