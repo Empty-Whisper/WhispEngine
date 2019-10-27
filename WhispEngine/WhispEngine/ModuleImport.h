@@ -5,10 +5,15 @@ struct aiNode;
 struct aiScene;
 class GameObject;
 class Texture;
+class ModelImporter;
+class MaterialImporter;
+class MeshImporter;
 
 class ModuleImport :
 	public Module
 {
+	friend class ModelImporter;
+
 public:
 	ModuleImport();
 	~ModuleImport();
@@ -26,5 +31,10 @@ public:
 
 private:
 	void LoadNode(aiNode * node, GameObject * container, const aiScene * scene);
+
+private:
+	ModelImporter*		model = nullptr;
+	MaterialImporter*	material = nullptr;
+	MeshImporter*		mesh = nullptr;
 };
 

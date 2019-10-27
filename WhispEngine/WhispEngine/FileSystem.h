@@ -1,5 +1,6 @@
 #pragma once
 #include "JSON/json.hpp"
+#include "Globals.h"
 
 class FileSystem
 {
@@ -21,4 +22,6 @@ public:
 	FileSystem::Format GetFormat(const char* file);
 	std::string GetFileNameFromPath(const char* file);
 	std::string GetFileFromPath(const char* file);
+
+	bool SaveData(const char* data, const char* path, const uint &size);
 };

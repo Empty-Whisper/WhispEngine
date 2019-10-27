@@ -6,5 +6,7 @@ class MeshImporter :
 public:
 	MeshImporter();
 	~MeshImporter();
+
+	bool Import(const char* path);
 };
 

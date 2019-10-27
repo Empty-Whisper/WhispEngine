@@ -83,7 +83,7 @@ std::string FileSystem::GetFileNameFromPath(const char * file)
 		}
 	}
 	std::reverse(buffer.begin(), buffer.end());
-	return buffer.data();
+	return buffer;
 }
 
 std::string FileSystem::GetFileFromPath(const char * file)
@@ -99,4 +99,13 @@ std::string FileSystem::GetFileFromPath(const char * file)
 	std::reverse(buffer.begin(), buffer.end());
 
 	return buffer.data();
+}
+
+bool FileSystem::SaveData(const char * data, const char * path, const uint &size)
+{
+	std::ofstream to_save(path);
+	to_save.write(data, size);
+	to_save.close();
+
+	return true;
 }

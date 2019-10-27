@@ -6,5 +6,7 @@ class MaterialImporter :
 public:
 	MaterialImporter();
 	~MaterialImporter();
+
+	bool Import(const char* path);
 };
 

@@ -9,7 +9,11 @@
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
+
 #include "Brofiler/Brofiler.h"
+
+#include "ModelImporter.h"
+#include "MaterialImporter.h"
 
 // Devil ---------------------------------------------------------
 #include "DevIL/include/IL/il.h"
@@ -22,8 +26,6 @@
 //--------------------------------------------------------------------
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
-
-
 
 
 ModuleImport::ModuleImport()
@@ -46,6 +48,9 @@ bool ModuleImport::Start()
 	LOG("Initializing DevIL...");
 	ilInit();
 	
+	model = new ModelImporter();
+	material = new MaterialImporter();
+
 	// Charge logo texture
 	logo_txt = ImportTexture("Assets/logo.png");
 	logo_txt->visible_on_inspector = false;
@@ -57,6 +62,9 @@ bool ModuleImport::CleanUp()
 {
 	// detach log stream
 	aiDetachAllLogStreams();
+
+	delete model;
+	delete material;
 
 	return true;
 }
@@ -70,13 +78,13 @@ bool ModuleImport::Import(const char * path)
 	case FileSystem::Format::DDS:
 	case FileSystem::Format::PNG:
 	case FileSystem::Format::JPG:
-		App->importer->ImportTexture(path);
+		material->Import(path);
 		break;
 	case FileSystem::Format::FBX:
-		App->importer->ImportFbx(path);
+		model->Import(path);
 		break;
 	default:
-		LOG("Failed to load %s. Format not seted");
+		LOG("Failed to load %s. Format not setted");
 		break;
 	}
 	return false;
@@ -84,102 +92,10 @@ bool ModuleImport::Import(const char * path)
 
 bool ModuleImport::ImportFbx(const char * path)
 {
-	BROFILER_CATEGORY("Import FBX", Profiler::Color::Green);
-	bool ret = true;
-
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
-	LOG("Importing fbx with path: %s", path);
-	
-	if (scene != nullptr && scene->HasMeshes())
-	{
-		App->object_manager->SetSelected(nullptr);
-		uint ticks = SDL_GetTicks(); //timer
-		PerfTimer timer;
-
-		GameObject * container = App->object_manager->CreateGameObject(nullptr);
-		container->SetName(App->file_system->GetFileNameFromPath(path).data());
-		
-		aiNode *node = scene->mRootNode;
-
-		aiVector3D position, scale;			// This will be commented only for assignment 1
-		aiQuaternion rotation;
-		node->mTransformation.Decompose(scale, rotation, position);
-		ComponentTransform* transform = ((ComponentTransform*)container->GetComponent(ComponentType::TRANSFORM));
-		transform->SetPosition(position.x, position.y, position.z);
-		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
-		transform->SetScale(scale.x, scale.y, scale.z);
-
-		transform->CalculeLocalMatrix();
-		transform->CalculateGlobalMatrix();
-
-		LoadNode(node, container, scene);
-
-		aiReleaseImport(scene);
-		LOG("Time to load FBX: %u", SDL_GetTicks() - ticks);
-
-		
-	}
-	else
-		LOG("Error loading scene: %s", scene == nullptr ? aiGetErrorString() : "The FBX has no meshes");
-
-	return ret;
+	return true;
 }
 
-void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * scene)
-{
-	for (int i = 0; i < node->mNumChildren; ++i) {
-		aiNode* child = node->mChildren[i];
 
-		GameObject* obj = App->object_manager->CreateGameObject(parent);
-		obj->SetName(child->mName.C_Str());
-		LOG("Created %s GameObject", obj->GetName());
-
-		ComponentTransform *transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
-		aiVector3D position, scale;
-		aiQuaternion rotation;
-		child->mTransformation.Decompose(scale, rotation, position);
-
-		transform->SetPosition(position.x, position.y, position.z);
-		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
-		// FBX exporters have some options that will change the scale of the models, be sure you export your models in Apply Scale FBX All mode
-
-		//scale *= 0.01f;
-		//scale /= std::max(std::max(scale.x, scale.y),scale.z); 
-		transform->SetScale(scale.x, scale.y, scale.z);
-
-		transform->CalculeLocalMatrix();
-		transform->CalculateGlobalMatrix();
-
-		if (child->mNumMeshes == 1) {
-			ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
-			aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
-			mesh->mesh = App->object_manager->CreateMesh(amesh);
-
-			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
-			aiString path;
-			aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
-			LOG("Diffuse texture found: %s", path.C_Str());
-			ComponentMaterial* material = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
-			material->SetTexture(ImportTexture(std::string(std::string("Assets/Textures/") + App->file_system->GetFileFromPath(path.C_Str())).data()));
-
-		}
-		else {
-			for (int j = 0; j < child->mNumMeshes; ++j) {
-				GameObject * child_m = App->object_manager->CreateGameObject(obj);
-
-				ComponentMesh* mesh = static_cast<ComponentMesh*>(child_m->CreateComponent(ComponentType::MESH));
-				aiMesh* amesh = scene->mMeshes[child->mMeshes[j]];
-				mesh->mesh = App->object_manager->CreateMesh(amesh);
-
-				child_m->SetName(amesh->mName.C_Str());
-			}
-		}
-
-		if (child->mNumChildren > 0) {
-			LoadNode(child, obj, scene);
-		}
-	}
-}
 
 Texture* ModuleImport::ImportTexture(const char * path)
 {

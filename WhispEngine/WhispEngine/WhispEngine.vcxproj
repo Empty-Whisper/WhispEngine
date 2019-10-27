@@ -40,6 +40,7 @@
     <ClCompile Include="Importer.cpp" />
     <ClCompile Include="MaterialImporter.cpp" />
     <ClCompile Include="MeshImporter.cpp" />
+    <ClCompile Include="ModelImporter.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="ModuleObjectManager.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="Importer.h" />
     <ClInclude Include="MaterialImporter.h" />
     <ClInclude Include="MeshImporter.h" />
+    <ClInclude Include="ModelImporter.h" />
     <ClInclude Include="mmgr\mmgr.h" />
     <ClInclude Include="mmgr\nommgr.h" />
     <ClInclude Include="ModuleImport.h" />

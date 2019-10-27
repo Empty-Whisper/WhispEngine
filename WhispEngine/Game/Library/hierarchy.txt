@@ -1,0 +1,11 @@
+| num_children 4b| name_size 4b| fbx_name |
+
+->| num_children 4b| has mesh 0/1 1b| mesh_id 4b |
+
+
+//Baker_house example
+
+| 2 | 11 | BakerHouse |
+
+| 0 | 1 | 0 |
+| 0 | 1 | 1 |
