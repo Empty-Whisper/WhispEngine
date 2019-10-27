@@ -14,6 +14,7 @@ enum class ObjectSelected
 
 class GameObject
 {
+	friend class ComponentMesh;
 public:
 	GameObject(GameObject *parent);
 	~GameObject();
@@ -56,6 +57,6 @@ private:
 	std::vector<Component*> components_to_delete;
 
 	AABB aabb = AABB(float3::zero, float3::zero);
-	bool see_bounding_box = true;
+	bool see_bounding_box = false;
 };
 
