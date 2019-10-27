@@ -78,10 +78,6 @@ void ComponentTransform::OnInspector()
 			CalculeLocalMatrix();
 		}
 		ImGui::PopID();
-
-		ImGui::Separator();
-
-		ImGui::Checkbox("Bounding Box", &object->see_bounding_box);
 	}
 }
 

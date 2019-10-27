@@ -44,34 +44,6 @@ void GameObject::Update()
 		}
 		components_to_delete.clear();
 	}
-
-	if (see_bounding_box) {
-		glColor3f(0.f, 1.f, 0.f);
-
-		glBegin(GL_LINES);
-
-		glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
-		glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
-
-		glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
-		glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
-
-		glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
-		glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
-
-
-		glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
-		glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
-
-		glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
-		glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
-
-		glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
-		glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
-
-
-		glEnd();
-	}
 }
 
 Component * GameObject::CreateComponent(const ComponentType & type)

@@ -47,14 +47,10 @@ public:
 
 	GameObject* parent = nullptr;
 
-	bool see_bounding_box = false;
-	AABB aabb;
-
 private:
 	bool active = true;
 	std::string name;
 	ObjectSelected obj_selected = ObjectSelected::NONE;
 	std::vector<Component*> components_to_delete;
-
 };
 

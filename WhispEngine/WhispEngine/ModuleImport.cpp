@@ -79,7 +79,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		container->SetName(App->file_system->GetFileNameFromPath(path).data());
 		
 		aiNode *node = scene->mRootNode;
-		
+
 		/*aiVector3D position, scale;			// This will be commented only for assignment 1
 		aiQuaternion rotation;
 		node->mTransformation.Decompose(scale, rotation, position);
@@ -131,9 +131,6 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 			ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
 			aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
 			mesh->mesh = App->object_manager->CreateMesh(amesh);
-			float3 min = float3(amesh->mAABB.mMin.x, amesh->mAABB.mMin.y, amesh->mAABB.mMin.z);
-			float3 max = float3(amesh->mAABB.mMax.x, amesh->mAABB.mMax.y, amesh->mAABB.mMax.z);
-			obj->aabb = AABB(min, max);
 
 			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
 			aiString path;
@@ -150,9 +147,6 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 				ComponentMesh* mesh = static_cast<ComponentMesh*>(child_m->CreateComponent(ComponentType::MESH));
 				aiMesh* amesh = scene->mMeshes[child->mMeshes[j]];
 				mesh->mesh = App->object_manager->CreateMesh(amesh);
-				float3 min = float3(amesh->mAABB.mMin.x, amesh->mAABB.mMin.y, amesh->mAABB.mMin.z);
-				float3 max = float3(amesh->mAABB.mMax.x, amesh->mAABB.mMax.y, amesh->mAABB.mMax.z);
-				child_m->aabb = AABB(min, max);
 
 				child_m->SetName(amesh->mName.C_Str());
 			}
