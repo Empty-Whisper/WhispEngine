@@ -44,6 +44,56 @@ void GameObject::Update()
 		}
 		components_to_delete.clear();
 	}
+
+	if (see_bounding_box) {
+		DrawBoundingBox();
+	}
+}
+
+void GameObject::DrawBoundingBox()
+{
+	glColor3f(0.f, 1.f, 0.f);
+
+	glBegin(GL_LINES);
+
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
+
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
+
+
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
+	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+
+	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+
+	glEnd();
 }
 
 Component * GameObject::CreateComponent(const ComponentType & type)
@@ -180,15 +230,12 @@ bool GameObject::HasChild(GameObject * child)
 	return ret;
 }
 
-void GameObject::GetBBox(math::AABB& aabb)
+void GameObject::SetAABB(AABB & bbox)
 {
-	ComponentMesh* component_mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-	
-	if (component_mesh != nullptr)
-	{
-		component_mesh->InitAABB();
-		aabb = component_mesh->mesh->aabb;
-		aabb.maxPoint = aabb.maxPoint.Max(component_mesh->mesh->aabb.maxPoint);
-		aabb.minPoint = aabb.minPoint.Min(component_mesh->mesh->aabb.minPoint);
-	}
+	aabb = bbox;
+}
+
+AABB GameObject::GetAABB() const
+{
+	return aabb;
 }
