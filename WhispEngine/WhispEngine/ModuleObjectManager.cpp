@@ -254,6 +254,9 @@ void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const
 		if (faces[j].mNumIndices != 3)
 		{
 			LOG("WARNING, geometry face with != 3 indices!");
+			ret->index.data[j * 3] = 0;
+			ret->index.data[j * 3 + 1] = 0;
+			ret->index.data[j * 3 + 2] = 0;
 		}
 		else
 		{
