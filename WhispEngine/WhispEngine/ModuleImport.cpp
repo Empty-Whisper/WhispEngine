@@ -135,6 +135,7 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 
 			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
 			aiString path;
+			LOG("num of diffuse textures: %i", aimaterial->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE));
 			aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
 			LOG("Diffuse texture found: %s", path.C_Str());
 			ComponentMaterial* material = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);

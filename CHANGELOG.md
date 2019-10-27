@@ -1,5 +1,15 @@
 # Changelog
 
+## [Assignment1.3] - 27/10/2019
+### Added
+- Bounding Box
+
+### Changed
+- Camera controls work with bounding boxes
+
+### Fixed
+- When import an fbx with polygons with more tha 3 vertex, crashes because cannot calculate normals faces
+
 ## [Assignment1.2] - 26/10/2019
 ### Added
 - Can deselect GameObjects clicking in hierarchy window

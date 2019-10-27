@@ -98,7 +98,7 @@ update_status ModuleInput::PollEvents()
 				App->importer->ImportFbx(file);
 				break;
 			default:
-				LOG("Failed to load %s. Format not seted");
+				LOG("Failed to load %s. Format not setted");
 				break;
 			}
 
