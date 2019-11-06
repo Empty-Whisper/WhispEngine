@@ -203,6 +203,10 @@ void ComponentMesh::OnInspector()
 
 			ImGui::Checkbox("Face Normals", &view_face_normals);
 			ImGui::Checkbox("Vertex Normals", &view_vertex_normals);
+
+			ImGui::Separator();
+
+			ImGui::Checkbox("Bounding Box", &object->see_bounding_box);
 		}
 		else {
 			if (ImGui::Button("Set Resource"))
