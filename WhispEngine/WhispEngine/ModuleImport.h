@@ -1,6 +1,10 @@
 #pragma once
 #include "Module.h"
 
+#define ASSETS_AFOLDER "Assets/"
+#define MODEL_AFOLDER "Assets/Models"
+#define TEXTURE_AFOLDER "Assets/Textures"
+
 struct aiNode;
 struct aiScene;
 class GameObject;

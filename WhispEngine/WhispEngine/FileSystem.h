@@ -23,5 +23,7 @@ public:
 	std::string GetFileNameFromPath(const char* file);
 	std::string GetFileFromPath(const char* file);
 
+	bool IsInDirectory(const char* directory, const char* file);
+
 	bool SaveData(const char* data, const char* path, const uint &size);
 };

@@ -30,6 +30,26 @@ bool ModelImporter::Import(const char * path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		const char* new_path = nullptr;
+
+		if (App->file_system->IsInDirectory(MODEL_AFOLDER, App->file_system->GetFileFromPath(path).data())) {
+			new_path = (std::string("Assets/Models/") + App->file_system->GetFileFromPath(path)).data();
+			if (!CopyFile(path, new_path, FALSE)) {
+				LOG("Failed to copy fbx in Assets folder, Error: %s", GetLastError());
+			}
+			else {
+				path = new_path;
+			}
+		}
+
+		// .meta -------------------------------------------------------------
+		uint64_t meta = App->random->RandomGUID();
+		char* meta_data = new char[sizeof(uint64_t)];
+		memset(meta_data, meta, sizeof(uint64_t));
+		App->file_system->SaveData(meta_data, std::string(path + std::string(".meta")).data(), sizeof(uint64_t));
+		delete[] meta_data;
+		// -------------------------------------------------------------------
+
 		App->object_manager->SetSelected(nullptr);
 		uint ticks = SDL_GetTicks(); //timer
 		PerfTimer timer;
@@ -170,7 +190,7 @@ uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * 
 		size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint/*mesh_id*/);
 
 		if (child_n->mNumChildren > 0)
-			size += CalculateHierarchyInfo(&child, child_n, mesh_id, );
+			size += CalculateHierarchyInfo(&child, child_n, mesh_id, name);
 
 		info->children.push_back(child);
 	}

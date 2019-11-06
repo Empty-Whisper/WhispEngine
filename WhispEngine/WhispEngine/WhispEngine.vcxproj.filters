@@ -303,7 +303,9 @@
     <ClCompile Include="ModelImporter.cpp">
       <Filter>Importer</Filter>
     </ClCompile>
-    <ClCompile Include="MeshImporter.cpp" />
+    <ClCompile Include="MeshImporter.cpp">
+      <Filter>Importer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -663,7 +665,9 @@
     <ClInclude Include="ModelImporter.h">
       <Filter>Importer</Filter>
     </ClInclude>
-    <ClInclude Include="MeshImporter.h" />
+    <ClInclude Include="MeshImporter.h">
+      <Filter>Importer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

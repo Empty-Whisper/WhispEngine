@@ -101,6 +101,12 @@ std::string FileSystem::GetFileFromPath(const char * file)
 	return buffer.data();
 }
 
+bool FileSystem::IsInDirectory(const char * directory, const char * file)
+{
+	struct stat buffer;
+	return (stat(std::string(std::string(directory) + file).c_str(), &buffer) == 0);
+}
+
 bool FileSystem::SaveData(const char * data, const char * path, const uint &size)
 {
 	std::ofstream to_save(path);

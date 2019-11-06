@@ -14,6 +14,7 @@
 
 #include "ModelImporter.h"
 #include "MaterialImporter.h"
+#include "MeshImporter.h"
 
 // Devil ---------------------------------------------------------
 #include "DevIL/include/IL/il.h"
@@ -48,8 +49,9 @@ bool ModuleImport::Start()
 	LOG("Initializing DevIL...");
 	ilInit();
 	
-	model = new ModelImporter();
-	material = new MaterialImporter();
+	model		= new ModelImporter();
+	material	= new MaterialImporter();
+	mesh		= new MeshImporter();
 
 	// Charge logo texture
 	logo_txt = ImportTexture("Assets/logo.png");
