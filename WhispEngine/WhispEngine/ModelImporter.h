@@ -10,12 +10,13 @@ struct aiScene;
 class ModelImporter :
 	public Importer
 {
-private:
-
+public:
 	struct HierarchyInfo {
-		uint mesh_id = 0;
+		uint64_t mesh_id = 0;
+		HierarchyInfo* parent = nullptr;
 		std::vector<HierarchyInfo> children;
 	};
+
 public:
 	ModelImporter();
 	~ModelImporter();
@@ -25,6 +26,6 @@ public:
 	void FillChildrenInfo(ModelImporter::HierarchyInfo &info, char * &cursor);
 
 	void LoadNode(aiNode * node, GameObject * parent, const aiScene * scene);
-	uint CalculateHierarchyInfo(HierarchyInfo* info, const aiNode* node, uint* mesh_id, const std::string & name);
+	uint CalculateHierarchyInfo(HierarchyInfo* info, const aiNode* node, const aiScene* scene);
 };
 

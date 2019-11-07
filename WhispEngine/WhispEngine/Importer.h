@@ -5,6 +5,6 @@ public:
 	Importer();
 	virtual ~Importer();
 
-	virtual bool Import(const char* path) = 0;
+	virtual bool Import(const char* path) { return false; };
 };
 

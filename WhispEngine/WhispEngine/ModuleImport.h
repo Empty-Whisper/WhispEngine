@@ -2,8 +2,13 @@
 #include "Module.h"
 
 #define ASSETS_AFOLDER "Assets/"
-#define MODEL_AFOLDER "Assets/Models"
-#define TEXTURE_AFOLDER "Assets/Textures"
+#define MODEL_AFOLDER "Assets/Models/"
+#define TEXTURE_AFOLDER "Assets/Textures/"
+
+#define LIBRARY_LFOLDER "Library/"
+#define MODEL_LFOLDER "Library/Models/"
+#define MESH_LFOLDER "Library/Meshes/"
+#define MATERIAL_LFOLDER "Library/Material/"
 
 struct aiNode;
 struct aiScene;

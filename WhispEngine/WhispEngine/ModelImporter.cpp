@@ -30,15 +30,15 @@ bool ModelImporter::Import(const char * path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		const char* new_path = nullptr;
+		std::string new_path;
 
-		if (App->file_system->IsInDirectory(MODEL_AFOLDER, App->file_system->GetFileFromPath(path).data())) {
-			new_path = (std::string("Assets/Models/") + App->file_system->GetFileFromPath(path)).data();
-			if (!CopyFile(path, new_path, FALSE)) {
+		if (!App->file_system->IsInDirectory(MODEL_AFOLDER, App->file_system->GetFileFromPath(path).data())) {
+			new_path = (MODEL_AFOLDER + App->file_system->GetFileFromPath(path));
+			if (!CopyFile(path, new_path.data(), FALSE)) {
 				LOG("Failed to copy fbx in Assets folder, Error: %s", GetLastError());
 			}
 			else {
-				path = new_path;
+				path = new_path.data();
 			}
 		}
 
@@ -57,11 +57,10 @@ bool ModelImporter::Import(const char * path)
 		aiNode *node = scene->mRootNode;
 
 		HierarchyInfo info;
-		uint mesh_id = 1;
 		std::string name = App->file_system->GetFileNameFromPath(path);
-		uint header[2] = { node->mNumChildren, strlen(name.data()) };
+		uint header[2] = { node->mNumChildren, name.length() };
 
-		uint size = CalculateHierarchyInfo(&info, node, &mesh_id, name) + sizeof(header) + strlen(name.data());
+		uint size = CalculateHierarchyInfo(&info, node, scene) + sizeof(header) + name.length();
 
 		char* data = new char[size];
 		memset(data, 0, size);
@@ -76,7 +75,7 @@ bool ModelImporter::Import(const char * path)
 		cursor += bytes;
 		FillChildrenInfo(info, cursor);
 
-		App->file_system->SaveData(data, std::string(std::string("Library/Models/") + name + std::string(".whisp")).data(), size);
+		App->file_system->SaveData(data, std::string(MODEL_LFOLDER + name + std::string(".whispModel")).data(), size);
 
 		delete[] data;
 
@@ -103,7 +102,7 @@ void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char * 
 		memcpy(cursor, &has_mesh, bytes);
 		cursor += bytes;
 
-		bytes = sizeof(uint);
+		bytes = sizeof(uint64_t);
 		memcpy(cursor, &(*i).mesh_id, bytes);
 		cursor += bytes;
 
@@ -169,28 +168,30 @@ void ModelImporter::LoadNode(aiNode * node, GameObject * parent, const aiScene *
 	}
 }
 
-uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * node, uint* mesh_id, const std::string & name)
+uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * node, const aiScene* scene)
 {
 	uint size = 0;
 	for (int i = 0; i < node->mNumChildren; i++) {
 		aiNode* child_n = node->mChildren[i];
 		HierarchyInfo child;
+		child.parent = info;
 		if (child_n->mNumMeshes == 1) {
-			child.mesh_id = (*mesh_id)++;
-			App->importer->mesh->Import(std::string(name + std::to_string((int)mesh_id)).data());
+			child.mesh_id = App->random->RandomGUID();
+			App->importer->mesh->Import(child.mesh_id, scene->mMeshes[child_n->mMeshes[0]]);
 		}
 		else if (child_n->mNumMeshes > 1) {
 			for (int i = 0; i < child_n->mNumMeshes; ++i) {
 				HierarchyInfo child_mesh;
-				child_mesh.mesh_id = (*mesh_id)++;
+				child_mesh.mesh_id = App->random->RandomGUID();
+				App->importer->mesh->Import(child_mesh.mesh_id, scene->mMeshes[child_n->mMeshes[i]]);
 				child.children.push_back(child_mesh);
-				size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint/*mesh_id*/);
+				size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint64_t/*mesh_id*/);
 			}
 		}
-		size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint/*mesh_id*/);
+		size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint64_t/*mesh_id*/);
 
 		if (child_n->mNumChildren > 0)
-			size += CalculateHierarchyInfo(&child, child_n, mesh_id, name);
+			size += CalculateHierarchyInfo(&child, child_n, scene);
 
 		info->children.push_back(child);
 	}
