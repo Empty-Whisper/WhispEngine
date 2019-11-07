@@ -80,7 +80,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		
 		aiNode *node = scene->mRootNode;
 
-		/*aiVector3D position, scale;			// This will be commented only for assignment 1
+		aiVector3D position, scale;			
 		aiQuaternion rotation;
 		node->mTransformation.Decompose(scale, rotation, position);
 		ComponentTransform* transform = ((ComponentTransform*)container->GetComponent(ComponentType::TRANSFORM));
@@ -89,7 +89,7 @@ bool ModuleImport::ImportFbx(const char * path)
 		transform->SetScale(scale.x, scale.y, scale.z);
 
 		transform->CalculeLocalMatrix();
-		transform->CalculateGlobalMatrix();*/
+		transform->CalculateGlobalMatrix();
 
 		LoadNode(node, container, scene);
 
@@ -120,8 +120,8 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
 		// FBX exporters have some options that will change the scale of the models, be sure you export your models in Apply Scale FBX All mode
 
-		//scale *= 0.01f;
-		//scale /= std::max(std::max(scale.x, scale.y),scale.z); 
+		scale *= 0.01f;
+		scale /= std::max(std::max(scale.x, scale.y),scale.z); 
 		transform->SetScale(scale.x, scale.y, scale.z);
 
 		transform->CalculeLocalMatrix();
@@ -132,6 +132,7 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 			aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
 			mesh->mesh = App->object_manager->CreateMesh(amesh);
 			obj->SetAABB(mesh->mesh->aabb);
+			obj->SetOBB(mesh->mesh->obb);
 
 			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
 			aiString path;
@@ -150,6 +151,7 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 				aiMesh* amesh = scene->mMeshes[child->mMeshes[j]];
 				mesh->mesh = App->object_manager->CreateMesh(amesh);
 				obj->SetAABB(mesh->mesh->aabb); // TODO: Set AABB for all container parents of gameobject childs of meshes
+				obj->SetOBB(mesh->mesh->obb);
 
 				child_m->SetName(amesh->mName.C_Str());
 			}

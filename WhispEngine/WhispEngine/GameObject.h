@@ -4,6 +4,7 @@
 
 #include "Component.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
+#include "MathGeoLib/include/Geometry/OBB.h"
 
 enum class ObjectSelected
 {
@@ -21,7 +22,8 @@ public:
 
 public:
 	void Update();
-	void DrawBoundingBox();
+	void DrawBoundingBoxAABB();
+	void DrawBoundingBoxOBB();
 	Component* CreateComponent(const ComponentType &type);
 	void	   DeleteComponent(Component* comp);
 	Component* GetComponent(const ComponentType &type);
@@ -43,6 +45,10 @@ public:
 
 	void SetAABB(AABB& bbox);
 	AABB GetAABB() const;
+	void SetOBB(AABB& bbox);
+	AABB GetOBB() const;
+
+	void GlobalBoundingBox();
 
 public:
 	std::vector<GameObject*> children;
@@ -57,6 +63,7 @@ private:
 	std::vector<Component*> components_to_delete;
 
 	AABB aabb = AABB(float3::zero, float3::zero);
+	AABB obb = AABB(float3::zero, float3::zero);
 	bool see_bounding_box = false;
 };
 

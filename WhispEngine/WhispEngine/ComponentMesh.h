@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "SDL/include/SDL_config.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
+#include "MathGeoLib/include/Geometry/OBB.h"
 
 #include "glmath.h"
 #include <array>
@@ -30,6 +31,7 @@ struct Mesh_info {
 	Buffer<float> tex_coords;
 
 	AABB aabb;
+	AABB obb;
 };
 
 enum class Normals {

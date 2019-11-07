@@ -33,12 +33,12 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
 	
 	if (obj->IsActive()) {
-		/*glPushMatrix();		//Commented only for assignment 1
-		glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());*/
+		glPushMatrix();		
+		glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());
 
 		obj->Update();
 
-		//glPopMatrix();
+		glPopMatrix();
 		if (!obj->children.empty()) {
 			for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 				UpdateGameObject(*i);
@@ -191,8 +191,12 @@ Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 		FillTextureCoords(ret, (float*)mesh->mTextureCoords[0]);
 	}
 
-	// AABB
-	ret->aabb.SetFrom((float3*)ret->vertex.data, ret->vertex.size);
+	// AABB - OBB
+	
+	ret->obb.Enclose((float3*)ret->vertex.data, ret->vertex.size);
+	ret->aabb.SetNegativeInfinity();
+	ret->aabb.Enclose((OBB)ret->obb);
+
 
 	ret->SetGLBuffers();
 

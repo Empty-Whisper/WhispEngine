@@ -3,7 +3,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "Application.h"
-
+#include "MathGeoLib/include/MathGeoLib.h"
 GameObject::GameObject(GameObject * parent) : parent(parent)
 {
 	if (parent != nullptr)
@@ -46,52 +46,116 @@ void GameObject::Update()
 	}
 
 	if (see_bounding_box) {
-		DrawBoundingBox();
+		DrawBoundingBoxAABB();
+		DrawBoundingBoxOBB();
 	}
 }
 
-void GameObject::DrawBoundingBox()
+void GameObject::DrawBoundingBoxAABB()
 {
+	GlobalBoundingBox();
+	float MinX = aabb.MinX();
+	float MinY = aabb.MinY();
+	float MinZ = aabb.MinZ();
+	float MaxX = aabb.MaxX();
+	float MaxY = aabb.MaxY();
+	float MaxZ = aabb.MaxZ();
+	glBegin(GL_LINES);
+
 	glColor3f(0.f, 1.f, 0.f);
+
+	
+
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MaxX, MinY, MinZ);
+
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MinY, MaxZ);
+
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MaxY, MinZ);
+
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MaxX, MinY, MinZ);
+
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MinX, MinY, MaxZ);
+
+
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MinY, MaxZ);
+
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
+
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MinX, MaxY, MaxZ);
+
+	glVertex3f(MinX, MinY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
+
+	glVertex3f(MaxX, MinY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+
+	glEnd();
+}
+
+void GameObject::DrawBoundingBoxOBB()
+{
+	
+	float MinX = obb.MinX();
+	float MinY = obb.MinY();
+	float MinZ = obb.MinZ();
+	float MaxX = obb.MaxX();
+	float MaxY = obb.MaxY();
+	float MaxZ = obb.MaxZ();
+
+	glColor3f(0.f, 0.f, 1.f);
 
 	glBegin(GL_LINES);
 
-	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
-	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MaxX, MinY, MinZ);
 
-	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
-	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MinY, MaxZ);
 
-	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MinZ());
-	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MaxY, MinZ);
 
-	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
-	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MaxX, MinY, MinZ);
 
-	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
-	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MinX, MinY, MaxZ);
 
 
-	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
-	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MaxZ());
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MinY, MaxZ);
 
-	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
-	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
 
-	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MaxZ());
-	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MaxY, MinZ);
 
-	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
-	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
 
-	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MinZ());
-	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MinX, MaxY, MaxZ);
 
-	glVertex3f(aabb.MinX(), aabb.MinY(), aabb.MaxZ());
-	glVertex3f(aabb.MinX(), aabb.MaxY(), aabb.MaxZ());
+	glVertex3f(MinX, MinY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
 
-	glVertex3f(aabb.MaxX(), aabb.MinY(), aabb.MinZ());
-	glVertex3f(aabb.MaxX(), aabb.MaxY(), aabb.MinZ());
+	glVertex3f(MaxX, MinY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
 
 	glEnd();
 }
@@ -238,4 +302,35 @@ void GameObject::SetAABB(AABB & bbox)
 AABB GameObject::GetAABB() const
 {
 	return aabb;
+}
+
+void GameObject::SetOBB(AABB & bbox)
+{
+	obb = bbox;
+}
+
+AABB GameObject::GetOBB() const
+{
+	return obb;
+}
+
+void GameObject::GlobalBoundingBox()
+{
+
+	//C_Mesh* c_mesh = (C_Mesh*)(*child)->GetComponentsByType(ComponentType::MESH);
+
+	//if (c_mesh != nullptr)
+	//{
+		AABB global_aabb = aabb;
+		OBB obb = global_aabb;
+		global_aabb = obb.MinimalEnclosingAABB();
+
+		aabb.maxPoint = aabb.maxPoint.Max(global_aabb.maxPoint);
+		aabb.minPoint = aabb.minPoint.Min(global_aabb.minPoint);
+	//}
+	//else
+	//{
+		//aabb->maxPoint = aabb->maxPoint.Max((*child)->transform->GetWorldPosition());
+		//aabb->minPoint = aabb->minPoint.Min((*child)->transform->GetWorldPosition());
+	//}
 }
