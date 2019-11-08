@@ -150,6 +150,8 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 				ComponentMesh* mesh = static_cast<ComponentMesh*>(child_m->CreateComponent(ComponentType::MESH));
 				aiMesh* amesh = scene->mMeshes[child->mMeshes[j]];
 				mesh->mesh = App->object_manager->CreateMesh(amesh);
+
+				//mesh->mesh->aabb.Transform()
 				obj->SetAABB(mesh->mesh->aabb); // TODO: Set AABB for all container parents of gameobject childs of meshes
 				obj->SetOBB(mesh->mesh->obb);
 

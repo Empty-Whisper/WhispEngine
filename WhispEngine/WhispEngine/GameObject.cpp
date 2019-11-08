@@ -320,13 +320,13 @@ void GameObject::GlobalBoundingBox()
 	//C_Mesh* c_mesh = (C_Mesh*)(*child)->GetComponentsByType(ComponentType::MESH);
 
 	//if (c_mesh != nullptr)
-	//{
-		AABB global_aabb = aabb;
-		OBB obb = global_aabb;
-		global_aabb = obb.MinimalEnclosingAABB();
+	////{
+	//	AABB global_aabb = aabb;
+	//	OBB obb = global_aabb;
+	//	global_aabb = obb.MinimalEnclosingAABB();
 
-		aabb.maxPoint = aabb.maxPoint.Max(global_aabb.maxPoint);
-		aabb.minPoint = aabb.minPoint.Min(global_aabb.minPoint);
+	//	aabb.maxPoint = aabb.maxPoint.Max(global_aabb.maxPoint);
+	//	aabb.minPoint = aabb.minPoint.Min(global_aabb.minPoint);
 	//}
 	//else
 	//{

@@ -103,11 +103,13 @@ void ComponentMesh::Draw()
 }
 
 void ComponentMesh::DrawWireFrame() {
+	glDisable(GL_LIGHTING);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
 	glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+	glEnable(GL_LIGHTING);
 }
 
 void ComponentMesh::DrawOutline()
