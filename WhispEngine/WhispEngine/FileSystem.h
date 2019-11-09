@@ -8,6 +8,7 @@ public:
 	enum class Format {
 		NONE = -1,
 		JSON, FBX, DDS, PNG, JPG,
+		MODEL, MESH, 
 		MAX
 	};
 
@@ -26,4 +27,9 @@ public:
 	bool IsInDirectory(const char* directory, const char* file);
 
 	bool SaveData(const char* data, const char* path, const uint &size);
+
+	/*
+	Give Data from a file. The result is a char array. WARNING: REMEMBER TO DELETE ARRAY AFTER USE IT
+	*/
+	char* GetData(const char* path);
 };

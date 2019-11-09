@@ -59,6 +59,9 @@ FileSystem::Format FileSystem::GetFormat(const char * file)
 	else if (buffer.compare("jpg") == 0) {
 		return FileSystem::Format::JPG;
 	}
+	else if (buffer.compare("whispmodel") == 0) {
+		return FileSystem::Format::MODEL;
+	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());
 
@@ -114,4 +117,24 @@ bool FileSystem::SaveData(const char * data, const char * path, const uint &size
 	to_save.close();
 
 	return true;
+}
+
+char * FileSystem::GetData(const char * path)
+{
+	std::ifstream file(path);
+
+	if (!file) {
+		LOG("Failed to open %s", path);
+		file.close();
+		return nullptr;
+	}
+
+	file.seekg(0, std::ios::end);
+	size_t len = file.tellg();
+	char *data = new char[len];
+	file.seekg(0, std::ios::beg);
+	file.read(data, len);
+	file.close();
+
+	return data;
 }

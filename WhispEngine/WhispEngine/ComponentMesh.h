@@ -10,6 +10,7 @@
 
 
 class GameObject;
+class ComponentMesh;
 
 template <typename T>
 struct Buffer {
@@ -29,6 +30,8 @@ struct Mesh_info {
 	Buffer<float> vertex_normals;
 	Buffer<float> tex_coords;
 	AABB aabb;
+
+	ComponentMesh* component = nullptr;
 };
 
 enum class Normals {

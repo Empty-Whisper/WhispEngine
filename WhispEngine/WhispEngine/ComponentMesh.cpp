@@ -8,6 +8,8 @@
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
 	material = (ComponentMaterial*)parent->CreateComponent(ComponentType::MATERIAL);
+	if (mesh != nullptr)
+		mesh->component = this;
 }
 
 void ComponentMesh::Update()

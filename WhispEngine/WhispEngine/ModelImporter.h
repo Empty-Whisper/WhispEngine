@@ -3,6 +3,8 @@
 #include "Globals.h"
 #include <vector>
 
+#define SIZE_OF_NODE sizeof(uint) + sizeof(char) + sizeof(uint64_t)
+
 class GameObject;
 struct aiNode;
 struct aiScene;
@@ -23,7 +25,13 @@ public:
 
 	bool Import(const char* path);
 
-	void FillChildrenInfo(ModelImporter::HierarchyInfo &info, char * &cursor);
+	bool Load(const char* path);
+
+	void CreateObjects(GameObject * container, char * &cursor);
+
+private:
+
+	void FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &cursor);
 
 	void LoadNode(aiNode * node, GameObject * parent, const aiScene * scene);
 	uint CalculateHierarchyInfo(HierarchyInfo* info, const aiNode* node, const aiScene* scene);

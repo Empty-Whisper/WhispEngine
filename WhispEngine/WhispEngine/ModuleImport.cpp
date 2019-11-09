@@ -85,6 +85,9 @@ bool ModuleImport::Import(const char * path)
 	case FileSystem::Format::FBX:
 		model->Import(path);
 		break;
+	case FileSystem::Format::MODEL:
+		model->Load(path);
+		break;
 	default:
 		LOG("Failed to load %s. Format not setted");
 		break;

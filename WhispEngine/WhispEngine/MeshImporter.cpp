@@ -90,3 +90,42 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh)
 	return true;
 }
 
+bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
+{
+	std::string path(MESH_LFOLDER + std::to_string(uid) + ".whispMesh");
+
+	char * data = App->file_system->GetData(path.c_str());
+	if (data == nullptr) {
+		return false;
+	}
+	char* cursor = data;
+
+
+	uint header[6];
+	uint bytes = sizeof(header);
+	memcpy(header, cursor, bytes);
+
+	mesh->vertex.size = header[1] / sizeof(float);
+	mesh->index.size = header[2] / sizeof(uint);
+
+	cursor += bytes;
+	bytes = header[0];
+	std::string name(cursor); //TODO: set name in model file, the mesh has not any relation with object's name
+	//mesh->component->object->SetName(name.c_str());
+
+	cursor += bytes;
+	bytes = mesh->vertex.size * 3;
+	mesh->vertex.data = new float[mesh->vertex.size];
+	memcpy(mesh->vertex.data, cursor, bytes);
+
+	cursor += bytes;
+	bytes = mesh->index.size * 3;
+	mesh->index.data = new uint[mesh->index.size];
+	memcpy(mesh->index.data, cursor, bytes);
+
+	mesh->SetGLBuffers();
+
+	delete[] data;
+	return true;
+}
+

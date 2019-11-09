@@ -43,6 +43,10 @@ bool ModelImporter::Import(const char * path)
 		}
 
 		// .meta -------------------------------------------------------------
+		if (App->file_system->IsInDirectory(MODEL_AFOLDER, (App->file_system->GetFileFromPath(path) + ".meta").data())) {
+			LOG("File %s already imported", App->file_system->GetFileFromPath(path).data());
+			return false;
+		}
 		uint64_t meta = App->random->RandomGUID();
 		char* meta_data = new char[sizeof(uint64_t)];
 		memset(meta_data, meta, sizeof(uint64_t));
@@ -56,9 +60,13 @@ bool ModelImporter::Import(const char * path)
 
 		aiNode *node = scene->mRootNode;
 
+		//H: num_children | name_size | name
+
+		//Obj: num_children | has_mesh | mesh_UID
+
 		HierarchyInfo info;
 		std::string name = App->file_system->GetFileNameFromPath(path);
-		uint header[2] = { node->mNumChildren, name.length() };
+		uint header[2] = { node->mNumChildren, (uint)name.length() };
 
 		uint size = CalculateHierarchyInfo(&info, node, scene) + sizeof(header) + name.length();
 
@@ -69,13 +77,13 @@ bool ModelImporter::Import(const char * path)
 		uint bytes = sizeof(header);
 		memcpy(cursor, header, bytes);
 		cursor += bytes;
-		bytes = strlen(name.data());
-		memcpy(cursor, name.data(), bytes);
+		bytes = name.length();
+		memcpy(cursor, name.c_str(), bytes);
 
 		cursor += bytes;
 		FillChildrenInfo(info, cursor);
 
-		App->file_system->SaveData(data, std::string(MODEL_LFOLDER + name + std::string(".whispModel")).data(), size);
+		App->file_system->SaveData(data, std::string(MODEL_LFOLDER + std::to_string(meta) + std::string(".whispModel")).data(), size);
 
 		delete[] data;
 
@@ -88,7 +96,62 @@ bool ModelImporter::Import(const char * path)
 	return ret;
 }
 
-void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char * &cursor)
+bool ModelImporter::Load(const char * path)
+{
+	char* data = App->file_system->GetData(path);
+
+	char* cursor = data;
+
+	uint ranges[2];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+
+	GameObject* container = App->object_manager->CreateGameObject(nullptr);
+
+	cursor += bytes;
+	bytes = ranges[1];
+	std::string name(cursor);
+	container->SetName(name.c_str());
+
+	cursor += bytes;
+	for (int i = 0; i < ranges[0]; i++) {
+		CreateObjects(container, cursor);
+	}
+
+
+	delete[] data;
+	return true;
+}
+
+void ModelImporter::CreateObjects(GameObject * container, char * &cursor)
+{
+	uint bytes = 0;
+	GameObject* child = App->object_manager->CreateGameObject(container);
+
+	uint num_children;
+	bytes = sizeof(uint);
+	memcpy(&num_children, cursor, bytes);
+	cursor += bytes;
+
+	if (cursor[0] == 1) {
+		ComponentMesh* mesh = (ComponentMesh*)child->CreateComponent(ComponentType::MESH);
+		uint64_t mesh_uid = 0;
+		bytes = sizeof(uint64_t);
+		memcpy(&mesh_uid, cursor+1, bytes);
+
+		mesh->mesh = new Mesh_info();
+
+		App->importer->mesh->Load(mesh_uid, mesh->mesh);
+	}
+		cursor++;
+		cursor += bytes;
+
+	for (int i = 0; i < num_children; i++) {
+		CreateObjects(child, cursor);
+	}
+}
+
+void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &cursor)
 {
 	uint bytes = 0;
 	for (auto i = info.children.begin(); i != info.children.end(); ++i) {
