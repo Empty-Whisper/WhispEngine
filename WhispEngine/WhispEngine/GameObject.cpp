@@ -53,7 +53,6 @@ void GameObject::Update()
 
 void GameObject::DrawBoundingBoxAABB()
 {
-	GlobalBoundingBox();
 	float MinX = aabb.MinX();
 	float MinY = aabb.MinY();
 	float MinZ = aabb.MinZ();
@@ -314,23 +313,4 @@ AABB GameObject::GetOBB() const
 	return obb;
 }
 
-void GameObject::GlobalBoundingBox()
-{
 
-	//C_Mesh* c_mesh = (C_Mesh*)(*child)->GetComponentsByType(ComponentType::MESH);
-
-	//if (c_mesh != nullptr)
-	////{
-	//	AABB global_aabb = aabb;
-	//	OBB obb = global_aabb;
-	//	global_aabb = obb.MinimalEnclosingAABB();
-
-	//	aabb.maxPoint = aabb.maxPoint.Max(global_aabb.maxPoint);
-	//	aabb.minPoint = aabb.minPoint.Min(global_aabb.minPoint);
-	//}
-	//else
-	//{
-		//aabb->maxPoint = aabb->maxPoint.Max((*child)->transform->GetWorldPosition());
-		//aabb->minPoint = aabb->minPoint.Min((*child)->transform->GetWorldPosition());
-	//}
-}

@@ -30,8 +30,9 @@ struct Mesh_info {
 	Buffer<float> vertex_normals;
 	Buffer<float> tex_coords;
 
+	AABB local_box;
 	AABB aabb;
-	AABB obb;
+	OBB obb;
 };
 
 enum class Normals {

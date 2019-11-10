@@ -73,7 +73,7 @@ public:
 	void FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
 	void FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
 	void FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
-	
+
 	void Demo();
 
 	// =========================================================== !old

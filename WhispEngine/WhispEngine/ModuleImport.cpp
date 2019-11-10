@@ -117,6 +117,7 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 		child->mTransformation.Decompose(scale, rotation, position);
 
 		transform->SetPosition(position.x, position.y, position.z);
+		rotation = { 0, 0, 0, 0 };
 		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
 		// FBX exporters have some options that will change the scale of the models, be sure you export your models in Apply Scale FBX All mode
 
@@ -132,7 +133,6 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 			aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
 			mesh->mesh = App->object_manager->CreateMesh(amesh);
 			obj->SetAABB(mesh->mesh->aabb);
-			obj->SetOBB(mesh->mesh->obb);
 
 			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
 			aiString path;
@@ -153,7 +153,6 @@ void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * 
 
 				//mesh->mesh->aabb.Transform()
 				obj->SetAABB(mesh->mesh->aabb); // TODO: Set AABB for all container parents of gameobject childs of meshes
-				obj->SetOBB(mesh->mesh->obb);
 
 				child_m->SetName(amesh->mName.C_Str());
 			}

@@ -48,7 +48,8 @@ public:
 	void SetOBB(AABB& bbox);
 	AABB GetOBB() const;
 
-	void GlobalBoundingBox();
+	void GenerateOBB(OBB obb, GameObject* &obj);
+
 
 public:
 	std::vector<GameObject*> children;

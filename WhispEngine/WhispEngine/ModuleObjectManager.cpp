@@ -33,6 +33,7 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
 	
 	if (obj->IsActive()) {
+		
 		glPushMatrix();		
 		glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());
 
@@ -191,11 +192,15 @@ Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 		FillTextureCoords(ret, (float*)mesh->mTextureCoords[0]);
 	}
 
-	// AABB - OBB
+	// Generate AABB
+	ret->local_box.SetNegativeInfinity();
+	ret->local_box.Enclose((float3*)ret->vertex.data, ret->vertex.size);
+
+	ret->obb = ret->local_box;
 	
-	ret->obb.Enclose((float3*)ret->vertex.data, ret->vertex.size);
+
 	ret->aabb.SetNegativeInfinity();
-	ret->aabb.Enclose((OBB)ret->obb);
+	ret->aabb.Enclose(ret->obb);
 
 
 	ret->SetGLBuffers();
@@ -283,6 +288,8 @@ void ModuleObjectManager::FillTextureCoords(Mesh_info * mesh, const float * text
 	mesh->tex_coords.data = new float[mesh->tex_coords.size * 3];
 	memcpy(mesh->tex_coords.data, textureCoords, sizeof(float) * mesh->tex_coords.size * 3);
 }
+
+
 
 Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type)
 {
