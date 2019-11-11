@@ -267,11 +267,10 @@ void PanelConfiguration::Viewport()
 
 void PanelConfiguration::Frustrum()
 {
-	ImGui::SliderFloat("Field of View (FOV)", (float*)&App->camera->f_fov, 5, 179);
-	ImGui::SliderFloat("Aspect ratio", (float*)&App->camera->f_aspect, 0.1f, 5);
+	ImGui::SliderFloat("Field of View (FOV)", (float*)&App->camera->f_fov, 0, 3);
+	//ImGui::SliderFloat("Aspect ratio", (float*)&App->camera->f_aspect, 0.1f, 5);
 	ImGui::SliderFloat("zNear", (float*)&App->camera->f_depth, 1, 50);
 	ImGui::SliderFloat("zFar", (float*)&App->camera->f_initial_z, 1, 50);
-	//ImGui::SliderFloat("zFar", (float*)&App->camera->f_initial_z, 0, App->camera->f_far);
 	
 }
 

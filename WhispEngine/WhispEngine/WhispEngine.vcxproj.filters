@@ -291,6 +291,9 @@
     <ClCompile Include="PanelScene.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>GameObject\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -640,6 +643,9 @@
     </ClInclude>
     <ClInclude Include="Brofiler\Brofiler.h">
       <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>GameObject\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,6 @@ public:
 	void MoveCameraOffsetByMouse(vec3 newPos, float speed);
 	float* GetViewMatrix();
 	void DrawFrustrumDebug();
-	void CalculateFOV(const float f_fov);
 	void CalculateZNear(const float f_near);
 	void CalculateZFar(const float f_far);
 	void CalculateAspect(const float aspect);
@@ -65,8 +64,7 @@ public:
 	float f_depth = 0;
 	float f_fov = 0;
 	float f_aspect = 0;
-	float f_near = 0;
-	float f_far = 0;
+
 
 private:
 

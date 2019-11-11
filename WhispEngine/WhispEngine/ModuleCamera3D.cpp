@@ -40,10 +40,9 @@ bool ModuleCamera3D::Start()
 
 	f_initial_z = 0;
 	f_depth = 6;
-	f_fov = 90;
+	f_fov = 0.5f;
 	f_aspect = 1;
-	f_near = 10;
-	f_far = 25;
+	
 	zFar.width = 10;
 	zFar.height = 10;
 	zNear.width = 5;
@@ -66,10 +65,9 @@ update_status ModuleCamera3D::Update()
 	BROFILER_CATEGORY("Camera", Profiler::Color::Coral);
 
 	//Frustrum
-	DrawFrustrumDebug();
-	CalculateAspect(f_aspect);
+	/*DrawFrustrumDebug();
 	CalculateZNear(f_depth);
-	CalculateZFar(f_initial_z);
+	CalculateZFar(f_initial_z);*/
 
 	//Camera
 	vec3 newPos(0, 0, 0);
@@ -423,11 +421,6 @@ const vec3 ModuleCamera3D::GetTransformPosition()
 	return vec3(obj_pos.x,obj_pos.y,obj_pos.z); //TODO set all vec3 to math::float3
 }
 
-
-void ModuleCamera3D::CalculateFOV(const float f_fov)
-{
-}
-
 void ModuleCamera3D::CalculateZNear(const float f_near)
 {
 	zNear.height = 2 * tan(f_fov / 2) * f_near;
@@ -441,6 +434,6 @@ void ModuleCamera3D::CalculateZFar(const float f_far)
 
 void ModuleCamera3D::CalculateAspect(const float aspect)
 {
-	/*zFar.width = aspect * zFar.height;
-	zNear.width = aspect * zNear.height;*/
+	zFar.width = aspect * zFar.height;
+	zNear.width = aspect * zNear.height;
 }

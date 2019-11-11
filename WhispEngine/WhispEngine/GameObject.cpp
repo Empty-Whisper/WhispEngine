@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
+#include "ComponentCamera.h"
 #include "Application.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 GameObject::GameObject(GameObject * parent) : parent(parent)
@@ -186,6 +187,12 @@ Component * GameObject::CreateComponent(const ComponentType & type)
 		break;
 	case LIGHT:
 		break;
+	case CAMERA: {
+		ComponentCamera* comp = new ComponentCamera(this);
+		components.push_back(comp);
+		return comp;
+	}
+				   break;
 	default:
 		LOG("Not declared Component type with id: %d", type);
 		break;

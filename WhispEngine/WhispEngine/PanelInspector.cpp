@@ -45,6 +45,9 @@ void PanelInspector::Update()
 				if (ImGui::Selectable("Mesh")) // TODO: Do a for loop or a ImGui::Combo
 					if (!sel->HasComponent(ComponentType::MESH))
 						sel->CreateComponent(ComponentType::MESH);
+				if(ImGui::Selectable("Camera"))
+					if (!sel->HasComponent(ComponentType::CAMERA))
+						sel->CreateComponent(ComponentType::CAMERA);
 
 				ImGui::EndPopup();
 			}
