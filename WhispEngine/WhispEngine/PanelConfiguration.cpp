@@ -56,9 +56,9 @@ void PanelConfiguration::Update()
 		{
 			Hardware();
 		}
-		if (ImGui::CollapsingHeader("Frustrum Options"))
+		if (ImGui::CollapsingHeader("Frustum Options"))
 		{
-			Frustrum();
+			Frustum();
 		}
 	}
 	ImGui::End();
@@ -265,7 +265,7 @@ void PanelConfiguration::Viewport()
 
 }
 
-void PanelConfiguration::Frustrum()
+void PanelConfiguration::Frustum()
 {
 	ImGui::SliderFloat("Field of View (FOV)", (float*)&App->camera->f_fov, 0, 3);
 	//ImGui::SliderFloat("Aspect ratio", (float*)&App->camera->f_aspect, 0.1f, 5);

@@ -64,11 +64,12 @@ update_status ModuleCamera3D::Update()
 {
 	BROFILER_CATEGORY("Camera", Profiler::Color::Coral);
 
-	//Frustrum
-	/*DrawFrustrumDebug();
+	//Frustum
+	DrawFrustum();
 	CalculateZNear(f_depth);
-	CalculateZFar(f_initial_z);*/
-
+	CalculateZFar(f_initial_z);
+	frustum.ProjectionMatrix();
+	frustum.ViewMatrix();
 	//Camera
 	vec3 newPos(0, 0, 0);
 	float speed = movement_speed * App->GetDeltaTime();
@@ -308,7 +309,7 @@ float* ModuleCamera3D::GetViewMatrix()
 }
 
 
-void ModuleCamera3D::DrawFrustrumDebug()
+void ModuleCamera3D::DrawFrustum()
 {
 	
 	zFar.up_right = { f_center.x + zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};

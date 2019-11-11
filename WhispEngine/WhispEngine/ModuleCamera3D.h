@@ -2,8 +2,9 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
+#include "MathGeoLib/include/Geometry/Frustum.h"
 
-struct zFrustrumFace
+struct zFrustumFace
 {
 	float3 up_right = float3(0, 0, 0);
 	float3 up_left = float3(0, 0, 0);
@@ -33,7 +34,7 @@ public:
 	void MoveCameraByMouse(vec3 newPos, float speed);
 	void MoveCameraOffsetByMouse(vec3 newPos, float speed);
 	float* GetViewMatrix();
-	void DrawFrustrumDebug();
+	void DrawFrustum();
 	void CalculateZNear(const float f_near);
 	void CalculateZFar(const float f_far);
 	void CalculateAspect(const float aspect);
@@ -57,14 +58,14 @@ public:
 	int slowness_middle_mouse = 0;
 	int slowness_zoom_in_out = 0;
 
-	zFrustrumFace zFar;
-	zFrustrumFace zNear;
+	zFrustumFace zFar;
+	zFrustumFace zNear;
 	float3 f_center = float3(0, 0, 0);
 	float f_initial_z = 0;
 	float f_depth = 0;
 	float f_fov = 0;
 	float f_aspect = 0;
-
+	Frustum frustum;
 
 private:
 

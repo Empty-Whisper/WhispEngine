@@ -20,7 +20,7 @@ private:
 	void Render();
 	void Application();
 	void Viewport();
-	void Frustrum();
+	void Frustum();
 
 private:
 	void PushBackVectorAsQueue(std::vector<float> &vector, const float &value);

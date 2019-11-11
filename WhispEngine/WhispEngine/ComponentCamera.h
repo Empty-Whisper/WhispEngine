@@ -6,7 +6,7 @@
 #include "MathGeoLib/include/Geometry/Frustum.h"
 
 
-struct FrustrumInfo
+struct FrustumInfo
 {
 	float3 up_right = float3(0, 0, 0);
 	float3 up_left = float3(0, 0, 0);
@@ -29,14 +29,14 @@ public:
 
 	void Update();
 	void OnInspector();
-	void DrawFrustrum();
+	void DrawFrustum();
 	void CalculateZNear(const float f_near);
 	void CalculateZFar(const float f_far);
 
 public:
-	FrustrumInfo zFar;
-	FrustrumInfo zNear;
-	Frustum frustrum;
+	FrustumInfo zFar;
+	FrustumInfo zNear;
+	Frustum frustum;
 
 private:
 	float3 f_center = float3(0, 0, 0);

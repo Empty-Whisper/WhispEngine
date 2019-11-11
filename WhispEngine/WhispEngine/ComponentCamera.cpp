@@ -14,9 +14,10 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::Update()
 {
-	DrawFrustrum();
+	DrawFrustum();
 	CalculateZNear(f_depth);
 	CalculateZFar(f_initial_z);
+	
 }
 
 void ComponentCamera::OnInspector()
@@ -31,7 +32,7 @@ void ComponentCamera::OnInspector()
 	}
 }
 
-void ComponentCamera::DrawFrustrum()
+void ComponentCamera::DrawFrustum()
 {
 	zFar.up_right = { f_center.x + zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z };
 	zFar.up_left = { f_center.x - zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z };
