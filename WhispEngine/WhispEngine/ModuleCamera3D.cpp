@@ -37,6 +37,17 @@ bool ModuleCamera3D::Start()
 	offset_reference = 5;  //  TODO: Save and Load this data in JSON
 	slowness_middle_mouse = 50;  //  TODO: Save and Load this data in JSON
 	slowness_zoom_in_out = 50;  //  TODO: Save and Load this data in JSON
+
+	f_initial_z = 0;
+	f_depth = 6;
+	f_fov = 90;
+	f_near = 10;
+	f_far = 25;
+	zFar.width = 10;
+	zFar.height = 10;
+	zNear.width = 5;
+	zNear.height = 5;
+
 	return ret;
 }
 
@@ -296,12 +307,7 @@ float* ModuleCamera3D::GetViewMatrix()
 
 void ModuleCamera3D::DrawFrustrumDebug()
 {
-	f_initial_z = 0;
-	f_depth = 6;
-	zFar.width = 10;
-	zFar.height = 10;
-	zNear.width = 5;
-	zNear.height = 5;
+	
 
 
 	zFar.up_right = { f_center.x + zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
@@ -412,4 +418,28 @@ const vec3 ModuleCamera3D::GetTransformPosition()
 {
 	float3 obj_pos = ((ComponentTransform*)App->object_manager->GetSelected()->GetComponent(ComponentType::TRANSFORM))->GetPosition();
 	return vec3(obj_pos.x,obj_pos.y,obj_pos.z); //TODO set all vec3 to math::float3
+}
+
+float ModuleCamera3D::CalculateFOV()
+{
+
+
+
+	return f_fov;
+}
+
+float ModuleCamera3D::CalculateZNear()
+{
+
+
+
+	return  f_near;
+}
+
+float ModuleCamera3D::CalculateZFar()
+{
+
+
+
+	return f_far;
 }

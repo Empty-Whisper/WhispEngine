@@ -34,6 +34,9 @@ public:
 	void MoveCameraOffsetByMouse(vec3 newPos, float speed);
 	float* GetViewMatrix();
 	void DrawFrustrumDebug();
+	float CalculateFOV();
+	float CalculateZNear();
+	float CalculateZFar();
 
 private:
 
@@ -54,18 +57,20 @@ public:
 	int slowness_middle_mouse = 0;
 	int slowness_zoom_in_out = 0;
 
+	zFrustrumFace zFar;
+	zFrustrumFace zNear;
+	float3 f_center = float3(0, 0, 0);
+	float f_initial_z = 0;
+	float f_depth = 0;
+	float f_fov = 0;
+	float f_near = 0;
+	float f_far = 0;
+
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 
 	bool is_focusing = false;
 	bool is_moving_camera = false;
-
-	zFrustrumFace zFar;
-	zFrustrumFace zNear;
-	float3 f_center = float3(0, 0, 0);
-	float f_initial_z = 0;
-	float f_depth = 0;
-
 
 };
