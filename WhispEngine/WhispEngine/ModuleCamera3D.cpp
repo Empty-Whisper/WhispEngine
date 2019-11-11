@@ -41,6 +41,7 @@ bool ModuleCamera3D::Start()
 	f_initial_z = 0;
 	f_depth = 6;
 	f_fov = 90;
+	f_aspect = 1;
 	f_near = 10;
 	f_far = 25;
 	zFar.width = 10;
@@ -64,9 +65,13 @@ update_status ModuleCamera3D::Update()
 {
 	BROFILER_CATEGORY("Camera", Profiler::Color::Coral);
 
-	// Implement a debug camera with keys and mouse
-	// Now we can make this movememnt frame rate independant!
+	//Frustrum
 	DrawFrustrumDebug();
+	CalculateAspect(f_aspect);
+	CalculateZNear(f_depth);
+	CalculateZFar(f_initial_z);
+
+	//Camera
 	vec3 newPos(0, 0, 0);
 	float speed = movement_speed * App->GetDeltaTime();
 
@@ -308,8 +313,6 @@ float* ModuleCamera3D::GetViewMatrix()
 void ModuleCamera3D::DrawFrustrumDebug()
 {
 	
-
-
 	zFar.up_right = { f_center.x + zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
 	zFar.up_left = { f_center.x - zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
 	zFar.down_right = { f_center.x + zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z};
@@ -420,26 +423,24 @@ const vec3 ModuleCamera3D::GetTransformPosition()
 	return vec3(obj_pos.x,obj_pos.y,obj_pos.z); //TODO set all vec3 to math::float3
 }
 
-float ModuleCamera3D::CalculateFOV()
+
+void ModuleCamera3D::CalculateFOV(const float f_fov)
 {
-
-
-
-	return f_fov;
 }
 
-float ModuleCamera3D::CalculateZNear()
+void ModuleCamera3D::CalculateZNear(const float f_near)
 {
-
-
-
-	return  f_near;
+	zNear.height = 2 * tan(f_fov / 2) * f_near;
+	zNear.width = zNear.height * 1;
+}
+void ModuleCamera3D::CalculateZFar(const float f_far)
+{
+	zFar.height = 2 * tan(f_fov / 2) * f_far;
+	zFar.width = zFar.height * 1;
 }
 
-float ModuleCamera3D::CalculateZFar()
+void ModuleCamera3D::CalculateAspect(const float aspect)
 {
-
-
-
-	return f_far;
+	/*zFar.width = aspect * zFar.height;
+	zNear.width = aspect * zNear.height;*/
 }
