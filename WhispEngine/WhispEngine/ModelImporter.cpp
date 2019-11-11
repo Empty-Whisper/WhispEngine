@@ -32,8 +32,8 @@ bool ModelImporter::Import(const char * path)
 	{
 		std::string new_path;
 
-		if (!App->file_system->IsInDirectory(MODEL_AFOLDER, App->file_system->GetFileFromPath(path).data())) {
-			new_path = (MODEL_AFOLDER + App->file_system->GetFileFromPath(path));
+		if (!App->dummy_file_system->IsInDirectory(MODEL_A_FOLDER, App->dummy_file_system->GetFileFromPath(path).data())) {
+			new_path = (MODEL_A_FOLDER + App->dummy_file_system->GetFileFromPath(path));
 			if (!CopyFile(path, new_path.data(), FALSE)) {
 				LOG("Failed to copy fbx in Assets folder, Error: %s", GetLastError());
 			}
@@ -43,14 +43,14 @@ bool ModelImporter::Import(const char * path)
 		}
 
 		// .meta -------------------------------------------------------------
-		if (App->file_system->IsInDirectory(MODEL_AFOLDER, (App->file_system->GetFileFromPath(path) + ".meta").data())) {
-			LOG("File %s already imported", App->file_system->GetFileFromPath(path).data());
+		if (App->dummy_file_system->IsInDirectory(MODEL_A_FOLDER, (App->dummy_file_system->GetFileFromPath(path) + ".meta").data())) {
+			LOG("File %s already imported", App->dummy_file_system->GetFileFromPath(path).data());
 			return false;
 		}
 		uint64_t meta = App->random->RandomGUID();
 		char* meta_data = new char[sizeof(uint64_t)];
 		memset(meta_data, meta, sizeof(uint64_t));
-		App->file_system->SaveData(meta_data, std::string(path + std::string(".meta")).data(), sizeof(uint64_t));
+		App->dummy_file_system->SaveData(meta_data, std::string(path + std::string(".meta")).data(), sizeof(uint64_t));
 		delete[] meta_data;
 		// -------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ bool ModelImporter::Import(const char * path)
 		//Obj: num_children | has_mesh | mesh_UID
 
 		HierarchyInfo info;
-		std::string name = App->file_system->GetFileNameFromPath(path);
+		std::string name = App->dummy_file_system->GetFileNameFromPath(path);
 		uint header[2] = { node->mNumChildren, (uint)name.length() };
 
 		uint size = CalculateHierarchyInfo(&info, node, scene) + sizeof(header) + name.length();
@@ -83,7 +83,7 @@ bool ModelImporter::Import(const char * path)
 		cursor += bytes;
 		FillChildrenInfo(info, cursor);
 
-		App->file_system->SaveData(data, std::string(MODEL_LFOLDER + std::to_string(meta) + std::string(".whispModel")).data(), size);
+		App->dummy_file_system->SaveData(data, std::string(MODEL_L_FOLDER + std::to_string(meta) + std::string(".whispModel")).data(), size);
 
 		delete[] data;
 
@@ -98,7 +98,7 @@ bool ModelImporter::Import(const char * path)
 
 bool ModelImporter::Load(const char * path)
 {
-	char* data = App->file_system->GetData(path);
+	char* data = App->dummy_file_system->GetData(path);
 
 	char* cursor = data;
 
@@ -143,8 +143,7 @@ void ModelImporter::CreateObjects(GameObject * container, char * &cursor)
 
 		App->importer->mesh->Load(mesh_uid, mesh->mesh);
 	}
-		cursor++;
-		cursor += bytes;
+		cursor += bytes + 1;
 
 	for (int i = 0; i < num_children; i++) {
 		CreateObjects(child, cursor);

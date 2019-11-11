@@ -73,7 +73,7 @@ bool ModuleImport::CleanUp()
 
 bool ModuleImport::Import(const char * path)
 {
-	switch (App->file_system->GetFormat(path))
+	switch (App->dummy_file_system->GetFormat(path))
 	{
 	case FileSystem::Format::JSON:
 		break;
@@ -106,11 +106,11 @@ Texture* ModuleImport::ImportTexture(const char * path)
 {
 	Texture* ret = nullptr;
 
-	std::string tmp = App->file_system->GetFileNameFromPath(path); // Lazy way to compare if the texture already exists, will work for now TODO: improve it (std::filesystem?)
+	std::string tmp = App->dummy_file_system->GetFileNameFromPath(path); // Lazy way to compare if the texture already exists, will work for now TODO: improve it (std::filesystem?)
 	std::vector<Texture*>* vtex = App->object_manager->GetTextures();
 	for (auto i = vtex->begin(); i != vtex->end(); i++) {
 		if (tmp.compare((*i)->name) == 0)
-			if (App->file_system->GetFormat(path) == App->file_system->GetFormat((*i)->path.data())) {
+			if (App->dummy_file_system->GetFormat(path) == App->dummy_file_system->GetFormat((*i)->path.data())) {
 				LOG("Texture already loaded, returning the texture already loaded...");
 				if (App->object_manager->GetSelected() != nullptr) {// Assign new texture to object selected (ONLY FOR THE FIRST ASSIGNMENT) TODO: Delete this after first delivery
 					ComponentMaterial* mat = (ComponentMaterial*)App->object_manager->GetSelected()->GetComponent(ComponentType::MATERIAL);

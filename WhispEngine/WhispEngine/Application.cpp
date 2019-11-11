@@ -13,6 +13,7 @@ Application::Application()
 	shortcut =			new ModuleShortCut();
 	importer =			new ModuleImport();
 	object_manager =	new ModuleObjectManager();
+	file_system =		new ModuleFileSystem();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -22,6 +23,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(file_system);
 	AddModule(shortcut);
 	AddModule(importer);
 	AddModule(object_manager);
@@ -35,7 +37,7 @@ Application::Application()
 	AddModule(renderer3D);
 
 	hardware = new HardwareInfo();
-	file_system = new FileSystem();
+	dummy_file_system = new FileSystem();
 	random = new Random();
 }
 
@@ -54,8 +56,8 @@ bool Application::Init()
 {
 	bool ret = true;
 
-	nlohmann::json load = file_system->OpenFile("Configuration/configuration.json");
-	if(load == nullptr) load = file_system->OpenFile("Configuration/conf_default.json");
+	nlohmann::json load = dummy_file_system->OpenFile("Configuration/configuration.json");
+	if(load == nullptr) load = dummy_file_system->OpenFile("Configuration/conf_default.json");
 
 	engine_name = load["Configuration"]["App"]["name"].get<std::string>();
 	organization = load["Configuration"]["App"]["organization"].get<std::string>();
@@ -226,7 +228,7 @@ bool Application::SaveConfNow()
 {
 	bool ret = true;
 
-	nlohmann::json save = file_system->OpenFile("Configuration/configuration.json");
+	nlohmann::json save = dummy_file_system->OpenFile("Configuration/configuration.json");
 	
 	save["Configuration"]["App"]["name"] = engine_name.data();
 	save["Configuration"]["App"]["organization"] = organization.data();
@@ -236,7 +238,7 @@ bool Application::SaveConfNow()
 		(*i)->Save(save["Configuration"][(*i)->name.data()]);
 	}
 
-	file_system->SaveFile("Configuration/configuration.json", save);
+	dummy_file_system->SaveFile("Configuration/configuration.json", save);
 
 	want_to_save = false;
 
@@ -250,9 +252,9 @@ bool Application::LoadConfNow()
 	nlohmann::json load;
 
 	if (want_to_load)
-		load = file_system->OpenFile("Configuration/configuration.json");
+		load = dummy_file_system->OpenFile("Configuration/configuration.json");
 	else if(want_to_load_def)
-		load = file_system->OpenFile("Configuration/conf_default.json");
+		load = dummy_file_system->OpenFile("Configuration/conf_default.json");
 
 	engine_name = load["Configuration"]["App"]["name"].get<std::string>();
 	organization = load["Configuration"]["App"]["organization"].get<std::string>();
@@ -279,8 +281,8 @@ bool Application::CleanUp()
 	delete hardware;
 	hardware = nullptr;
 
-	delete file_system;
-	file_system = nullptr;
+	delete dummy_file_system;
+	dummy_file_system = nullptr;
 
 	delete random;
 	random = nullptr;

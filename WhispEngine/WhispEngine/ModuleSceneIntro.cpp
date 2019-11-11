@@ -35,7 +35,7 @@ bool ModuleSceneIntro::Start()
 
 	GenerateGrid(10);
 
-	App->importer->ImportFbx("Assets/Models/BakerHouse.fbx");
+	App->importer->Import("Assets/Models/BakerHouse.fbx");
 	
 	return ret;
 }

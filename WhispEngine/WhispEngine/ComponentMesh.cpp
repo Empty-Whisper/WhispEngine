@@ -260,9 +260,12 @@ void ComponentMesh::InitAABB()
 
 Mesh_info::~Mesh_info()
 {
-	delete[] vertex.data;
-	delete[] index.data;
-	delete[] face_normals.data;
+	if (vertex.data != nullptr)
+		delete[] vertex.data;
+	if (index.data != nullptr)
+		delete[] index.data;
+	if (face_normals.data != nullptr)
+		delete[] face_normals.data;
 	if (vertex_normals.data != nullptr)
 		delete[] vertex_normals.data;
 	if (tex_coords.data != nullptr)

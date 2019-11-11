@@ -17,8 +17,8 @@ void PanelResources::Update()
 {
 	if (ImGui::Begin("Resources", &active))
 	{
-		if (ImGui::TreeNodeEx(LIBRARY_LFOLDER)) {
-			DrawNode(LIBRARY_LFOLDER);
+		if (ImGui::TreeNodeEx(LIBRARY_FOLDER)) {
+			DrawNode(LIBRARY_FOLDER);
 
 			ImGui::TreePop();
 		}
@@ -33,7 +33,7 @@ void PanelResources::DrawNode(const char * path)
 			if (!entry.path().has_extension())
 				DrawNode(entry.path().u8string().data());
 			else if (ImGui::IsItemClicked()) {
-				if (App->file_system->GetFormat(entry.path().extension().u8string().c_str()) == FileSystem::Format::MODEL) {
+				if (App->dummy_file_system->GetFormat(entry.path().extension().u8string().c_str()) == FileSystem::Format::MODEL) {
 					App->importer->Import(entry.path().u8string().c_str());
 				}
 			}

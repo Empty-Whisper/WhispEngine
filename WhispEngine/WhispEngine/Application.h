@@ -14,6 +14,7 @@
 #include "ModuleShortCut.h"
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
+#include "ModuleFileSystem.h"
 #include "Random.h"
 
 #include "HardwareInfo.h"
@@ -32,6 +33,7 @@ public:
 	ModuleShortCut* shortcut = nullptr;
 	ModuleObjectManager* object_manager = nullptr;
 	ModuleImport* importer = nullptr;
+	ModuleFileSystem* file_system = nullptr;
 
 public:
 
@@ -89,7 +91,7 @@ public:
 	const char* GetVersion() const;
 
 	HardwareInfo *hardware = nullptr;
-	FileSystem *file_system = nullptr;
+	FileSystem *dummy_file_system = nullptr;
 	Random* random = nullptr;
 
 private:
