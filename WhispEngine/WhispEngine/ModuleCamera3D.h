@@ -3,6 +3,18 @@
 #include "Globals.h"
 #include "glmath.h"
 
+struct zFrustrumFace
+{
+	float3 up_right = float3(0, 0, 0);
+	float3 up_left = float3(0, 0, 0);
+	float3 down_right = float3(0, 0, 0);
+	float3 down_left = float3(0, 0, 0);
+
+	float width = 0;
+	float height = 0;
+	
+};
+
 class ModuleCamera3D : public Module
 {
 public:
@@ -21,6 +33,7 @@ public:
 	void MoveCameraByMouse(vec3 newPos, float speed);
 	void MoveCameraOffsetByMouse(vec3 newPos, float speed);
 	float* GetViewMatrix();
+	void DrawFrustrumDebug();
 
 private:
 
@@ -47,6 +60,12 @@ private:
 
 	bool is_focusing = false;
 	bool is_moving_camera = false;
+
+	zFrustrumFace zFar;
+	zFrustrumFace zNear;
+	float3 f_center = float3(0, 0, 0);
+	float f_initial_z = 0;
+	float f_depth = 0;
 
 
 };

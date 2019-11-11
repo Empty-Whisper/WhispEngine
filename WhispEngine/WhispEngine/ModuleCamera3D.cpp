@@ -55,7 +55,7 @@ update_status ModuleCamera3D::Update()
 
 	// Implement a debug camera with keys and mouse
 	// Now we can make this movememnt frame rate independant!
-
+	DrawFrustrumDebug();
 	vec3 newPos(0, 0, 0);
 	float speed = movement_speed * App->GetDeltaTime();
 
@@ -291,6 +291,77 @@ void ModuleCamera3D::MoveCameraOffsetByMouse(vec3 newPos, float speed)
 float* ModuleCamera3D::GetViewMatrix()
 {
 	return &ViewMatrix;
+}
+
+
+void ModuleCamera3D::DrawFrustrumDebug()
+{
+	f_initial_z = 0;
+	f_depth = 6;
+	zFar.width = 10;
+	zFar.height = 10;
+	zNear.width = 5;
+	zNear.height = 5;
+
+
+	zFar.up_right = { f_center.x + zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
+	zFar.up_left = { f_center.x - zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
+	zFar.down_right = { f_center.x + zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z};
+	zFar.down_left = { f_center.x - zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z};
+
+	zNear.up_right = { f_center.x + zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
+	zNear.up_left = { f_center.x - zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
+	zNear.down_right = { f_center.x + zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
+	zNear.down_left = { f_center.x - zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
+
+	glDisable(GL_LIGHTING);
+	glColor3f(0.f, 0.f, 1.f);
+
+	glBegin(GL_LINES);
+
+	//zFar
+	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
+	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
+
+	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
+	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
+
+	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
+	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
+
+	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
+	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
+
+	//zNear
+	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
+	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
+
+	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
+	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
+
+	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
+	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
+
+	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
+	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
+
+	//zConection
+	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
+	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
+
+	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
+	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
+
+	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
+	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
+
+	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
+	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
+
+
+	glEnable(GL_LIGHTING);
+
+	glEnd();
 }
 
 // -----------------------------------------------------------------

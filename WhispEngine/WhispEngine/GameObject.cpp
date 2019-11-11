@@ -59,6 +59,7 @@ void GameObject::DrawBoundingBoxAABB()
 	float MaxX = aabb.MaxX();
 	float MaxY = aabb.MaxY();
 	float MaxZ = aabb.MaxZ();
+	glDisable(GL_LIGHTING);
 	glBegin(GL_LINES);
 
 	glColor3f(0.f, 1.f, 0.f);
@@ -101,6 +102,7 @@ void GameObject::DrawBoundingBoxAABB()
 
 	glVertex3f(MaxX, MinY, MinZ);
 	glVertex3f(MaxX, MaxY, MinZ);
+	glEnable(GL_LIGHTING);
 
 	glEnd();
 }
@@ -116,7 +118,7 @@ void GameObject::DrawBoundingBoxOBB()
 	float MaxZ = obb.MaxZ();
 
 	glColor3f(0.f, 0.f, 1.f);
-
+	glDisable(GL_LIGHTING);
 	glBegin(GL_LINES);
 
 	glVertex3f(MinX, MinY, MinZ);
@@ -155,6 +157,7 @@ void GameObject::DrawBoundingBoxOBB()
 
 	glVertex3f(MaxX, MinY, MinZ);
 	glVertex3f(MaxX, MaxY, MinZ);
+	glEnable(GL_LIGHTING);
 
 	glEnd();
 }
