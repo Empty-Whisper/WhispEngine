@@ -87,7 +87,8 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh)
 	
 	//App->dummy_file_system->SaveData(data, std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data(), size);
 	
-	App->file_system->Save(std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data(), data, size);
+	//App->file_system->Save(std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data(), data, size);
+	App->dummy_file_system->SaveData(data, std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data(), size);
 	delete[] data;
 
 	return true;

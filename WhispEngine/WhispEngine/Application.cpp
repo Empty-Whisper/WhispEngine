@@ -13,7 +13,7 @@ Application::Application()
 	shortcut =			new ModuleShortCut();
 	importer =			new ModuleImport();
 	object_manager =	new ModuleObjectManager();
-	file_system =		new ModuleFileSystem();
+	//file_system =		new ModuleFileSystem();		------------Unused for now--------------------
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -23,7 +23,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(file_system);
+	//AddModule(file_system);
 	AddModule(shortcut);
 	AddModule(importer);
 	AddModule(object_manager);

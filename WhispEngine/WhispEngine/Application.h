@@ -33,7 +33,7 @@ public:
 	ModuleShortCut* shortcut = nullptr;
 	ModuleObjectManager* object_manager = nullptr;
 	ModuleImport* importer = nullptr;
-	ModuleFileSystem* file_system = nullptr;
+	//ModuleFileSystem* file_system = nullptr;
 
 public:
 
