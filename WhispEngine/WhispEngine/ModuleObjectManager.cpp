@@ -222,15 +222,23 @@ void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 	// Face Normals ----------------------------------------------------
 	ret->face_normals.size = ret->index.size * 2;
 	ret->face_normals.data = new float[ret->face_normals.size];
+	float* buffer = CalculateFaceNormals(ret->vertex.data, ret->face_normals.size, ret->index.size, ret->index.data, magnitude);
+	memcpy(ret->face_normals.data, buffer, ret->face_normals.size * sizeof(float));
+	delete[] buffer;
+}
 
-	for (int k = 0; k < ret->index.size/3; k += 3) {
-		vec3 p1(ret->vertex.data[ret->index.data[k] * 3],     ret->vertex.data[ret->index.data[k] * 3 + 1],     ret->vertex.data[ret->index.data[k] * 3 + 2]);
-		vec3 p2(ret->vertex.data[ret->index.data[k + 1] * 3], ret->vertex.data[ret->index.data[k + 1] * 3 + 1], ret->vertex.data[ret->index.data[k + 1] * 3 + 2]);
-		vec3 p3(ret->vertex.data[ret->index.data[k + 2] * 3], ret->vertex.data[ret->index.data[k + 2] * 3 + 1], ret->vertex.data[ret->index.data[k + 2] * 3 + 2]);
+float* ModuleObjectManager::CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude)
+{
+	float* data = new float[n_face_normals];
 
-		ret->face_normals.data[k * 2]	  = (p1.x + p2.x + p3.x) / 3.f;
-		ret->face_normals.data[k * 2 + 1] = (p1.y + p2.y + p3.y) / 3.f;
-		ret->face_normals.data[k * 2 + 2] = (p1.z + p2.z + p3.z) / 3.f;
+	for (int k = 0; k < n_index / 3; k += 3) {
+		vec3 p1(vertex[index[k] * 3],	  vertex[index[k] * 3 + 1],		vertex[index[k] * 3 + 2]);
+		vec3 p2(vertex[index[k + 1] * 3], vertex[index[k + 1] * 3 + 1], vertex[index[k + 1] * 3 + 2]);
+		vec3 p3(vertex[index[k + 2] * 3], vertex[index[k + 2] * 3 + 1], vertex[index[k + 2] * 3 + 2]);
+
+		data[k * 2] = (p1.x + p2.x + p3.x) / 3.f;
+		data[k * 2 + 1] = (p1.y + p2.y + p3.y) / 3.f;
+		data[k * 2 + 2] = (p1.z + p2.z + p3.z) / 3.f;
 
 		vec3 v1 = p2 - p1;
 		vec3 v2 = p3 - p1;
@@ -238,10 +246,12 @@ void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 		vec3 v_norm = cross(v1, v2);
 		v_norm = normalize(v_norm);
 
-		ret->face_normals.data[k * 2 + 3] = ret->face_normals.data[k * 2]     + v_norm.x * magnitude;
-		ret->face_normals.data[k * 2 + 4] = ret->face_normals.data[k * 2 + 1] + v_norm.y * magnitude;
-		ret->face_normals.data[k * 2 + 5] = ret->face_normals.data[k * 2 + 2] + v_norm.z * magnitude;
+		data[k * 2 + 3] = data[k * 2] + v_norm.x * magnitude;
+		data[k * 2 + 4] = data[k * 2 + 1] + v_norm.y * magnitude;
+		data[k * 2 + 5] = data[k * 2 + 2] + v_norm.z * magnitude;
 	}
+
+	return data;
 }
 
 void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces)

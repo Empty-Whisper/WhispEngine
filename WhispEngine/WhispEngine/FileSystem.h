@@ -26,7 +26,7 @@ public:
 
 	bool IsInDirectory(const char* directory, const char* file);
 
-	bool SaveData(const char* data, const char* path, const uint &size);
+	bool SaveData(const char* data, const uint &size, const char* path);
 
 	/*
 	Give Data from a file. The result is a char array. WARNING: REMEMBER TO DELETE ARRAY AFTER USE IT

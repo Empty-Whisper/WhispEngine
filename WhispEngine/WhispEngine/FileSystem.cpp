@@ -110,7 +110,7 @@ bool FileSystem::IsInDirectory(const char * directory, const char * file)
 	return (stat(std::string(std::string(directory) + file).c_str(), &buffer) == 0);
 }
 
-bool FileSystem::SaveData(const char * data, const char * path, const uint &size)
+bool FileSystem::SaveData(const char * data, const uint &size, const char * path)
 {
 	std::ofstream to_save(path, std::ios::binary);
 	to_save.write(data, size);

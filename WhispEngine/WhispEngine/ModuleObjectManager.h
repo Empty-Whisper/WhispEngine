@@ -68,11 +68,12 @@ public:
 	Mesh_info* CreateMeshPrimitive(const Primitives &type);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 
-	void FillNormals(Mesh_info * ret, const float * normals = nullptr);
-	void FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces);
-	void FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
-	void FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
-	void FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
+	void   FillNormals(Mesh_info * ret, const float * normals = nullptr);
+	float* CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude = 0.5f);
+	void   FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces);
+	void   FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
+	void   FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
+	void   FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
 	
 	void Demo();
 

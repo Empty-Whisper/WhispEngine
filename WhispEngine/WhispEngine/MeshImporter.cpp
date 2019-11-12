@@ -19,15 +19,15 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh)
 	name | vertex | index | face_normals | vertex_normals | tex_normals*/
 
 	std::string name(mesh->mName.C_Str());
-	uint header[5] = { mesh->mNumVertices, mesh->mNumFaces, mesh->mNumFaces * 2, mesh->mNumVertices, mesh->mNumVertices };
+	uint header[5] = { mesh->mNumVertices, mesh->mNumFaces * 3, mesh->mNumFaces * 3 * 2, mesh->mNumVertices, mesh->mNumVertices };
 
 	uint size =
 		sizeof(header) +								//header
 		sizeof(float) * mesh->mNumVertices * 3 + 		//vertex
-		sizeof(uint) * mesh->mNumFaces * 9; //+ 			//index
-		//sizeof(float) * mesh->mNumFaces * 2 * 3 * 3 + 	//face_normals
-		//sizeof(float) * mesh->mNumVertices * 3 + 		//vertex_normals
-		//sizeof(float) * mesh->mNumVertices * 3;			//tex_normals
+		sizeof(uint) * mesh->mNumFaces * 9 + 			//index
+		sizeof(float) * mesh->mNumFaces * 2 * 3 * 3 + 	//face_normals
+		sizeof(float) * mesh->mNumVertices * 3 + 		//vertex_normals
+		sizeof(float) * mesh->mNumVertices * 3;			//tex_normals
 
 	char* data = new char[size];
 	memset(data, 0, size);
@@ -39,13 +39,10 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh)
 	cursor += bytes;
 	bytes = sizeof(float) * mesh->mNumVertices * 3;
 	memcpy(cursor, mesh->mVertices, bytes);
-	for (int i = 0; i < mesh->mNumVertices; ++i) {
-		LOG("Vertex %i: %.3f, %.3f, %.3f", i, mesh->mVertices[i * 3], mesh->mVertices[i * 3 + 1], mesh->mVertices[i * 3 + 2])
-	}
 
 	cursor += bytes;
 	if (mesh->HasFaces()) {
-
+		uint* indices = (uint*)cursor;
 		for (uint i = 0; i < mesh->mNumFaces; ++i)
 		{
 			if (mesh->mFaces[i].mNumIndices != 3)
@@ -57,38 +54,41 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh)
 			else
 			{
 				memcpy(cursor, mesh->mFaces[i].mIndices, sizeof(uint) * 3);
-				uint* num = (uint*)cursor;
-				LOG("Face %i: %u, %u, %u", i, num[0], num[1], num[2]);
 			}
 			cursor += sizeof(uint) * 3;
 		}
-		//bytes = sizeof(uint) * mesh->mNumFaces * 9;
 
-		//cursor += bytes;
-		//bytes = sizeof(float) * mesh->mNumFaces * 2 * 3 * 3;
-		//memcpy(cursor, face_normals, bytes); TODO: Calculate face normals
-		//memset(cursor, NULL, bytes);
+		bytes = sizeof(float) * mesh->mNumFaces * 2 * 3 * 3;
+		float* face_normals = App->object_manager->CalculateFaceNormals((float*)mesh->mVertices, mesh->mNumFaces * 9 * 2, mesh->mNumFaces * 9, indices);
+		memcpy(cursor, face_normals, bytes); 
+		delete[] face_normals;
 	}
-	else LOG("Mesh has not faces");
+	else {
+		cursor += sizeof(uint) * mesh->mNumFaces * 9 + sizeof(float) * mesh->mNumFaces * 2 * 3 * 3;
+		LOG("Mesh has not faces");
+	}
 
-	/*if (mesh->HasNormals()) {
+	if (mesh->HasNormals()) {
 		cursor += bytes;
 		bytes = sizeof(float) * mesh->mNumVertices * 3;
-		memcpy(cursor, (float*)mesh->mNormals, bytes);
+		memcpy(cursor, mesh->mNormals, bytes);
 	}
-	else LOG("Mesh has not normals");
+	else {
+		cursor += sizeof(float) * mesh->mNumVertices * 3;
+		LOG("Mesh has not normals");
+	}
 
 	if (mesh->HasTextureCoords(0)) {
 		cursor += bytes;
 		bytes = sizeof(float) * mesh->mNumVertices * 3;
-		memcpy(cursor, (float*)mesh->mTextureCoords[0], bytes);
+		memcpy(cursor, mesh->mTextureCoords[0], bytes);
 	}
-	else LOG("Mesh has not texture coords");*/
-	
-	//App->dummy_file_system->SaveData(data, std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data(), size);
+	else {
+		LOG("Mesh has not texture coords");
+	}
 	
 	//App->file_system->Save(std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data(), data, size);
-	App->dummy_file_system->SaveData(data, std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data(), size);
+	App->dummy_file_system->SaveData(data, size, std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data());
 	delete[] data;
 
 	return true;
@@ -99,7 +99,7 @@ bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
 	std::string path(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh");
 
 	char * data = App->dummy_file_system->GetData(path.c_str());
-	//App->file_system.
+	
 	if (data == nullptr) {
 		return false;
 	}
@@ -110,8 +110,11 @@ bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
 	uint bytes = sizeof(header);
 	memcpy(header, cursor, bytes);
 
-	uint num_vertices = header[0];
-	uint num_index = header[1];
+	uint num_vertices		= header[0];
+	uint num_index			= header[1];
+	uint num_face_normals	= header[2];
+	uint num_vertex_normals = header[3];
+	uint num_tex_coords		= header[4];
 
 	cursor += bytes;
 	mesh->vertex.size = num_vertices;
@@ -121,15 +124,28 @@ bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
 
 	cursor += bytes;
 
-	mesh->index.size = num_index * 3 * 3;
+	mesh->index.size = num_index * 3;
 	bytes = mesh->index.size * sizeof(uint);
 	mesh->index.data = new uint[mesh->index.size];
-
-	uint * num = (uint*)cursor;
-	for (int i = 0; i < num_index; i++) {
-		LOG("%u", num[i]);
-	}
 	memcpy(mesh->index.data, cursor, bytes);
+
+	cursor += bytes;
+	mesh->face_normals.size = num_face_normals * 3;
+	bytes = mesh->face_normals.size * sizeof(float);
+	mesh->face_normals.data = new float[mesh->face_normals.size];
+	memcpy(mesh->face_normals.data, cursor, bytes);
+
+	cursor += bytes;
+	mesh->vertex_normals.size = num_vertex_normals * 3;
+	bytes = mesh->vertex_normals.size * sizeof(float) * 3;
+	mesh->vertex_normals.data = new float[mesh->vertex_normals.size * 3];
+	memcpy(mesh->vertex_normals.data, cursor, bytes);
+
+	cursor += bytes;
+	mesh->tex_coords.size = num_tex_coords * 3;
+	bytes = mesh->tex_coords.size * sizeof(float);
+	mesh->tex_coords.data = new float[mesh->tex_coords.size];
+	memcpy(mesh->tex_coords.data, cursor, bytes);
 
 	mesh->SetGLBuffers();
 
