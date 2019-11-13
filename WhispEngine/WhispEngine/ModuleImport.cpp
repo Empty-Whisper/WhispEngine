@@ -67,6 +67,7 @@ bool ModuleImport::CleanUp()
 
 	delete model;
 	delete material;
+	delete mesh;
 
 	return true;
 }

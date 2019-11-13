@@ -3,7 +3,7 @@
 #include "Globals.h"
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
-#include "MathGeoLib/include/Geometry/AABB.h""
+#include "MathGeoLib/include/Geometry/AABB.h"
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
