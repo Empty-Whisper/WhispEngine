@@ -1,6 +1,7 @@
 #include "FileSystem.h"
 #include <fstream>
 #include <iomanip>
+#include <filesystem>
 #include "Globals.h"
 
 FileSystem::FileSystem()
@@ -111,6 +112,29 @@ bool FileSystem::IsInDirectory(const char * directory, const char * file) const
 {
 	struct stat buffer;
 	return (stat(std::string(std::string(directory) + file).c_str(), &buffer) == 0);
+}
+
+bool FileSystem::IsInSubDirectory(const char * directory, const char * file) const
+{
+	std::string path = directory;
+	
+	return RecursiveDirectory(path, file);
+}
+
+bool FileSystem::RecursiveDirectory(std::string &path, const char * file) const
+{
+	bool ret = false;
+	for (const auto & entry : std::experimental::filesystem::directory_iterator(path))
+		if (std::experimental::filesystem::is_directory(entry)) {
+			if (RecursiveDirectory(entry.path().u8string(), file))
+				return true;
+		}
+		else {
+			if (entry.path().filename().u8string().compare(file) == 0)
+				return true;
+		}
+
+	return ret;
 }
 
 bool FileSystem::Exists(const char * path) const

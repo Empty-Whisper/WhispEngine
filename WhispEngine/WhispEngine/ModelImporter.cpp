@@ -32,7 +32,7 @@ bool ModelImporter::Import(const char * path)
 	{
 		std::string new_path;
 
-		if (!App->dummy_file_system->IsInDirectory(MODEL_A_FOLDER, App->dummy_file_system->GetFileFromPath(path).data())) {
+		if (!App->dummy_file_system->IsInSubDirectory(MODEL_A_FOLDER, App->dummy_file_system->GetFileFromPath(path).data())) {
 			new_path = (MODEL_A_FOLDER + App->dummy_file_system->GetFileFromPath(path));
 			if (!CopyFile(path, new_path.data(), FALSE)) {
 				LOG("Failed to copy fbx in Assets folder, Error: %s", GetLastError());
@@ -62,13 +62,13 @@ bool ModelImporter::Import(const char * path)
 
 		//H: num_children | name_size | name
 
-		//Obj: num_children | has_mesh | mesh_UID
+		//Obj: length_name | name | num_children | has_mesh | mesh_UID | 16xfloat transform
 
 		HierarchyInfo info;
 		std::string name = App->dummy_file_system->GetFileNameFromPath(path);
-		uint header[2] = { node->mNumChildren, (uint)name.length() };
+		uint header[2] = { node->mNumChildren, name.length() + 1 };
 
-		uint size = CalculateHierarchyInfo(&info, node, scene) + sizeof(header) + name.length();
+		uint size = CalculateHierarchyInfo(&info, node, scene) + sizeof(header) + name.length() + 1;
 
 		char* data = new char[size];
 		memset(data, 0, size);
@@ -77,7 +77,7 @@ bool ModelImporter::Import(const char * path)
 		uint bytes = sizeof(header);
 		memcpy(cursor, header, bytes);
 		cursor += bytes;
-		bytes = name.length();
+		bytes = name.length() + 1; // '\0'
 		memcpy(cursor, name.c_str(), bytes);
 
 		cursor += bytes;
@@ -99,6 +99,8 @@ bool ModelImporter::Import(const char * path)
 bool ModelImporter::Load(const char * path)
 {
 	char* data = App->dummy_file_system->GetData(path);
+	if (data == nullptr)
+		return false;
 
 	char* cursor = data;
 
@@ -111,6 +113,9 @@ bool ModelImporter::Load(const char * path)
 	cursor += bytes;
 	bytes = ranges[1];
 	std::string name(cursor);
+	//char* n = new char[bytes];
+	//memcpy(n, cursor, bytes);
+	////n[bytes] = '\0';
 	container->SetName(name.c_str());
 
 	cursor += bytes;

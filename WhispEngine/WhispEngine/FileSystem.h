@@ -25,6 +25,8 @@ public:
 	std::string GetFileFromPath(const char* file) const;
 
 	bool IsInDirectory(const char* directory, const char* file) const;
+	bool IsInSubDirectory(const char* directory, const char* file) const;
+	bool RecursiveDirectory(std::string &path, const char * file) const;
 	bool Exists(const char* path) const;
 
 	bool SaveData(const char* data, const uint &size, const char* path);

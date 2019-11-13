@@ -142,9 +142,9 @@ bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
 	memcpy(mesh->vertex_normals.data, cursor, bytes);
 
 	cursor += bytes;
-	mesh->tex_coords.size = num_tex_coords * 3;
-	bytes = mesh->tex_coords.size * sizeof(float);
-	mesh->tex_coords.data = new float[mesh->tex_coords.size];
+	mesh->tex_coords.size = num_tex_coords;
+	bytes = mesh->tex_coords.size * sizeof(float)*3;
+	mesh->tex_coords.data = new float[mesh->tex_coords.size*3];
 	memcpy(mesh->tex_coords.data, cursor, bytes);
 
 	mesh->SetGLBuffers();
