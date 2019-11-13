@@ -74,6 +74,7 @@ bool ModuleImport::CleanUp()
 
 bool ModuleImport::Import(const char * path)
 {
+	bool ret = false;
 	switch (App->dummy_file_system->GetFormat(path))
 	{
 	case FileSystem::Format::JSON:
@@ -81,27 +82,32 @@ bool ModuleImport::Import(const char * path)
 	case FileSystem::Format::DDS:
 	case FileSystem::Format::PNG:
 	case FileSystem::Format::JPG:
-		material->Import(path);
+		ret = material->Import(path);
 		break;
 	case FileSystem::Format::FBX:
-		model->Import(path);
+		ret = model->Import(path);
 		break;
 	case FileSystem::Format::MODEL:
-		model->Load(path);
+		ret = model->Load(path);
+		break;
+	case FileSystem::Format::META: {
+		char* f_uid = App->dummy_file_system->GetData(path);
+		uint64_t uid = 0u;
+		memcpy(&uid, f_uid, sizeof(uint64_t));
+
+		delete[] f_uid;
+
+		if (uid != 0u) {
+			ret = model->Load((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str());
+		}
+	}
 		break;
 	default:
 		LOG("Failed to load %s. Format not setted");
 		break;
 	}
-	return false;
+	return ret;
 }
-
-bool ModuleImport::ImportFbx(const char * path)
-{
-	return true;
-}
-
-
 
 Texture* ModuleImport::ImportTexture(const char * path)
 {

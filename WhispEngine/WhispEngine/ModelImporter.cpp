@@ -49,7 +49,7 @@ bool ModelImporter::Import(const char * path)
 		}
 		uint64_t meta = App->random->RandomGUID();
 		char* meta_data = new char[sizeof(uint64_t)];
-		memset(meta_data, meta, sizeof(uint64_t));
+		memcpy(meta_data, &meta, sizeof(uint64_t));
 		App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t), std::string(path + std::string(".meta")).data());
 		delete[] meta_data;
 		// -------------------------------------------------------------------

@@ -8,7 +8,7 @@ public:
 	enum class Format {
 		NONE = -1,
 		JSON, FBX, DDS, PNG, JPG,
-		MODEL, MESH, 
+		MODEL, MESH, META,
 		MAX
 	};
 
@@ -20,11 +20,12 @@ public:
 	nlohmann::json	OpenFile(const char* path);
 	void			SaveFile(const char* path, const nlohmann::json &to_save);
 
-	FileSystem::Format GetFormat(const char* file);
-	std::string GetFileNameFromPath(const char* file);
-	std::string GetFileFromPath(const char* file);
+	FileSystem::Format GetFormat(const char* file) const;
+	std::string GetFileNameFromPath(const char* file) const;
+	std::string GetFileFromPath(const char* file) const;
 
-	bool IsInDirectory(const char* directory, const char* file);
+	bool IsInDirectory(const char* directory, const char* file) const;
+	bool Exists(const char* path) const;
 
 	bool SaveData(const char* data, const uint &size, const char* path);
 

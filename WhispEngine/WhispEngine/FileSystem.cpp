@@ -31,7 +31,7 @@ void FileSystem::SaveFile(const char * path, const nlohmann::json & to_save)
 	o.close();
 }
 
-FileSystem::Format FileSystem::GetFormat(const char * file)
+FileSystem::Format FileSystem::GetFormat(const char * file) const
 {
 	std::string f(file);
 	std::string buffer;
@@ -62,13 +62,16 @@ FileSystem::Format FileSystem::GetFormat(const char * file)
 	else if (buffer.compare("whispmodel") == 0) {
 		return FileSystem::Format::MODEL;
 	}
+	else if (buffer.compare("meta") == 0) {
+		return FileSystem::Format::META;
+	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());
 
 	return FileSystem::Format::NONE;
 }
 
-std::string FileSystem::GetFileNameFromPath(const char * file)
+std::string FileSystem::GetFileNameFromPath(const char * file) const
 {
 	std::string f(file);
 	std::string buffer;
@@ -89,7 +92,7 @@ std::string FileSystem::GetFileNameFromPath(const char * file)
 	return buffer;
 }
 
-std::string FileSystem::GetFileFromPath(const char * file)
+std::string FileSystem::GetFileFromPath(const char * file) const
 {
 	std::string f(file);
 	std::string buffer;
@@ -104,10 +107,16 @@ std::string FileSystem::GetFileFromPath(const char * file)
 	return buffer.data();
 }
 
-bool FileSystem::IsInDirectory(const char * directory, const char * file)
+bool FileSystem::IsInDirectory(const char * directory, const char * file) const
 {
 	struct stat buffer;
 	return (stat(std::string(std::string(directory) + file).c_str(), &buffer) == 0);
+}
+
+bool FileSystem::Exists(const char * path) const
+{
+	struct stat buffer;
+	return (stat(path, &buffer) == 0);
 }
 
 bool FileSystem::SaveData(const char * data, const uint &size, const char * path)
