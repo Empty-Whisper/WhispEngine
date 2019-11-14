@@ -115,7 +115,7 @@ const float * ComponentMaterial::GetWireColor() const
 	return &wire_color[0];
 }
 
-Texture::Texture(const uint &id, const char* path, const int& width, const int& height)
-	: id(id), path(path), name(App->dummy_file_system->GetFileNameFromPath(path)), width(width), height(height)
+Texture::Texture(const uint &id, const char* path, const int& width, const int& height, const uint64_t &file_uid)
+	: id(id), path(path), name(App->dummy_file_system->GetFileNameFromPath(path)), width(width), height(height), uid(file_uid)
 {
 }

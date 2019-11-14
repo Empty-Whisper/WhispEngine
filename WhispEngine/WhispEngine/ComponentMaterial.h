@@ -4,9 +4,10 @@
 
 struct Texture
 {
-	Texture(const uint &id, const char* path, const int& width, const int& height);
+	Texture(const uint &id, const char* path, const int& width, const int& height, const uint64_t& file_uid);
 
-	uint id = 0;
+	uint id = 0u;
+	uint64_t uid = 0u;
 	std::string name;
 	std::string path;
 

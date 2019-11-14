@@ -80,10 +80,10 @@ bool ModuleImport::Import(const char * path)
 	case FileSystem::Format::META: {
 		char* f_uid = App->dummy_file_system->GetData(path);
 		if (f_uid == nullptr) {
-			LOG("Failed to open meta file, trying to load model...");
+			LOG("Failed to open meta file, trying to reload asset...");
 			std::string s_path(path);
 			s_path.erase(s_path.end() - 5, s_path.end());
-			Import(std::string(path - 5).data());
+			Import(s_path.c_str());
 			f_uid = App->dummy_file_system->GetData(path);
 			if (f_uid == nullptr) {
 				LOG("Failed another time to load meta file, aborting loading");
@@ -96,16 +96,37 @@ bool ModuleImport::Import(const char * path)
 		delete[] f_uid;
 
 		if (uid != 0u) {
-			if (App->dummy_file_system->Exists((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str()) == false) {
-				std::string s_path(path);
-				LOG("Model referenced in meta does not exists, recreating .meta...");
-				App->dummy_file_system->RemoveFile(path);
-				s_path.erase(s_path.end() - 5, s_path.end());
-				if (Import(s_path.c_str()))
-					Import(path);
-			}
-			else {
-				ret = model->Load((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str());
+			std::string s_path(path);
+			s_path.erase(s_path.end() - 5, s_path.end());
+			switch (App->dummy_file_system->GetFormat(s_path.c_str())) {
+			case FileSystem::Format::FBX:
+				if (App->dummy_file_system->Exists((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str()) == false) {
+					LOG("Model referenced in meta does not exists, recreating .meta...");
+					App->dummy_file_system->RemoveFile(path);
+					std::string s_path(path);
+					s_path.erase(s_path.end() - 5, s_path.end());
+					if (Import(s_path.c_str()))
+						Import(path);
+				}
+				else {
+					ret = model->Load((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str());
+				}
+				break;
+			case FileSystem::Format::JPG:
+			case FileSystem::Format::PNG:
+			case FileSystem::Format::DDS:
+				if (App->dummy_file_system->Exists((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str()) == false) {
+					LOG("Texture referenced in meta does not exists, recreating .meta...");
+					App->dummy_file_system->RemoveFile(path);
+					std::string s_path(path);
+					s_path.erase(s_path.end() - 5, s_path.end());
+					if (Import(s_path.c_str()))
+						Import(path);
+				}
+				else {
+					ret = material->Load((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str());
+				}
+				break;
 			}
 		}
 	}

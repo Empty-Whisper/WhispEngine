@@ -2,6 +2,8 @@
 #include "Importer.h"
 #include "SDL/include/SDL_config.h"
 
+struct Texture;
+
 class MaterialImporter :
 	public Importer
 {
@@ -10,5 +12,6 @@ public:
 	~MaterialImporter();
 
 	bool Import(const char* path, uint64_t * const uid = nullptr);
+	Texture* Load(const char* path);
 };
 
