@@ -17,6 +17,7 @@ public:
 		uint64_t mesh_id = 0;
 		HierarchyInfo* parent = nullptr;
 		std::vector<HierarchyInfo> children;
+		std::string name;
 	};
 
 public:
