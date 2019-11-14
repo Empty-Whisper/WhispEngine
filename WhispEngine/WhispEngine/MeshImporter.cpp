@@ -87,7 +87,9 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh)
 		LOG("Mesh has not texture coords");
 	}
 	
-	//App->file_system->Save(std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data(), data, size);
+	if (App->dummy_file_system->Exists(MESH_L_FOLDER) == false)
+		App->dummy_file_system->CreateDir(MESH_L_FOLDER);
+
 	App->dummy_file_system->SaveData(data, size, std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data());
 	delete[] data;
 
@@ -101,6 +103,7 @@ bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
 	char * data = App->dummy_file_system->GetData(path.c_str());
 	
 	if (data == nullptr) {
+		LOG("Failed, mesh with uid %" PRIu64 " not found", uid);
 		return false;
 	}
 	char* cursor = data;

@@ -92,18 +92,37 @@ bool ModuleImport::Import(const char * path)
 		break;
 	case FileSystem::Format::META: {
 		char* f_uid = App->dummy_file_system->GetData(path);
+		if (f_uid == nullptr) {
+			LOG("Failed to open meta file, trying to load model...");
+			Import(std::string(path - 5).data());
+			f_uid = App->dummy_file_system->GetData(path);
+			if (f_uid == nullptr) {
+				LOG("Failed another time to load meta file, aborting loading");
+				return false;
+			}
+		}
 		uint64_t uid = 0u;
 		memcpy(&uid, f_uid, sizeof(uint64_t));
 
 		delete[] f_uid;
 
 		if (uid != 0u) {
-			ret = model->Load((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str());
+			if (App->dummy_file_system->Exists((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str()) == false) {
+				std::string s_path(path);
+				LOG("Model referenced in meta does not exists, recreating .meta...");
+				App->dummy_file_system->RemoveFile(path);
+				s_path.erase(s_path.end() - 5, s_path.end());
+				if (Import(s_path.c_str()))
+					Import(path);
+			}
+			else {
+				ret = model->Load((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str());
+			}
 		}
 	}
 		break;
 	default:
-		LOG("Failed to load %s. Format not setted");
+		LOG("Failed to load %s. Format not setted", path);
 		break;
 	}
 	return ret;

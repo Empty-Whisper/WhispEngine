@@ -108,6 +108,43 @@ std::string FileSystem::GetFileFromPath(const char * file) const
 	return buffer.data();
 }
 
+bool FileSystem::CreateDir(const char * path)
+{
+	if (std::experimental::filesystem::create_directories(path)) {
+		LOG("Directory %s created successfully", path);
+		return true;
+	}
+	else {
+		LOG("Faile to create directory %s");
+		return false;
+	}
+}
+
+bool FileSystem::RemoveFile(const char * path)
+{
+	if (std::experimental::filesystem::remove(path) == 0) {
+		LOG("Removed %s successfully", path);
+		return true;
+	}
+	else {
+		LOG("Failed to delete file %s", path);
+		return false;
+	}
+}
+
+bool FileSystem::RemoveDirAndContent(const char * path)
+{
+	if (std::experimental::filesystem::remove_all(path) == 0) {
+		LOG("Removed %s successfully", path);
+		return true;
+	}
+	else {
+		LOG("Failed to delete dir %s", path);
+		return false;
+	}
+	return false;
+}
+
 bool FileSystem::IsInDirectory(const char * directory, const char * file) const
 {
 	struct stat buffer;

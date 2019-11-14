@@ -24,6 +24,10 @@ public:
 	std::string GetFileNameFromPath(const char* file) const;
 	std::string GetFileFromPath(const char* file) const;
 
+	bool CreateDir(const char* path);
+	bool RemoveFile(const char* path);
+	bool RemoveDirAndContent(const char* path);
+
 	bool IsInDirectory(const char* directory, const char* file) const;
 	bool IsInSubDirectory(const char* directory, const char* file) const;
 	bool RecursiveDirectory(std::string &path, const char * file) const;
