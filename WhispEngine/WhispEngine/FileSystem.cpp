@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip>
 #include <filesystem>
+#include "Application.h"
 #include "Globals.h"
 
 FileSystem::FileSystem()
@@ -108,6 +109,20 @@ std::string FileSystem::GetFileFromPath(const char * file) const
 	return buffer.data();
 }
 
+std::string FileSystem::GetFileDirectory(const char * file_path) const
+{
+	std::string f(file_path);
+
+	for (auto i = f.rbegin(); i != f.rend(); i++) {
+		if (*i == '\\' || *i == '/') {
+			f.erase(i.base(), f.end());
+			break;
+		}
+	}
+
+	return f;
+}
+
 bool FileSystem::CreateDir(const char * path)
 {
 	if (std::experimental::filesystem::create_directories(path)) {
@@ -151,24 +166,27 @@ bool FileSystem::IsInDirectory(const char * directory, const char * file) const
 	return (stat(std::string(std::string(directory) + file).c_str(), &buffer) == 0);
 }
 
-bool FileSystem::IsInSubDirectory(const char * directory, const char * file) const
+bool FileSystem::IsInSubDirectory(const char * directory, const char * file, std::string * const real_path) const
 {
 	std::string path = directory;
 	
-	return RecursiveDirectory(path, file);
+	return RecursiveDirectory(path.c_str(), file, real_path);
 }
 
-bool FileSystem::RecursiveDirectory(std::string &path, const char * file) const
+bool FileSystem::RecursiveDirectory(const char* path, const char * file, std::string * const real_path) const
 {
 	bool ret = false;
 	for (const auto & entry : std::experimental::filesystem::directory_iterator(path))
 		if (std::experimental::filesystem::is_directory(entry)) {
-			if (RecursiveDirectory(entry.path().u8string(), file))
+			if (RecursiveDirectory(entry.path().u8string().c_str(), file, real_path))
 				return true;
 		}
 		else {
-			if (entry.path().filename().u8string().compare(file) == 0)
+			if (entry.path().filename().u8string().compare(file) == 0) {
+				if (real_path != nullptr)
+					(*real_path).assign(entry.path().u8string());
 				return true;
+			}
 		}
 
 	return ret;
@@ -180,10 +198,57 @@ bool FileSystem::Exists(const char * path) const
 	return (stat(path, &buffer) == 0);
 }
 
-bool FileSystem::SaveData(const char * data, const uint &size, const char * path)
+bool FileSystem::IsMetaVaild(const char * path)
+{
+	char* ret = GetData(path);
+
+	if (ret == nullptr) {
+		return false;
+	}
+	else {
+		uint64_t uid = 0u;
+		memcpy(&uid, ret, sizeof(uint64_t));
+		delete[] ret;
+		if (uid == 0u) {
+			return false;
+		}
+		else {
+			if (Exists((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str()) || Exists((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str()))
+				return true;
+			return false;
+		}
+	}
+}
+
+uint64_t FileSystem::GenerateMetaFile(const char * meta_path)
+{
+	uint64_t meta = App->random->RandomGUID();
+	char* meta_data = new char[sizeof(uint64_t)];
+	memcpy(meta_data, &meta, sizeof(uint64_t));
+	App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t), meta_path);
+	delete[] meta_data;
+
+	return meta;
+}
+
+uint64_t FileSystem::GetMeta(const char * mata_path) const
+{
+	char* f_uid = App->dummy_file_system->GetData(mata_path);
+	if (f_uid == nullptr) {
+		LOG("Failed to open meta file");
+		return 0u;
+	}
+	uint64_t uid = 0u;
+	memcpy(&uid, f_uid, sizeof(uint64_t));
+
+	delete[] f_uid;
+	return uid;
+}
+
+bool FileSystem::SaveData(const void * data, const uint &size, const char * path)
 {
 	std::ofstream to_save(path, std::ios::binary);
-	to_save.write(data, size);
+	to_save.write((char*)data, size);
 	to_save.close();
 
 	return true;

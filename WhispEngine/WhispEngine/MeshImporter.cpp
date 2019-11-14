@@ -1,6 +1,7 @@
 #include "MeshImporter.h"
 #include "Application.h"
 #include "Assimp/include/scene.h"
+#include "MaterialImporter.h"
 #include "Globals.h"
 
 MeshImporter::MeshImporter()
@@ -12,7 +13,7 @@ MeshImporter::~MeshImporter()
 {
 }
 
-bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh)
+bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh, const aiScene* scene)
 {
 	/*length_name | num_vertex | num_index | num_face_normals | num_vertex_normals | num_tex_normals | ¿AABB?
 
@@ -23,6 +24,7 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh)
 
 	uint size =
 		sizeof(header) +								//header
+		sizeof(uint64_t) +								//texture uid
 		sizeof(float) * mesh->mNumVertices * 3 + 		//vertex
 		sizeof(uint) * mesh->mNumFaces * 9 + 			//index
 		sizeof(float) * mesh->mNumFaces * 2 * 3 * 3 + 	//face_normals
@@ -35,6 +37,15 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh)
 
 	uint bytes = sizeof(header);
 	memcpy(cursor, header, bytes);
+
+	cursor += bytes;
+	bytes = sizeof(uint64_t);
+	aiMaterial* aimaterial = scene->mMaterials[mesh->mMaterialIndex];
+	aiString path;
+	aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
+	LOG("Diffuse texture found: %s", path.C_Str());
+	uint64_t uid_tex = 0u;
+	App->importer->material->Import(path.C_Str(), &uid_tex);
 
 	cursor += bytes;
 	bytes = sizeof(float) * mesh->mNumVertices * 3;
@@ -112,6 +123,8 @@ bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
 	uint header[5];
 	uint bytes = sizeof(header);
 	memcpy(header, cursor, bytes);
+
+	cursor += sizeof(uint64_t);
 
 	uint num_vertices		= header[0];
 	uint num_index			= header[1];

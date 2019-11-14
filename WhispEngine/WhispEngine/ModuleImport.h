@@ -13,6 +13,7 @@ class ModuleImport :
 	public Module
 {
 	friend class ModelImporter;
+	friend class MeshImporter;
 
 public:
 	ModuleImport();

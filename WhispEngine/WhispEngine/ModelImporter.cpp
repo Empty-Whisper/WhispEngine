@@ -44,14 +44,12 @@ bool ModelImporter::Import(const char * path)
 
 		// .meta -------------------------------------------------------------
 		if (App->dummy_file_system->IsInDirectory(MODEL_A_FOLDER, (App->dummy_file_system->GetFileFromPath(path) + ".meta").data())) {
-			LOG("File %s already imported", App->dummy_file_system->GetFileFromPath(path).data());
-			return false;
+			if (App->dummy_file_system->IsMetaVaild((std::string(path) + ".meta").data())) {
+				LOG("File %s already imported", App->dummy_file_system->GetFileFromPath(path).data());
+				return false;
+			}
 		}
-		uint64_t meta = App->random->RandomGUID();
-		char* meta_data = new char[sizeof(uint64_t)];
-		memcpy(meta_data, &meta, sizeof(uint64_t));
-		App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t), std::string(path + std::string(".meta")).data());
-		delete[] meta_data;
+		uint64_t meta = App->dummy_file_system->GenerateMetaFile((std::string(path) + ".meta").data());
 		// -------------------------------------------------------------------
 
 		App->object_manager->SetSelected(nullptr);
@@ -266,14 +264,14 @@ uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * 
 		child.name.assign(child_n->mName.C_Str());
 		if (child_n->mNumMeshes == 1) {
 			child.mesh_id = App->random->RandomGUID();
-			App->importer->mesh->Import(child.mesh_id, scene->mMeshes[child_n->mMeshes[0]]);
+			App->importer->mesh->Import(child.mesh_id, scene->mMeshes[child_n->mMeshes[0]], scene);
 		}
 		else if (child_n->mNumMeshes > 1) {
 			for (int i = 0; i < child_n->mNumMeshes; ++i) {
 				HierarchyInfo child_mesh;
 				child_mesh.mesh_id = App->random->RandomGUID();
 				child_mesh.name.assign(scene->mMeshes[child_n->mMeshes[i]]->mName.C_Str());
-				App->importer->mesh->Import(child_mesh.mesh_id, scene->mMeshes[child_n->mMeshes[i]]);
+				App->importer->mesh->Import(child_mesh.mesh_id, scene->mMeshes[child_n->mMeshes[i]], scene);
 				child.children.push_back(child_mesh);
 				size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint64_t/*mesh_id*/) + sizeof(uint/*n_characters*/) + child_mesh.name.length()+1;
 			}
