@@ -31,8 +31,9 @@ public:
 
 	bool IsInDirectory(const char* directory, const char* file) const;
 	bool IsInSubDirectory(const char* directory, const char* file, std::string * const real_path = nullptr) const;
-	bool RecursiveDirectory(const char* path, const char * file, std::string * const real_path) const;
+	
 	bool Exists(const char* path) const;
+
 	bool IsMetaVaild(const char* path);
 	uint64_t GenerateMetaFile(const char* meta_path);
 	uint64_t GetMeta(const char* mata_path) const;
@@ -43,4 +44,7 @@ public:
 	Give Data from a file. The result is a char array. WARNING: REMEMBER TO DELETE ARRAY AFTER USE IT
 	*/
 	char* GetData(const char* path);
+
+private:
+	bool RecursiveDirectory(const char* path, const char * file, std::string * const real_path) const;
 };

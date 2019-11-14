@@ -25,29 +25,29 @@ MaterialImporter::~MaterialImporter()
 
 bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 {
-	bool ret = false;
+	bool ret = true;
 
 	uint64_t id = 0u;
 
-	if (ilLoadImage(path)) {
-		std::string mat_path;
-		if (App->dummy_file_system->IsInSubDirectory(TEXTURE_A_FOLDER, App->dummy_file_system->GetFileFromPath(path).c_str(), &mat_path)) {
-			if (App->dummy_file_system->Exists((mat_path + ".meta").c_str())) {
-				if (App->dummy_file_system->IsMetaVaild((mat_path + ".meta").c_str())) {
-					id = App->dummy_file_system->GetMeta((mat_path + ".meta").c_str());
-					return false;
-				}
-				else {
-					LOG("Meta %s not vaild, recreating meta...", path);
-				}
+	std::string mat_path;
+	if (App->dummy_file_system->IsInSubDirectory(TEXTURE_A_FOLDER, App->dummy_file_system->GetFileFromPath(path).c_str(), &mat_path)) {
+		if (App->dummy_file_system->Exists((mat_path + ".meta").c_str())) {
+			if (App->dummy_file_system->IsMetaVaild((mat_path + ".meta").c_str())) {
+				*uid = App->dummy_file_system->GetMeta((mat_path + ".meta").c_str());
+				return false;
+			}
+			else {
+				LOG("Meta %s not vaild, recreating meta...", path);
 			}
 		}
-		else {
-			mat_path.assign((TEXTURE_A_FOLDER + App->dummy_file_system->GetFileFromPath(path)));
-			if (!CopyFile(path, mat_path.data(), FALSE)) {
-				LOG("Failed to copy fbx in Assets folder, Error: %s", GetLastError());
-			}
+	}
+	else {
+		mat_path.assign((TEXTURE_A_FOLDER + App->dummy_file_system->GetFileFromPath(path)));
+		if (!CopyFile(path, mat_path.data(), FALSE)) {
+			LOG("Failed to copy fbx in Assets folder, Error: %s", GetLastError());
 		}
+	}
+	if (ilLoadImage(mat_path.c_str())) {
 
 		id = App->dummy_file_system->GenerateMetaFile((mat_path + ".meta").c_str());
 
@@ -73,7 +73,7 @@ bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 				rename((MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(path)).c_str(), (MATERIAL_L_FOLDER + std::to_string(id) + ".dds").c_str());
 			}
 			else {
-				LOG("Failed to copy fbx in Assets folder, Error: %s", GetLastError());
+				LOG("Failed to copy material in Library folder, Cannot copy %s in %s", path, (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(path)).c_str());
 			}
 		}
 		if (uid != nullptr)
@@ -82,7 +82,7 @@ bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 	else {
 		LOG("Cannot open image with path %s, Error: %s", path, iluErrorString(ilGetError()));
 	}
-	
+
 	return ret;
 }
 

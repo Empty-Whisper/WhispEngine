@@ -54,8 +54,6 @@ public:
 	void DrawOutline();
 	void DrawNormals();
 
-	void SetMaterial(ComponentMaterial * mat);
-
 	void OnInspector();
 	math::float3 CalculateRadius();
 	void InitAABB();

@@ -30,7 +30,7 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh, const aiScene
 		sizeof(float) * mesh->mNumFaces * 2 * 3 * 3 + 	//face_normals
 		sizeof(float) * mesh->mNumVertices * 3 + 		//vertex_normals
 		sizeof(float) * mesh->mNumVertices * 3;			//tex_normals
-		
+
 	char* data = new char[size];
 	memset(data, 0, size);
 	char* cursor = data;
@@ -40,12 +40,15 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh, const aiScene
 
 	cursor += bytes;
 	bytes = sizeof(uint64_t);
+
 	aiMaterial* aimaterial = scene->mMaterials[mesh->mMaterialIndex];
 	aiString path;
-	aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
-	LOG("Diffuse texture found: %s", path.C_Str());
-	uint64_t uid_tex = 0u;
-	App->importer->material->Import(path.C_Str(), &uid_tex);
+	if (aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path) == aiReturn_SUCCESS) {
+		LOG("Diffuse texture found: %s", path.C_Str());
+		uint64_t uid_tex = 0u;
+		App->importer->material->Import(path.C_Str(), &uid_tex);
+		memcpy(cursor, &uid_tex, bytes);
+	}
 
 	cursor += bytes;
 	bytes = sizeof(float) * mesh->mNumVertices * 3;
@@ -124,7 +127,14 @@ bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
 	uint bytes = sizeof(header);
 	memcpy(header, cursor, bytes);
 
-	cursor += sizeof(uint64_t);
+	cursor += bytes;
+	bytes = sizeof(uint64_t);
+	uint64_t mat_uid = 0u;
+	memcpy(&mat_uid, cursor, bytes);
+	if (mat_uid != 0u) {
+		std::string mat_path(MATERIAL_L_FOLDER + std::to_string(mat_uid) + ".dds");
+		((ComponentMaterial*)mesh->component->object->GetComponent(ComponentType::MATERIAL))->SetTexture(App->importer->material->Load(mat_path.c_str()));
+	}
 
 	uint num_vertices		= header[0];
 	uint num_index			= header[1];

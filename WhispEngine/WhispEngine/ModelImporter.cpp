@@ -155,6 +155,7 @@ void ModelImporter::CreateObjects(GameObject * container, char * &cursor)
 		memcpy(&mesh_uid, cursor+1, bytes);
 
 		mesh->mesh = new Mesh_info();
+		mesh->mesh->component = mesh;
 
 		App->importer->mesh->Load(mesh_uid, mesh->mesh);
 	}
