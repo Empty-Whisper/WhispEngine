@@ -60,15 +60,17 @@ int main(int argc, char ** argv)
 
 		case MAIN_UPDATE:
 		{
+			BROFILER_FRAME("WhispEngine");
+
 			int update_return = App->Update();
 
+			BROFILER_CATEGORY("Main loop", Profiler::Color::Aqua);
 			if (update_return == UPDATE_ERROR)
 			{
 				LOG("Application Update exits with ERROR");
 				state = MAIN_EXIT;
 			}
-			BROFILER_FRAME("WhispEngine");
-			BROFILER_CATEGORY("Main loop", Profiler::Color::Aqua);
+			
 
 			if (update_return == UPDATE_STOP)
 				state = MAIN_FINISH;

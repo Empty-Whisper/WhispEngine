@@ -33,12 +33,13 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
 	
 	if (obj->IsActive()) {
-		/*glPushMatrix();		//Commented only for assignment 1
-		glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());*/
+		
+		glPushMatrix();		
+		glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());
 
 		obj->Update();
 
-		//glPopMatrix();
+		glPopMatrix();
 		if (!obj->children.empty()) {
 			for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 				UpdateGameObject(*i);
@@ -191,16 +192,15 @@ Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 		FillTextureCoords(ret, (float*)mesh->mTextureCoords[0]);
 	}
 
-	// AABB
+	// Generate AABB
+	ret->local_box.SetNegativeInfinity();
+	ret->local_box.Enclose((float3*)ret->vertex.data, ret->vertex.size);
+
+	ret->obb = ret->local_box;
+	
+
 	ret->aabb.SetNegativeInfinity();
-
-	ret->aabb.minPoint.x = mesh->mAABB.mMin.x;
-	ret->aabb.minPoint.y = mesh->mAABB.mMin.y;
-	ret->aabb.minPoint.z = mesh->mAABB.mMin.z;
-
-	ret->aabb.maxPoint.x = mesh->mAABB.mMax.x;
-	ret->aabb.maxPoint.y = mesh->mAABB.mMax.y;
-	ret->aabb.maxPoint.z = mesh->mAABB.mMax.z;
+	ret->aabb.Enclose(ret->obb);
 
 
 	ret->SetGLBuffers();
@@ -264,6 +264,9 @@ void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const
 		if (faces[j].mNumIndices != 3)
 		{
 			LOG("WARNING, geometry face with != 3 indices!");
+			ret->index.data[j * 3] = 0;
+			ret->index.data[j * 3 + 1] = 0;
+			ret->index.data[j * 3 + 2] = 0;
 		}
 		else
 		{
@@ -295,6 +298,8 @@ void ModuleObjectManager::FillTextureCoords(Mesh_info * mesh, const float * text
 	mesh->tex_coords.data = new float[mesh->tex_coords.size * 3];
 	memcpy(mesh->tex_coords.data, textureCoords, sizeof(float) * mesh->tex_coords.size * 3);
 }
+
+
 
 Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type)
 {

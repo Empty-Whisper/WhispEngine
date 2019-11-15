@@ -13,7 +13,8 @@ enum ComponentType
 	TRANSFORM,
 	MESH,
 	MATERIAL,
-	LIGHT
+	LIGHT,
+	CAMERA
 };
 
 class Component

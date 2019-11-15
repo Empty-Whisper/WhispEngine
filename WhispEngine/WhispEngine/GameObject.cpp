@@ -2,8 +2,9 @@
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
+#include "ComponentCamera.h"
 #include "Application.h"
-
+#include "MathGeoLib/include/MathGeoLib.h"
 GameObject::GameObject(GameObject * parent) : parent(parent)
 {
 	if (parent != nullptr)
@@ -44,6 +45,122 @@ void GameObject::Update()
 		}
 		components_to_delete.clear();
 	}
+
+	if (see_bounding_box) {
+		DrawBoundingBoxAABB();
+		DrawBoundingBoxOBB();
+	}
+}
+
+void GameObject::DrawBoundingBoxAABB()
+{
+	float MinX = aabb.MinX();
+	float MinY = aabb.MinY();
+	float MinZ = aabb.MinZ();
+	float MaxX = aabb.MaxX();
+	float MaxY = aabb.MaxY();
+	float MaxZ = aabb.MaxZ();
+	glDisable(GL_LIGHTING);
+	glBegin(GL_LINES);
+
+	glColor3f(0.f, 1.f, 0.f);
+
+	
+
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MaxX, MinY, MinZ);
+
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MinY, MaxZ);
+
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MaxY, MinZ);
+
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MaxX, MinY, MinZ);
+
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MinX, MinY, MaxZ);
+
+
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MinY, MaxZ);
+
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
+
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MinX, MaxY, MaxZ);
+
+	glVertex3f(MinX, MinY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
+
+	glVertex3f(MaxX, MinY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+	glEnable(GL_LIGHTING);
+
+	glEnd();
+}
+
+void GameObject::DrawBoundingBoxOBB()
+{
+	
+	float MinX = obb.MinX();
+	float MinY = obb.MinY();
+	float MinZ = obb.MinZ();
+	float MaxX = obb.MaxX();
+	float MaxY = obb.MaxY();
+	float MaxZ = obb.MaxZ();
+
+	glColor3f(0.f, 0.f, 1.f);
+	glDisable(GL_LIGHTING);
+	glBegin(GL_LINES);
+
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MaxX, MinY, MinZ);
+
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MinY, MaxZ);
+
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MaxY, MinZ);
+
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MaxX, MinY, MinZ);
+
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MinX, MinY, MaxZ);
+
+
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MinY, MaxZ);
+
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
+
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MinX, MaxY, MaxZ);
+
+	glVertex3f(MinX, MinY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
+
+	glVertex3f(MaxX, MinY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+	glEnable(GL_LIGHTING);
+
+	glEnd();
 }
 
 Component * GameObject::CreateComponent(const ComponentType & type)
@@ -70,6 +187,12 @@ Component * GameObject::CreateComponent(const ComponentType & type)
 		break;
 	case LIGHT:
 		break;
+	case CAMERA: {
+		ComponentCamera* comp = new ComponentCamera(this);
+		components.push_back(comp);
+		return comp;
+	}
+				   break;
 	default:
 		LOG("Not declared Component type with id: %d", type);
 		break;
@@ -180,15 +303,24 @@ bool GameObject::HasChild(GameObject * child)
 	return ret;
 }
 
-void GameObject::GetBBox(math::AABB& aabb)
+void GameObject::SetAABB(AABB & bbox)
 {
-	ComponentMesh* component_mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
-	
-	if (component_mesh != nullptr)
-	{
-		component_mesh->InitAABB();
-		aabb = component_mesh->mesh->aabb;
-		aabb.maxPoint = aabb.maxPoint.Max(component_mesh->mesh->aabb.maxPoint);
-		aabb.minPoint = aabb.minPoint.Min(component_mesh->mesh->aabb.minPoint);
-	}
+	aabb = bbox;
 }
+
+AABB GameObject::GetAABB() const
+{
+	return aabb;
+}
+
+void GameObject::SetOBB(AABB & bbox)
+{
+	obb = bbox;
+}
+
+AABB GameObject::GetOBB() const
+{
+	return obb;
+}
+
+

@@ -2,6 +2,19 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
+#include "MathGeoLib/include/Geometry/Frustum.h"
+
+struct zFrustumFace
+{
+	float3 up_right = float3(0, 0, 0);
+	float3 up_left = float3(0, 0, 0);
+	float3 down_right = float3(0, 0, 0);
+	float3 down_left = float3(0, 0, 0);
+
+	float width = 0;
+	float height = 0;
+	
+};
 
 class ModuleCamera3D : public Module
 {
@@ -16,11 +29,15 @@ public:
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	//void LookAround(const math::float3 &Reference, float DeltaX, float DeltaY);
 	void LookAt(const vec3 &Spot);
-	void FocusObject(vec3 newPos, bool is_focusing);
+	void FocusObject(vec3 newPos);
 	void Move(const vec3 &Movement);
 	void MoveCameraByMouse(vec3 newPos, float speed);
 	void MoveCameraOffsetByMouse(vec3 newPos, float speed);
 	float* GetViewMatrix();
+	void DrawFrustum();
+	void CalculateZNear(const float f_near);
+	void CalculateZFar(const float f_far);
+	void CalculateAspect(const float aspect);
 
 private:
 
@@ -41,12 +58,20 @@ public:
 	int slowness_middle_mouse = 0;
 	int slowness_zoom_in_out = 0;
 
+	zFrustumFace zFar;
+	zFrustumFace zNear;
+	float3 f_center = float3(0, 0, 0);
+	float f_initial_z = 0;
+	float f_depth = 0;
+	float f_fov = 0;
+	float f_aspect = 0;
+	Frustum frustum;
+
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 
 	bool is_focusing = false;
 	bool is_moving_camera = false;
-
 
 };

@@ -76,12 +76,17 @@ update_status ModuleSceneIntro::PostUpdate()
 
 void ModuleSceneIntro::DrawGrid()
 {
+	glDisable(GL_LIGHTING);
+
 	glColor3f(1.f, 1.f, 1.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, grid_id);
 	glVertexPointer(3, GL_INT, 0, NULL);
 	glDrawArrays(GL_LINES, 0, grid_vertex_size);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glEnable(GL_LIGHTING);
+
 }
 
 

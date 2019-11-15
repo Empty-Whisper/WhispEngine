@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "SDL/include/SDL_config.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
+#include "MathGeoLib/include/Geometry/OBB.h"
 
 #include "glmath.h"
 #include <array>
@@ -29,7 +30,10 @@ struct Mesh_info {
 	Buffer<float> face_normals;
 	Buffer<float> vertex_normals;
 	Buffer<float> tex_coords;
+
+	AABB local_box;
 	AABB aabb;
+	OBB obb;
 
 	ComponentMesh* component = nullptr;
 };
@@ -56,7 +60,6 @@ public:
 
 	void OnInspector();
 	math::float3 CalculateRadius();
-	void InitAABB();
 
 public:
 	Mesh_info* mesh = nullptr;

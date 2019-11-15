@@ -56,6 +56,10 @@ void PanelConfiguration::Update()
 		{
 			Hardware();
 		}
+		if (ImGui::CollapsingHeader("Frustum Options"))
+		{
+			Frustum();
+		}
 	}
 	ImGui::End();
 }
@@ -259,6 +263,15 @@ void PanelConfiguration::Viewport()
 	ImGui::SliderInt("Middle mouse move Slowness ", (int*)&App->camera->slowness_middle_mouse, 0, 200);
 
 
+}
+
+void PanelConfiguration::Frustum()
+{
+	ImGui::SliderFloat("Field of View (FOV)", (float*)&App->camera->f_fov, 0, 3);
+	//ImGui::SliderFloat("Aspect ratio", (float*)&App->camera->f_aspect, 0.1f, 5);
+	ImGui::SliderFloat("zNear", (float*)&App->camera->f_depth, 1, 50);
+	ImGui::SliderFloat("zFar", (float*)&App->camera->f_initial_z, 1, 50);
+	
 }
 
 void PanelConfiguration::PushBackVectorAsQueue(std::vector<float> &vector, const float &value)

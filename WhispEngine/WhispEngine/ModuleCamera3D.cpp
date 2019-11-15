@@ -37,6 +37,17 @@ bool ModuleCamera3D::Start()
 	offset_reference = 5;  //  TODO: Save and Load this data in JSON
 	slowness_middle_mouse = 50;  //  TODO: Save and Load this data in JSON
 	slowness_zoom_in_out = 50;  //  TODO: Save and Load this data in JSON
+
+	f_initial_z = 0;
+	f_depth = 6;
+	f_fov = 0.5f;
+	f_aspect = 1;
+	
+	zFar.width = 10;
+	zFar.height = 10;
+	zNear.width = 5;
+	zNear.height = 5;
+
 	return ret;
 }
 
@@ -53,9 +64,13 @@ update_status ModuleCamera3D::Update()
 {
 	BROFILER_CATEGORY("Camera", Profiler::Color::Coral);
 
-	// Implement a debug camera with keys and mouse
-	// Now we can make this movememnt frame rate independant!
-
+	//Frustum
+	DrawFrustum();
+	CalculateZNear(f_depth);
+	CalculateZFar(f_initial_z);
+	frustum.ProjectionMatrix();
+	frustum.ViewMatrix();
+	//Camera
 	vec3 newPos(0, 0, 0);
 	float speed = movement_speed * App->GetDeltaTime();
 
@@ -155,7 +170,7 @@ update_status ModuleCamera3D::Update()
 		}
 
 		if (App->object_manager->GetSelected())
-			FocusObject(newPos, is_focusing);
+			FocusObject(newPos);
 	}
 	
 	// Recalculate matrix -------------
@@ -196,18 +211,22 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
+void ModuleCamera3D::FocusObject(vec3 newPos)
 {
 	static vec3 actual_camera_position(0, 0, 0);
 	static vec3 reference_position(0, 0, 0);
 
 	if (is_focusing)
 	{
-		AABB aabb;
-		App->object_manager->GetSelected()->GetBBox(aabb);
+		GameObject* sel = App->object_manager->GetSelected();
+		AABB aabb = AABB(-float3::one, float3::one);
+
+		if (sel != nullptr)
+			aabb = sel->GetAABB();
+		
 		actual_camera_position = Position;
-		if (App->object_manager->GetSelected() != nullptr)
-			reference_position = GetTransformPosition(); // Reference 
+		float3 center = aabb.CenterPoint();
+		reference_position = vec3(center.x, center.y, center.z);
 
 		LookAt(reference_position);
 
@@ -219,11 +238,15 @@ void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
 
 		float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
 
-		float object_length = aabb.Diagonal().Length();
+		vec3 vector = newPos - reference_position;
+		
+		float object_length = length(normalize(vector) * aabb.Diagonal().Length());
 
 		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
 		if (component_mesh == nullptr)
 			object_length = offset_reference;
+
+		
 
 		if (mag_diff >= object_length + offset_reference)
 		{
@@ -231,6 +254,7 @@ void ModuleCamera3D::FocusObject(vec3 newPos, bool is_focusing)
 		}
 		else
 			this->is_focusing = false;
+
 
 		Position += newPos;
 		Reference += newPos;
@@ -263,8 +287,11 @@ void ModuleCamera3D::MoveCameraByMouse(vec3 newPos, float speed)
 
 void ModuleCamera3D::MoveCameraOffsetByMouse(vec3 newPos, float speed)
 {
-	if (App->object_manager->GetSelected() != nullptr)
-		Reference = GetTransformPosition(); //Get GameObject selected position
+	GameObject* sel = App->object_manager->GetSelected();
+	if (sel != nullptr) {
+		float3 center = sel->GetAABB().CenterPoint(); //Get GameObject selected position
+		Reference = vec3(center.x, center.y, center.z);
+	}
 	else
 		Reference = vec3(0, 0, 0);
 	Position += newPos;
@@ -279,6 +306,70 @@ void ModuleCamera3D::MoveCameraOffsetByMouse(vec3 newPos, float speed)
 float* ModuleCamera3D::GetViewMatrix()
 {
 	return &ViewMatrix;
+}
+
+
+void ModuleCamera3D::DrawFrustum()
+{
+	
+	zFar.up_right = { f_center.x + zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
+	zFar.up_left = { f_center.x - zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
+	zFar.down_right = { f_center.x + zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z};
+	zFar.down_left = { f_center.x - zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z};
+
+	zNear.up_right = { f_center.x + zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
+	zNear.up_left = { f_center.x - zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
+	zNear.down_right = { f_center.x + zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
+	zNear.down_left = { f_center.x - zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
+
+	glDisable(GL_LIGHTING);
+	glColor3f(0.f, 0.f, 1.f);
+
+	glBegin(GL_LINES);
+
+	//zFar
+	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
+	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
+
+	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
+	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
+
+	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
+	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
+
+	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
+	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
+
+	//zNear
+	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
+	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
+
+	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
+	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
+
+	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
+	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
+
+	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
+	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
+
+	//zConection
+	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
+	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
+
+	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
+	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
+
+	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
+	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
+
+	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
+	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
+
+
+	glEnable(GL_LIGHTING);
+
+	glEnd();
 }
 
 // -----------------------------------------------------------------
@@ -329,4 +420,21 @@ const vec3 ModuleCamera3D::GetTransformPosition()
 {
 	float3 obj_pos = ((ComponentTransform*)App->object_manager->GetSelected()->GetComponent(ComponentType::TRANSFORM))->GetPosition();
 	return vec3(obj_pos.x,obj_pos.y,obj_pos.z); //TODO set all vec3 to math::float3
+}
+
+void ModuleCamera3D::CalculateZNear(const float f_near)
+{
+	zNear.height = 2 * tan(f_fov / 2) * f_near;
+	zNear.width = zNear.height * 1;
+}
+void ModuleCamera3D::CalculateZFar(const float f_far)
+{
+	zFar.height = 2 * tan(f_fov / 2) * f_far;
+	zFar.width = zFar.height * 1;
+}
+
+void ModuleCamera3D::CalculateAspect(const float aspect)
+{
+	zFar.width = aspect * zFar.height;
+	zNear.width = aspect * zNear.height;
 }
