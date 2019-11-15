@@ -24,8 +24,6 @@ public:
 	bool CleanUp();
 
 	bool Import(const char* path);
-	bool ImportFbx(const char* path);
-	Texture* ImportTexture(const char* path);
 
 public:
 	Texture* logo_txt = nullptr;

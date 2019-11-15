@@ -315,6 +315,9 @@
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Main Modules</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>GameObject\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -694,6 +697,9 @@
     </ClInclude>
     <ClInclude Include="Bass\include\bass.h">
       <Filter>Tools\Bass</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>GameObject\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

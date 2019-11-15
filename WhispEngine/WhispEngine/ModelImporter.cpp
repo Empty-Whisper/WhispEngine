@@ -207,58 +207,58 @@ void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &
 
 void ModelImporter::LoadNode(aiNode * node, GameObject * parent, const aiScene * scene)
 {
-	for (int i = 0; i < node->mNumChildren; ++i) {
-		aiNode* child = node->mChildren[i];
+	//for (int i = 0; i < node->mNumChildren; ++i) {
+	//	aiNode* child = node->mChildren[i];
 
-		GameObject* obj = App->object_manager->CreateGameObject(parent);
-		obj->SetName(child->mName.C_Str());
-		LOG("Created %s GameObject", obj->GetName());
+	//	GameObject* obj = App->object_manager->CreateGameObject(parent);
+	//	obj->SetName(child->mName.C_Str());
+	//	LOG("Created %s GameObject", obj->GetName());
 
-		ComponentTransform *transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
-		aiVector3D position, scale;
-		aiQuaternion rotation;
-		child->mTransformation.Decompose(scale, rotation, position);
+	//	ComponentTransform *transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
+	//	aiVector3D position, scale;
+	//	aiQuaternion rotation;
+	//	child->mTransformation.Decompose(scale, rotation, position);
 
-		transform->SetPosition(position.x, position.y, position.z);
-		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
-		// FBX exporters have some options that will change the scale of the models, be sure you export your models in Apply Scale FBX All mode
+	//	transform->SetPosition(position.x, position.y, position.z);
+	//	transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
+	//	// FBX exporters have some options that will change the scale of the models, be sure you export your models in Apply Scale FBX All mode
 
-		//scale *= 0.01f;
-		//scale /= std::max(std::max(scale.x, scale.y),scale.z); 
-		transform->SetScale(scale.x, scale.y, scale.z);
+	//	//scale *= 0.01f;
+	//	//scale /= std::max(std::max(scale.x, scale.y),scale.z); 
+	//	transform->SetScale(scale.x, scale.y, scale.z);
 
-		transform->CalculeLocalMatrix();
-		transform->CalculateGlobalMatrix();
+	//	transform->CalculeLocalMatrix();
+	//	transform->CalculateGlobalMatrix();
 
-		if (child->mNumMeshes == 1) {
-			ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
-			aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
-			mesh->mesh = App->object_manager->CreateMesh(amesh);
+	//	if (child->mNumMeshes == 1) {
+	//		ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
+	//		aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
+	//		mesh->mesh = App->object_manager->CreateMesh(amesh);
 
-			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
-			aiString path;
-			aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
-			LOG("Diffuse texture found: %s", path.C_Str());
-			ComponentMaterial* material = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
-			material->SetTexture(App->importer->ImportTexture(path.C_Str()));
+	//		aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
+	//		aiString path;
+	//		aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
+	//		LOG("Diffuse texture found: %s", path.C_Str());
+	//		ComponentMaterial* material = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
+	//		material->SetTexture(App->importer->ImportTexture(path.C_Str()));
 
-		}
-		else {
-			for (int j = 0; j < child->mNumMeshes; ++j) {
-				GameObject * child_m = App->object_manager->CreateGameObject(obj);
+	//	}
+	//	else {
+	//		for (int j = 0; j < child->mNumMeshes; ++j) {
+	//			GameObject * child_m = App->object_manager->CreateGameObject(obj);
 
-				ComponentMesh* mesh = static_cast<ComponentMesh*>(child_m->CreateComponent(ComponentType::MESH));
-				aiMesh* amesh = scene->mMeshes[child->mMeshes[j]];
-				mesh->mesh = App->object_manager->CreateMesh(amesh);
+	//			ComponentMesh* mesh = static_cast<ComponentMesh*>(child_m->CreateComponent(ComponentType::MESH));
+	//			aiMesh* amesh = scene->mMeshes[child->mMeshes[j]];
+	//			mesh->mesh = App->object_manager->CreateMesh(amesh);
 
-				child_m->SetName(amesh->mName.C_Str());
-			}
-		}
+	//			child_m->SetName(amesh->mName.C_Str());
+	//		}
+	//	}
 
-		if (child->mNumChildren > 0) {
-			LoadNode(child, obj, scene);
-		}
-	}
+	//	if (child->mNumChildren > 0) {
+	//		LoadNode(child, obj, scene);
+	//	}
+	//}
 }
 
 uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * node, const aiScene* scene)

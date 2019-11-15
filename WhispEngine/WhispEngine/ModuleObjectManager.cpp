@@ -16,7 +16,7 @@ ModuleObjectManager::~ModuleObjectManager()
 bool ModuleObjectManager::Start()
 {
 	root = new GameObject(nullptr);
-	App->importer->ImportTexture("Assets/Textures/Checker.dds");
+	App->importer->Import("Assets/Textures/Checker.dds");
 
 	return true;
 }
