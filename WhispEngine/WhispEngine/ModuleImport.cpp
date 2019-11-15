@@ -102,7 +102,7 @@ bool ModuleImport::Import(const char * path)
 			case FileSystem::Format::FBX:
 				if (App->dummy_file_system->Exists((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str()) == false) {
 					LOG("Model referenced in meta does not exists, recreating .meta...");
-					App->dummy_file_system->RemoveFile(path);
+					//App->dummy_file_system->RemoveFile(path);
 					std::string s_path(path);
 					s_path.erase(s_path.end() - 5, s_path.end());
 					if (Import(s_path.c_str()))
@@ -117,7 +117,7 @@ bool ModuleImport::Import(const char * path)
 			case FileSystem::Format::DDS:
 				if (App->dummy_file_system->Exists((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str()) == false) {
 					LOG("Texture referenced in meta does not exists, recreating .meta...");
-					App->dummy_file_system->RemoveFile(path);
+					//App->dummy_file_system->RemoveFile(path);
 					std::string s_path(path);
 					s_path.erase(s_path.end() - 5, s_path.end());
 					if (Import(s_path.c_str()))

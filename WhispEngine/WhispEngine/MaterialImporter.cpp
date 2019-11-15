@@ -37,8 +37,12 @@ bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 				return false;
 			}
 			else {
-				LOG("Meta %s not vaild, recreating meta...", path);
+				LOG("Meta %s not vaild, recreating...", path);
+				id = App->dummy_file_system->GetMeta((mat_path + ".meta").c_str());
 			}
+		}
+		else {
+			id = App->dummy_file_system->GenerateMetaFile((mat_path + ".meta").c_str());
 		}
 	}
 	else {
@@ -48,8 +52,6 @@ bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 		}
 	}
 	if (ilLoadImage(mat_path.c_str())) {
-
-		id = App->dummy_file_system->GenerateMetaFile((mat_path + ".meta").c_str());
 
 		ILuint size;
 		if (App->dummy_file_system->GetFormat(mat_path.c_str()) != FileSystem::Format::DDS) {

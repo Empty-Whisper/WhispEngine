@@ -43,13 +43,19 @@ bool ModelImporter::Import(const char * path)
 		}
 
 		// .meta -------------------------------------------------------------
+		uint64_t meta = 0u;
 		if (App->dummy_file_system->IsInDirectory(MODEL_A_FOLDER, (App->dummy_file_system->GetFileFromPath(path) + ".meta").data())) {
 			if (App->dummy_file_system->IsMetaVaild((std::string(path) + ".meta").data())) {
 				LOG("File %s already imported", App->dummy_file_system->GetFileFromPath(path).data());
 				return false;
 			}
+			else {
+				meta = App->dummy_file_system->GetMeta((std::string(path) + ".meta").data());
+			}
 		}
-		uint64_t meta = App->dummy_file_system->GenerateMetaFile((std::string(path) + ".meta").data());
+		else {
+			meta = App->dummy_file_system->GenerateMetaFile((std::string(path) + ".meta").data());
+		}
 		// -------------------------------------------------------------------
 
 		App->object_manager->SetSelected(nullptr);
