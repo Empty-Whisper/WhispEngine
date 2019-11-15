@@ -86,14 +86,29 @@ void ComponentTransform::SetPosition(const float & x, const float & y, const flo
 	position.Set(x, y, z);
 }
 
+void ComponentTransform::SetPosition(const float3& pos)
+{
+	position = pos;
+}
+
 void ComponentTransform::SetRotation(const float & w, const float & x, const float & y, const float & z)
 {
 	rotation.Set(x, y, z, w);
 }
 
+void ComponentTransform::SetRotation(const Quat &rot)
+{
+	rotation = rot;
+}
+
 void ComponentTransform::SetScale(const float & x, const float & y, const float & z)
 {
 	scale.Set(x, y, z);
+}
+
+void ComponentTransform::SetScale(const float3& _scale)
+{
+	scale = _scale;
 }
 
 void ComponentTransform::SetLocalMatrix(const math::float4x4 & matrix)

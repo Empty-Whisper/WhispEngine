@@ -33,7 +33,8 @@ bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 	if (App->dummy_file_system->IsInSubDirectory(TEXTURE_A_FOLDER, App->dummy_file_system->GetFileFromPath(path).c_str(), &mat_path)) {
 		if (App->dummy_file_system->Exists((mat_path + ".meta").c_str())) {
 			if (App->dummy_file_system->IsMetaVaild((mat_path + ".meta").c_str())) {
-				*uid = App->dummy_file_system->GetMeta((mat_path + ".meta").c_str());
+				if (uid != nullptr)
+					*uid = App->dummy_file_system->GetMeta((mat_path + ".meta").c_str());
 				return false;
 			}
 			else {

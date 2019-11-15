@@ -24,6 +24,7 @@ bool ModuleObjectManager::Start()
 update_status ModuleObjectManager::Update()
 {
 	BROFILER_CATEGORY("GameObject Manager", Profiler::Color::MediumSpringGreen);
+	glEnable(GL_LIGHTING);
 	UpdateGameObject(root);
 
 	return UPDATE_CONTINUE;

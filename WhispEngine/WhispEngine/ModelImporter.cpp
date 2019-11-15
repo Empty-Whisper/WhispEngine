@@ -77,7 +77,8 @@ bool ModelImporter::Import(const char * path)
 		char* data = new char[size];
 		memset(data, 0, size);
 		char* cursor = data;
-
+		nlohmann::json file;
+		
 		uint bytes = sizeof(header);
 		memcpy(cursor, header, bytes);
 		cursor += bytes;
@@ -85,12 +86,13 @@ bool ModelImporter::Import(const char * path)
 		memcpy(cursor, name.c_str(), bytes);
 
 		cursor += bytes;
-		FillChildrenInfo(info, cursor);
+		FillChildrenInfo(info, cursor, file[name.c_str()]);
 
 		if (App->dummy_file_system->Exists(MODEL_L_FOLDER) == false) {
 			App->dummy_file_system->CreateDir(MODEL_L_FOLDER);
 		}
 		App->dummy_file_system->SaveData(data, size, std::string(MODEL_L_FOLDER + std::to_string(meta) + std::string(".whispModel")).data());
+		App->dummy_file_system->SaveFile("model.json", file);
 
 		delete[] data;
 
@@ -145,8 +147,8 @@ void ModelImporter::CreateObjects(GameObject * container, char * &cursor)
 	cursor += bytes;
 
 	bytes = n_characters;
-	std::string name(cursor);
-	child->SetName(name.c_str());
+	//std::string name(cursor);
+	//child->SetName(name.c_str());
 	cursor += bytes;
 
 	uint num_children;
@@ -167,15 +169,25 @@ void ModelImporter::CreateObjects(GameObject * container, char * &cursor)
 	}
 		cursor += bytes + 1;
 
+		bytes = sizeof(float) * 16;
+		ComponentTransform* transform = (ComponentTransform*)child->GetComponent(ComponentType::TRANSFORM);
+		float4x4 matrix = float4x4::identity;
+		matrix.Set((float*)cursor);
+		transform->SetLocalMatrix(matrix);
+		transform->CalculeLocalMatrix();
+		transform->CalculateGlobalMatrix();
+		cursor += bytes;
+
 	for (int i = 0; i < num_children; i++) {
 		CreateObjects(child, cursor);
 	}
 }
 
-void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &cursor)
+void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &cursor, nlohmann::json & file)
 {
 	uint bytes = 0;
 	for (auto i = info.children.begin(); i != info.children.end(); ++i) {
+		nlohmann::json object;
 		bytes = sizeof(uint);
 		uint n_characters = (*i).name.length();
 		memcpy(cursor, &n_characters, bytes);
@@ -184,6 +196,8 @@ void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &
 		bytes = (*i).name.length();
 		memcpy(cursor, (*i).name.c_str(), bytes);
 		cursor += bytes;
+
+		object["name"] = (*i).name.c_str();
 
 		bytes = sizeof(uint);
 		uint n_children = (*i).children.size();
@@ -194,71 +208,26 @@ void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &
 		char has_mesh = (*i).mesh_id == 0 ? 0 : 1;
 		memcpy(cursor, &has_mesh, bytes);
 		cursor += bytes;
+		if ((bool)has_mesh == true)
+			object["meshId"] = (*i).mesh_id;
 
 		bytes = sizeof(uint64_t);
 		memcpy(cursor, &(*i).mesh_id, bytes);
 		cursor += bytes;
 
+		bytes = sizeof(float) * 16;
+		memcpy(cursor, (*i).transform, bytes);
+		cursor += bytes;
+
+		object["position"] = { (*i).position.x, (*i).position.y, (*i).position.z };
+		object["rotation"] = { (*i).rotation.w, (*i).rotation.x, (*i).rotation.y, (*i).rotation.z };
+		object["scale"]	   = { (*i).scale.x, (*i).scale.y, (*i).scale.z };
+
 		if ((*i).children.size() > 0) {
-			FillChildrenInfo(*i, cursor);
+			FillChildrenInfo(*i, cursor, object["children"]);
 		}
+		file.push_back(object);
 	}
-}
-
-void ModelImporter::LoadNode(aiNode * node, GameObject * parent, const aiScene * scene)
-{
-	//for (int i = 0; i < node->mNumChildren; ++i) {
-	//	aiNode* child = node->mChildren[i];
-
-	//	GameObject* obj = App->object_manager->CreateGameObject(parent);
-	//	obj->SetName(child->mName.C_Str());
-	//	LOG("Created %s GameObject", obj->GetName());
-
-	//	ComponentTransform *transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
-	//	aiVector3D position, scale;
-	//	aiQuaternion rotation;
-	//	child->mTransformation.Decompose(scale, rotation, position);
-
-	//	transform->SetPosition(position.x, position.y, position.z);
-	//	transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
-	//	// FBX exporters have some options that will change the scale of the models, be sure you export your models in Apply Scale FBX All mode
-
-	//	//scale *= 0.01f;
-	//	//scale /= std::max(std::max(scale.x, scale.y),scale.z); 
-	//	transform->SetScale(scale.x, scale.y, scale.z);
-
-	//	transform->CalculeLocalMatrix();
-	//	transform->CalculateGlobalMatrix();
-
-	//	if (child->mNumMeshes == 1) {
-	//		ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
-	//		aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
-	//		mesh->mesh = App->object_manager->CreateMesh(amesh);
-
-	//		aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
-	//		aiString path;
-	//		aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
-	//		LOG("Diffuse texture found: %s", path.C_Str());
-	//		ComponentMaterial* material = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
-	//		material->SetTexture(App->importer->ImportTexture(path.C_Str()));
-
-	//	}
-	//	else {
-	//		for (int j = 0; j < child->mNumMeshes; ++j) {
-	//			GameObject * child_m = App->object_manager->CreateGameObject(obj);
-
-	//			ComponentMesh* mesh = static_cast<ComponentMesh*>(child_m->CreateComponent(ComponentType::MESH));
-	//			aiMesh* amesh = scene->mMeshes[child->mMeshes[j]];
-	//			mesh->mesh = App->object_manager->CreateMesh(amesh);
-
-	//			child_m->SetName(amesh->mName.C_Str());
-	//		}
-	//	}
-
-	//	if (child->mNumChildren > 0) {
-	//		LoadNode(child, obj, scene);
-	//	}
-	//}
 }
 
 uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * node, const aiScene* scene)
@@ -269,6 +238,15 @@ uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * 
 		HierarchyInfo child;
 		child.parent = info;
 		child.name.assign(child_n->mName.C_Str());
+
+		aiVector3D pos, scale; aiQuaternion rot;
+		node->mTransformation.Decompose(scale, rot, pos);
+		child.position.Set(pos.x, pos.y, pos.z);
+		child.rotation.Set(rot.w, rot.x, rot.y, rot.z);
+		child.scale.Set(scale.x, scale.y, scale.z);
+		memcpy(child.transform, &node->mTransformation, sizeof(float) * 16);
+		
+
 		if (child_n->mNumMeshes == 1) {
 			child.mesh_id = App->random->RandomGUID();
 			App->importer->mesh->Import(child.mesh_id, scene->mMeshes[child_n->mMeshes[0]], scene);
@@ -278,12 +256,13 @@ uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * 
 				HierarchyInfo child_mesh;
 				child_mesh.mesh_id = App->random->RandomGUID();
 				child_mesh.name.assign(scene->mMeshes[child_n->mMeshes[i]]->mName.C_Str());
+				memcpy(child_mesh.transform, &node->mTransformation, sizeof(float) * 16);
 				App->importer->mesh->Import(child_mesh.mesh_id, scene->mMeshes[child_n->mMeshes[i]], scene);
 				child.children.push_back(child_mesh);
-				size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint64_t/*mesh_id*/) + sizeof(uint/*n_characters*/) + child_mesh.name.length()+1;
+				size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint64_t/*mesh_id*/) + sizeof(uint/*n_characters*/) + child_mesh.name.length() + 1 + sizeof(float) * 16;
 			}
 		}
-		size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint64_t/*mesh_id*/) + sizeof(uint/*n_characters*/) + child.name.length()+1;
+		size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint64_t/*mesh_id*/) + sizeof(uint/*n_characters*/) + child.name.length() + 1 + sizeof(float) * 16;
 
 		if (child_n->mNumChildren > 0)
 			size += CalculateHierarchyInfo(&child, child_n, scene);
