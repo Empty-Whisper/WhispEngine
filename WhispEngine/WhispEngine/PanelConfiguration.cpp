@@ -252,8 +252,6 @@ void PanelConfiguration::Application()
 
 void PanelConfiguration::Viewport()
 {
-
-	
 	ImGui::SliderFloat("Sensibility", (float*)&App->camera->sensiblity, 0, 1);
 	ImGui::SliderInt("Movement speed", (int*)&App->camera->movement_speed, 0, 200);
 	ImGui::SliderInt("Focus speed", (int*)&App->camera->focus_speed, 0, 1000);
@@ -267,10 +265,10 @@ void PanelConfiguration::Viewport()
 
 void PanelConfiguration::Frustum()
 {
-	ImGui::SliderFloat("Field of View (FOV)", (float*)&App->camera->f_fov, 0, 3);
-	//ImGui::SliderFloat("Aspect ratio", (float*)&App->camera->f_aspect, 0.1f, 5);
-	ImGui::SliderFloat("zNear", (float*)&App->camera->f_depth, 1, 50);
-	ImGui::SliderFloat("zFar", (float*)&App->camera->f_initial_z, 1, 50);
+	//ImGui::SliderFloat("Field of View (FOV)", (float*)&App->camera->f_fov, 0, 3);
+	////ImGui::SliderFloat("Aspect ratio", (float*)&App->camera->f_aspect, 0.1f, 5);
+	//ImGui::SliderFloat("zNear", (float*)&App->camera->f_depth, 1, 50);
+	//ImGui::SliderFloat("zFar", (float*)&App->camera->f_initial_z, 1, 50);
 	
 }
 

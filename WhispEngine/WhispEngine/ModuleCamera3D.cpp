@@ -38,16 +38,6 @@ bool ModuleCamera3D::Start()
 	slowness_middle_mouse = 50;  //  TODO: Save and Load this data in JSON
 	slowness_zoom_in_out = 50;  //  TODO: Save and Load this data in JSON
 
-	f_initial_z = 0;
-	f_depth = 6;
-	f_fov = 0.5f;
-	f_aspect = 1;
-	
-	zFar.width = 10;
-	zFar.height = 10;
-	zNear.width = 5;
-	zNear.height = 5;
-
 	return ret;
 }
 
@@ -65,11 +55,10 @@ update_status ModuleCamera3D::Update()
 	BROFILER_CATEGORY("Camera", Profiler::Color::Coral);
 
 	//Frustum
-	DrawFrustum();
-	CalculateZNear(f_depth);
-	CalculateZFar(f_initial_z);
-	frustum.ProjectionMatrix();
-	frustum.ViewMatrix();
+	
+
+
+
 	//Camera
 	vec3 newPos(0, 0, 0);
 	float speed = movement_speed * App->GetDeltaTime();
@@ -147,10 +136,10 @@ update_status ModuleCamera3D::Update()
 			last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 			math::float2 mouse_vec = last_mouse_position - initial_mouse_position;
 
-			if (App->input->GetMouseXMotion() > 0) newPos -= X * mouse_vec.x / slowness_middle_mouse;
-			if (App->input->GetMouseXMotion() < 0) newPos -= X * mouse_vec.x / slowness_middle_mouse;
-			if (App->input->GetMouseYMotion() < 0) newPos += Y * mouse_vec.y / slowness_middle_mouse;
-			if (App->input->GetMouseYMotion() > 0) newPos += Y * mouse_vec.y / slowness_middle_mouse;
+			if (App->input->GetMouseXMotion() > 0) newPos -= X * mouse_vec.x / (float)slowness_middle_mouse;
+			if (App->input->GetMouseXMotion() < 0) newPos -= X * mouse_vec.x / (float)slowness_middle_mouse;
+			if (App->input->GetMouseYMotion() < 0) newPos += Y * mouse_vec.y / (float)slowness_middle_mouse;
+			if (App->input->GetMouseYMotion() > 0) newPos += Y * mouse_vec.y / (float)slowness_middle_mouse;
 
 			Position += newPos;
 			Reference += newPos;
@@ -244,7 +233,7 @@ void ModuleCamera3D::FocusObject(vec3 newPos)
 
 		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
 		if (component_mesh == nullptr)
-			object_length = offset_reference;
+			object_length = (float)offset_reference;
 
 		
 
@@ -308,68 +297,19 @@ float* ModuleCamera3D::GetViewMatrix()
 	return &ViewMatrix;
 }
 
-
-void ModuleCamera3D::DrawFrustum()
+Camera * ModuleCamera3D::CreateCamera()
 {
-	
-	zFar.up_right = { f_center.x + zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
-	zFar.up_left = { f_center.x - zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
-	zFar.down_right = { f_center.x + zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z};
-	zFar.down_left = { f_center.x - zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z};
+	Camera* cam = nullptr;
 
-	zNear.up_right = { f_center.x + zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
-	zNear.up_left = { f_center.x - zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
-	zNear.down_right = { f_center.x + zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
-	zNear.down_left = { f_center.x - zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
+	cam = new Camera;
+	cameras.push_back(cam);
 
-	glDisable(GL_LIGHTING);
-	glColor3f(0.f, 0.f, 1.f);
+	return cam;
+}
 
-	glBegin(GL_LINES);
-
-	//zFar
-	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
-	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
-
-	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
-	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
-
-	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
-	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
-
-	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
-	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
-
-	//zNear
-	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
-	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
-
-	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
-	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
-
-	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
-	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
-
-	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
-	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
-
-	//zConection
-	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
-	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
-
-	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
-	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
-
-	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
-	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
-
-	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
-	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
-
-
-	glEnable(GL_LIGHTING);
-
-	glEnd();
+Camera * ModuleCamera3D::GetGameCamera()
+{
+	return game_camera;
 }
 
 // -----------------------------------------------------------------
@@ -422,19 +362,80 @@ const vec3 ModuleCamera3D::GetTransformPosition()
 	return vec3(obj_pos.x,obj_pos.y,obj_pos.z); //TODO set all vec3 to math::float3
 }
 
-void ModuleCamera3D::CalculateZNear(const float f_near)
+
+
+Camera::Camera()
 {
-	zNear.height = 2 * tan(f_fov / 2) * f_near;
-	zNear.width = zNear.height * 1;
-}
-void ModuleCamera3D::CalculateZFar(const float f_far)
-{
-	zFar.height = 2 * tan(f_fov / 2) * f_far;
-	zFar.width = zFar.height * 1;
+	frustum.type = FrustumType::PerspectiveFrustum;
+
+	frustum.front = float3::unitZ;
+	frustum.up = float3::unitY;
+	frustum.pos = { 0, 1, -1 };
+	
+	SetNearZ(5.f);
+	SetFarZ(15.f);
+	SetAspectRatio(1.f);
+	SetFOV(45.f);
 }
 
-void ModuleCamera3D::CalculateAspect(const float aspect)
+void Camera::GetAllCorners(float3 * corners)
 {
-	zFar.width = aspect * zFar.height;
-	zNear.width = aspect * zNear.height;
+	frustum.GetCornerPoints(corners);
+}
+
+void Camera::SetNearZ(const float &zNear)
+{
+	frustum.nearPlaneDistance = zNear;
+}
+
+void Camera::SetFarZ(const float &zFar)
+{
+	frustum.farPlaneDistance = zFar;
+}
+
+void Camera::SetFOV(const float &fov)
+{
+	frustum.verticalFov = DEGTORAD * fov;
+	float _verticalFov = tan(frustum.verticalFov/2.f);
+
+	frustum.horizontalFov = atanf(2.f * aspect_ratio *_verticalFov);
+}
+
+void Camera::SetAspectRatio(const float &ratio)
+{
+	aspect_ratio = ratio;
+
+	if (frustum.horizontalFov > 0 && frustum.verticalFov > 0)
+		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
+}
+
+const float Camera::GetNearZ() const
+{
+	return frustum.nearPlaneDistance;
+}
+
+const float Camera::GetFarZ() const
+{
+	return frustum.farPlaneDistance;
+}
+
+const float Camera::GetVerticalFOV() const
+{
+	return frustum.verticalFov * RADTODEG;
+}
+
+const float4x4 Camera::GetViewMatrix() const
+{
+	float4x4 view = frustum.ViewMatrix();
+	return view.Transposed();
+}
+
+const float4x4 Camera::GetProjectionMatrix() const
+{
+	return frustum.ProjectionMatrix().Transposed();
+}
+
+Frustum Camera::GetFrustum()
+{
+	return frustum;
 }

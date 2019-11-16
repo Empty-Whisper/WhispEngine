@@ -236,10 +236,16 @@ const bool ModuleRenderer3D::CanResize()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	glViewport(0, 0, width, height);
+	App->camera->GetGameCamera()->SetAspectRatio((float)width / (float)height);
+
+	//glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+
+	glLoadMatrixf(App->camera->GetGameCamera()->GetProjectionMatrix().ptr());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 void ModuleRenderer3D::InitTextureBuffers()

@@ -211,11 +211,11 @@ void Application::FinishUpdate()
 	if (framerate_cap != 0 && apply_cap_frames)
 	{
 		
-		Uint32 frame_cap_ms = 1000.0F / (float)framerate_cap;
+		Uint32 frame_cap_ms = 1000.0F / (Uint32)framerate_cap;
 
 		if (frame_cap_ms > last_frame_ms)
 		{
-			SDL_Delay((Uint32)frame_cap_ms - last_frame_ms);
+			SDL_Delay(frame_cap_ms - (Uint32)last_frame_ms);
 		}
 		else
 			SDL_Delay(frame_cap_ms - (Uint32)last_frame_ms % (Uint32)frame_cap_ms);

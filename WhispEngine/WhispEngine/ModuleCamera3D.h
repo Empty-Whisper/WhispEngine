@@ -3,17 +3,38 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "MathGeoLib/include/Geometry/Frustum.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
-struct zFrustumFace
+class GameObject;
+
+class Camera
 {
-	float3 up_right = float3(0, 0, 0);
-	float3 up_left = float3(0, 0, 0);
-	float3 down_right = float3(0, 0, 0);
-	float3 down_left = float3(0, 0, 0);
+public: 
+	Camera();
 
-	float width = 0;
-	float height = 0;
+	//Getters
+	Frustum GetFrustum();
+	const float GetNearZ() const;
+	const float GetFarZ() const;
+	const float GetVerticalFOV() const;
+	const float4x4 GetViewMatrix() const;
+	const float4x4 GetProjectionMatrix() const;
+	void GetAllCorners(float3* corners);
+
+	//Setters
+	void SetNearZ(const float& set);
+	void SetFarZ(const float& set);
+	void SetFOV(const float& set);
+	void SetAspectRatio(const float& set);
+
 	
+
+
+private:
+	Frustum frustum;
+	float	aspect_ratio = 0.0f;
+	float   vertical_fov = 0.0f;
+	bool	frustum_culling = true;
 };
 
 class ModuleCamera3D : public Module
@@ -27,17 +48,15 @@ public:
 	bool CleanUp();
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	//void LookAround(const math::float3 &Reference, float DeltaX, float DeltaY);
 	void LookAt(const vec3 &Spot);
 	void FocusObject(vec3 newPos);
 	void Move(const vec3 &Movement);
 	void MoveCameraByMouse(vec3 newPos, float speed);
 	void MoveCameraOffsetByMouse(vec3 newPos, float speed);
 	float* GetViewMatrix();
-	void DrawFrustum();
-	void CalculateZNear(const float f_near);
-	void CalculateZFar(const float f_far);
-	void CalculateAspect(const float aspect);
+	
+	Camera* CreateCamera();
+	Camera* GetGameCamera();
 
 private:
 
@@ -47,7 +66,6 @@ private:
 	const vec3 GetTransformPosition();
 
 public:
-	
 	vec3 X, Y, Z, Position, Reference;
 
 	float sensiblity = 0.f;
@@ -58,16 +76,11 @@ public:
 	int slowness_middle_mouse = 0;
 	int slowness_zoom_in_out = 0;
 
-	zFrustumFace zFar;
-	zFrustumFace zNear;
-	float3 f_center = float3(0, 0, 0);
-	float f_initial_z = 0;
-	float f_depth = 0;
-	float f_fov = 0;
-	float f_aspect = 0;
-	Frustum frustum;
-
 private:
+	Camera* game_camera = nullptr;
+	Camera* scene_camera = nullptr;
+	std::vector<Camera*> cameras;
+
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 
