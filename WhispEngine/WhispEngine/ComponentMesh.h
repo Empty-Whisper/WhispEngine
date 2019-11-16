@@ -35,6 +35,8 @@ struct Mesh_info {
 	AABB aabb;
 	OBB obb;
 
+	uint64_t uid = 0u;
+
 	ComponentMesh* component = nullptr;
 };
 
@@ -60,6 +62,9 @@ public:
 
 	void OnInspector();
 	math::float3 CalculateRadius();
+
+	void Save(nlohmann::json &node) override;
+	void Load(const nlohmann::json &node) override;
 
 public:
 	Mesh_info* mesh = nullptr;

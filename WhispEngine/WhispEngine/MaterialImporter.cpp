@@ -149,3 +149,8 @@ Texture* MaterialImporter::Load(const char * path)
 	ilDeleteImages(1, &devilID);
 	return ret;
 }
+
+Texture * MaterialImporter::Load(const uint64_t & uid)
+{
+	return Load((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str());
+}

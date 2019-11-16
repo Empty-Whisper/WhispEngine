@@ -57,6 +57,11 @@ public:
 	void		SetSelected(GameObject* select);
 
 	std::vector<Texture*>* GetTextures();
+	Texture* FindTexture(const uint64_t &uid);
+
+	bool SaveGameObjects(nlohmann::json &file);
+	bool LoadGameObjects(const nlohmann::json &file);
+	bool LoadGameObject(const nlohmann::json &node, GameObject* parent);
 
 	// ========================================== old
 

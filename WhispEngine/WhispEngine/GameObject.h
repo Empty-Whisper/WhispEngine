@@ -6,6 +6,8 @@
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MathGeoLib/include/Geometry/OBB.h"
 
+#include "JSON/json.hpp"
+
 enum class ObjectSelected
 {
 	NONE = -1,
@@ -16,6 +18,7 @@ enum class ObjectSelected
 class GameObject
 {
 	friend class ComponentMesh;
+	friend class ModuleObjectManager;
 public:
 	GameObject(GameObject *parent);
 	~GameObject();
@@ -50,6 +53,8 @@ public:
 
 	void GenerateOBB(OBB obb, GameObject* &obj);
 
+	bool Save(nlohmann::json &node);
+
 
 public:
 	std::vector<GameObject*> children;
@@ -62,6 +67,8 @@ private:
 	std::string name;
 	ObjectSelected obj_selected = ObjectSelected::NONE;
 	std::vector<Component*> components_to_delete;
+
+	uint64_t UID = 0u;
 
 	AABB aabb = AABB(float3::zero, float3::zero);
 	AABB obb = AABB(float3::zero, float3::zero);

@@ -105,3 +105,7 @@ void ComponentCamera::CalculateZFar(const float f_far)
 	zFar.height = 2 * tan(f_fov / 2) * f_far;
 	zFar.width = zFar.height * 1;
 }
+
+void ComponentCamera::Save(nlohmann::json & node)
+{
+}

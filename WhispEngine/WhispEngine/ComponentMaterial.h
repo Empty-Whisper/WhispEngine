@@ -32,6 +32,9 @@ public:
 
 	void OnInspector();
 
+	void Save(nlohmann::json &node) override;
+	void Load(const nlohmann::json &node) override;
+
 	void			SetFaceColor(const float &r, const float &g, const float &b, const float &a);
 	void			SetFaceColor(const float* c);
 	void			SetWireColor(const float &r, const float &g, const float &b, const float &a);

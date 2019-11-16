@@ -18,8 +18,10 @@ nlohmann::json FileSystem::OpenFile(const char * path)
 {
 	nlohmann::json file;
 	std::ifstream i(path);
-	if (i.fail())
+	if (i.fail()) {
+		LOG("Failed to open %s", path);
 		return nullptr;
+	}
 
 	i >> file;
 
@@ -57,6 +59,9 @@ FileSystem::Format FileSystem::GetFormat(const char * file) const
 	}
 	else if (buffer.compare("meta") == 0) {
 		return FileSystem::Format::META;
+	}
+	else if (buffer.compare("scene") == 0) {
+		return FileSystem::Format::SCENE;
 	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());

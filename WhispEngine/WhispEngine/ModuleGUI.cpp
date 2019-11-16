@@ -116,12 +116,22 @@ update_status ModuleGUI::MainMenuBar()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Save Scene"))
+			{
+				App->SaveScene();
+			}
+
+			if (ImGui::MenuItem("Load Scene"))
+			{
+				App->LoadScene();
+			}
+
 			if (ImGui::MenuItem("Quit"))
 			{
 				ret = update_status::UPDATE_STOP;
 			}
-			ImGui::EndMenu();
 
+			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Windows"))

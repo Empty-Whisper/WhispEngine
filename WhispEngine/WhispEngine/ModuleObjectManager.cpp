@@ -16,6 +16,7 @@ ModuleObjectManager::~ModuleObjectManager()
 bool ModuleObjectManager::Start()
 {
 	root = new GameObject(nullptr);
+	root->SetName("Root");
 	App->importer->Import("Assets/Textures/Checker.dds");
 
 	return true;
@@ -74,7 +75,8 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 
 void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 {
-	obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
+	if (obj->parent != nullptr)
+		obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
 	delete obj;
 }
 
@@ -105,6 +107,63 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 std::vector<Texture*>* ModuleObjectManager::GetTextures()
 {
 	return &textures;
+}
+
+Texture * ModuleObjectManager::FindTexture(const uint64_t & uid)
+{
+	for (auto i = textures.begin(); i != textures.end(); i++) {
+		if ((*i)->uid == uid)
+			return *i;
+	}
+	return nullptr;
+}
+
+bool ModuleObjectManager::SaveGameObjects(nlohmann::json & file)
+{
+	bool ret = true;
+
+	ret = root->Save(file["GameObjects"]);
+
+	return ret;
+}
+
+bool ModuleObjectManager::LoadGameObjects(const nlohmann::json & it)
+{
+	bool ret = true;
+
+	auto object = *it.begin();
+	DestroyGameObject(root);
+	if (it.size() == 1) {
+		root = new GameObject(nullptr);
+		root->UID = object["UID"];
+
+		for (auto i = object["Children"].cbegin(); i != object["Children"].cend(); i++) {
+			LoadGameObject(*i, root);
+		}
+	}
+
+	return ret;
+}
+
+bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject * parent)
+{
+	bool ret = true;
+
+	GameObject* obj = CreateGameObject(parent);
+	obj->SetName(node.value("name", "GameObject").c_str());
+	obj->UID = node["UID"];
+	obj->SetActive(node["active"]);
+	obj->GetComponent(ComponentType::TRANSFORM)->Load(node);
+
+	for (auto i = node["Components"].begin(); i != node["Components"].end(); ++i) {
+		obj->CreateComponent((*i).value("type", ComponentType::NONE))->Load(*i);
+	}
+
+	for (auto i = node["Children"].begin(); i != node["Children"].end(); ++i) {
+		LoadGameObject(*i, obj);
+	}
+
+	return ret;
 }
 
 const char * ModuleObjectManager::PrimitivesToString(const Primitives prim)

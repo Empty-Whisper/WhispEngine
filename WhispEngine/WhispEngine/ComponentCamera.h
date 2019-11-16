@@ -33,6 +33,8 @@ public:
 	void CalculateZNear(const float f_near);
 	void CalculateZFar(const float f_far);
 
+	void Save(nlohmann::json &node);
+
 public:
 	FrustumInfo zFar;
 	FrustumInfo zNear;

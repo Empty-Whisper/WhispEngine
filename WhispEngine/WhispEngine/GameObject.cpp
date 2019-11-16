@@ -5,6 +5,7 @@
 #include "ComponentCamera.h"
 #include "Application.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+
 GameObject::GameObject(GameObject * parent) : parent(parent)
 {
 	if (parent != nullptr)
@@ -12,6 +13,7 @@ GameObject::GameObject(GameObject * parent) : parent(parent)
 
 	CreateComponent(ComponentType::TRANSFORM);
 	SetName("GameObject");
+	UID = App->random->RandomGUID();
 }
 
 GameObject::~GameObject()
@@ -321,6 +323,39 @@ void GameObject::SetOBB(AABB & bbox)
 AABB GameObject::GetOBB() const
 {
 	return obb;
+}
+
+bool GameObject::Save(nlohmann::json & node)
+{
+	bool ret = true;
+
+	nlohmann::json object;
+
+	object["active"] = active;
+	object["UID"] = UID;
+	object["name"] = name;
+	GetComponent(ComponentType::TRANSFORM)->Save(object);
+
+	nlohmann::json component;
+	for (auto i = components.begin(); i != components.end(); ++i) {
+		if ((*i)->GetType() != ComponentType::TRANSFORM) {
+			nlohmann::json comp;
+			comp["active"] = (*i)->IsActive();
+			comp["type"] = (int)(*i)->GetType();
+			(*i)->Save(comp);
+			component.push_back(comp);
+		}
+	}
+	object["Components"] = { component };
+
+	object["Children"] = {};
+	for (auto i = children.begin(); i != children.end(); ++i) {
+		(*i)->Save(object["Children"]);
+	}
+
+	node.push_back(object);
+
+	return ret;
 }
 
 

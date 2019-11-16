@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "ComponentMesh.h"
 #include "Application.h"
+#include "MaterialImporter.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* parent) : Component(parent, ComponentType::MATERIAL)
 {
@@ -77,6 +78,26 @@ void ComponentMaterial::OnInspector()
 			}
 		}
 	}
+}
+
+void ComponentMaterial::Save(nlohmann::json & node)
+{
+	if (texture != nullptr)
+		node["texture"] = texture->uid;
+	App->json->AddColor4("face color", face_color, node);
+	App->json->AddColor4("wire color", wire_color, node);
+}
+
+void ComponentMaterial::Load(const nlohmann::json & node)
+{
+	texture = App->object_manager->FindTexture(node.value("texture", 0u));
+	if (texture == nullptr)
+		texture = App->importer->material->Load(node.value("texture", 0u));
+	float* fcolor = App->json->GetColor4("face color", node);
+	float* wcolor = App->json->GetColor4("wire color", node);
+
+	memcpy(face_color, fcolor, sizeof(float) * 4);
+	memcpy(wire_color, wcolor, sizeof(float) * 4);
 }
 
 void ComponentMaterial::SetFaceColor(const float & r, const float & g, const float & b, const float & a)

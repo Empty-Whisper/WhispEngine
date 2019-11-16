@@ -39,6 +39,7 @@ Application::Application()
 	hardware = new HardwareInfo();
 	dummy_file_system = new FileSystem();
 	random = new Random();
+	json = new JsonHelper();
 }
 
 Application::~Application()
@@ -131,6 +132,16 @@ void Application::LoadConfiguration()
 	want_to_load = true;
 }
 
+void Application::SaveScene()
+{
+	want_to_save_scene = true;
+}
+
+void Application::LoadScene()
+{
+	want_to_load_scene = true;
+}
+
 void Application::LoadDefaultConfiguration()
 {
 	want_to_load_def = true;
@@ -195,6 +206,16 @@ void Application::FinishUpdate()
 {
 	if (want_to_save) {
 		SaveConfNow();
+	}
+
+	if (want_to_save_scene) {
+		want_to_save_scene = false;
+		scene_intro->SaveScene();
+	}
+
+	if (want_to_load_scene) {
+		want_to_load_scene = false;
+		scene_intro->LoadScene();
 	}
 
 	if (want_to_load || want_to_load_def) {
@@ -286,6 +307,9 @@ bool Application::CleanUp()
 
 	delete random;
 	random = nullptr;
+
+	delete json;
+	json = nullptr;
 
 	return ret;
 }

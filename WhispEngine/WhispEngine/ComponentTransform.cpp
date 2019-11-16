@@ -156,3 +156,18 @@ math::float3 ComponentTransform::GetPosition() const
 {
 	return position;
 }
+
+void ComponentTransform::Save(nlohmann::json & node)
+{
+	App->json->AddFloat3("position", position, node);
+	App->json->AddQuaternion("rotation", rotation, node);
+	App->json->AddFloat3("scale", scale, node);
+}
+
+void ComponentTransform::Load(const nlohmann::json & node)
+{
+	position = App->json->GetFloat3("position", node);
+	rotation = App->json->GetQuaternion("rotation", node);
+	scale    = App->json->GetFloat3("scale", node);
+	CalculeLocalMatrix();
+}

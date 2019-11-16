@@ -28,10 +28,7 @@ public:
 public:
 	Texture* logo_txt = nullptr;
 
-private:
-	void LoadNode(aiNode * node, GameObject * container, const aiScene * scene);
-
-private:
+public:
 	ModelImporter*		model = nullptr;
 	MaterialImporter*	material = nullptr;
 	MeshImporter*		mesh = nullptr;

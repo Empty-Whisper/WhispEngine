@@ -38,6 +38,9 @@ public:
 
 	math::float3 GetPosition() const;
 
+	void Save(nlohmann::json& node) override;
+	void Load(const nlohmann::json& node) override;
+
 private:
 	math::float3 position = math::float3::zero;
 	math::Quat rotation = math::Quat::identity;

@@ -16,6 +16,7 @@
 #include "ModuleObjectManager.h"
 #include "ModuleFileSystem.h"
 #include "Random.h"
+#include "JsonHelper.h"
 
 #include "HardwareInfo.h"
 
@@ -65,6 +66,9 @@ private:
 	bool want_to_load = false;
 	bool want_to_load_def = false;
 
+	bool want_to_save_scene = false;
+	bool want_to_load_scene = false;
+
 	std::string log_buff;
 
 public:
@@ -82,6 +86,8 @@ public:
 	void SaveLogFile();
 	void SaveConfiguration();
 	void LoadConfiguration();
+	void SaveScene();
+	void LoadScene();
 	void LoadDefaultConfiguration();
 
 	void SetAppName(const char* name);
@@ -90,9 +96,11 @@ public:
 	const char* GetOrganizationName() const;
 	const char* GetVersion() const;
 
+	// Helpers
 	HardwareInfo *hardware = nullptr;
 	FileSystem *dummy_file_system = nullptr;
 	Random* random = nullptr;
+	JsonHelper* json = nullptr;
 
 private:
 

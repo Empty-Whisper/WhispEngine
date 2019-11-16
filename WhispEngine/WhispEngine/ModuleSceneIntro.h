@@ -21,9 +21,14 @@ public:
 
 	void GenerateGrid(const int &width);
 
+	bool SaveScene();
+	bool LoadScene() const;
+
 public:
 	uint grid_id = 0;
 	uint grid_vertex_size = 0;
 	bool show_grid = true;
 
+private:
+	std::string scene_name;
 };

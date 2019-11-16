@@ -8,7 +8,7 @@ public:
 	enum class Format {
 		NONE = -1,
 		JSON, FBX, DDS, PNG, JPG,
-		MODEL, MESH, META,
+		MODEL, MESH, META, SCENE,
 		MAX
 	};
 

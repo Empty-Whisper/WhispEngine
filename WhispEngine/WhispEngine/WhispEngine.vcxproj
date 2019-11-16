@@ -39,6 +39,7 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="Importer.cpp" />
+    <ClCompile Include="JsonHelper.cpp" />
     <ClCompile Include="MaterialImporter.cpp" />
     <ClCompile Include="MeshImporter.cpp" />
     <ClCompile Include="ModelImporter.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Imgui\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Importer.h" />
+    <ClInclude Include="JsonHelper.h" />
     <ClInclude Include="MaterialImporter.h" />
     <ClInclude Include="MeshImporter.h" />
     <ClInclude Include="ModelImporter.h" />

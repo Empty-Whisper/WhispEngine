@@ -121,7 +121,7 @@ bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
 		return false;
 	}
 	char* cursor = data;
-
+	mesh->uid = uid;
 
 	uint header[5];
 	uint bytes = sizeof(header);
@@ -133,6 +133,8 @@ bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
 	memcpy(&mat_uid, cursor, bytes);
 	if (mat_uid != 0u) {
 		std::string mat_path(MATERIAL_L_FOLDER + std::to_string(mat_uid) + ".dds");
+		if (mesh->component->object->HasComponent(ComponentType::MATERIAL) == false)
+			mesh->component->object->CreateComponent(ComponentType::MATERIAL);
 		((ComponentMaterial*)mesh->component->object->GetComponent(ComponentType::MATERIAL))->SetTexture(App->importer->material->Load(mat_path.c_str()));
 	}
 

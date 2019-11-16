@@ -4,6 +4,7 @@
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
+#include "MeshImporter.h"
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
@@ -241,6 +242,20 @@ void ComponentMesh::OnInspector()
 			}
 		}
 	}
+}
+
+void ComponentMesh::Save(nlohmann::json & node)
+{
+	node["MeshId"] = mesh->uid;
+}
+
+void ComponentMesh::Load(const nlohmann::json & node)
+{
+	if (mesh == nullptr)
+		mesh = new Mesh_info();
+	mesh->component = this;
+	mesh->uid = node["MeshId"];
+	App->importer->mesh->Load(mesh->uid, mesh);
 }
 
 Mesh_info::~Mesh_info()
