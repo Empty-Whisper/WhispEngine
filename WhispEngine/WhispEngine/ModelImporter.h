@@ -38,9 +38,9 @@ public:
 
 private:
 
-	void FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &cursor, nlohmann::json & file);
+	void FillChildrenInfo(ModelImporter::HierarchyInfo &info, nlohmann::json & file);
 	
 	void LoadNode(aiNode * node, GameObject * parent, const aiScene * scene);
-	uint CalculateHierarchyInfo(HierarchyInfo* info, const aiNode* node, const aiScene* scene);
+	void CalculateHierarchyInfo(HierarchyInfo* info, const aiNode* node, const aiScene* scene);
 };
 
