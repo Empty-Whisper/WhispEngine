@@ -35,16 +35,7 @@ void FileSystem::SaveFile(const char * path, const nlohmann::json & to_save)
 
 FileSystem::Format FileSystem::GetFormat(const char * file) const
 {
-	std::string f(file);
-	std::string buffer;
-
-	for (auto i = f.rbegin(); i != f.rend(); i++) {
-		if (*i != '.')
-			buffer.push_back(std::tolower(*i));
-		else
-			break;
-	}
-	std::reverse(buffer.begin(), buffer.end());
+	std::string buffer = GetPathFormat(file);
 
 	if (buffer.compare("json") == 0) {
 		return FileSystem::Format::JSON;
@@ -71,6 +62,21 @@ FileSystem::Format FileSystem::GetFormat(const char * file) const
 	LOG("Cannot identify format, format is: %s", buffer.data());
 
 	return FileSystem::Format::NONE;
+}
+
+std::string FileSystem::GetPathFormat(const char* path) const
+{
+	std::string f(path);
+	std::string ret;
+	for (auto i = f.rbegin(); i != f.rend(); i++) {
+		if (*i != '.')
+			ret.push_back(std::tolower(*i));
+		else
+			break;
+	}
+	std::reverse(ret.begin(), ret.end());
+
+	return ret;
 }
 
 std::string FileSystem::GetFileNameFromPath(const char * file) const

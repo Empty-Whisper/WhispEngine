@@ -16,6 +16,7 @@ MaterialImporter::MaterialImporter()
 {
 	LOG("Initializing DevIL...");
 	ilInit();
+	
 }
 
 
@@ -56,8 +57,14 @@ bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 			LOG("Failed to copy fbx in Assets folder, Error: %s", buf);
 		}
 	}
-	if (ilLoadImage(mat_path.c_str())) {
 
+	if (App->dummy_file_system->GetPathFormat(mat_path.c_str()).compare("tga") == 0) {
+		ret = ilLoad(IL_TGA, mat_path.c_str());
+	}
+	else
+		ret = ilLoadImage(mat_path.c_str());
+
+	if (ret) {
 		ILuint size;
 		if (App->dummy_file_system->GetFormat(mat_path.c_str()) != FileSystem::Format::DDS) {
 			ILubyte *data = nullptr;
@@ -87,7 +94,7 @@ bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 			*uid = id;
 	}
 	else {
-		LOG("Cannot open image with path %s, Error: %s", path, iluErrorString(ilGetError()));
+		LOG("Cannot open image with path %s, Error: %i", path, ilGetError());
 	}
 
 	return ret;

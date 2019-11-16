@@ -21,6 +21,7 @@ public:
 	void			SaveFile(const char* path, const nlohmann::json &to_save);
 
 	FileSystem::Format GetFormat(const char* file) const;
+	std::string GetPathFormat(const char* path) const;
 	std::string GetFileNameFromPath(const char* file) const;
 	std::string GetFileFromPath(const char* file) const;
 	std::string GetFileDirectory(const char* file_path) const;
