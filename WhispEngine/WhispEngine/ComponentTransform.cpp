@@ -117,6 +117,14 @@ void ComponentTransform::SetLocalMatrix(const math::float4x4 & matrix)
 	local_matrix.Decompose(position, rotation, scale);
 }
 
+void ComponentTransform::SetLocalMatrix(const float3 &_pos, const Quat& _rot, const float3 &_scale)
+{
+	position = _pos;
+	rotation = _rot;
+	scale	 = _scale;
+	local_matrix = float4x4::FromTRS(position, rotation, scale);
+}
+
 void ComponentTransform::CalculeLocalMatrix()
 {
 	local_matrix = math::float4x4::FromTRS(position, rotation, scale);

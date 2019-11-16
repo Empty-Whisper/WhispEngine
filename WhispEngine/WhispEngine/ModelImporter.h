@@ -24,16 +24,6 @@ public:
 		float3 position;
 		Quat rotation;
 		float3 scale;
-		float transform[16] = { 1.f, 0.f, 0.f, 0.f,
-								0.f, 1.f, 0.f, 0.f,
-								0.f, 0.f, 1.f, 0.f,
-								0.f, 0.f, 0.f, 1.f };
-		//float transform[10] = {
-		//	0.f, 0.f, 0.f,       // position
-		//	1.f, 0.f, 0.f, 0.f,  // rotation
-		//	1.f, 1.f, 1.f		 // scale
-		//};
-
 	};
 
 public:
@@ -44,7 +34,7 @@ public:
 
 	bool Load(const char* path);
 
-	void CreateObjects(GameObject * container, char * &cursor);
+	void CreateObjects(GameObject * container, const nlohmann::json & data);
 
 private:
 

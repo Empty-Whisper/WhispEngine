@@ -3,7 +3,7 @@
 Random::Random()
 {
 	rng = pcg32(seed_source);
-	guid = std::uniform_real_distribution<double>(0, UINT64_MAX);
+	guid = std::uniform_real_distribution<double>(1, UINT64_MAX); // starts with 1 to keep 0 as invalid
 }
 
 

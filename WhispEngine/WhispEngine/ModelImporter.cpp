@@ -91,8 +91,8 @@ bool ModelImporter::Import(const char * path)
 		if (App->dummy_file_system->Exists(MODEL_L_FOLDER) == false) {
 			App->dummy_file_system->CreateDir(MODEL_L_FOLDER);
 		}
-		App->dummy_file_system->SaveData(data, size, std::string(MODEL_L_FOLDER + std::to_string(meta) + std::string(".whispModel")).data());
-		App->dummy_file_system->SaveFile("model.json", file);
+		//App->dummy_file_system->SaveData(data, size, std::string(MODEL_L_FOLDER + std::to_string(meta) + std::string(".whispModel")).data());
+		App->dummy_file_system->SaveFile(std::string(MODEL_L_FOLDER + std::to_string(meta) + std::string(".whispModel")).data(), file);
 
 		delete[] data;
 
@@ -107,7 +107,23 @@ bool ModelImporter::Import(const char * path)
 
 bool ModelImporter::Load(const char * path)
 {
-	char* data = App->dummy_file_system->GetData(path);
+	nlohmann::json data = App->dummy_file_system->OpenFile(path);
+	if (data == nullptr) {
+		LOG("Model %s not found", path);
+		return false;
+	}
+
+	GameObject* container = App->object_manager->CreateGameObject(nullptr);
+	if (data.is_object()) {
+		nlohmann::json::iterator object = data.begin();
+		container->SetName(object.key().c_str());
+		if ((*object).is_array()) {
+			for (nlohmann::json::iterator it = (*object).begin(); it != (*object).end(); it++) {
+				CreateObjects(container, *it);
+			}
+		}
+	}
+	/*char* data = App->dummy_file_system->GetData(path);
 	if (data == nullptr) {
 		LOG("Model %s not found", path);
 		return false;
@@ -132,55 +148,78 @@ bool ModelImporter::Load(const char * path)
 	}
 
 
-	delete[] data;
+	delete[] data;*/
 	return true;
 }
 
-void ModelImporter::CreateObjects(GameObject * container, char * &cursor)
+void ModelImporter::CreateObjects(GameObject * container, const nlohmann::json & data)
 {
 	uint bytes = 0;
 	GameObject* child = App->object_manager->CreateGameObject(container);
 
-	bytes = sizeof(uint);
-	uint n_characters = 0u;
-	memcpy(&n_characters, cursor, bytes);
-	cursor += bytes;
+	child->SetName(data["name"].get<std::string>().c_str());
+	ComponentTransform* transform = (ComponentTransform*)child->GetComponent(ComponentType::TRANSFORM);
+	transform->SetLocalMatrix(
+		float3(data["position"][0],data["position"][1], data["position"][2]),
+		Quat(data["rotation"][1], data["rotation"][2], data["rotation"][3], data["rotation"][0]),
+		float3(data["scale"][0], data["scale"][1], data["scale"][2])
+	);
+	transform->CalculateGlobalMatrix();
 
-	bytes = n_characters;
-	//std::string name(cursor);
-	//child->SetName(name.c_str());
-	cursor += bytes;
-
-	uint num_children;
-	bytes = sizeof(uint);
-	memcpy(&num_children, cursor, bytes);
-	cursor += bytes;
-
-	bytes = sizeof(uint64_t);
-	if (cursor[0] == 1) {
+	if (data.value("meshId", 0) != 0) {
 		ComponentMesh* mesh = (ComponentMesh*)child->CreateComponent(ComponentType::MESH);
-		uint64_t mesh_uid = 0;
-		memcpy(&mesh_uid, cursor+1, bytes);
-
 		mesh->mesh = new Mesh_info();
 		mesh->mesh->component = mesh;
 
-		App->importer->mesh->Load(mesh_uid, mesh->mesh);
+		App->importer->mesh->Load(data["meshId"], mesh->mesh);
 	}
-		cursor += bytes + 1;
 
-		bytes = sizeof(float) * 16;
-		ComponentTransform* transform = (ComponentTransform*)child->GetComponent(ComponentType::TRANSFORM);
-		float4x4 matrix = float4x4::identity;
-		matrix.Set((float*)cursor);
-		transform->SetLocalMatrix(matrix);
-		transform->CalculeLocalMatrix();
-		transform->CalculateGlobalMatrix();
-		cursor += bytes;
-
-	for (int i = 0; i < num_children; i++) {
-		CreateObjects(child, cursor);
+	if (data.find("children") != data.end()) {
+		for (nlohmann::json::const_iterator it = data["children"].begin(); it != data["children"].end(); it++) {
+			CreateObjects(child, *it);
+		}
 	}
+
+	//bytes = sizeof(uint);
+	//uint n_characters = 0u;
+	//memcpy(&n_characters, cursor, bytes);
+	//cursor += bytes;
+
+	//bytes = n_characters;
+	////std::string name(cursor);
+	////child->SetName(name.c_str());
+	//cursor += bytes;
+
+	//uint num_children;
+	//bytes = sizeof(uint);
+	//memcpy(&num_children, cursor, bytes);
+	//cursor += bytes;
+
+	//bytes = sizeof(uint64_t);
+	//if (cursor[0] == 1) {
+	//	ComponentMesh* mesh = (ComponentMesh*)child->CreateComponent(ComponentType::MESH);
+	//	uint64_t mesh_uid = 0;
+	//	memcpy(&mesh_uid, cursor+1, bytes);
+
+	//	mesh->mesh = new Mesh_info();
+	//	mesh->mesh->component = mesh;
+
+	//	App->importer->mesh->Load(mesh_uid, mesh->mesh);
+	//}
+	//	cursor += bytes + 1;
+
+	//	bytes = sizeof(float) * 16;
+	//	ComponentTransform* transform = (ComponentTransform*)child->GetComponent(ComponentType::TRANSFORM);
+	//	float4x4 matrix = float4x4::identity;
+	//	matrix.Set((float*)cursor);
+	//	transform->SetLocalMatrix(matrix);
+	//	transform->CalculeLocalMatrix();
+	//	transform->CalculateGlobalMatrix();
+	//	cursor += bytes;
+
+	//for (int i = 0; i < num_children; i++) {
+	//	CreateObjects(child, cursor);
+	//}
 }
 
 void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &cursor, nlohmann::json & file)
@@ -188,7 +227,22 @@ void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &
 	uint bytes = 0;
 	for (auto i = info.children.begin(); i != info.children.end(); ++i) {
 		nlohmann::json object;
-		bytes = sizeof(uint);
+
+		object["name"] = (*i).name.c_str();
+
+		if ((*i).mesh_id > 0u)
+			object["meshId"] = (*i).mesh_id;
+
+		object["position"] = { (*i).position.x, (*i).position.y, (*i).position.z };
+		object["rotation"] = { (*i).rotation.x, (*i).rotation.y, (*i).rotation.z, (*i).rotation.w};
+		object["scale"]	   = { (*i).scale.x, (*i).scale.y, (*i).scale.z };
+
+		if ((*i).children.size() > 0) {
+			FillChildrenInfo(*i, cursor, object["children"]);
+		}
+		file.push_back(object);
+		
+		/*bytes = sizeof(uint);
 		uint n_characters = (*i).name.length();
 		memcpy(cursor, &n_characters, bytes);
 		cursor += bytes;
@@ -197,7 +251,6 @@ void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &
 		memcpy(cursor, (*i).name.c_str(), bytes);
 		cursor += bytes;
 
-		object["name"] = (*i).name.c_str();
 
 		bytes = sizeof(uint);
 		uint n_children = (*i).children.size();
@@ -208,8 +261,6 @@ void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &
 		char has_mesh = (*i).mesh_id == 0 ? 0 : 1;
 		memcpy(cursor, &has_mesh, bytes);
 		cursor += bytes;
-		if ((bool)has_mesh == true)
-			object["meshId"] = (*i).mesh_id;
 
 		bytes = sizeof(uint64_t);
 		memcpy(cursor, &(*i).mesh_id, bytes);
@@ -217,16 +268,8 @@ void ModelImporter::FillChildrenInfo(ModelImporter::HierarchyInfo &info, char* &
 
 		bytes = sizeof(float) * 16;
 		memcpy(cursor, (*i).transform, bytes);
-		cursor += bytes;
+		cursor += bytes;*/
 
-		object["position"] = { (*i).position.x, (*i).position.y, (*i).position.z };
-		object["rotation"] = { (*i).rotation.w, (*i).rotation.x, (*i).rotation.y, (*i).rotation.z };
-		object["scale"]	   = { (*i).scale.x, (*i).scale.y, (*i).scale.z };
-
-		if ((*i).children.size() > 0) {
-			FillChildrenInfo(*i, cursor, object["children"]);
-		}
-		file.push_back(object);
 	}
 }
 
@@ -240,11 +283,11 @@ uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * 
 		child.name.assign(child_n->mName.C_Str());
 
 		aiVector3D pos, scale; aiQuaternion rot;
-		node->mTransformation.Decompose(scale, rot, pos);
+		child_n->mTransformation.Decompose(scale, rot, pos);
 		child.position.Set(pos.x, pos.y, pos.z);
 		child.rotation.Set(rot.w, rot.x, rot.y, rot.z);
 		child.scale.Set(scale.x, scale.y, scale.z);
-		memcpy(child.transform, &node->mTransformation, sizeof(float) * 16);
+		//memcpy(child.transform, &node->mTransformation, sizeof(float) * 16);
 		
 
 		if (child_n->mNumMeshes == 1) {
@@ -256,7 +299,7 @@ uint ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * 
 				HierarchyInfo child_mesh;
 				child_mesh.mesh_id = App->random->RandomGUID();
 				child_mesh.name.assign(scene->mMeshes[child_n->mMeshes[i]]->mName.C_Str());
-				memcpy(child_mesh.transform, &node->mTransformation, sizeof(float) * 16);
+				//memcpy(child_mesh.transform, &node->mTransformation, sizeof(float) * 16);
 				App->importer->mesh->Import(child_mesh.mesh_id, scene->mMeshes[child_n->mMeshes[i]], scene);
 				child.children.push_back(child_mesh);
 				size += sizeof(uint/*num_children*/) + sizeof(char/*has_mesh*/) + sizeof(uint64_t/*mesh_id*/) + sizeof(uint/*n_characters*/) + child_mesh.name.length() + 1 + sizeof(float) * 16;

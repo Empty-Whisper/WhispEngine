@@ -49,7 +49,11 @@ bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 	else {
 		mat_path.assign((TEXTURE_A_FOLDER + App->dummy_file_system->GetFileFromPath(path)));
 		if (!CopyFile(path, mat_path.data(), FALSE)) {
-			LOG("Failed to copy fbx in Assets folder, Error: %s", GetLastError());
+			wchar_t buf[256];
+			FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+				NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+				buf, (sizeof(buf) / sizeof(wchar_t)), NULL);
+			LOG("Failed to copy fbx in Assets folder, Error: %s", buf);
 		}
 	}
 	if (ilLoadImage(mat_path.c_str())) {
