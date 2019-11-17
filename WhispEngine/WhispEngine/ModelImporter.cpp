@@ -172,6 +172,9 @@ void ModelImporter::CalculateHierarchyInfo(HierarchyInfo * info, const aiNode * 
 		child_n->mTransformation.Decompose(scale, rot, pos);
 		child.position.Set(pos.x, pos.y, pos.z);
 		child.rotation.Set(rot.w, rot.x, rot.y, rot.z);
+		float div_scale = std::max(scale.x, scale.y);
+		div_scale = std::max(div_scale, scale.z);
+		scale /= div_scale;
 		child.scale.Set(scale.x, scale.y, scale.z);
 		
 
