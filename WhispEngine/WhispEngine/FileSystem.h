@@ -26,6 +26,8 @@ public:
 	std::string GetFileFromPath(const char* file) const;
 	std::string GetFileDirectory(const char* file_path) const;
 
+	bool IsFileSupported(const char* path) const;
+
 	bool CreateDir(const char* path);
 	bool RemoveFile(const char* path);
 	bool RemoveDirAndContent(const char* path);
@@ -36,6 +38,7 @@ public:
 	bool Exists(const char* path) const;
 
 	bool IsMetaVaild(const char* path);
+	bool HasMeta(const char* file);
 	uint64_t GenerateMetaFile(const char* meta_path);
 	uint64_t GetMeta(const char* mata_path) const;
 

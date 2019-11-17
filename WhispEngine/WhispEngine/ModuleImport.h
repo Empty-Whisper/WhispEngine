@@ -25,6 +25,11 @@ public:
 
 	bool Import(const char* path);
 
+private:
+	void CreateLibrary();
+	void CreateFiles(const char* directory);
+
+
 public:
 	Texture* logo_txt = nullptr;
 

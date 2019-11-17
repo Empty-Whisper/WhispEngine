@@ -114,6 +114,10 @@ Texture* MaterialImporter::Load(const char * path)
 			}
 	}
 
+	if (App->dummy_file_system->Exists(path) == false) {
+		// TODO?: Recreate library
+	}
+
 	ILuint devilID = 0;
 
 	ilGenImages(1, &devilID);

@@ -134,6 +134,12 @@ std::string FileSystem::GetFileDirectory(const char * file_path) const
 	return f;
 }
 
+bool FileSystem::IsFileSupported(const char * path) const
+{
+	FileSystem::Format form = GetFormat(path);
+	return form == FileSystem::Format::DDS || form == FileSystem::Format::FBX || form == FileSystem::Format::JPG || form == FileSystem::Format::PNG;
+}
+
 bool FileSystem::CreateDir(const char * path)
 {
 	if (std::experimental::filesystem::create_directories(path)) {
@@ -229,6 +235,11 @@ bool FileSystem::IsMetaVaild(const char * path)
 			return false;
 		}
 	}
+}
+
+bool FileSystem::HasMeta(const char * file)
+{
+	return Exists((std::string(file) + ".meta").c_str());
 }
 
 uint64_t FileSystem::GenerateMetaFile(const char * meta_path)

@@ -16,6 +16,8 @@
 #include "MaterialImporter.h"
 #include "MeshImporter.h"
 
+#include <filesystem>
+
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 
@@ -39,6 +41,8 @@ bool ModuleImport::Start()
 	model		= new ModelImporter();
 	material	= new MaterialImporter();
 	mesh		= new MeshImporter();
+
+	CreateLibrary();
 
 	// Charge logo texture
 	//logo_txt = ImportTexture("Assets/logo.png");
@@ -133,4 +137,36 @@ bool ModuleImport::Import(const char * path)
 		break;
 	}
 	return ret;
+}
+
+void ModuleImport::CreateLibrary()
+{
+	if (App->dummy_file_system->Exists(LIBRARY_FOLDER) == false) {
+		LOG("Missing Library, generating...");
+		App->dummy_file_system->CreateDir(LIBRARY_FOLDER);
+	}
+
+	CreateFiles(ASSETS_FOLDER);
+}
+
+void ModuleImport::CreateFiles(const char* directory)
+{
+	for (const auto & entry : std::experimental::filesystem::directory_iterator(directory)) {
+		if (std::experimental::filesystem::is_directory(entry)) {
+			CreateFiles(entry.path().u8string().c_str());
+		}
+		else {
+			std::string path = entry.path().u8string();
+			if (App->dummy_file_system->IsFileSupported(path.c_str())) {
+				if (App->dummy_file_system->HasMeta(path.c_str())) {
+					if (App->dummy_file_system->IsMetaVaild((path + ".meta").c_str()) == false) {
+						App->importer->Import(path.c_str());
+					}
+				}
+				else {
+					App->importer->Import(path.c_str());
+				}
+			}
+		}
+	}
 }
