@@ -61,6 +61,12 @@
     <Filter Include="GameObject\Components">
       <UniqueIdentifier>{d334a48d-a01b-421c-9d0d-4b7a75e39e8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Importer">
+      <UniqueIdentifier>{37e09d0b-3340-472a-8a07-eb653c6b34d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Bass">
+      <UniqueIdentifier>{a7b0736b-1edc-4533-a6d7-370c9cbdd71b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -291,8 +297,29 @@
     <ClCompile Include="PanelScene.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
+    <ClCompile Include="Importer.cpp">
+      <Filter>Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialImporter.cpp">
+      <Filter>Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelImporter.cpp">
+      <Filter>Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshImporter.cpp">
+      <Filter>Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelResources.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleFileSystem.cpp">
+      <Filter>Main Modules</Filter>
+    </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonHelper.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -644,8 +671,41 @@
     <ClInclude Include="Brofiler\Brofiler.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialImporter.h">
+      <Filter>Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelImporter.h">
+      <Filter>Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshImporter.h">
+      <Filter>Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelResources.h">
+      <Filter>UI_Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="PathNode.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleFileSystem.h">
+      <Filter>Main Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Bass\include\bassenc.h">
+      <Filter>Tools\Bass</Filter>
+    </ClInclude>
+    <ClInclude Include="Bass\include\bassenc_ogg.h">
+      <Filter>Tools\Bass</Filter>
+    </ClInclude>
+    <ClInclude Include="Bass\include\bass.h">
+      <Filter>Tools\Bass</Filter>
+    </ClInclude>
     <ClInclude Include="ComponentCamera.h">
       <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonHelper.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

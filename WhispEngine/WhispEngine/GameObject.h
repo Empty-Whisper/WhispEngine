@@ -6,6 +6,8 @@
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MathGeoLib/include/Geometry/OBB.h"
 
+#include "JSON/json.hpp"
+
 enum class ObjectSelected
 {
 	NONE = -1,
@@ -16,14 +18,15 @@ enum class ObjectSelected
 class GameObject
 {
 	friend class ComponentMesh;
+	friend class ModuleObjectManager;
 public:
 	GameObject(GameObject *parent);
 	~GameObject();
 
 public:
 	void Update();
-	void DrawBoundingBoxAABB(bool active);
-	void DrawBoundingBoxOBB(bool active);
+	void DrawBoundingBoxAABB();
+	void DrawBoundingBoxOBB();
 	Component* CreateComponent(const ComponentType &type);
 	void	   DeleteComponent(Component* comp);
 	Component* GetComponent(const ComponentType &type);
@@ -43,10 +46,8 @@ public:
 	void Attach(GameObject* parent);
 	bool HasChild(GameObject* child);
 
-	void SetAABB(AABB& bbox);
-	AABB GetAABB() const;
-	void SetOBB(AABB& bbox);
-	AABB GetOBB() const;
+	bool Save(nlohmann::json &node);
+
 
 public:
 	std::vector<GameObject*> children;
@@ -60,9 +61,8 @@ private:
 	ObjectSelected obj_selected = ObjectSelected::NONE;
 	std::vector<Component*> components_to_delete;
 
-	AABB local_box = AABB(float3::zero, float3::zero);
-	AABB aabb = AABB(float3::zero, float3::zero);
-	AABB obb = AABB(float3::zero, float3::zero);
-	bool see_bounding_box = false;
+	uint64_t UID = 0u;
+
+	bool see_bounding_box = false; // TODO: Set in component mesh ?
 };
 

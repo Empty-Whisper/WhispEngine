@@ -19,6 +19,8 @@
 #include "PanelCreate.h"
 #include "PanelInspector.h"
 #include "PanelScene.h"
+#include "PanelResources.h"
+
 #include "Brofiler/Brofiler.h"
 
 
@@ -62,6 +64,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_4));
 	panels.push_back(inspector = new PanelInspector(node["panels"]["inspector"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_5));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
+	panels.push_back(new PanelResources());
 
 	return true;
 }
@@ -113,12 +116,22 @@ update_status ModuleGUI::MainMenuBar()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Save Scene"))
+			{
+				App->SaveScene();
+			}
+
+			if (ImGui::MenuItem("Load Scene"))
+			{
+				App->LoadScene();
+			}
+
 			if (ImGui::MenuItem("Quit"))
 			{
 				ret = update_status::UPDATE_STOP;
 			}
-			ImGui::EndMenu();
 
+			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Windows"))

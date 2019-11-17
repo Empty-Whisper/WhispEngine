@@ -111,3 +111,6 @@ void ComponentCamera::DrawFrustum()
 
 }
 
+void ComponentCamera::Save(nlohmann::json & node)
+{
+}

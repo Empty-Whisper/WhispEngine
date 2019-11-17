@@ -38,7 +38,13 @@
     <ClCompile Include="Imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Imgui\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="Importer.cpp" />
+    <ClCompile Include="JsonHelper.cpp" />
+    <ClCompile Include="MaterialImporter.cpp" />
+    <ClCompile Include="MeshImporter.cpp" />
+    <ClCompile Include="ModelImporter.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
+    <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="ModuleObjectManager.cpp" />
     <ClCompile Include="ModuleShortCut.cpp" />
@@ -49,6 +55,7 @@
     <ClCompile Include="PanelCreate.cpp" />
     <ClCompile Include="PanelHierarchy.cpp" />
     <ClCompile Include="PanelInspector.cpp" />
+    <ClCompile Include="PanelResources.cpp" />
     <ClCompile Include="PanelScene.cpp" />
     <ClCompile Include="par_shapes.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
@@ -99,6 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Bass\include\bass.h" />
+    <ClInclude Include="Bass\include\bassenc.h" />
+    <ClInclude Include="Bass\include\bassenc_ogg.h" />
     <ClInclude Include="Brofiler\Brofiler.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
@@ -125,8 +135,14 @@
     <ClInclude Include="Imgui\imstb_textedit.h" />
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="Importer.h" />
+    <ClInclude Include="JsonHelper.h" />
+    <ClInclude Include="MaterialImporter.h" />
+    <ClInclude Include="MeshImporter.h" />
+    <ClInclude Include="ModelImporter.h" />
     <ClInclude Include="mmgr\mmgr.h" />
     <ClInclude Include="mmgr\nommgr.h" />
+    <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleImport.h" />
     <ClInclude Include="ModuleObjectManager.h" />
     <ClInclude Include="ModuleShortCut.h" />
@@ -137,8 +153,10 @@
     <ClInclude Include="PanelCreate.h" />
     <ClInclude Include="PanelHierarchy.h" />
     <ClInclude Include="PanelInspector.h" />
+    <ClInclude Include="PanelResources.h" />
     <ClInclude Include="PanelScene.h" />
     <ClInclude Include="par_shapes.h" />
+    <ClInclude Include="PathNode.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="JSON\json.hpp" />
     <ClInclude Include="Light.h" />

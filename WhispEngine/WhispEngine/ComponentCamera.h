@@ -23,6 +23,10 @@ public:
 
 	void DrawFrustum();
 
+	void Save(nlohmann::json &node);
+
+public:
+	Frustum frustum;
 
 private:
 	Camera* camera = nullptr;

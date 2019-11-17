@@ -9,21 +9,16 @@
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
+
 #include "Brofiler/Brofiler.h"
 
-// Devil ---------------------------------------------------------
-#include "DevIL/include/IL/il.h"
-#include "DevIL/include/IL/ilu.h"
-#include "DevIL/include/IL/ilut.h"
+#include "ModelImporter.h"
+#include "MaterialImporter.h"
+#include "MeshImporter.h"
 
-#pragma comment (lib, "DevIL/libx86/DevIL.lib")
-#pragma comment (lib, "DevIL/libx86/ILU.lib")
-#pragma comment (lib, "DevIL/libx86/ILUT.lib")
-//--------------------------------------------------------------------
+#include <filesystem>
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
-
-
 
 
 ModuleImport::ModuleImport()
@@ -42,13 +37,16 @@ bool ModuleImport::Start()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-
-	LOG("Initializing DevIL...");
-	ilInit();
 	
+	model		= new ModelImporter();
+	material	= new MaterialImporter();
+	mesh		= new MeshImporter();
+
+	CreateLibrary();
+
 	// Charge logo texture
-	logo_txt = ImportTexture("Assets/logo.png");
-	logo_txt->visible_on_inspector = false;
+	//logo_txt = ImportTexture("Assets/logo.png");
+	//logo_txt->visible_on_inspector = false;
 
 	return true;
 }
@@ -58,167 +56,117 @@ bool ModuleImport::CleanUp()
 	// detach log stream
 	aiDetachAllLogStreams();
 
+	delete model;
+	delete material;
+	delete mesh;
+
 	return true;
 }
 
-bool ModuleImport::ImportFbx(const char * path)
+bool ModuleImport::Import(const char * path)
 {
-	BROFILER_CATEGORY("Import FBX", Profiler::Color::Green);
-	bool ret = true;
-
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
-	LOG("Importing fbx with path: %s", path);
-	
-	if (scene != nullptr && scene->HasMeshes())
+	bool ret = false;
+	switch (App->dummy_file_system->GetFormat(path))
 	{
-		App->object_manager->SetSelected(nullptr);
-		uint ticks = SDL_GetTicks(); //timer
-		PerfTimer timer;
+	case FileSystem::Format::JSON:
+		break;
+	case FileSystem::Format::DDS:
+	case FileSystem::Format::PNG:
+	case FileSystem::Format::JPG:
+		ret = material->Import(path);
+		break;
+	case FileSystem::Format::SCENE:
+		ret = App->scene_intro->LoadScene();
+		break;
+	case FileSystem::Format::FBX:
+		ret = model->Import(path);
+		break;
+	case FileSystem::Format::MODEL:
+		ret = model->Load(path);
+		break;
+	case FileSystem::Format::META: {
+		char* f_uid = App->dummy_file_system->GetData(path);
+		if (f_uid == nullptr) {
+			LOG("Failed to open meta file, trying to reload asset...");
+			std::string s_path(path);
+			s_path.erase(s_path.end() - 5, s_path.end());
+			Import(s_path.c_str());
+			f_uid = App->dummy_file_system->GetData(path);
+			if (f_uid == nullptr) {
+				LOG("Failed another time to load meta file, aborting loading");
+				return false;
+			}
+		}
+		uint64_t uid = 0u;
+		memcpy(&uid, f_uid, sizeof(uint64_t));
 
-		GameObject * container = App->object_manager->CreateGameObject(nullptr);
-		container->SetName(App->file_system->GetFileNameFromPath(path).data());
-		
-		aiNode *node = scene->mRootNode;
+		delete[] f_uid;
 
-		aiVector3D position, scale;			
-		aiQuaternion rotation;
-		node->mTransformation.Decompose(scale, rotation, position);
-		ComponentTransform* transform = ((ComponentTransform*)container->GetComponent(ComponentType::TRANSFORM));
-		transform->SetPosition(position.x, position.y, position.z);
-		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
-		transform->SetScale(scale.x, scale.y, scale.z);
-
-		transform->CalculeLocalMatrix();
-		transform->CalculateGlobalMatrix();
-
-		LoadNode(node, container, scene);
-
-		aiReleaseImport(scene);
-		LOG("Time to load FBX: %u", SDL_GetTicks() - ticks);
+		if (uid != 0u) {
+			std::string s_path(path);
+			s_path.erase(s_path.end() - 5, s_path.end());
+			switch (App->dummy_file_system->GetFormat(s_path.c_str())) {
+			case FileSystem::Format::FBX:
+				if (App->dummy_file_system->Exists((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str()) == false) {
+					LOG("Model referenced in meta does not exists, recreating from .meta...");
+					model->Import(s_path.c_str());
+				}
+				else {
+					ret = model->Load((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str());
+				}
+				break;
+			case FileSystem::Format::JPG:
+			case FileSystem::Format::PNG:
+			case FileSystem::Format::DDS:
+				if (App->dummy_file_system->Exists((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str()) == false) {
+					LOG("Texture referenced in meta does not exists, recreating from .meta...");
+					std::string s_path(path);
+					s_path.erase(s_path.end() - 5, s_path.end());
+					material->Load(s_path.c_str());
+				}
+				else {
+					ret = material->Load((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str());
+				}
+				break;
+			}
+		}
 	}
-	else
-		LOG("Error loading scene: %s", scene == nullptr ? aiGetErrorString() : "The FBX has no meshes");
-
+		break;
+	default:
+		LOG("Failed to load %s. Format not setted", path);
+		break;
+	}
 	return ret;
 }
 
-void ModuleImport::LoadNode(aiNode * node, GameObject * parent, const aiScene * scene)
+void ModuleImport::CreateLibrary()
 {
-	for (int i = 0; i < node->mNumChildren; ++i) {
-		aiNode* child = node->mChildren[i];
+	if (App->dummy_file_system->Exists(LIBRARY_FOLDER) == false) {
+		LOG("Missing Library, generating...");
+		App->dummy_file_system->CreateDir(LIBRARY_FOLDER);
+	}
 
-		GameObject* obj = App->object_manager->CreateGameObject(parent);
-		obj->SetName(child->mName.C_Str());
-		LOG("Created %s GameObject", obj->GetName());
+	CreateFiles(ASSETS_FOLDER);
+}
 
-		ComponentTransform *transform = (ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM);
-		aiVector3D position, scale;
-		aiQuaternion rotation;
-		child->mTransformation.Decompose(scale, rotation, position);
-
-		transform->SetPosition(position.x, position.y, position.z);
-		rotation = { 0, 0, 0, 0 };
-		transform->SetRotation(rotation.w, rotation.x, rotation.y, rotation.z);
-		// FBX exporters have some options that will change the scale of the models, be sure you export your models in Apply Scale FBX All mode
-
-		scale *= 0.01f;
-		scale /= std::max(std::max(scale.x, scale.y),scale.z); 
-		transform->SetScale(scale.x, scale.y, scale.z);
-
-		transform->CalculeLocalMatrix();
-		transform->CalculateGlobalMatrix();
-
-		if (child->mNumMeshes == 1) {
-			ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
-			aiMesh* amesh = scene->mMeshes[child->mMeshes[0]];
-			mesh->mesh = App->object_manager->CreateMesh(amesh);
-			obj->SetAABB(mesh->mesh->aabb);
-
-			aiMaterial* aimaterial = scene->mMaterials[amesh->mMaterialIndex];
-			aiString path;
-			LOG("num of diffuse textures: %i", aimaterial->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE));
-			aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path);
-			LOG("Diffuse texture found: %s", path.C_Str());
-			ComponentMaterial* material = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
-			material->SetTexture(ImportTexture(std::string(std::string("Assets/Textures/") + App->file_system->GetFileFromPath(path.C_Str())).data()));
-
+void ModuleImport::CreateFiles(const char* directory)
+{
+	for (const auto & entry : std::experimental::filesystem::directory_iterator(directory)) {
+		if (std::experimental::filesystem::is_directory(entry)) {
+			CreateFiles(entry.path().u8string().c_str());
 		}
 		else {
-			for (int j = 0; j < child->mNumMeshes; ++j) {
-				GameObject * child_m = App->object_manager->CreateGameObject(obj);
-
-				ComponentMesh* mesh = static_cast<ComponentMesh*>(child_m->CreateComponent(ComponentType::MESH));
-				aiMesh* amesh = scene->mMeshes[child->mMeshes[j]];
-				mesh->mesh = App->object_manager->CreateMesh(amesh);
-
-				//mesh->mesh->aabb.Transform()
-				obj->SetAABB(mesh->mesh->aabb); // TODO: Set AABB for all container parents of gameobject childs of meshes
-
-				child_m->SetName(amesh->mName.C_Str());
-			}
-		}
-
-		if (child->mNumChildren > 0) {
-			LoadNode(child, obj, scene);
-		}
-	}
-}
-
-Texture* ModuleImport::ImportTexture(const char * path)
-{
-	Texture* ret = nullptr;
-
-	std::string tmp = App->file_system->GetFileNameFromPath(path); // Lazy way to compare if the texture already exists, will work for now TODO: improve it (std::filesystem?)
-	std::vector<Texture*>* vtex = App->object_manager->GetTextures();
-	for (auto i = vtex->begin(); i != vtex->end(); i++) {
-		if (tmp.compare((*i)->name) == 0)
-			if (App->file_system->GetFormat(path) == App->file_system->GetFormat((*i)->path.data())) {
-				LOG("Texture already loaded, returning the texture already loaded...");
-				if (App->object_manager->GetSelected() != nullptr) {// Assign new texture to object selected (ONLY FOR THE FIRST ASSIGNMENT) TODO: Delete this after first delivery
-					ComponentMaterial* mat = (ComponentMaterial*)App->object_manager->GetSelected()->GetComponent(ComponentType::MATERIAL);
-					if (mat != nullptr)	mat->SetTexture(*i);
+			std::string path = entry.path().u8string();
+			if (App->dummy_file_system->IsFileSupported(path.c_str())) {
+				if (App->dummy_file_system->HasMeta(path.c_str())) {
+					if (App->dummy_file_system->IsMetaVaild((path + ".meta").c_str()) == false) {
+						App->importer->Import(path.c_str());
+					}
 				}
-				return *i;
+				else {
+					App->importer->Import(path.c_str());
+				}
 			}
-	}
-
-	ILuint devilID = 0;
-
-	ilGenImages(1, &devilID);
-	ilBindImage(devilID);
-
-	ilutRenderer(ILUT_OPENGL);  // Switch the renderer
-
-	if (!ilLoadImage(path)) {
-		auto error = ilGetError();
-		LOG("Failed to load texture with path: %s. Error: %s", path, ilGetString(error));
-	}
-	else {
-		ret = new Texture(ilutGLBindTexImage(), path, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
-
-		// Upload pixels into texture
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-		glBindTexture(GL_TEXTURE_2D, ret->id);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-
-		// Setup filtering parameters for display
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-		if (App->object_manager->GetSelected() != nullptr) {// Assign new texture to object selected (ONLY FOR THE FIRST ASSIGNMENT) TODO: Delete this after first delivery
-			ComponentMaterial* mat = (ComponentMaterial*)App->object_manager->GetSelected()->GetComponent(ComponentType::MATERIAL);
-			if (mat != nullptr)	mat->SetTexture(ret);
 		}
-		App->object_manager->AddTexture(ret);
-		LOG("Loaded successfully texture: %s", path);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-
-	ilDeleteImages(1, &devilID);
-
-	return ret;
 }

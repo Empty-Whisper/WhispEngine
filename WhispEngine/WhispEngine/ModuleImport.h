@@ -5,10 +5,16 @@ struct aiNode;
 struct aiScene;
 class GameObject;
 class Texture;
+class ModelImporter;
+class MaterialImporter;
+class MeshImporter;
 
 class ModuleImport :
 	public Module
 {
+	friend class ModelImporter;
+	friend class MeshImporter;
+
 public:
 	ModuleImport();
 	~ModuleImport();
@@ -17,13 +23,19 @@ public:
 
 	bool CleanUp();
 
-	bool ImportFbx(const char* path);
-	Texture* ImportTexture(const char* path);
+	bool Import(const char* path);
+
+private:
+	void CreateLibrary();
+	void CreateFiles(const char* directory);
+
 
 public:
 	Texture* logo_txt = nullptr;
 
-private:
-	void LoadNode(aiNode * node, GameObject * container, const aiScene * scene);
+public:
+	ModelImporter*		model = nullptr;
+	MaterialImporter*	material = nullptr;
+	MeshImporter*		mesh = nullptr;
 };
 

@@ -16,7 +16,8 @@ ModuleObjectManager::~ModuleObjectManager()
 bool ModuleObjectManager::Start()
 {
 	root = new GameObject(nullptr);
-	App->importer->ImportTexture("Assets/Textures/Checker.dds");
+	root->SetName("Root");
+	App->importer->Import("Assets/Textures/Checker.dds");
 
 	return true;
 }
@@ -24,7 +25,7 @@ bool ModuleObjectManager::Start()
 update_status ModuleObjectManager::Update()
 {
 	BROFILER_CATEGORY("GameObject Manager", Profiler::Color::MediumSpringGreen);
-
+	glEnable(GL_LIGHTING);
 	UpdateGameObject(root);
 
 	//Camera
@@ -36,13 +37,9 @@ update_status ModuleObjectManager::Update()
 void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
 	if (obj->IsActive()) {
-		
-		glPushMatrix();		
-		glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());
 
 		obj->Update();
 
-		glPopMatrix();
 		if (!obj->children.empty()) {
 			for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 				UpdateGameObject(*i);
@@ -76,7 +73,8 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 
 void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 {
-	obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
+	if (obj->parent != nullptr)
+		obj->parent->children.erase(std::find(obj->parent->children.begin(), obj->parent->children.end(), obj));
 	delete obj;
 }
 
@@ -121,6 +119,63 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 std::vector<Texture*>* ModuleObjectManager::GetTextures()
 {
 	return &textures;
+}
+
+Texture * ModuleObjectManager::FindTexture(const uint64_t & uid)
+{
+	for (auto i = textures.begin(); i != textures.end(); i++) {
+		if ((*i)->uid == uid)
+			return *i;
+	}
+	return nullptr;
+}
+
+bool ModuleObjectManager::SaveGameObjects(nlohmann::json & file)
+{
+	bool ret = true;
+
+	ret = root->Save(file["GameObjects"]);
+
+	return ret;
+}
+
+bool ModuleObjectManager::LoadGameObjects(const nlohmann::json & it)
+{
+	bool ret = true;
+
+	auto object = *it.begin();
+	DestroyGameObject(root);
+	if (it.size() == 1) {
+		root = new GameObject(nullptr);
+		root->UID = object["UID"];
+
+		for (auto i = object["Children"].cbegin(); i != object["Children"].cend(); i++) {
+			LoadGameObject(*i, root);
+		}
+	}
+
+	return ret;
+}
+
+bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject * parent)
+{
+	bool ret = true;
+
+	GameObject* obj = CreateGameObject(parent);
+	obj->SetName(node.value("name", "GameObject").c_str());
+	obj->UID = node["UID"];
+	obj->SetActive(node["active"]);
+	obj->GetComponent(ComponentType::TRANSFORM)->Load(node);
+
+	for (auto i = node["Components"].begin(); i != node["Components"].end(); ++i) {
+		obj->CreateComponent((*i).value("type", ComponentType::NONE))->Load(*i);
+	}
+
+	for (auto i = node["Children"].begin(); i != node["Children"].end(); ++i) {
+		LoadGameObject(*i, obj);
+	}
+
+	return ret;
 }
 
 const char * ModuleObjectManager::PrimitivesToString(const Primitives prim)
@@ -171,9 +226,9 @@ void ModuleObjectManager::AddTexture(Texture * tex)
 	textures.push_back(tex);
 }
 
-Mesh_info * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords)
+Mesh_info * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords, ComponentMesh* component)
 {
-	Mesh_info *mesh = new Mesh_info();
+	Mesh_info *mesh = new Mesh_info(component);
 
 	FillVertex(mesh, n_vertex, vertex);
 
@@ -189,9 +244,9 @@ Mesh_info * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float *
 	return mesh;
 }
 
-Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
+Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh, ComponentMesh* component)
 {
-	Mesh_info *ret = new Mesh_info();
+	Mesh_info *ret = new Mesh_info(component);
 
 	FillVertex(ret, mesh->mNumVertices, (float*)mesh->mVertices);
 
@@ -208,17 +263,6 @@ Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 	if (mesh->HasTextureCoords(0)) {
 		FillTextureCoords(ret, (float*)mesh->mTextureCoords[0]);
 	}
-
-	// Generate AABB
-	ret->local_box.SetNegativeInfinity();
-	ret->local_box.Enclose((float3*)ret->vertex.data, ret->vertex.size);
-
-	ret->obb = ret->local_box;
-	
-
-	ret->aabb.SetNegativeInfinity();
-	ret->aabb.Enclose(ret->obb);
-
 
 	ret->SetGLBuffers();
 
@@ -239,15 +283,23 @@ void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 	// Face Normals ----------------------------------------------------
 	ret->face_normals.size = ret->index.size * 2;
 	ret->face_normals.data = new float[ret->face_normals.size];
+	float* buffer = CalculateFaceNormals(ret->vertex.data, ret->face_normals.size, ret->index.size, ret->index.data, magnitude);
+	memcpy(ret->face_normals.data, buffer, ret->face_normals.size * sizeof(float));
+	delete[] buffer;
+}
 
-	for (int k = 0; k < ret->index.size/3; k += 3) {
-		vec3 p1(ret->vertex.data[ret->index.data[k] * 3],     ret->vertex.data[ret->index.data[k] * 3 + 1],     ret->vertex.data[ret->index.data[k] * 3 + 2]);
-		vec3 p2(ret->vertex.data[ret->index.data[k + 1] * 3], ret->vertex.data[ret->index.data[k + 1] * 3 + 1], ret->vertex.data[ret->index.data[k + 1] * 3 + 2]);
-		vec3 p3(ret->vertex.data[ret->index.data[k + 2] * 3], ret->vertex.data[ret->index.data[k + 2] * 3 + 1], ret->vertex.data[ret->index.data[k + 2] * 3 + 2]);
+float* ModuleObjectManager::CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude)
+{
+	float* data = new float[n_face_normals];
 
-		ret->face_normals.data[k * 2]	  = (p1.x + p2.x + p3.x) / 3.f;
-		ret->face_normals.data[k * 2 + 1] = (p1.y + p2.y + p3.y) / 3.f;
-		ret->face_normals.data[k * 2 + 2] = (p1.z + p2.z + p3.z) / 3.f;
+	for (int k = 0; k < n_index / 3; k += 3) {
+		vec3 p1(vertex[index[k] * 3],	  vertex[index[k] * 3 + 1],		vertex[index[k] * 3 + 2]);
+		vec3 p2(vertex[index[k + 1] * 3], vertex[index[k + 1] * 3 + 1], vertex[index[k + 1] * 3 + 2]);
+		vec3 p3(vertex[index[k + 2] * 3], vertex[index[k + 2] * 3 + 1], vertex[index[k + 2] * 3 + 2]);
+
+		data[k * 2] = (p1.x + p2.x + p3.x) / 3.f;
+		data[k * 2 + 1] = (p1.y + p2.y + p3.y) / 3.f;
+		data[k * 2 + 2] = (p1.z + p2.z + p3.z) / 3.f;
 
 		vec3 v1 = p2 - p1;
 		vec3 v2 = p3 - p1;
@@ -255,10 +307,12 @@ void ModuleObjectManager::FillNormals(Mesh_info * ret, const float * normals)
 		vec3 v_norm = cross(v1, v2);
 		v_norm = normalize(v_norm);
 
-		ret->face_normals.data[k * 2 + 3] = ret->face_normals.data[k * 2]     + v_norm.x * magnitude;
-		ret->face_normals.data[k * 2 + 4] = ret->face_normals.data[k * 2 + 1] + v_norm.y * magnitude;
-		ret->face_normals.data[k * 2 + 5] = ret->face_normals.data[k * 2 + 2] + v_norm.z * magnitude;
+		data[k * 2 + 3] = data[k * 2] + v_norm.x * magnitude;
+		data[k * 2 + 4] = data[k * 2 + 1] + v_norm.y * magnitude;
+		data[k * 2 + 5] = data[k * 2 + 2] + v_norm.z * magnitude;
 	}
+
+	return data;
 }
 
 void ModuleObjectManager::FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces)
@@ -308,7 +362,7 @@ void ModuleObjectManager::FillTextureCoords(Mesh_info * mesh, const float * text
 
 
 
-Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type)
+Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type, ComponentMesh* component)
 {
 	Object_data data = Object_data();
 	par_shapes_mesh* prim = nullptr;
@@ -351,7 +405,7 @@ Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type)
 		break;
 	}
 
-	Mesh_info* mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	Mesh_info* mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords, component);
 	par_shapes_free_mesh(prim);
 
 	return mesh;
@@ -415,7 +469,7 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 	obj->SetName(PrimitivesToString(type));
 
 	ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
-	mesh->mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	mesh->mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords, mesh);
 	
 	ComponentMaterial* mat = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
 	mat->SetFaceColor(data.face_color[0],data.face_color[1],data.face_color[2],1.f); 
@@ -450,7 +504,7 @@ void ModuleObjectManager::Demo()
 		obj->SetName(PrimitivesToString((Primitives)std::distance(prim.begin(), i)));
 
 		ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
-		mesh->mesh = CreateMesh((*i)->npoints, (*i)->points, (*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
+		mesh->mesh = CreateMesh((*i)->npoints, (*i)->points, (*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords, mesh);
 
 		ComponentMaterial* mat = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
 

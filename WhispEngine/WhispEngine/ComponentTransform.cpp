@@ -86,9 +86,19 @@ void ComponentTransform::SetPosition(const float & x, const float & y, const flo
 	position.Set(x, y, z);
 }
 
+void ComponentTransform::SetPosition(const float3& pos)
+{
+	position = pos;
+}
+
 void ComponentTransform::SetRotation(const float & w, const float & x, const float & y, const float & z)
 {
 	rotation.Set(x, y, z, w);
+}
+
+void ComponentTransform::SetRotation(const Quat &rot)
+{
+	rotation = rot;
 }
 
 void ComponentTransform::SetScale(const float & x, const float & y, const float & z)
@@ -96,16 +106,32 @@ void ComponentTransform::SetScale(const float & x, const float & y, const float 
 	scale.Set(x, y, z);
 }
 
+void ComponentTransform::SetScale(const float3& _scale)
+{
+	scale = _scale;
+}
+
 void ComponentTransform::SetLocalMatrix(const math::float4x4 & matrix)
 {
 	local_matrix = matrix;
 	local_matrix.Decompose(position, rotation, scale);
+	euler_rot = math::RadToDeg(rotation.ToEulerXYZ());
+}
+
+void ComponentTransform::SetLocalMatrix(const float3 &_pos, const Quat& _rot, const float3 &_scale)
+{
+	position = _pos;
+	rotation = _rot;
+	euler_rot = math::RadToDeg(rotation.ToEulerXYZ());
+	scale	 = _scale;
+	local_matrix = float4x4::FromTRS(position, rotation, scale);
 }
 
 void ComponentTransform::CalculeLocalMatrix()
 {
 	local_matrix = math::float4x4::FromTRS(position, rotation, scale);
 	CalculateGlobalMatrix();
+
 	for (auto i = object->children.begin(); i != object->children.end(); i++) {
 		((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
 	}
@@ -116,6 +142,14 @@ void ComponentTransform::CalculateGlobalMatrix()
 	global_matrix = local_matrix;
 	if (object->parent != nullptr) {
 		global_matrix = ((ComponentTransform*)object->parent->GetComponent(ComponentType::TRANSFORM))->global_matrix * local_matrix;
+	}
+
+	ComponentMesh* mesh = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
+	if (mesh != nullptr)
+		mesh->CalulateAABB_OBB();
+
+	for (auto i = object->children.begin(); i != object->children.end(); i++) {
+		((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
 	}
 }
 
@@ -132,4 +166,19 @@ math::float4x4 ComponentTransform::GetGlobalMatrix() const
 math::float3 ComponentTransform::GetPosition() const
 {
 	return position;
+}
+
+void ComponentTransform::Save(nlohmann::json & node)
+{
+	App->json->AddFloat3("position", position, node);
+	App->json->AddQuaternion("rotation", rotation, node);
+	App->json->AddFloat3("scale", scale, node);
+}
+
+void ComponentTransform::Load(const nlohmann::json & node)
+{
+	position = App->json->GetFloat3("position", node);
+	rotation = App->json->GetQuaternion("rotation", node);
+	scale    = App->json->GetFloat3("scale", node);
+	CalculeLocalMatrix();
 }

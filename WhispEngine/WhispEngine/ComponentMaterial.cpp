@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "ComponentMesh.h"
 #include "Application.h"
+#include "MaterialImporter.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* parent) : Component(parent, ComponentType::MATERIAL)
 {
@@ -79,6 +80,26 @@ void ComponentMaterial::OnInspector()
 	}
 }
 
+void ComponentMaterial::Save(nlohmann::json & node)
+{
+	if (texture != nullptr)
+		node["texture"] = texture->uid;
+	App->json->AddColor4("face color", face_color, node);
+	App->json->AddColor4("wire color", wire_color, node);
+}
+
+void ComponentMaterial::Load(const nlohmann::json & node)
+{
+	texture = App->object_manager->FindTexture(node.value("texture", 0u));
+	if (texture == nullptr)
+		texture = App->importer->material->Load(node.value("texture", 0u));
+	float* fcolor = App->json->GetColor4("face color", node);
+	float* wcolor = App->json->GetColor4("wire color", node);
+
+	memcpy(face_color, fcolor, sizeof(float) * 4);
+	memcpy(wire_color, wcolor, sizeof(float) * 4);
+}
+
 void ComponentMaterial::SetFaceColor(const float & r, const float & g, const float & b, const float & a)
 {
 	face_color[0] = r;
@@ -115,7 +136,7 @@ const float * ComponentMaterial::GetWireColor() const
 	return &wire_color[0];
 }
 
-Texture::Texture(const uint &id, const char* path, const int& width, const int& height)
-	: id(id), path(path), name(App->file_system->GetFileNameFromPath(path)), width(width), height(height)
+Texture::Texture(const uint &id, const char* path, const int& width, const int& height, const uint64_t &file_uid)
+	: id(id), path(path), name(App->dummy_file_system->GetFileNameFromPath(path)), width(width), height(height), uid(file_uid)
 {
 }

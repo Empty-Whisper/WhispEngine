@@ -15,6 +15,26 @@
 #include <windows.h>
 #include <stdio.h>
 
+#define RELEASE( x )\
+    {\
+       if( x != nullptr )\
+       {\
+         delete x;\
+	     x = nullptr;\
+       }\
+    }
+
+// Deletes an array of buffers
+#define RELEASE_ARRAY( x )\
+	{\
+       if( x != nullptr )\
+       {\
+           delete[] x;\
+	       x = nullptr;\
+		 }\
+	 }
+
+
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
 void log(const char file[], int line, const char* format, ...);
@@ -27,6 +47,17 @@ void log(const char file[], int line, const char* format, ...);
 #define HAVE_M_PI
 #undef max
 #undef min
+
+#define SETTINGS_FOLDER "Configuration/"
+
+#define ASSETS_FOLDER "Assets/"
+#define MODEL_A_FOLDER "Assets/Models/"
+#define TEXTURE_A_FOLDER "Assets/Textures/"
+
+#define LIBRARY_FOLDER "Library/"
+#define MODEL_L_FOLDER "Library/Models/"
+#define MESH_L_FOLDER "Library/Meshes/"
+#define MATERIAL_L_FOLDER "Library/Material/"
 
 typedef unsigned int uint;
 

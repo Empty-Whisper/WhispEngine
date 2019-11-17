@@ -35,7 +35,10 @@ bool ModuleSceneIntro::Start()
 
 	GenerateGrid(10);
 
-	App->importer->ImportFbx("Assets/Models/BakerHouse.fbx");
+	App->importer->Import("Assets/Models/BakerHouse.fbx");
+	App->importer->Import("Assets/Models/BakerHouse.fbx.meta");
+
+	scene_name.assign("SampleScene");
 	
 	return ret;
 }
@@ -117,4 +120,29 @@ void ModuleSceneIntro::GenerateGrid(const int & width)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(int) * grid_vertex_size, grid, GL_STATIC_DRAW);
 	
 	delete[] grid;
+}
+
+bool ModuleSceneIntro::SaveScene()
+{
+	bool ret = true;
+
+	nlohmann::json scene;
+
+	ret = App->object_manager->SaveGameObjects(scene[scene_name.c_str()]);
+
+	App->dummy_file_system->SaveFile((ASSETS_FOLDER + scene_name + ".scene").c_str(), scene);
+
+	return ret;
+}
+
+bool ModuleSceneIntro::LoadScene() const
+{
+	bool ret = true;
+
+	nlohmann::json scene = App->dummy_file_system->OpenFile("Assets/SampleScene.scene");
+
+	auto it = scene.begin();
+	ret = App->object_manager->LoadGameObjects((*it)["GameObjects"]);
+
+	return ret;
 }

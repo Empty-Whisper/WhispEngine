@@ -5,6 +5,7 @@
 #include "ComponentCamera.h"
 #include "Application.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+
 GameObject::GameObject(GameObject * parent) : parent(parent)
 {
 	if (parent != nullptr)
@@ -12,6 +13,7 @@ GameObject::GameObject(GameObject * parent) : parent(parent)
 
 	CreateComponent(ComponentType::TRANSFORM);
 	SetName("GameObject");
+	UID = App->random->RandomGUID();
 }
 
 GameObject::~GameObject()
@@ -47,126 +49,125 @@ void GameObject::Update()
 	}
 
 	if (see_bounding_box) {
-		DrawBoundingBoxAABB(true);
-		DrawBoundingBoxOBB(true);
+		DrawBoundingBoxAABB();
+		DrawBoundingBoxOBB();
 	}
 }
 
-void GameObject::DrawBoundingBoxAABB(bool active)
+// TODO: add all bounding boxes functions to mesh ---------------------------------------------------
+void GameObject::DrawBoundingBoxAABB()
 {
-	if (active)
-	{
-		float MinX = aabb.MinX();
-		float MinY = aabb.MinY();
-		float MinZ = aabb.MinZ();
-		float MaxX = aabb.MaxX();
-		float MaxY = aabb.MaxY();
-		float MaxZ = aabb.MaxZ();
-		glDisable(GL_LIGHTING);
-		glBegin(GL_LINES);
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	if (mesh == nullptr)
+		return;
+	AABB aabb = mesh->GetAABB();
 
-		glColor3f(0.f, 1.f, 0.f);
+	float MinX = aabb.MinX();
+	float MinY = aabb.MinY();
+	float MinZ = aabb.MinZ();
+	float MaxX = aabb.MaxX();
+	float MaxY = aabb.MaxY();
+	float MaxZ = aabb.MaxZ();
+	glDisable(GL_LIGHTING);
+	glBegin(GL_LINES);
 
-		glVertex3f(MinX, MinY, MinZ);
-		glVertex3f(MaxX, MinY, MinZ);
+	glColor3f(0.f, 1.f, 0.f);
 
-		glVertex3f(MinX, MinY, MinZ);
-		glVertex3f(MinX, MinY, MaxZ);
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MaxX, MinY, MinZ);
 
-		glVertex3f(MinX, MinY, MinZ);
-		glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MinY, MaxZ);
 
-		glVertex3f(MaxX, MinY, MaxZ);
-		glVertex3f(MaxX, MinY, MinZ);
+	glVertex3f(MinX, MinY, MinZ);
+	glVertex3f(MinX, MaxY, MinZ);
 
-		glVertex3f(MaxX, MinY, MaxZ);
-		glVertex3f(MinX, MinY, MaxZ);
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MaxX, MinY, MinZ);
+
+	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MinX, MinY, MaxZ);
 
 
-		glVertex3f(MaxX, MaxY, MaxZ);
-		glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MinY, MaxZ);
 
-		glVertex3f(MaxX, MaxY, MaxZ);
-		glVertex3f(MinX, MaxY, MaxZ);
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
 
-		glVertex3f(MaxX, MaxY, MaxZ);
-		glVertex3f(MaxX, MaxY, MinZ);
+	glVertex3f(MaxX, MaxY, MaxZ);
+	glVertex3f(MaxX, MaxY, MinZ);
 
-		glVertex3f(MinX, MaxY, MinZ);
-		glVertex3f(MaxX, MaxY, MinZ);
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
 
-		glVertex3f(MinX, MaxY, MinZ);
-		glVertex3f(MinX, MaxY, MaxZ);
+	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3f(MinX, MaxY, MaxZ);
 
-		glVertex3f(MinX, MinY, MaxZ);
-		glVertex3f(MinX, MaxY, MaxZ);
+	glVertex3f(MinX, MinY, MaxZ);
+	glVertex3f(MinX, MaxY, MaxZ);
 
-		glVertex3f(MaxX, MinY, MinZ);
-		glVertex3f(MaxX, MaxY, MinZ);
-		glEnable(GL_LIGHTING);
+	glVertex3f(MaxX, MinY, MinZ);
+	glVertex3f(MaxX, MaxY, MinZ);
+	glEnable(GL_LIGHTING);
 
-		glEnd();
-	}
-	
+	glEnd();
 }
 
-void GameObject::DrawBoundingBoxOBB(bool active)
+void GameObject::DrawBoundingBoxOBB()
 {
-	if (active)
-	{
-		float MinX = obb.MinX();
-		float MinY = obb.MinY();
-		float MinZ = obb.MinZ();
-		float MaxX = obb.MaxX();
-		float MaxY = obb.MaxY();
-		float MaxZ = obb.MaxZ();
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	if (mesh == nullptr)
+		return;
+	OBB obb = mesh->GetOBB();
+	math::float3 points[8];
+	obb.GetCornerPoints(points);
 
-		glColor3f(0.f, 0.f, 1.f);
-		glDisable(GL_LIGHTING);
-		glBegin(GL_LINES);
+	glColor3f(0.f, 0.f, 1.f);
+	glDisable(GL_LIGHTING);
+	glBegin(GL_LINES);
 
-		glVertex3f(MinX, MinY, MinZ);
-		glVertex3f(MaxX, MinY, MinZ);
+	glVertex3fv(points[0].ptr());
+	glVertex3fv(points[1].ptr());
 
-		glVertex3f(MinX, MinY, MinZ);
-		glVertex3f(MinX, MinY, MaxZ);
+	glVertex3fv(points[0].ptr());
+	glVertex3fv(points[4].ptr());
 
-		glVertex3f(MinX, MinY, MinZ);
-		glVertex3f(MinX, MaxY, MinZ);
+	glVertex3fv(points[0].ptr());
+	glVertex3fv(points[2].ptr());
 
-		glVertex3f(MaxX, MinY, MaxZ);
-		glVertex3f(MaxX, MinY, MinZ);
+	glVertex3fv(points[1].ptr());
+	glVertex3fv(points[5].ptr());
 
-		glVertex3f(MaxX, MinY, MaxZ);
-		glVertex3f(MinX, MinY, MaxZ);
+	glVertex3fv(points[1].ptr());
+	glVertex3fv(points[3].ptr());
 
+	glVertex3fv(points[2].ptr());
+	glVertex3fv(points[3].ptr());
 
-		glVertex3f(MaxX, MaxY, MaxZ);
-		glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3fv(points[2].ptr());
+	glVertex3fv(points[6].ptr());
 
-		glVertex3f(MaxX, MaxY, MaxZ);
-		glVertex3f(MinX, MaxY, MaxZ);
+	glVertex3fv(points[3].ptr());
+	glVertex3fv(points[7].ptr());
 
-		glVertex3f(MaxX, MaxY, MaxZ);
-		glVertex3f(MaxX, MaxY, MinZ);
+	glVertex3fv(points[4].ptr());
+	glVertex3fv(points[5].ptr());
 
-		glVertex3f(MinX, MaxY, MinZ);
-		glVertex3f(MaxX, MaxY, MinZ);
+	glVertex3fv(points[4].ptr());
+	glVertex3fv(points[6].ptr());
 
-		glVertex3f(MinX, MaxY, MinZ);
-		glVertex3f(MinX, MaxY, MaxZ);
+	glVertex3fv(points[5].ptr());
+	glVertex3fv(points[7].ptr());
 
-		glVertex3f(MinX, MinY, MaxZ);
-		glVertex3f(MinX, MaxY, MaxZ);
+	glVertex3fv(points[6].ptr());
+	glVertex3fv(points[7].ptr());
 
-		glVertex3f(MaxX, MinY, MinZ);
-		glVertex3f(MaxX, MaxY, MinZ);
-		glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 
-		glEnd();
-	}
-	
+	glEnd();
 }
+// --------------------------------------------------------------------------------------------------------------------------------
 
 Component * GameObject::CreateComponent(const ComponentType & type)
 {
@@ -308,24 +309,37 @@ bool GameObject::HasChild(GameObject * child)
 	return ret;
 }
 
-void GameObject::SetAABB(AABB & bbox)
+bool GameObject::Save(nlohmann::json & node)
 {
-	aabb = bbox;
-}
+	bool ret = true;
 
-AABB GameObject::GetAABB() const
-{
-	return aabb;
-}
+	nlohmann::json object;
 
-void GameObject::SetOBB(AABB & bbox)
-{
-	obb = bbox;
-}
+	object["active"] = active;
+	object["UID"] = UID;
+	object["name"] = name;
+	GetComponent(ComponentType::TRANSFORM)->Save(object);
 
-AABB GameObject::GetOBB() const
-{
-	return obb;
+	nlohmann::json component;
+	for (auto i = components.begin(); i != components.end(); ++i) {
+		if ((*i)->GetType() != ComponentType::TRANSFORM) {
+			nlohmann::json comp;
+			comp["active"] = (*i)->IsActive();
+			comp["type"] = (int)(*i)->GetType();
+			(*i)->Save(comp);
+			component.push_back(comp);
+		}
+	}
+	object["Components"] = { component };
+
+	object["Children"] = {};
+	for (auto i = children.begin(); i != children.end(); ++i) {
+		(*i)->Save(object["Children"]);
+	}
+
+	node.push_back(object);
+
+	return ret;
 }
 
 

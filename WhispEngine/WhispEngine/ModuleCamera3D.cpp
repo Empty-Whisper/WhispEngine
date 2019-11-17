@@ -216,7 +216,7 @@ void ModuleCamera3D::FocusObject(vec3 newPos)
 		AABB aabb = AABB(-float3::one, float3::one);
 
 		if (sel != nullptr)
-			aabb = sel->GetAABB();
+			aabb = ((ComponentMesh*)sel->GetComponent(ComponentType::MESH))->GetAABB();
 		
 		actual_camera_position = Position;
 		float3 center = aabb.CenterPoint();
@@ -283,7 +283,7 @@ void ModuleCamera3D::MoveCameraOffsetByMouse(vec3 newPos, float speed)
 {
 	GameObject* sel = App->object_manager->GetSelected();
 	if (sel != nullptr) {
-		float3 center = sel->GetAABB().CenterPoint(); //Get GameObject selected position
+		float3 center = ((ComponentMesh*)sel->GetComponent(ComponentType::MESH))->GetAABB().CenterPoint(); //Get GameObject selected position
 		Reference = vec3(center.x, center.y, center.z);
 	}
 	else
@@ -458,16 +458,6 @@ void Camera::DrawInsideFrustum()
 		//TODO: Move Frustrum Position when game object is moved
 		//TODO: Find Bug Bbox static and duplicated in da house
 		//TODO: DrawObject if is inside
-
-		if ((*go)->GetAABB().IsFinite())
-		{
-			if (BboxIntersectsFrustum((*go)->GetAABB()))
-				(*go)->DrawBoundingBoxAABB(true);
-			
-			else
-				(*go)->DrawBoundingBoxAABB(false);
-			
-		}
 		
 	}
 }
