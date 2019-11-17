@@ -394,6 +394,11 @@ void Camera::GetAllCorners(float3 * corners)
 	frustum.GetCornerPoints(corners);
 }
 
+const float3 Camera::GetPosition()
+{
+	return frustum.pos;
+}
+
 void Camera::SetNearZ(const float &zNear)
 {
 	frustum.nearPlaneDistance = zNear;
@@ -419,6 +424,22 @@ void Camera::SetAspectRatio(const float &ratio)
 	if (frustum.horizontalFov > 0 && frustum.verticalFov > 0)
 		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
 }
+
+void Camera::SetTransformPosition(const float3 &position)
+{
+	frustum.pos = position;
+}
+
+void Camera::SetVectorDirectionFront(const float3 &pos)
+{
+	frustum.front = pos.Normalized();
+}
+
+void Camera::SetVectorDirectionUp(const float3 &pos)
+{
+	frustum.up = pos.Normalized();
+}
+
 
 const float Camera::GetNearZ() const
 {
@@ -462,13 +483,11 @@ void Camera::DrawInsideFrustum()
 		if ((*go)->GetAABB().IsFinite())
 		{
 			if (BboxIntersectsFrustum((*go)->GetAABB()))
-				(*go)->DrawBoundingBoxAABB(true);
-			
+				(*go)->DrawBoundingBoxAABB(true);			
 			else
 				(*go)->DrawBoundingBoxAABB(false);
 			
-		}
-		
+		}		
 	}
 }
 

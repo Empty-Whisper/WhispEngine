@@ -21,11 +21,17 @@ public:
 	const float4x4 GetProjectionMatrix() const;
 	void GetAllCorners(float3* corners);
 
+	const float3 GetPosition();
+
 	//Setters
-	void SetNearZ(const float& set);
-	void SetFarZ(const float& set);
-	void SetFOV(const float& set);
-	void SetAspectRatio(const float& set);
+	void SetNearZ(const float &zNear);
+	void SetFarZ(const float &zFar);
+	void SetFOV(const float &fov);
+	void SetAspectRatio(const float &ratio);
+
+	void SetTransformPosition(const float3 &pos);
+	void SetVectorDirectionFront(const float3 &pos);
+	void SetVectorDirectionUp(const float3 &pos);
 
 	//Culling
 	void DrawInsideFrustum();

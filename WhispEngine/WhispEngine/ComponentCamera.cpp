@@ -1,6 +1,7 @@
 #include "ComponentCamera.h"
 #include "GameObject.h"
 #include "MathGeoLib/include/Math/float3.h"
+#include "ComponentTransform.h"
 #include "Application.h"
 
 
@@ -16,16 +17,17 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::Update()
 {
-	//camera->SetPosition(App->object_manager->GetSelected()->/*GetOwner()->transform->GetLocalPosition()*/);
-	//camera->SetZDir(GetOwner()->transform->GetGlobalTransform().WorldZ());
-	//camera->SetYDir(GetOwner()->transform->GetGlobalTransform().WorldY());
-
 	float3 corners[8];
 	camera->GetAllCorners(corners);
+
+	//Update Component Transform
+	camera->SetTransformPosition(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetPosition());
+	camera->SetVectorDirectionFront(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().WorldZ());
+	camera->SetVectorDirectionUp(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().WorldY());
+	
+	//Debug Drawing
 	DrawFrustum();
 
-	
-	
 }
 
 void ComponentCamera::OnInspector()
