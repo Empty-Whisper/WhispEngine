@@ -458,16 +458,6 @@ void Camera::DrawInsideFrustum()
 		//TODO: Move Frustrum Position when game object is moved
 		//TODO: Find Bug Bbox static and duplicated in da house
 		//TODO: DrawObject if is inside
-
-		if ((*go)->GetAABB().IsFinite())
-		{
-			if (BboxIntersectsFrustum((*go)->GetAABB()))
-				(*go)->DrawBoundingBoxAABB(true);
-			
-			else
-				(*go)->DrawBoundingBoxAABB(false);
-			
-		}
 		
 	}
 }
