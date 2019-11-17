@@ -214,7 +214,7 @@ void ComponentMesh::OnInspector()
 			ImGui::Checkbox("Vertex Normals", &view_vertex_normals);
 
 			ImGui::Separator();
-
+			
 			ImGui::Checkbox("Bounding Box", &object->see_bounding_box);
 		}
 		else {

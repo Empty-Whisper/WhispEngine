@@ -6,6 +6,8 @@
 
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)
 {
+	camera = App->camera->CreateCamera();
+
 }
 
 ComponentCamera::~ComponentCamera()
@@ -14,9 +16,15 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::Update()
 {
+	//camera->SetPosition(App->object_manager->GetSelected()->/*GetOwner()->transform->GetLocalPosition()*/);
+	//camera->SetZDir(GetOwner()->transform->GetGlobalTransform().WorldZ());
+	//camera->SetYDir(GetOwner()->transform->GetGlobalTransform().WorldY());
+
+	float3 corners[8];
+	camera->GetAllCorners(corners);
 	DrawFrustum();
-	CalculateZNear(f_depth);
-	CalculateZFar(f_initial_z);
+
+	
 	
 }
 
@@ -26,84 +34,81 @@ void ComponentCamera::OnInspector()
 	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen)) {
 
-		ImGui::SliderFloat("Field of View (FOV)", (float*)&f_fov, 0, 3);
-		ImGui::SliderFloat("zNear", (float*)&f_depth, 1, 50);
-		ImGui::SliderFloat("zFar", (float*)&f_initial_z, 1, 50);
+		float fov = camera->GetVerticalFOV();
+		float zNear = camera->GetNearZ();
+		float zFar = camera->GetFarZ();
+
+		if (ImGui::DragFloat("Field of View (FOV)", (float*)&fov, 0.1f, 0.1f, 179))
+			camera->SetFOV(fov);
+
+		if (ImGui::DragFloat("zNear", (float*)&zNear, 0.1f, 1, zFar))
+			camera->SetNearZ(zNear);
+
+		if (ImGui::DragFloat("zFar", (float*)&zFar, 0.1f, zNear, 1000))
+			camera->SetFarZ(zFar);
+
+		if(ImGui::Checkbox("Main Camera", &camera->main_camera))
+			App->camera->SetCurrentCamera(camera);
 	}
 }
 
 void ComponentCamera::DrawFrustum()
 {
-	zFar.up_right = { f_center.x + zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z };
-	zFar.up_left = { f_center.x - zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z };
-	zFar.down_right = { f_center.x + zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z };
-	zFar.down_left = { f_center.x - zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z };
+	float3 vertices[8];
+	camera->GetFrustum().GetCornerPoints(vertices);
 
-	zNear.up_right = { f_center.x + zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
-	zNear.up_left = { f_center.x - zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
-	zNear.down_right = { f_center.x + zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
-	zNear.down_left = { f_center.x - zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
+	GLint previous[2];
+	
+	
+	glGetIntegerv(GL_POLYGON_MODE, previous);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	
 
-	glDisable(GL_LIGHTING);
-	glColor3f(0.f, 0.f, 1.f);
+	glColor3f(0, 0, 255);
 
-	glBegin(GL_LINES);
+	glLineWidth(3.f);
 
-	//zFar
-	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
-	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
+	glBegin(GL_QUADS);
 
-	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
-	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
+	glVertex3fv((GLfloat*)&vertices[1]);
+	glVertex3fv((GLfloat*)&vertices[5]);
+	glVertex3fv((GLfloat*)&vertices[7]);
+	glVertex3fv((GLfloat*)&vertices[3]);
 
-	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
-	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
+	glVertex3fv((GLfloat*)&vertices[4]);
+	glVertex3fv((GLfloat*)&vertices[0]);
+	glVertex3fv((GLfloat*)&vertices[2]);
+	glVertex3fv((GLfloat*)&vertices[6]);
 
-	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
-	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
+	glVertex3fv((GLfloat*)&vertices[5]);
+	glVertex3fv((GLfloat*)&vertices[4]);
+	glVertex3fv((GLfloat*)&vertices[6]);
+	glVertex3fv((GLfloat*)&vertices[7]);
 
-	//zNear
-	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
-	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
+	glVertex3fv((GLfloat*)&vertices[0]);
+	glVertex3fv((GLfloat*)&vertices[1]);
+	glVertex3fv((GLfloat*)&vertices[3]);
+	glVertex3fv((GLfloat*)&vertices[2]);
 
-	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
-	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
+	glVertex3fv((GLfloat*)&vertices[3]);
+	glVertex3fv((GLfloat*)&vertices[7]);
+	glVertex3fv((GLfloat*)&vertices[6]);
+	glVertex3fv((GLfloat*)&vertices[2]);
 
-	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
-	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
-
-	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
-	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
-
-	//zConection
-	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
-	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
-
-	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
-	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
-
-	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
-	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
-
-	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
-	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
-
-
-	glEnable(GL_LIGHTING);
+	glVertex3fv((GLfloat*)&vertices[0]);
+	glVertex3fv((GLfloat*)&vertices[4]);
+	glVertex3fv((GLfloat*)&vertices[5]);
+	glVertex3fv((GLfloat*)&vertices[1]);
 
 	glEnd();
-}
 
-void ComponentCamera::CalculateZNear(const float f_near)
-{
-	zNear.height = 2 * tan(f_fov / 2) * f_near;
-	zNear.width = zNear.height * 1;
-}
+	
+	glPolygonMode(GL_FRONT_AND_BACK, previous[0]);
 
-void ComponentCamera::CalculateZFar(const float f_far)
-{
-	zFar.height = 2 * tan(f_fov / 2) * f_far;
-	zFar.width = zFar.height * 1;
+	glLineWidth(1.0f);
+
+	glColor3f(255, 255, 255);
+
 }
 
 void ComponentCamera::Save(nlohmann::json & node)

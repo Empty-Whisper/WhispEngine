@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "JSON/json.hpp"
+#include "MathGeoLib/include/Geometry/AABB.h"
 
 class GameObject;
 

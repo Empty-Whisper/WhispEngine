@@ -7,6 +7,8 @@
 #include "PanelScene.h"
 #include "ComponentTransform.h"
 #include "Brofiler/Brofiler.h"
+
+#include "MathGeoLib/include/Geometry/AABB.h"
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Camera3D");
@@ -19,6 +21,9 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 
 	Position = vec3(0.0f, 0.0f, 0.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
+
+	editor_camera = CreateCamera();
+	current_camera = editor_camera;
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -38,16 +43,6 @@ bool ModuleCamera3D::Start()
 	slowness_middle_mouse = 50;  //  TODO: Save and Load this data in JSON
 	slowness_zoom_in_out = 50;  //  TODO: Save and Load this data in JSON
 
-	f_initial_z = 0;
-	f_depth = 6;
-	f_fov = 0.5f;
-	f_aspect = 1;
-	
-	zFar.width = 10;
-	zFar.height = 10;
-	zNear.width = 5;
-	zNear.height = 5;
-
 	return ret;
 }
 
@@ -65,11 +60,10 @@ update_status ModuleCamera3D::Update()
 	BROFILER_CATEGORY("Camera", Profiler::Color::Coral);
 
 	//Frustum
-	DrawFrustum();
-	CalculateZNear(f_depth);
-	CalculateZFar(f_initial_z);
-	frustum.ProjectionMatrix();
-	frustum.ViewMatrix();
+	
+
+
+
 	//Camera
 	vec3 newPos(0, 0, 0);
 	float speed = movement_speed * App->GetDeltaTime();
@@ -147,10 +141,10 @@ update_status ModuleCamera3D::Update()
 			last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 			math::float2 mouse_vec = last_mouse_position - initial_mouse_position;
 
-			if (App->input->GetMouseXMotion() > 0) newPos -= X * mouse_vec.x / slowness_middle_mouse;
-			if (App->input->GetMouseXMotion() < 0) newPos -= X * mouse_vec.x / slowness_middle_mouse;
-			if (App->input->GetMouseYMotion() < 0) newPos += Y * mouse_vec.y / slowness_middle_mouse;
-			if (App->input->GetMouseYMotion() > 0) newPos += Y * mouse_vec.y / slowness_middle_mouse;
+			if (App->input->GetMouseXMotion() > 0) newPos -= X * mouse_vec.x / (float)slowness_middle_mouse;
+			if (App->input->GetMouseXMotion() < 0) newPos -= X * mouse_vec.x / (float)slowness_middle_mouse;
+			if (App->input->GetMouseYMotion() < 0) newPos += Y * mouse_vec.y / (float)slowness_middle_mouse;
+			if (App->input->GetMouseYMotion() > 0) newPos += Y * mouse_vec.y / (float)slowness_middle_mouse;
 
 			Position += newPos;
 			Reference += newPos;
@@ -244,7 +238,7 @@ void ModuleCamera3D::FocusObject(vec3 newPos)
 
 		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
 		if (component_mesh == nullptr)
-			object_length = offset_reference;
+			object_length = (float)offset_reference;
 
 		
 
@@ -308,68 +302,25 @@ float* ModuleCamera3D::GetViewMatrix()
 	return &ViewMatrix;
 }
 
-
-void ModuleCamera3D::DrawFrustum()
+Camera * ModuleCamera3D::CreateCamera()
 {
-	
-	zFar.up_right = { f_center.x + zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
-	zFar.up_left = { f_center.x - zFar.width*0.5f, f_center.y + zFar.height*0.5f, f_center.z + f_initial_z};
-	zFar.down_right = { f_center.x + zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z};
-	zFar.down_left = { f_center.x - zFar.width*0.5f, f_center.y - zFar.height*0.5f, f_center.z + f_initial_z};
+	Camera* cam = nullptr;
 
-	zNear.up_right = { f_center.x + zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
-	zNear.up_left = { f_center.x - zNear.width*0.5f, f_center.y + zNear.height*0.5f, f_center.z + f_depth };
-	zNear.down_right = { f_center.x + zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
-	zNear.down_left = { f_center.x - zNear.width*0.5f, f_center.y - zNear.height*0.5f, f_center.z + f_depth };
+	cam = new Camera;
+	cameras.push_back(cam);
 
-	glDisable(GL_LIGHTING);
-	glColor3f(0.f, 0.f, 1.f);
+	return cam;
+}
 
-	glBegin(GL_LINES);
+Camera * ModuleCamera3D::GetCurrentCamera()
+{
+	return current_camera;
+}
 
-	//zFar
-	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
-	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
-
-	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
-	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
-
-	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
-	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
-
-	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
-	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
-
-	//zNear
-	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
-	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
-
-	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
-	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
-
-	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
-	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
-
-	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
-	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
-
-	//zConection
-	glVertex3f(zFar.down_left.x, zFar.down_left.y, zFar.down_left.z);
-	glVertex3f(zNear.down_left.x, zNear.down_left.y, zNear.down_left.z);
-
-	glVertex3f(zFar.up_left.x, zFar.up_left.y, zFar.up_left.z);
-	glVertex3f(zNear.up_left.x, zNear.up_left.y, zNear.up_left.z);
-
-	glVertex3f(zFar.up_right.x, zFar.up_right.y, zFar.up_right.z);
-	glVertex3f(zNear.up_right.x, zNear.up_right.y, zNear.up_right.z);
-
-	glVertex3f(zFar.down_right.x, zFar.down_right.y, zFar.down_right.z);
-	glVertex3f(zNear.down_right.x, zNear.down_right.y, zNear.down_right.z);
-
-
-	glEnable(GL_LIGHTING);
-
-	glEnd();
+void ModuleCamera3D::SetCurrentCamera(Camera * camera)
+{
+	if (camera != nullptr)
+		current_camera = camera;
 }
 
 // -----------------------------------------------------------------
@@ -422,19 +373,130 @@ const vec3 ModuleCamera3D::GetTransformPosition()
 	return vec3(obj_pos.x,obj_pos.y,obj_pos.z); //TODO set all vec3 to math::float3
 }
 
-void ModuleCamera3D::CalculateZNear(const float f_near)
+
+
+Camera::Camera()
 {
-	zNear.height = 2 * tan(f_fov / 2) * f_near;
-	zNear.width = zNear.height * 1;
-}
-void ModuleCamera3D::CalculateZFar(const float f_far)
-{
-	zFar.height = 2 * tan(f_fov / 2) * f_far;
-	zFar.width = zFar.height * 1;
+	frustum.type = FrustumType::PerspectiveFrustum;
+
+	frustum.pos = { 0, 1, -1 };
+	frustum.front = float3::unitZ;
+	frustum.up = float3::unitY;
+	
+	SetNearZ(5.f);
+	SetFarZ(15.f);
+	SetAspectRatio(1.f);
+	SetFOV(45.f);
 }
 
-void ModuleCamera3D::CalculateAspect(const float aspect)
+void Camera::GetAllCorners(float3 * corners)
 {
-	zFar.width = aspect * zFar.height;
-	zNear.width = aspect * zNear.height;
+	frustum.GetCornerPoints(corners);
+}
+
+void Camera::SetNearZ(const float &zNear)
+{
+	frustum.nearPlaneDistance = zNear;
+}
+
+void Camera::SetFarZ(const float &zFar)
+{
+	frustum.farPlaneDistance = zFar;
+}
+
+void Camera::SetFOV(const float &fov)
+{
+	frustum.verticalFov = DEGTORAD * fov;
+	float _verticalFov = tanf(frustum.verticalFov/2.f);
+
+	frustum.horizontalFov = 2.f * atanf(_verticalFov * aspect_ratio);
+}
+
+void Camera::SetAspectRatio(const float &ratio)
+{
+	aspect_ratio = ratio;
+
+	if (frustum.horizontalFov > 0 && frustum.verticalFov > 0)
+		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
+}
+
+const float Camera::GetNearZ() const
+{
+	return frustum.nearPlaneDistance;
+}
+
+const float Camera::GetFarZ() const
+{
+	return frustum.farPlaneDistance;
+}
+
+const float Camera::GetVerticalFOV() const
+{
+	return frustum.verticalFov * RADTODEG;
+}
+
+const float4x4 Camera::GetViewMatrix() const
+{
+	float4x4 view = frustum.ViewMatrix();
+	return view.Transposed();
+}
+
+const float4x4 Camera::GetProjectionMatrix() const
+{
+	return frustum.ProjectionMatrix().Transposed();
+}
+
+
+void Camera::DrawInsideFrustum()
+{
+	//Keep all game objects in the scene
+	std::vector<GameObject*> game_objects;
+	App->object_manager->GetAllGameObjects(App->object_manager->root, game_objects);
+
+	for (std::vector<GameObject*>::iterator go = game_objects.begin(); go != game_objects.end(); ++go)
+	{
+		//TODO: Move Frustrum Position when game object is moved
+		//TODO: Find Bug Bbox static and duplicated in da house
+		//TODO: DrawObject if is inside
+
+		if ((*go)->GetAABB().IsFinite())
+		{
+			if (BboxIntersectsFrustum((*go)->GetAABB()))
+				(*go)->DrawBoundingBoxAABB(true);
+			
+			else
+				(*go)->DrawBoundingBoxAABB(false);
+			
+		}
+		
+	}
+}
+
+bool Camera::BboxIntersectsFrustum(const AABB & box)
+{
+	static int planes = 6;
+	static int vertex = 8;
+
+	float3 pos_vertex[8];
+	
+	box.GetCornerPoints(pos_vertex);
+
+	for (auto i = 0; i < planes; ++i)
+	{
+		int vertex_inside = vertex;
+
+		for (auto j = 0; j < vertex; ++j)
+			if (App->camera->GetCurrentCamera()->frustum.GetPlane(i).IsOnPositiveSide(pos_vertex[j]))
+				vertex_inside--;		
+
+		if (vertex_inside < 1)
+			return false;
+	}
+
+	return true;
+}
+
+Frustum Camera::GetFrustum()
+{
+	return frustum;
 }

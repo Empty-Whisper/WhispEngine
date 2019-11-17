@@ -73,8 +73,6 @@ void GameObject::DrawBoundingBoxAABB()
 
 	glColor3f(0.f, 1.f, 0.f);
 
-	
-
 	glVertex3f(MinX, MinY, MinZ);
 	glVertex3f(MaxX, MinY, MinZ);
 

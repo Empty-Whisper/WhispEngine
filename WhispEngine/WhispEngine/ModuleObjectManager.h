@@ -52,7 +52,7 @@ public:
 	void DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
-
+	void GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector);
 	GameObject*	GetSelected() const;
 	void		SetSelected(GameObject* select);
 
@@ -91,8 +91,11 @@ public:
 private:
 	const char* PrimitivesToString(const Primitives prim);
 
+public:
+	GameObject* root = nullptr; //TODO: Change this to private
+
 private:
-	GameObject* root = nullptr;
+	//GameObject* root = nullptr;
 
 	GameObject* selected = nullptr;
 
