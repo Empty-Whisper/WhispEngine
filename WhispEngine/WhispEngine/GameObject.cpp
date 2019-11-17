@@ -47,120 +47,125 @@ void GameObject::Update()
 	}
 
 	if (see_bounding_box) {
-		DrawBoundingBoxAABB();
-		DrawBoundingBoxOBB();
+		DrawBoundingBoxAABB(true);
+		DrawBoundingBoxOBB(true);
 	}
 }
 
-void GameObject::DrawBoundingBoxAABB()
+void GameObject::DrawBoundingBoxAABB(bool active)
 {
-	float MinX = aabb.MinX();
-	float MinY = aabb.MinY();
-	float MinZ = aabb.MinZ();
-	float MaxX = aabb.MaxX();
-	float MaxY = aabb.MaxY();
-	float MaxZ = aabb.MaxZ();
-	glDisable(GL_LIGHTING);
-	glBegin(GL_LINES);
+	if (active)
+	{
+		float MinX = aabb.MinX();
+		float MinY = aabb.MinY();
+		float MinZ = aabb.MinZ();
+		float MaxX = aabb.MaxX();
+		float MaxY = aabb.MaxY();
+		float MaxZ = aabb.MaxZ();
+		glDisable(GL_LIGHTING);
+		glBegin(GL_LINES);
 
-	glColor3f(0.f, 1.f, 0.f);
+		glColor3f(0.f, 1.f, 0.f);
 
+		glVertex3f(MinX, MinY, MinZ);
+		glVertex3f(MaxX, MinY, MinZ);
+
+		glVertex3f(MinX, MinY, MinZ);
+		glVertex3f(MinX, MinY, MaxZ);
+
+		glVertex3f(MinX, MinY, MinZ);
+		glVertex3f(MinX, MaxY, MinZ);
+
+		glVertex3f(MaxX, MinY, MaxZ);
+		glVertex3f(MaxX, MinY, MinZ);
+
+		glVertex3f(MaxX, MinY, MaxZ);
+		glVertex3f(MinX, MinY, MaxZ);
+
+
+		glVertex3f(MaxX, MaxY, MaxZ);
+		glVertex3f(MaxX, MinY, MaxZ);
+
+		glVertex3f(MaxX, MaxY, MaxZ);
+		glVertex3f(MinX, MaxY, MaxZ);
+
+		glVertex3f(MaxX, MaxY, MaxZ);
+		glVertex3f(MaxX, MaxY, MinZ);
+
+		glVertex3f(MinX, MaxY, MinZ);
+		glVertex3f(MaxX, MaxY, MinZ);
+
+		glVertex3f(MinX, MaxY, MinZ);
+		glVertex3f(MinX, MaxY, MaxZ);
+
+		glVertex3f(MinX, MinY, MaxZ);
+		glVertex3f(MinX, MaxY, MaxZ);
+
+		glVertex3f(MaxX, MinY, MinZ);
+		glVertex3f(MaxX, MaxY, MinZ);
+		glEnable(GL_LIGHTING);
+
+		glEnd();
+	}
 	
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MaxX, MinY, MinZ);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MinY, MaxZ);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MaxY, MinZ);
-
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MaxX, MinY, MinZ);
-
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MinX, MinY, MaxZ);
-
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MinY, MaxZ);
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MinX, MinY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MaxX, MinY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-	glEnable(GL_LIGHTING);
-
-	glEnd();
 }
 
-void GameObject::DrawBoundingBoxOBB()
+void GameObject::DrawBoundingBoxOBB(bool active)
 {
+	if (active)
+	{
+		float MinX = obb.MinX();
+		float MinY = obb.MinY();
+		float MinZ = obb.MinZ();
+		float MaxX = obb.MaxX();
+		float MaxY = obb.MaxY();
+		float MaxZ = obb.MaxZ();
+
+		glColor3f(0.f, 0.f, 1.f);
+		glDisable(GL_LIGHTING);
+		glBegin(GL_LINES);
+
+		glVertex3f(MinX, MinY, MinZ);
+		glVertex3f(MaxX, MinY, MinZ);
+
+		glVertex3f(MinX, MinY, MinZ);
+		glVertex3f(MinX, MinY, MaxZ);
+
+		glVertex3f(MinX, MinY, MinZ);
+		glVertex3f(MinX, MaxY, MinZ);
+
+		glVertex3f(MaxX, MinY, MaxZ);
+		glVertex3f(MaxX, MinY, MinZ);
+
+		glVertex3f(MaxX, MinY, MaxZ);
+		glVertex3f(MinX, MinY, MaxZ);
+
+
+		glVertex3f(MaxX, MaxY, MaxZ);
+		glVertex3f(MaxX, MinY, MaxZ);
+
+		glVertex3f(MaxX, MaxY, MaxZ);
+		glVertex3f(MinX, MaxY, MaxZ);
+
+		glVertex3f(MaxX, MaxY, MaxZ);
+		glVertex3f(MaxX, MaxY, MinZ);
+
+		glVertex3f(MinX, MaxY, MinZ);
+		glVertex3f(MaxX, MaxY, MinZ);
+
+		glVertex3f(MinX, MaxY, MinZ);
+		glVertex3f(MinX, MaxY, MaxZ);
+
+		glVertex3f(MinX, MinY, MaxZ);
+		glVertex3f(MinX, MaxY, MaxZ);
+
+		glVertex3f(MaxX, MinY, MinZ);
+		glVertex3f(MaxX, MaxY, MinZ);
+		glEnable(GL_LIGHTING);
+
+		glEnd();
+	}
 	
-	float MinX = obb.MinX();
-	float MinY = obb.MinY();
-	float MinZ = obb.MinZ();
-	float MaxX = obb.MaxX();
-	float MaxY = obb.MaxY();
-	float MaxZ = obb.MaxZ();
-
-	glColor3f(0.f, 0.f, 1.f);
-	glDisable(GL_LIGHTING);
-	glBegin(GL_LINES);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MaxX, MinY, MinZ);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MinY, MaxZ);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MaxY, MinZ);
-
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MaxX, MinY, MinZ);
-
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MinX, MinY, MaxZ);
-
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MinY, MaxZ);
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MinX, MinY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MaxX, MinY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-	glEnable(GL_LIGHTING);
-
-	glEnd();
 }
 
 Component * GameObject::CreateComponent(const ComponentType & type)

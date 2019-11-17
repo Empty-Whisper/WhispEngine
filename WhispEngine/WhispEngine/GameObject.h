@@ -22,8 +22,8 @@ public:
 
 public:
 	void Update();
-	void DrawBoundingBoxAABB();
-	void DrawBoundingBoxOBB();
+	void DrawBoundingBoxAABB(bool active);
+	void DrawBoundingBoxOBB(bool active);
 	Component* CreateComponent(const ComponentType &type);
 	void	   DeleteComponent(Component* comp);
 	Component* GetComponent(const ComponentType &type);
@@ -48,9 +48,6 @@ public:
 	void SetOBB(AABB& bbox);
 	AABB GetOBB() const;
 
-	void GenerateOBB(OBB obb, GameObject* &obj);
-
-
 public:
 	std::vector<GameObject*> children;
 	std::vector<Component*> components;
@@ -63,6 +60,7 @@ private:
 	ObjectSelected obj_selected = ObjectSelected::NONE;
 	std::vector<Component*> components_to_delete;
 
+	AABB local_box = AABB(float3::zero, float3::zero);
 	AABB aabb = AABB(float3::zero, float3::zero);
 	AABB obb = AABB(float3::zero, float3::zero);
 	bool see_bounding_box = false;

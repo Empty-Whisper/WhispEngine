@@ -2,6 +2,7 @@
 #define __COMPONENT_H__
 
 #include "Globals.h"
+#include "MathGeoLib/include/Geometry/AABB.h"
 
 #pragma once
 

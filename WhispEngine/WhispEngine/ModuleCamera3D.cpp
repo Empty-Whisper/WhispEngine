@@ -7,6 +7,8 @@
 #include "PanelScene.h"
 #include "ComponentTransform.h"
 #include "Brofiler/Brofiler.h"
+
+#include "MathGeoLib/include/Geometry/AABB.h"
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Camera3D");
@@ -19,6 +21,9 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 
 	Position = vec3(0.0f, 0.0f, 0.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
+
+	editor_camera = CreateCamera();
+	current_camera = editor_camera;
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -307,9 +312,15 @@ Camera * ModuleCamera3D::CreateCamera()
 	return cam;
 }
 
-Camera * ModuleCamera3D::GetGameCamera()
+Camera * ModuleCamera3D::GetCurrentCamera()
 {
-	return game_camera;
+	return current_camera;
+}
+
+void ModuleCamera3D::SetCurrentCamera(Camera * camera)
+{
+	if (camera != nullptr)
+		current_camera = camera;
 }
 
 // -----------------------------------------------------------------
@@ -368,9 +379,9 @@ Camera::Camera()
 {
 	frustum.type = FrustumType::PerspectiveFrustum;
 
+	frustum.pos = { 0, 1, -1 };
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
-	frustum.pos = { 0, 1, -1 };
 	
 	SetNearZ(5.f);
 	SetFarZ(15.f);
@@ -396,9 +407,9 @@ void Camera::SetFarZ(const float &zFar)
 void Camera::SetFOV(const float &fov)
 {
 	frustum.verticalFov = DEGTORAD * fov;
-	float _verticalFov = tan(frustum.verticalFov/2.f);
+	float _verticalFov = tanf(frustum.verticalFov/2.f);
 
-	frustum.horizontalFov = atanf(2.f * aspect_ratio *_verticalFov);
+	frustum.horizontalFov = 2.f * atanf(_verticalFov * aspect_ratio);
 }
 
 void Camera::SetAspectRatio(const float &ratio)
@@ -433,6 +444,56 @@ const float4x4 Camera::GetViewMatrix() const
 const float4x4 Camera::GetProjectionMatrix() const
 {
 	return frustum.ProjectionMatrix().Transposed();
+}
+
+
+void Camera::DrawInsideFrustum()
+{
+	//Keep all game objects in the scene
+	std::vector<GameObject*> game_objects;
+	App->object_manager->GetAllGameObjects(App->object_manager->root, game_objects);
+
+	for (std::vector<GameObject*>::iterator go = game_objects.begin(); go != game_objects.end(); ++go)
+	{
+		//TODO: Move Frustrum Position when game object is moved
+		//TODO: Find Bug Bbox static and duplicated in da house
+		//TODO: DrawObject if is inside
+
+		if ((*go)->GetAABB().IsFinite())
+		{
+			if (BboxIntersectsFrustum((*go)->GetAABB()))
+				(*go)->DrawBoundingBoxAABB(true);
+			
+			else
+				(*go)->DrawBoundingBoxAABB(false);
+			
+		}
+		
+	}
+}
+
+bool Camera::BboxIntersectsFrustum(const AABB & box)
+{
+	static int planes = 6;
+	static int vertex = 8;
+
+	float3 pos_vertex[8];
+	
+	box.GetCornerPoints(pos_vertex);
+
+	for (auto i = 0; i < planes; ++i)
+	{
+		int vertex_inside = vertex;
+
+		for (auto j = 0; j < vertex; ++j)
+			if (App->camera->GetCurrentCamera()->frustum.GetPlane(i).IsOnPositiveSide(pos_vertex[j]))
+				vertex_inside--;		
+
+		if (vertex_inside < 1)
+			return false;
+	}
+
+	return true;
 }
 
 Frustum Camera::GetFrustum()

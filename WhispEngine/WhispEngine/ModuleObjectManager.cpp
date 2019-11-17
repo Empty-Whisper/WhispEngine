@@ -24,14 +24,17 @@ bool ModuleObjectManager::Start()
 update_status ModuleObjectManager::Update()
 {
 	BROFILER_CATEGORY("GameObject Manager", Profiler::Color::MediumSpringGreen);
+
 	UpdateGameObject(root);
+
+	//Camera
+	App->camera->GetCurrentCamera()->DrawInsideFrustum();
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
-	
 	if (obj->IsActive()) {
 		
 		glPushMatrix();		
@@ -80,6 +83,20 @@ void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 GameObject * ModuleObjectManager::GetRoot() const
 {
 	return root;
+}
+void ModuleObjectManager::GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector)
+{
+
+	if (!obj->children.empty()) {
+
+		for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
+			vector.push_back(*i);
+
+			GetAllGameObjects(*i, vector);
+
+		}
+	}
+
 }
 
 GameObject * ModuleObjectManager::GetSelected() const

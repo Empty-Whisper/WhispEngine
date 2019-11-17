@@ -27,14 +27,17 @@ public:
 	void SetFOV(const float& set);
 	void SetAspectRatio(const float& set);
 
-	
+	//Culling
+	void DrawInsideFrustum();
+	bool BboxIntersectsFrustum(const AABB& box);
 
-
+public:
+	bool	frustum_culling = true;
+	bool	main_camera = false;
 private:
 	Frustum frustum;
 	float	aspect_ratio = 0.0f;
 	float   vertical_fov = 0.0f;
-	bool	frustum_culling = true;
 };
 
 class ModuleCamera3D : public Module
@@ -56,7 +59,8 @@ public:
 	float* GetViewMatrix();
 	
 	Camera* CreateCamera();
-	Camera* GetGameCamera();
+	Camera* GetCurrentCamera();
+	void SetCurrentCamera(Camera* camera);
 
 private:
 
@@ -66,6 +70,7 @@ private:
 	const vec3 GetTransformPosition();
 
 public:
+	
 	vec3 X, Y, Z, Position, Reference;
 
 	float sensiblity = 0.f;
@@ -77,8 +82,8 @@ public:
 	int slowness_zoom_in_out = 0;
 
 private:
-	Camera* game_camera = nullptr;
-	Camera* scene_camera = nullptr;
+	Camera* editor_camera = nullptr;
+	Camera* current_camera = nullptr;
 	std::vector<Camera*> cameras;
 
 
