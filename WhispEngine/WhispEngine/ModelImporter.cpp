@@ -125,8 +125,7 @@ void ModelImporter::CreateObjects(GameObject * container, const nlohmann::json &
 
 	if (data.value("meshId", 0) != 0) {
 		ComponentMesh* mesh = (ComponentMesh*)child->CreateComponent(ComponentType::MESH);
-		mesh->mesh = new Mesh_info();
-		mesh->mesh->component = mesh;
+		mesh->mesh = new Mesh_info(mesh);
 
 		App->importer->mesh->Load(data["meshId"], mesh->mesh);
 	}

@@ -54,8 +54,14 @@ void GameObject::Update()
 	}
 }
 
+// TODO: add all bounding boxes functions to mesh ---------------------------------------------------
 void GameObject::DrawBoundingBoxAABB()
 {
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	if (mesh == nullptr)
+		return;
+	AABB aabb = mesh->GetAABB();
+
 	float MinX = aabb.MinX();
 	float MinY = aabb.MinY();
 	float MinZ = aabb.MinZ();
@@ -112,58 +118,58 @@ void GameObject::DrawBoundingBoxAABB()
 
 void GameObject::DrawBoundingBoxOBB()
 {
-	
-	float MinX = obb.MinX();
-	float MinY = obb.MinY();
-	float MinZ = obb.MinZ();
-	float MaxX = obb.MaxX();
-	float MaxY = obb.MaxY();
-	float MaxZ = obb.MaxZ();
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	if (mesh == nullptr)
+		return;
+	OBB obb = mesh->GetOBB();
+	math::float3 points[8];
+	obb.GetCornerPoints(points);
 
 	glColor3f(0.f, 0.f, 1.f);
 	glDisable(GL_LIGHTING);
 	glBegin(GL_LINES);
 
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MaxX, MinY, MinZ);
+	glVertex3fv(points[0].ptr());
+	glVertex3fv(points[1].ptr());
 
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MinY, MaxZ);
+	glVertex3fv(points[0].ptr());
+	glVertex3fv(points[4].ptr());
 
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MaxY, MinZ);
+	glVertex3fv(points[0].ptr());
+	glVertex3fv(points[2].ptr());
 
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MaxX, MinY, MinZ);
+	glVertex3fv(points[1].ptr());
+	glVertex3fv(points[5].ptr());
 
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MinX, MinY, MaxZ);
+	glVertex3fv(points[1].ptr());
+	glVertex3fv(points[3].ptr());
 
+	glVertex3fv(points[2].ptr());
+	glVertex3fv(points[3].ptr());
 
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MinY, MaxZ);
+	glVertex3fv(points[2].ptr());
+	glVertex3fv(points[6].ptr());
 
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
+	glVertex3fv(points[3].ptr());
+	glVertex3fv(points[7].ptr());
 
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MaxY, MinZ);
+	glVertex3fv(points[4].ptr());
+	glVertex3fv(points[5].ptr());
 
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
+	glVertex3fv(points[4].ptr());
+	glVertex3fv(points[6].ptr());
 
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MinX, MaxY, MaxZ);
+	glVertex3fv(points[5].ptr());
+	glVertex3fv(points[7].ptr());
 
-	glVertex3f(MinX, MinY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
+	glVertex3fv(points[6].ptr());
+	glVertex3fv(points[7].ptr());
 
-	glVertex3f(MaxX, MinY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
 	glEnable(GL_LIGHTING);
 
 	glEnd();
 }
+// --------------------------------------------------------------------------------------------------------------------------------
 
 Component * GameObject::CreateComponent(const ComponentType & type)
 {
@@ -303,26 +309,6 @@ bool GameObject::HasChild(GameObject * child)
 			ret = (*it_child)->HasChild(child);
 	}
 	return ret;
-}
-
-void GameObject::SetAABB(AABB & bbox)
-{
-	aabb = bbox;
-}
-
-AABB GameObject::GetAABB() const
-{
-	return aabb;
-}
-
-void GameObject::SetOBB(AABB & bbox)
-{
-	obb = bbox;
-}
-
-AABB GameObject::GetOBB() const
-{
-	return obb;
 }
 
 bool GameObject::Save(nlohmann::json & node)

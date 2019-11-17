@@ -35,13 +35,9 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
 	
 	if (obj->IsActive()) {
-		
-		glPushMatrix();		
-		glMultMatrixf(((ComponentTransform*)obj->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());
 
 		obj->Update();
 
-		glPopMatrix();
 		if (!obj->children.empty()) {
 			for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 				UpdateGameObject(*i);
@@ -214,9 +210,9 @@ void ModuleObjectManager::AddTexture(Texture * tex)
 	textures.push_back(tex);
 }
 
-Mesh_info * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords)
+Mesh_info * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float * vertex, const uint & n_index, const uint * index, const float * normals, const float* texCoords, ComponentMesh* component)
 {
-	Mesh_info *mesh = new Mesh_info();
+	Mesh_info *mesh = new Mesh_info(component);
 
 	FillVertex(mesh, n_vertex, vertex);
 
@@ -232,9 +228,9 @@ Mesh_info * ModuleObjectManager::CreateMesh(const uint & n_vertex, const float *
 	return mesh;
 }
 
-Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
+Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh, ComponentMesh* component)
 {
-	Mesh_info *ret = new Mesh_info();
+	Mesh_info *ret = new Mesh_info(component);
 
 	FillVertex(ret, mesh->mNumVertices, (float*)mesh->mVertices);
 
@@ -251,17 +247,6 @@ Mesh_info * ModuleObjectManager::CreateMesh(const aiMesh * mesh)
 	if (mesh->HasTextureCoords(0)) {
 		FillTextureCoords(ret, (float*)mesh->mTextureCoords[0]);
 	}
-
-	// Generate AABB
-	ret->local_box.SetNegativeInfinity();
-	ret->local_box.Enclose((float3*)ret->vertex.data, ret->vertex.size);
-
-	ret->obb = ret->local_box;
-	
-
-	ret->aabb.SetNegativeInfinity();
-	ret->aabb.Enclose(ret->obb);
-
 
 	ret->SetGLBuffers();
 
@@ -361,7 +346,7 @@ void ModuleObjectManager::FillTextureCoords(Mesh_info * mesh, const float * text
 
 
 
-Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type)
+Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type, ComponentMesh* component)
 {
 	Object_data data = Object_data();
 	par_shapes_mesh* prim = nullptr;
@@ -404,7 +389,7 @@ Mesh_info * ModuleObjectManager::CreateMeshPrimitive(const Primitives & type)
 		break;
 	}
 
-	Mesh_info* mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	Mesh_info* mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords, component);
 	par_shapes_free_mesh(prim);
 
 	return mesh;
@@ -468,7 +453,7 @@ bool ModuleObjectManager::CreatePrimitive(const Primitives & type, const Object_
 	obj->SetName(PrimitivesToString(type));
 
 	ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
-	mesh->mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords);
+	mesh->mesh = CreateMesh(prim->npoints, prim->points, prim->ntriangles, prim->triangles, prim->normals, prim->tcoords, mesh);
 	
 	ComponentMaterial* mat = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
 	mat->SetFaceColor(data.face_color[0],data.face_color[1],data.face_color[2],1.f); 
@@ -503,7 +488,7 @@ void ModuleObjectManager::Demo()
 		obj->SetName(PrimitivesToString((Primitives)std::distance(prim.begin(), i)));
 
 		ComponentMesh* mesh = (ComponentMesh*)obj->CreateComponent(ComponentType::MESH);
-		mesh->mesh = CreateMesh((*i)->npoints, (*i)->points, (*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords);
+		mesh->mesh = CreateMesh((*i)->npoints, (*i)->points, (*i)->ntriangles, (*i)->triangles, (*i)->normals, (*i)->tcoords, mesh);
 
 		ComponentMaterial* mat = (ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL);
 
