@@ -50,6 +50,7 @@ bool ModuleCamera3D::Start()
 bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
+	DeleteVectorCameras();
 
 	return true;
 }
@@ -310,6 +311,31 @@ Camera * ModuleCamera3D::CreateCamera()
 	cameras.push_back(cam);
 
 	return cam;
+}
+
+void ModuleCamera3D::DeleteCamera(Camera * camera)
+{
+	for (std::vector<Camera*>::iterator i = cameras.begin(); i != cameras.end();)
+	{
+		if (camera == (*i))
+		{
+			delete(*i);
+			cameras.erase(i);
+			break;
+		}
+		else
+			++i;
+	}
+}
+
+void ModuleCamera3D::DeleteVectorCameras()
+{
+	for (std::vector<Camera*>::iterator camera = cameras.begin(); camera != cameras.end();)
+	{
+		delete (*camera);
+		camera = cameras.erase(camera);
+		(*camera) = nullptr;
+	}
 }
 
 Camera * ModuleCamera3D::GetCurrentCamera()

@@ -27,7 +27,7 @@ update_status ModuleObjectManager::Update()
 	BROFILER_CATEGORY("GameObject Manager", Profiler::Color::MediumSpringGreen);
 
 	UpdateGameObject(root);
-
+	UpdateGuizmo();
 	//Camera
 	App->camera->GetCurrentCamera()->DrawInsideFrustum();
 
@@ -165,6 +165,77 @@ const char * ModuleObjectManager::PrimitivesToString(const Primitives prim)
 	}
 
 	return name;
+}
+
+void ModuleObjectManager::UpdateGuizmo()
+{
+	ImGuizmo::MODE guizmoApply = guizmoMode;
+
+	if (gizmoOperation == ImGuizmo::OPERATION::SCALE)
+		guizmoApply = ImGuizmo::MODE::WORLD;
+
+	//for (GameObject* go = selected; go != selected; ++go)
+	//for (std::vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	//{
+	//	/*float4x4 global_transform_trans = (*it)->transform->GetGlobalTransform().Transposed();
+	//	float t[16];
+
+	//	ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(),
+	//		App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(),
+	//		gizmoOperation,
+	//		guizmoApply,
+	//		global_transform_trans.ptr(), t);
+
+	//	float4x4 moved_transformation = float4x4(
+	//		t[0], t[4], t[8], t[12],
+	//		t[1], t[5], t[9], t[13],
+	//		t[2], t[6], t[10], t[14],
+	//		t[3], t[7], t[11], t[15]);
+
+	//	if (ImGuizmo::IsUsing() && can_move)
+	//	{
+	//		switch (gizmoOperation)
+	//		{
+	//		case ImGuizmo::OPERATION::TRANSLATE:
+	//		{
+	//			float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
+	//			(*it)->transform->SetGlobalTransform(new_trans);
+	//		}
+	//		break;
+
+	//		case ImGuizmo::OPERATION::ROTATE:
+	//		{
+	//			float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
+	//			(*it)->transform->SetGlobalTransform(new_trans);
+	//		}
+	//		break;
+	//		case ImGuizmo::OPERATION::SCALE:
+	//		{
+	//			float4x4 save_trans = moved_transformation;
+	//			moved_transformation = moved_transformation * last_moved_transformation.Inverted();
+
+	//			float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
+	//			(*it)->transform->SetGlobalTransform(new_trans);
+
+	//			last_moved_transformation = save_trans;
+	//		}
+	//		break;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		last_moved_transformation = float4x4::identity;
+	//	}*/
+	//}
+
+	if (ImGuizmo::IsOver() || ImGuizmo::IsUsing())
+	{
+		//can_pick = false;
+	}
+	else
+	{
+		//can_pick = true;
+	}
 }
 
 void ModuleObjectManager::AddTexture(Texture * tex)

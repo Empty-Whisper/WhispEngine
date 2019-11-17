@@ -42,7 +42,8 @@ void ComponentMesh::Update()
 	}
 	if(App->renderer3D->fill) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		Draw();
+		if (object->is_inside_frustum)
+			Draw();
 	}
 	DrawNormals();
 	glColor3f(0.f, 0.f, 0.f);
@@ -64,9 +65,8 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::Draw()
 {
-	//if (object->is_inside_frustum)
-	//{
-		glColor3f(1.f, 1.f, 1.f);
+	
+	glColor3f(1.f, 1.f, 1.f);
 
 		if (mesh->tex_coords.data != nullptr) {
 			if (material->IsActive()) {
@@ -101,7 +101,7 @@ void ComponentMesh::Draw()
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindTexture(GL_TEXTURE_2D, 0);
-	//}
+	
 	
 }
 

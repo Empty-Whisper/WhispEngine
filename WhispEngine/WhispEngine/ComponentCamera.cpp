@@ -8,11 +8,11 @@
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)
 {
 	camera = App->camera->CreateCamera();
-
 }
 
 ComponentCamera::~ComponentCamera()
 {
+	App->camera->DeleteCamera(camera);
 }
 
 void ComponentCamera::Update()

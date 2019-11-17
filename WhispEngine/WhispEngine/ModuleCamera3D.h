@@ -65,6 +65,8 @@ public:
 	float* GetViewMatrix();
 	
 	Camera* CreateCamera();
+	void DeleteCamera(Camera* camera);
+	void DeleteVectorCameras();
 	Camera* GetCurrentCamera();
 	void SetCurrentCamera(Camera* camera);
 

@@ -81,6 +81,7 @@ public:
 
 private:
 	const char* PrimitivesToString(const Primitives prim);
+	void UpdateGuizmo();
 
 public:
 	GameObject* root = nullptr; //TODO: Change this to private
@@ -95,5 +96,10 @@ private:
 	std::vector<Texture*> textures; //TEMPORARY
 
 	// ========================================================
+
+	ImGuizmo::OPERATION   gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE        guizmoMode = ImGuizmo::MODE::LOCAL;
+
+
 };
 
