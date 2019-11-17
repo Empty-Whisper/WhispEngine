@@ -318,7 +318,9 @@
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>GameObject\Components</Filter>
     </ClCompile>
-    <ClCompile Include="JsonHelper.cpp" />
+    <ClCompile Include="JsonHelper.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -702,7 +704,9 @@
     <ClInclude Include="ComponentCamera.h">
       <Filter>GameObject\Components</Filter>
     </ClInclude>
-    <ClInclude Include="JsonHelper.h" />
+    <ClInclude Include="JsonHelper.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
