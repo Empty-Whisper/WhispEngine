@@ -64,8 +64,8 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::Draw()
 {
-	if (object->is_inside_frustum)
-	{
+	//if (object->is_inside_frustum)
+	//{
 		glColor3f(1.f, 1.f, 1.f);
 
 		if (mesh->tex_coords.data != nullptr) {
@@ -101,7 +101,7 @@ void ComponentMesh::Draw()
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindTexture(GL_TEXTURE_2D, 0);
-	}
+	//}
 	
 }
 

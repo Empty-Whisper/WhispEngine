@@ -2,6 +2,7 @@
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "Brofiler/Brofiler.h"
+#include "Imgui/ImGuizmo.h"
 
 ModuleObjectManager::ModuleObjectManager()
 {

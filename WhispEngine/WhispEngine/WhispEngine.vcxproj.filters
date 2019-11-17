@@ -294,6 +294,9 @@
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>GameObject\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Imgui\ImGuizmo.cpp">
+      <Filter>Tools\Imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -646,6 +649,9 @@
     </ClInclude>
     <ClInclude Include="ComponentCamera.h">
       <Filter>GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImGuizmo.h">
+      <Filter>Tools\Imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
