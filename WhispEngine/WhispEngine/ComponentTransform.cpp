@@ -140,6 +140,9 @@ void ComponentTransform::CalculateGlobalMatrix()
 	if (object->parent != nullptr) {
 		global_matrix = ((ComponentTransform*)object->parent->GetComponent(ComponentType::TRANSFORM))->global_matrix * local_matrix;
 	}
+	for (auto i = object->children.begin(); i != object->children.end(); i++) {
+		((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
+	}
 }
 
 math::float4x4 ComponentTransform::GetLocalMatrix() const
