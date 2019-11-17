@@ -67,10 +67,12 @@ public:
 
 	void AddTexture(Texture *tex);
 
-	Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
-	Mesh_info* CreateMesh(const aiMesh *mesh);
+	//TODO mesh: set all mesh creation functions in Mesh_info class----------------------------------------------------------------------------------------------------------
 
-	Mesh_info* CreateMeshPrimitive(const Primitives &type);
+	Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords, ComponentMesh* component);
+	Mesh_info* CreateMesh(const aiMesh *mesh, ComponentMesh* component);
+
+	Mesh_info* CreateMeshPrimitive(const Primitives &type, ComponentMesh* component);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 
 	void   FillNormals(Mesh_info * ret, const float * normals = nullptr);
@@ -79,6 +81,8 @@ public:
 	void   FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
 	void   FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
 	void   FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
+
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	void Demo();
 

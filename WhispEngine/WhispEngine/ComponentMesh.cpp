@@ -5,6 +5,7 @@
 #include "MathGeoLib/include/Math/MathFunc.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MeshImporter.h"
+#include "ComponentTransform.h"
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
@@ -15,9 +16,11 @@ ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentTy
 
 void ComponentMesh::Update()
 {
-
 	if (mesh == nullptr)
 		return;
+
+	glPushMatrix();
+	glMultMatrixf(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr());
 
 	glColor3f(1.f, 1.f, 1.f);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -52,6 +55,7 @@ void ComponentMesh::Update()
 	glColor3f(0.f, 0.f, 0.f);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glPopMatrix();
 }
 
 ComponentMesh::~ComponentMesh()
@@ -218,30 +222,49 @@ void ComponentMesh::OnInspector()
 				ImGui::OpenPopup("primitive_popup");
 			if (ImGui::BeginPopup("primitive_popup")) {
 				if (ImGui::Selectable("Cube")) // TODO: Do a for loop or a ImGui::Combo
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CUBE);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CUBE, this);
 				if (ImGui::Selectable("Tetrahedron"))
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::TETRAHEDRON);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::TETRAHEDRON, this);
 				if (ImGui::Selectable("Octahedron"))
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::OCTAHEDRON);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::OCTAHEDRON, this);
 				if (ImGui::Selectable("Dodecahedron"))
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::DODECAHEDRON);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::DODECAHEDRON, this);
 				if (ImGui::Selectable("Icosahedron"))
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::ICOSAHEDRON);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::ICOSAHEDRON, this);
 				if (ImGui::Selectable("Sphere"))
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::SPHERE);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::SPHERE, this);
 				if (ImGui::Selectable("Hemisphere"))
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::HEMISPHERE);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::HEMISPHERE, this);
 				if (ImGui::Selectable("Torus"))
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::TORUS);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::TORUS, this);
 				if (ImGui::Selectable("Cone"))
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CONE);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CONE, this);
 				if (ImGui::Selectable("Cylinder"))
-					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CYLINDER);
+					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CYLINDER, this);
 
 				ImGui::EndPopup();
 			}
 		}
 	}
+}
+
+AABB ComponentMesh::GetAABB() const
+{
+	return aabb;
+}
+
+void ComponentMesh::CalulateAABB_OBB()
+{
+	obb = local_box;
+	obb.Transform(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix());
+
+	aabb.SetNegativeInfinity();
+	aabb.Enclose(obb);
+}
+
+OBB ComponentMesh::GetOBB() const
+{
+	return obb;
 }
 
 void ComponentMesh::Save(nlohmann::json & node)
@@ -252,10 +275,15 @@ void ComponentMesh::Save(nlohmann::json & node)
 void ComponentMesh::Load(const nlohmann::json & node)
 {
 	if (mesh == nullptr)
-		mesh = new Mesh_info();
-	mesh->component = this;
+		mesh = new Mesh_info(this);
+
 	mesh->uid = node["MeshId"];
 	App->importer->mesh->Load(mesh->uid, mesh);
+}
+
+Mesh_info::Mesh_info(ComponentMesh * mesh)
+{
+	component = mesh;
 }
 
 Mesh_info::~Mesh_info()
@@ -304,4 +332,8 @@ void Mesh_info::SetGLBuffers()
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_normals.id);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertex_normals.size, vertex_normals.data, GL_STATIC_DRAW);
 	}
+
+	component->local_box.SetNegativeInfinity();
+	component->local_box.Enclose((float3*)vertex.data, vertex.size);
+	component->CalulateAABB_OBB();
 }

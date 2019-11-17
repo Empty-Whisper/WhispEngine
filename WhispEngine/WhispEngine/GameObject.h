@@ -46,13 +46,6 @@ public:
 	void Attach(GameObject* parent);
 	bool HasChild(GameObject* child);
 
-	void SetAABB(AABB& bbox);
-	AABB GetAABB() const;
-	void SetOBB(AABB& bbox);
-	AABB GetOBB() const;
-
-	void GenerateOBB(OBB obb, GameObject* &obj);
-
 	bool Save(nlohmann::json &node);
 
 
@@ -70,8 +63,6 @@ private:
 
 	uint64_t UID = 0u;
 
-	AABB aabb = AABB(float3::zero, float3::zero);
-	AABB obb = AABB(float3::zero, float3::zero);
-	bool see_bounding_box = false;
+	bool see_bounding_box = false; // TODO: Set in component mesh ?
 };
 

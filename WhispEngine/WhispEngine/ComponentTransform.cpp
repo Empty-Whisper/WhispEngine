@@ -115,12 +115,14 @@ void ComponentTransform::SetLocalMatrix(const math::float4x4 & matrix)
 {
 	local_matrix = matrix;
 	local_matrix.Decompose(position, rotation, scale);
+	euler_rot = math::RadToDeg(rotation.ToEulerXYZ());
 }
 
 void ComponentTransform::SetLocalMatrix(const float3 &_pos, const Quat& _rot, const float3 &_scale)
 {
 	position = _pos;
 	rotation = _rot;
+	euler_rot = math::RadToDeg(rotation.ToEulerXYZ());
 	scale	 = _scale;
 	local_matrix = float4x4::FromTRS(position, rotation, scale);
 }
@@ -129,6 +131,7 @@ void ComponentTransform::CalculeLocalMatrix()
 {
 	local_matrix = math::float4x4::FromTRS(position, rotation, scale);
 	CalculateGlobalMatrix();
+
 	for (auto i = object->children.begin(); i != object->children.end(); i++) {
 		((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
 	}
@@ -140,6 +143,11 @@ void ComponentTransform::CalculateGlobalMatrix()
 	if (object->parent != nullptr) {
 		global_matrix = ((ComponentTransform*)object->parent->GetComponent(ComponentType::TRANSFORM))->global_matrix * local_matrix;
 	}
+
+	ComponentMesh* mesh = (ComponentMesh*)object->GetComponent(ComponentType::MESH);
+	if (mesh != nullptr)
+		mesh->CalulateAABB_OBB();
+
 	for (auto i = object->children.begin(); i != object->children.end(); i++) {
 		((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
 	}
