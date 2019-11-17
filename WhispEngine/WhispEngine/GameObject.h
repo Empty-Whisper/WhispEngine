@@ -53,6 +53,7 @@ public:
 	std::vector<Component*> components;
 
 	GameObject* parent = nullptr;
+	bool is_inside_frustum = false;
 
 private:
 	bool active = true;

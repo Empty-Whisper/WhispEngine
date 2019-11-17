@@ -12,7 +12,6 @@ ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentTy
 
 void ComponentMesh::Update()
 {
-
 	if (mesh == nullptr)
 		return;
 
@@ -65,41 +64,45 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::Draw()
 {
-	glColor3f(1.f, 1.f, 1.f);
-
-	if (mesh->tex_coords.data != nullptr) {
-		if (material->IsActive()) {
-			if (material->HasTexture()) {
-				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-				glBindTexture(GL_TEXTURE_2D, material->GetIDTexture());
-			}
-			else {
-				glColor3fv(material->GetFaceColor());
-			}
-		}
-	}
-
-	if (mesh->vertex.data != nullptr) {
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
+	if (object->is_inside_frustum)
+	{
+		glColor3f(1.f, 1.f, 1.f);
 
 		if (mesh->tex_coords.data != nullptr) {
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords.id);
-			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-		}
-		if (mesh->vertex_normals.data != nullptr) {
-			glEnableClientState(GL_NORMAL_ARRAY);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex_normals.id);
-			glNormalPointer(GL_FLOAT, 0, NULL);
+			if (material->IsActive()) {
+				if (material->HasTexture()) {
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					glBindTexture(GL_TEXTURE_2D, material->GetIDTexture());
+				}
+				else {
+					glColor3fv(material->GetFaceColor());
+				}
+			}
 		}
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
-		glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+		if (mesh->vertex.data != nullptr) {
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+			if (mesh->tex_coords.data != nullptr) {
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords.id);
+				glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+			}
+			if (mesh->vertex_normals.data != nullptr) {
+				glEnableClientState(GL_NORMAL_ARRAY);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex_normals.id);
+				glNormalPointer(GL_FLOAT, 0, NULL);
+			}
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
+			glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+		}
+
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	
 }
 
 void ComponentMesh::DrawWireFrame() {

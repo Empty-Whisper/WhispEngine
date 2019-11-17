@@ -39,7 +39,7 @@ public:
 
 public:
 	bool	frustum_culling = true;
-	bool	main_camera = false;
+	bool	is_main_camera = false;
 private:
 	Frustum frustum;
 	float	aspect_ratio = 0.0f;

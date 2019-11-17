@@ -49,7 +49,7 @@ void ComponentCamera::OnInspector()
 		if (ImGui::DragFloat("zFar", (float*)&zFar, 0.1f, zNear, 1000))
 			camera->SetFarZ(zFar);
 
-		if(ImGui::Checkbox("Main Camera", &camera->main_camera))
+		if(ImGui::Checkbox("Main Camera", &camera->is_main_camera))
 			App->camera->SetCurrentCamera(camera);
 	}
 }

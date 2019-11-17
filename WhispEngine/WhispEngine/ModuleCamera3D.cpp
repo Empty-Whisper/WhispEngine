@@ -470,7 +470,7 @@ const float4x4 Camera::GetProjectionMatrix() const
 
 void Camera::DrawInsideFrustum()
 {
-	//Keep all game objects in the scene
+	//Keep all game objects of the scene
 	std::vector<GameObject*> game_objects;
 	App->object_manager->GetAllGameObjects(App->object_manager->root, game_objects);
 
@@ -483,9 +483,9 @@ void Camera::DrawInsideFrustum()
 		if ((*go)->GetAABB().IsFinite())
 		{
 			if (BboxIntersectsFrustum((*go)->GetAABB()))
-				(*go)->DrawBoundingBoxAABB(true);			
+				(*go)->is_inside_frustum = true;			
 			else
-				(*go)->DrawBoundingBoxAABB(false);
+				(*go)->is_inside_frustum = false;
 			
 		}		
 	}
