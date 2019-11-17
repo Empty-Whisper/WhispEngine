@@ -29,7 +29,11 @@ void PanelInspector::Update()
 				sel->SetName(name);
 			}
 
-			ImGui::SameLine(); App->gui->HelpMarker("(?)", "Right Click on component header to Delete (only not obligatory)");
+			ImGui::SameLine();
+			bool to_static = sel->IsStatic();
+			if (ImGui::Checkbox("Static", &to_static))
+				sel->SetStatic(to_static);
+			//ImGui::SameLine(); App->gui->HelpMarker("(?)", "Right Click on component header to Delete (only in component not obligatory)");
 
 			for (auto i = sel->components.begin(); i != sel->components.end(); i++) {
 				ImGui::PushID(*i);

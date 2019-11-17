@@ -321,6 +321,7 @@
     <ClCompile Include="JsonHelper.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Octree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -707,6 +708,7 @@
     <ClInclude Include="JsonHelper.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Octree.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

@@ -241,6 +241,16 @@ void GameObject::SetActive(const bool & to_active)
 	active = to_active;
 }
 
+bool GameObject::IsStatic() const
+{
+	return obj_static;
+}
+
+void GameObject::SetStatic(bool to_static)
+{
+	obj_static = to_static;
+}
+
 const char * GameObject::GetName() const
 {
 	return name.data();

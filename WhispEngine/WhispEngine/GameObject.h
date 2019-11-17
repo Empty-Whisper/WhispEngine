@@ -35,6 +35,9 @@ public:
 	bool IsActive() const;
 	void SetActive(const bool &to_active);
 
+	bool IsStatic() const;
+	void SetStatic(bool to_static);
+
 	const char* GetName() const;
 	void SetName(const char* name);
 
@@ -57,6 +60,7 @@ public:
 
 private:
 	bool active = true;
+	bool obj_static = false;
 	std::string name;
 	ObjectSelected obj_selected = ObjectSelected::NONE;
 	std::vector<Component*> components_to_delete;

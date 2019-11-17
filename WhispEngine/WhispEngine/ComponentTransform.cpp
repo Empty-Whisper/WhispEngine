@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Application.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
+#include "Imgui/imgui_internal.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
 {
@@ -23,6 +24,11 @@ void ComponentTransform::PreUpdate()
 void ComponentTransform::OnInspector()
 {
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (object->IsStatic()) {
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+
 		ImGui::PushID("POSITION");
 		ImGui::Text("Position"); ImGui::SameLine(); App->gui->HelpMarker("(?)", "Double Click to turn drag box into an input box");
 
@@ -78,6 +84,11 @@ void ComponentTransform::OnInspector()
 			CalculeLocalMatrix();
 		}
 		ImGui::PopID();
+
+		if (object->IsStatic()) {
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
 	}
 }
 
