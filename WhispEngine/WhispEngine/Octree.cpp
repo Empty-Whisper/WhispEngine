@@ -70,12 +70,6 @@ void OctreeTree::Clear()
 	}
 }
 
-bool OctreeTree::Intersect(std::vector<GameObject*>& objects, int primitive)
-{
-	return false;
-}
-
-
 OctreeNode::OctreeNode(const AABB & section, const int & capacity, OctreeNode* parent)
 {
 	this->section = section;

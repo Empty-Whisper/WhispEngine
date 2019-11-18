@@ -20,7 +20,7 @@ bool ModuleObjectManager::Start()
 	App->importer->Import("Assets/Textures/Checker.dds");
 	
 
-	/*GameObject* test = CreateGameObject(root);
+	GameObject* test = CreateGameObject(root);
 	test->SetStatic(true);
 
 	for (int i = 0; i < 20; i++) {
@@ -31,7 +31,7 @@ bool ModuleObjectManager::Start()
 		mesh->mesh = CreateMeshPrimitive(Primitives::CUBE, mesh);
 		mesh->CalulateAABB_OBB();
 		App->scene_intro->octree->Insert(test2);
-	}*/
+	}
 
 	return true;
 }

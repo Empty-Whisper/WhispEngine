@@ -24,11 +24,18 @@ public:
 
 	void Clear();
 
-	bool Intersect(std::vector<GameObject*>& objects, int primitive);
+	template<typename TYPE>
+	bool Intersect(std::vector<GameObject*>& objects, const TYPE & primitive) const;
 
 private:
 	OctreeNode* root = nullptr;
 };
+
+template<typename TYPE>
+bool OctreeTree::Intersect(std::vector<GameObject*>& objects, const TYPE &primitive) const // Definition in .h to fix linker problems
+{
+	return root->Intersect(objects, primitive);
+}
 
 class OctreeNode
 {
@@ -40,11 +47,15 @@ private:	// Private constructors because we only want to create nodes inside Tre
 private:
 	bool Insert(GameObject* obj);
 	void RecalculateNode();
+	/*Get All children objects deleting form corresponding nodes*/
 	void StealAllObjects(std::vector<GameObject *> &refactor_objects);
 	bool Remove(GameObject* obj);
 
 	void Render() const;
 	void Subdivide();
+
+	template<typename TYPE>
+	bool Intersect(std::vector<GameObject*>& objects, const TYPE & primitive) const;
 
 private:
 	std::vector<GameObject*> objects;
@@ -55,3 +66,19 @@ private:
 	int capacity = 0;
 	bool is_leaf = true;
 };
+
+template<typename TYPE>
+inline bool OctreeNode::Intersect(std::vector<GameObject*>& objects, const TYPE & primitive) const
+{
+	if (primitive.Intersects(section))
+	{
+		for (std::vector<GameObject*>::const_iterator it = objects.begin(); it != objects.end(); ++it)
+		{
+			if (primitive.Intersects((*it)->GetAABB()))
+				objects.push_back(*it);
+		}
+		for (auto i = children.begin(); i != children.end(); ++i)
+			if (*i != nullptr) (*i)->Intersect(objects, primitive);
+	}
+	return !objects.empty();
+}

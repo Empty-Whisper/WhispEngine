@@ -118,6 +118,14 @@ void GameObject::DrawBoundingBoxOBB()
 
 	glEnd();
 }
+AABB GameObject::GetAABB() const
+{
+	ComponentMesh* mesh = nullptr;
+	if (TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
+		return mesh->GetAABB();
+	}
+	return AABB();
+}
 // --------------------------------------------------------------------------------------------------------------------------------
 
 Component * GameObject::CreateComponent(const ComponentType & type)
@@ -163,7 +171,7 @@ void GameObject::DeleteComponent(Component * comp)
 	components_to_delete.push_back(comp);
 }
 
-Component * GameObject::GetComponent(const ComponentType & type)
+Component * GameObject::GetComponent(const ComponentType & type) const
 {
 	for (auto i = components.cbegin(); i != components.cend(); ++i) {
 		if (*i != nullptr)
@@ -173,7 +181,7 @@ Component * GameObject::GetComponent(const ComponentType & type)
 	return nullptr;
 }
 
-bool GameObject::TryGetComponent(const ComponentType & type, Component *& comp)
+bool GameObject::TryGetComponent(const ComponentType & type, Component *& comp) const
 {
 	Component* component = GetComponent(type);
 	if (component != nullptr) {

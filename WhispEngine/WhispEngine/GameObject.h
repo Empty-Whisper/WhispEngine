@@ -25,12 +25,15 @@ public:
 
 public:
 	void Update();
+
 	void DrawBoundingBoxAABB();
 	void DrawBoundingBoxOBB();
+	AABB GetAABB() const;
+
 	Component* CreateComponent(const ComponentType &type);
 	void	   DeleteComponent(Component* comp);
-	Component* GetComponent(const ComponentType &type);
-	bool	   TryGetComponent(const ComponentType &type, Component* &comp);
+	Component* GetComponent(const ComponentType &type) const;
+	bool	   TryGetComponent(const ComponentType &type, Component* &comp) const;
 	bool	   HasComponent(const ComponentType &type);
 
 	bool IsActive() const;
