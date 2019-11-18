@@ -18,19 +18,37 @@ void PanelScene::Update()
 		ImGui::SameLine(ImGui::GetWindowWidth() - 70);
 		App->gui->HelpMarker("(?)Info", "Right click        - View around \nWASD + Right click - Move through viewport\nShift              - Speed up\nAlt + Right click  - Zoom\nScroll wheel       - Fast Zoom\nMiddle mouse       - Move X/Y viewport\nF                  - Focus object\nAlt + Left click   - Orbit object");
 
-		
-		
 		ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
-		ImGui::Image((ImTextureID)App->renderer3D->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
-
+		
+		//Check if window is Resized
 		if (current_viewport_size.x != panel_size.x || current_viewport_size.y != panel_size.y)
 		{
 			panel_size = current_viewport_size;
 
 			App->renderer3D->CanResize();
+			//App->renderer3D->OnResize(panel_pos.x, panel_pos.y);
+			ImGuizmo::SetRect(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y, current_viewport_size.x, current_viewport_size.y);
+
 		}
 		panel_pos = ImGui::GetWindowPos();
 
+
+		// Guizmo
+		ImGuizmo::SetDrawlist();
+
+		//App->renderer3D->OnResize(panel_pos.x, panel_pos.y);
+		ImGuizmo::SetRect(0,0, current_viewport_size.x, current_viewport_size.y);
+
+		// Render inside Window
+		ImGui::Image((ImTextureID)App->renderer3D->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+		//  Check if some obj is selected
+		if (App->object_manager->GetSelected() != nullptr)
+		{
+			ImGuizmo::Enable(true);
+			App->object_manager->UpdateGuizmo();
+		}
+		else
+			ImGuizmo::Enable(false);
 	}
 	ImGui::End();
 }

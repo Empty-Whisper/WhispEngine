@@ -4,6 +4,7 @@
 #include "Assimp/include/mesh.h"
 #include "Imgui/ImGuizmo.h"
 #include "GameObject.h"
+#include "MathGeoLib/include/Math/float4x4.h"
 //#include "Imgui/imgui.h"
 
 enum class Primitives {
@@ -53,9 +54,11 @@ public:
 	void DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
-	void GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector);
+	void GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector);
 	GameObject*	GetSelected() const;
-	void		SetSelected(GameObject* select);
+	void SetSelected(GameObject* select);
+
+	void MousePick();
 
 	std::vector<Texture*>* GetTextures();
 
@@ -74,6 +77,8 @@ public:
 	void FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
 	void FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
 	void FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
+	void UpdateGuizmo();
+	void ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation);
 
 	void Demo();
 
@@ -81,7 +86,6 @@ public:
 
 private:
 	const char* PrimitivesToString(const Primitives prim);
-	void UpdateGuizmo();
 
 public:
 	GameObject* root = nullptr; //TODO: Change this to private
@@ -99,6 +103,7 @@ private:
 
 	ImGuizmo::OPERATION   gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 	ImGuizmo::MODE        guizmoMode = ImGuizmo::MODE::LOCAL;
+	math::float4x4			  last_moved_transformation = float4x4::identity;
 
 
 };

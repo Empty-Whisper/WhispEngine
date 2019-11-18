@@ -24,6 +24,7 @@ public:
 	void SetScale(const float& x, const float& y, const float& z);
 
 	void SetLocalMatrix(const math::float4x4 &matrix);
+	void SetGlobalMatrix(const math::float4x4 &matrix);
 	
 	void CalculeLocalMatrix();
 	void CalculateGlobalMatrix();

@@ -42,7 +42,7 @@ void ComponentMesh::Update()
 	}
 	if(App->renderer3D->fill) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		if (object->is_inside_frustum)
+		//if (object->is_inside_frustum)
 			Draw();
 	}
 	DrawNormals();

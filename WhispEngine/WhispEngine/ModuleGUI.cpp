@@ -63,6 +63,8 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(inspector = new PanelInspector(node["panels"]["inspector"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_5));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
 
+	ImGuizmo::Enable(true);
+
 	return true;
 }
 
@@ -72,6 +74,7 @@ update_status ModuleGUI::PreUpdate()
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 
 	return UPDATE_CONTINUE;
 }

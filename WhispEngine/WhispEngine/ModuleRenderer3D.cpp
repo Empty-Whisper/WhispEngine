@@ -21,6 +21,16 @@ ModuleRenderer3D::~ModuleRenderer3D()
 // Called before render is available
 bool ModuleRenderer3D::Init(nlohmann::json &node)
 {
+	//OnResize(App->window->screen_width, App->window->screen_height);
+	//ImGuizmo::SetRect(0, 0, App->window->screen_width, App->window->screen_height);
+	//ImGuizmo::Enable(true);
+
+	//// Set Guizmo Config ----------------------------------------------
+	//ImGuizmo::Enable(true);
+	//ImGuizmo::SetRect(min.x, min.y, current_viewport_size.x, current_viewport_size.y);
+	//ImGuizmo::SetDrawlist();
+
+
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 	
@@ -139,8 +149,13 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate()
 {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glLoadMatrixf(App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr());
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->GetCurrentCamera()->GetViewMatrix().ptr());
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);

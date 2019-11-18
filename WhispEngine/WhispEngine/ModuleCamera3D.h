@@ -89,7 +89,7 @@ public:
 	int slowness_middle_mouse = 0;
 	int slowness_zoom_in_out = 0;
 
-private:
+public:
 	Camera* editor_camera = nullptr;
 	Camera* current_camera = nullptr;
 	std::vector<Camera*> cameras;

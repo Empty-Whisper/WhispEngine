@@ -102,6 +102,18 @@ void ComponentTransform::SetLocalMatrix(const math::float4x4 & matrix)
 	local_matrix.Decompose(position, rotation, scale);
 }
 
+void ComponentTransform::SetGlobalMatrix(const math::float4x4 & matrix)
+{
+	global_matrix = matrix;
+
+	if (object->parent != nullptr)
+	{
+		float4x4 _local_matrix = ((ComponentTransform*)object->parent->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Inverted() * global_matrix;
+		SetLocalMatrix(_local_matrix);
+	}
+}
+
+
 void ComponentTransform::CalculeLocalMatrix()
 {
 	local_matrix = math::float4x4::FromTRS(position, rotation, scale);

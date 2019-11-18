@@ -60,11 +60,6 @@ update_status ModuleCamera3D::Update()
 {
 	BROFILER_CATEGORY("Camera", Profiler::Color::Coral);
 
-	//Frustum
-	
-
-
-
 	//Camera
 	vec3 newPos(0, 0, 0);
 	float speed = movement_speed * App->GetDeltaTime();
@@ -268,7 +263,7 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 
 void ModuleCamera3D::MoveCameraByMouse(vec3 newPos, float speed)
 {
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= GetCurrentCamera()->GetFrustum().front * speed;
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
@@ -334,7 +329,6 @@ void ModuleCamera3D::DeleteVectorCameras()
 	{
 		delete (*camera);
 		camera = cameras.erase(camera);
-		(*camera) = nullptr;
 	}
 }
 
@@ -354,6 +348,7 @@ void ModuleCamera3D::CalculateViewMatrix()
 {
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
+
 }
 
 vec3 ModuleCamera3D::CalculateMouseMotion()
@@ -409,10 +404,10 @@ Camera::Camera()
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 	
-	SetNearZ(5.f);
-	SetFarZ(15.f);
+	SetNearZ(1.f);
+	SetFarZ(50.f);
 	SetAspectRatio(1.f);
-	SetFOV(45.f);
+	SetFOV(70.f);
 }
 
 void Camera::GetAllCorners(float3 * corners)
@@ -498,7 +493,7 @@ void Camera::DrawInsideFrustum()
 {
 	//Keep all game objects of the scene
 	std::vector<GameObject*> game_objects;
-	App->object_manager->GetAllGameObjects(App->object_manager->root, game_objects);
+	App->object_manager->GetChildsFrom(App->object_manager->root, game_objects);
 
 	for (std::vector<GameObject*>::iterator go = game_objects.begin(); go != game_objects.end(); ++go)
 	{

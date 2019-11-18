@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Brofiler/Brofiler.h"
 #include "Imgui/ImGuizmo.h"
+#include "PanelScene.h"
 
 ModuleObjectManager::ModuleObjectManager()
 {
@@ -27,7 +28,7 @@ update_status ModuleObjectManager::Update()
 	BROFILER_CATEGORY("GameObject Manager", Profiler::Color::MediumSpringGreen);
 
 	UpdateGameObject(root);
-	UpdateGuizmo();
+	//UpdateGuizmo();
 	//Camera
 	App->camera->GetCurrentCamera()->DrawInsideFrustum();
 
@@ -85,7 +86,7 @@ GameObject * ModuleObjectManager::GetRoot() const
 {
 	return root;
 }
-void ModuleObjectManager::GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector)
+void ModuleObjectManager::GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector)
 {
 
 	if (!obj->children.empty()) {
@@ -93,7 +94,7 @@ void ModuleObjectManager::GetAllGameObjects(GameObject* &obj, std::vector<GameOb
 		for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 			vector.push_back(*i);
 
-			GetAllGameObjects(*i, vector);
+			GetChildsFrom(*i, vector);
 
 		}
 	}
@@ -118,6 +119,7 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 		selected = select;
 	}
 }
+
 
 std::vector<Texture*>* ModuleObjectManager::GetTextures()
 {
@@ -174,68 +176,49 @@ void ModuleObjectManager::UpdateGuizmo()
 	if (gizmoOperation == ImGuizmo::OPERATION::SCALE)
 		guizmoApply = ImGuizmo::MODE::WORLD;
 
-	//for (GameObject* go = selected; go != selected; ++go)
-	//for (std::vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
-	//{
-	//	/*float4x4 global_transform_trans = (*it)->transform->GetGlobalTransform().Transposed();
-	//	float t[16];
 
-	//	ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(),
-	//		App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(),
-	//		gizmoOperation,
-	//		guizmoApply,
-	//		global_transform_trans.ptr(), t);
 
-	//	float4x4 moved_transformation = float4x4(
-	//		t[0], t[4], t[8], t[12],
-	//		t[1], t[5], t[9], t[13],
-	//		t[2], t[6], t[10], t[14],
-	//		t[3], t[7], t[11], t[15]);
+	std::vector<GameObject*> selected_and_childs;
 
-	//	if (ImGuizmo::IsUsing() && can_move)
-	//	{
-	//		switch (gizmoOperation)
-	//		{
-	//		case ImGuizmo::OPERATION::TRANSLATE:
-	//		{
-	//			float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
-	//			(*it)->transform->SetGlobalTransform(new_trans);
-	//		}
-	//		break;
-
-	//		case ImGuizmo::OPERATION::ROTATE:
-	//		{
-	//			float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
-	//			(*it)->transform->SetGlobalTransform(new_trans);
-	//		}
-	//		break;
-	//		case ImGuizmo::OPERATION::SCALE:
-	//		{
-	//			float4x4 save_trans = moved_transformation;
-	//			moved_transformation = moved_transformation * last_moved_transformation.Inverted();
-
-	//			float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
-	//			(*it)->transform->SetGlobalTransform(new_trans);
-
-	//			last_moved_transformation = save_trans;
-	//		}
-	//		break;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		last_moved_transformation = float4x4::identity;
-	//	}*/
-	//}
-
-	if (ImGuizmo::IsOver() || ImGuizmo::IsUsing())
+	if (selected != nullptr)
 	{
-		//can_pick = false;
+		selected_and_childs.push_back(selected);
+		GetChildsFrom(selected, selected_and_childs);
 	}
-	else
+
+	//for (auto it : selected_and_childs)
+	for (std::vector<GameObject*>::iterator i = selected_and_childs.begin(); i != selected_and_childs.end(); ++i)
 	{
-		//can_pick = true;
+		ChangeGuizmoOperation(gizmoOperation);
+
+		float t[16];
+
+		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(),
+			App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(),
+			gizmoOperation,
+			ImGuizmo::MODE::WORLD,
+			((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr(), t);
+
+		float4x4 using_transform = float4x4(
+			t[0], t[4], t[8], t[12],
+			t[1], t[5], t[9], t[13],
+			t[2], t[6], t[10], t[14],
+			t[3], t[7], t[11], t[15]);
 	}
+}
+
+void ModuleObjectManager::ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation)
+{
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		gizmoOperation = ImGuizmo::OPERATION::ROTATE;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+		gizmoOperation = ImGuizmo::OPERATION::SCALE;
+	}
+
 }
 
 void ModuleObjectManager::AddTexture(Texture * tex)
