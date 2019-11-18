@@ -37,7 +37,7 @@ void PanelScene::Update()
 		ImGuizmo::SetDrawlist();
 
 		//App->renderer3D->OnResize(panel_pos.x, panel_pos.y);
-		ImGuizmo::SetRect(0,0, current_viewport_size.x, current_viewport_size.y);
+		ImGuizmo::SetRect(panel_pos.x, panel_pos.y, current_viewport_size.x, current_viewport_size.y);
 
 		// Render inside Window
 		ImGui::Image((ImTextureID)App->renderer3D->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));

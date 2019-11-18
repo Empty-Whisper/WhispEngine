@@ -120,6 +120,78 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 	}
 }
 
+void ModuleObjectManager::MousePick()
+{
+	static ImVec2 scene_position;
+	static ImVec2 scene_size;
+
+	scene_position = App->gui->scene->GetPanelPos();
+	scene_size = App->gui->scene->GetPanelSize();
+	scene_size = { scene_position.x + scene_size.x, scene_position.y + scene_size.y };
+
+
+
+	Rect window = { (int)scene_position.x, (int)scene_position.y, (int)scene_size.x, (int)scene_size.y };
+	float2 mouse_pos = {(float)App->input->GetMouseX(), (float)App->input->GetMouseY()};
+
+	//Point Rect Formula
+	if (mouse_pos.x >= window.left && mouse_pos.x <= window.right && mouse_pos.y > window.top && mouse_pos.y < window.bottom)
+	{
+		//The point (1, 1) corresponds to the top-right corner of the near plane
+		//(-1, -1) is bottom-left
+
+		float first_normalized_x = (mouse_pos.x - window.left) / (window.right - window.left);
+		float first_normalized_y = (mouse_pos.y - window.top) / (window.bottom - window.top);
+
+		float normalized_x = (first_normalized_x * 2) - 1;
+		float normalized_y = 1 - (first_normalized_y * 2);
+
+		LineSegment picking = App->camera->GetCurrentCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
+
+		float distance = 99999999999;
+		GameObject* closest = nullptr;
+
+		std::vector<GameObject*> game_objects;
+		GetChildsFrom(root, game_objects);
+
+		//kdtree->GetElementsToTest(picking, 0, App->camera->GetCurrentCamera()->GetFarPlaneDistance(), gos);   //Need to be finished Octree
+
+		for (std::vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
+		{
+			bool hit;
+			float dist;
+			//(*it)->TestRay(picking, hit, dist); //Need to be finihed AABB
+
+			if (hit)
+			{
+				if (dist < distance)
+				{
+					distance = dist;
+					closest = (*it);
+				}
+			}
+		}
+
+		if (closest != nullptr)
+		{
+			std::vector<GameObject*> selected_and_childs;
+			if (selected != nullptr)
+			{
+				selected_and_childs.push_back(selected);
+				GetChildsFrom(selected, selected_and_childs);
+			}
+
+			for (std::vector<GameObject*>::iterator it = selected_and_childs.begin(); it != selected_and_childs.end();)
+			{
+				(*it)->Deselect();
+				it = selected_and_childs.erase(it);
+			}
+
+			//TODO solve this
+			GetChildsFrom(closest, selected_and_childs);
+		}
+	}
+}
 
 std::vector<Texture*>* ModuleObjectManager::GetTextures()
 {
@@ -199,12 +271,77 @@ void ModuleObjectManager::UpdateGuizmo()
 			ImGuizmo::MODE::WORLD,
 			((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr(), t);
 
-		float4x4 using_transform = float4x4(
+		float4x4 moved_transformation = float4x4(
 			t[0], t[4], t[8], t[12],
 			t[1], t[5], t[9], t[13],
 			t[2], t[6], t[10], t[14],
 			t[3], t[7], t[11], t[15]);
+
+		if (ImGuizmo::IsUsing()/* && can_move*/)
+		{
+			switch (gizmoOperation)
+			{
+			case ImGuizmo::OPERATION::TRANSLATE:
+			{
+				float4x4 new_trans = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(new_trans);
+			}
+			break;
+
+			case ImGuizmo::OPERATION::ROTATE:
+			{
+				float4x4 new_trans = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(new_trans);
+			}
+			break;
+			case ImGuizmo::OPERATION::SCALE:
+			{
+				float4x4 save_trans = moved_transformation;
+				moved_transformation = moved_transformation * last_moved_transformation.Inverted();
+
+				float4x4 new_trans = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(new_trans);
+
+				last_moved_transformation = save_trans;
+			}
+			break;
+			}
+		}
+		else
+		{
+			last_moved_transformation = float4x4::identity;
+		}
 	}
+
+	if (ImGuizmo::IsOver() || ImGuizmo::IsUsing())
+	{
+		//can_pick = false;
+	}
+	else
+	{
+		//can_pick = true;
+	}
+
+
+
+	//if (selected != nullptr)
+	//{
+	//	selected_and_childs.push_back(selected);
+	//	GetChildsFrom(selected, selected_and_childs);
+	//}
+
+	//ChangeGuizmoOperation(gizmoOperation);
+
+	//float4x4 global_transform_trans = ((ComponentTransform*)(selected)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed();
+
+	//ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(),
+	//	App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(),
+	//	gizmoOperation,
+	//	ImGuizmo::MODE::WORLD,
+	//	global_transform_trans.ptr());
+
+	//((ComponentTransform*)(selected)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(global_transform_trans.Tra)
+	//selected->transform->SetGlobalTransform(new_trans);
 }
 
 void ModuleObjectManager::ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation)
