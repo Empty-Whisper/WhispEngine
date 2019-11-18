@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "ComponentMesh.h"
 #include "Assimp/include/mesh.h"
+#include "Octree.h"
 
 #include "GameObject.h"
 
@@ -93,6 +94,7 @@ private:
 
 public:
 	GameObject* root = nullptr; //TODO: Change this to private
+	OctreeTree* tree = nullptr;
 
 private:
 	//GameObject* root = nullptr;

@@ -30,6 +30,7 @@ public:
 	Component* CreateComponent(const ComponentType &type);
 	void	   DeleteComponent(Component* comp);
 	Component* GetComponent(const ComponentType &type);
+	bool	   TryGetComponent(const ComponentType &type, Component* &comp);
 	bool	   HasComponent(const ComponentType &type);
 
 	bool IsActive() const;
@@ -50,7 +51,6 @@ public:
 	bool HasChild(GameObject* child);
 
 	bool Save(nlohmann::json &node);
-
 
 public:
 	std::vector<GameObject*> children;

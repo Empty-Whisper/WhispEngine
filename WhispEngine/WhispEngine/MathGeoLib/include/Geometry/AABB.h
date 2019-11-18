@@ -126,6 +126,9 @@ public:
 		@see MinimalEnclosingAABB(). */
 	void SetFrom(const float3 *pointArray, int numPoints);
 
+	/// Draws with old Opengl method AABB
+	void Draw(const float & r, const float & g, const float & b) const;
+
 	/// Converts this AABB to a polyhedron.
 	/** This function returns a polyhedron representation of this AABB. This conversion is exact, meaning that the returned
 		polyhedron represents the same set of points than this AABB.

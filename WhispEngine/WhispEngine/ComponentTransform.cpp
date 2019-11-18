@@ -95,31 +95,37 @@ void ComponentTransform::OnInspector()
 void ComponentTransform::SetPosition(const float & x, const float & y, const float & z)
 {
 	position.Set(x, y, z);
+	CalculeLocalMatrix();
 }
 
 void ComponentTransform::SetPosition(const float3& pos)
 {
 	position = pos;
+	CalculeLocalMatrix();
 }
 
 void ComponentTransform::SetRotation(const float & w, const float & x, const float & y, const float & z)
 {
 	rotation.Set(x, y, z, w);
+	CalculeLocalMatrix();
 }
 
 void ComponentTransform::SetRotation(const Quat &rot)
 {
 	rotation = rot;
+	CalculeLocalMatrix();
 }
 
 void ComponentTransform::SetScale(const float & x, const float & y, const float & z)
 {
 	scale.Set(x, y, z);
+	CalculeLocalMatrix();
 }
 
 void ComponentTransform::SetScale(const float3& _scale)
 {
 	scale = _scale;
+	CalculeLocalMatrix();
 }
 
 void ComponentTransform::SetLocalMatrix(const math::float4x4 & matrix)
@@ -142,10 +148,6 @@ void ComponentTransform::CalculeLocalMatrix()
 {
 	local_matrix = math::float4x4::FromTRS(position, rotation, scale);
 	CalculateGlobalMatrix();
-
-	for (auto i = object->children.begin(); i != object->children.end(); i++) {
-		((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
-	}
 }
 
 void ComponentTransform::CalculateGlobalMatrix()

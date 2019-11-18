@@ -18,6 +18,20 @@ bool ModuleObjectManager::Start()
 	root = new GameObject(nullptr);
 	root->SetName("Root");
 	App->importer->Import("Assets/Textures/Checker.dds");
+	tree = new OctreeTree(float3(-100,-100,-100), float3(100,100,100), 1);
+
+	GameObject* test = CreateGameObject(root);
+	test->SetStatic(true);
+
+	for (int i = 0; i < 10; i++) {
+		GameObject* test2 = CreateGameObject(test);
+		test2->SetStatic(true);
+		((ComponentTransform*)test2->GetComponent(ComponentType::TRANSFORM))->SetPosition(App->random->Randomf(-50, 50), App->random->Randomf(-50, 50), App->random->Randomf(-50, 50));
+		ComponentMesh* mesh = (ComponentMesh*)test2->CreateComponent(ComponentType::MESH);
+		mesh->mesh = CreateMeshPrimitive(Primitives::CUBE, mesh);
+		mesh->CalulateAABB_OBB();
+		tree->Insert(test2);
+	}
 
 	return true;
 }
@@ -27,7 +41,9 @@ update_status ModuleObjectManager::Update()
 	BROFILER_CATEGORY("GameObject Manager", Profiler::Color::MediumSpringGreen);
 	glEnable(GL_LIGHTING);
 	UpdateGameObject(root);
-
+	glDisable(GL_LIGHTING);
+	tree->Render();
+	glEnable(GL_LIGHTING);
 	//Camera
 	App->camera->GetCurrentCamera()->DrawInsideFrustum();
 

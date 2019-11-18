@@ -60,58 +60,9 @@ void GameObject::DrawBoundingBoxAABB()
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	if (mesh == nullptr)
 		return;
-	AABB aabb = mesh->GetAABB();
-
-	float MinX = aabb.MinX();
-	float MinY = aabb.MinY();
-	float MinZ = aabb.MinZ();
-	float MaxX = aabb.MaxX();
-	float MaxY = aabb.MaxY();
-	float MaxZ = aabb.MaxZ();
 	glDisable(GL_LIGHTING);
-	glBegin(GL_LINES);
-
-	glColor3f(0.f, 1.f, 0.f);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MaxX, MinY, MinZ);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MinY, MaxZ);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MaxY, MinZ);
-
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MaxX, MinY, MinZ);
-
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MinX, MinY, MaxZ);
-
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MinY, MaxZ);
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MinX, MinY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MaxX, MinY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
+	mesh->GetAABB().Draw(0.f, 1.f, 0.f);
 	glEnable(GL_LIGHTING);
-
-	glEnd();
 }
 
 void GameObject::DrawBoundingBoxOBB()
@@ -222,12 +173,22 @@ Component * GameObject::GetComponent(const ComponentType & type)
 	return nullptr;
 }
 
+bool GameObject::TryGetComponent(const ComponentType & type, Component *& comp)
+{
+	Component* component = GetComponent(type);
+	if (component != nullptr) {
+		comp = component;
+		return true;
+	}
+	return false;
+}
+
 bool GameObject::HasComponent(const ComponentType & type)
 {
 	for (auto comp = components.begin(); comp != components.end(); comp++)
 		if ((*comp)->GetType() == type)
 			return true;
-
+	
 	return false;
 }
 
