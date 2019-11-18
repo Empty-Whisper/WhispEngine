@@ -31,8 +31,13 @@ void PanelInspector::Update()
 
 			ImGui::SameLine();
 			bool to_static = sel->IsStatic();
-			if (ImGui::Checkbox("Static", &to_static))
+			if (ImGui::Checkbox("Static", &to_static)) {
 				sel->SetStatic(to_static);
+				if (to_static)
+					App->scene_intro->octree->Insert(sel);
+				else
+					App->scene_intro->octree->Remove(sel);
+			}
 			//ImGui::SameLine(); App->gui->HelpMarker("(?)", "Right Click on component header to Delete (only in component not obligatory)");
 
 			for (auto i = sel->components.begin(); i != sel->components.end(); i++) {

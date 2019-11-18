@@ -20,9 +20,9 @@ public:
 
 	void Render() const;
 
-	void Clear();
+	void Recalculate(const AABB& new_limit, GameObject* root);
 
-	void Create(const AABB &limits);
+	void Clear();
 
 	bool Intersect(std::vector<GameObject*>& objects, int primitive);
 
@@ -39,7 +39,9 @@ private:	// Private constructors because we only want to create nodes inside Tre
 
 private:
 	bool Insert(GameObject* obj);
-	void Remove(GameObject* obj);
+	void RecalculateNode();
+	void StealAllObjects(std::vector<GameObject *> &refactor_objects);
+	bool Remove(GameObject* obj);
 
 	void Render() const;
 	void Subdivide();

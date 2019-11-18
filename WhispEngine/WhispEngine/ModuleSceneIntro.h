@@ -4,7 +4,7 @@
 
 #include "par_shapes.h"
 #include "ComponentMesh.h"
-
+#include "Octree.h"
 
 class ModuleSceneIntro : public Module
 {
@@ -28,6 +28,8 @@ public:
 	uint grid_id = 0;
 	uint grid_vertex_size = 0;
 	bool show_grid = true;
+
+	OctreeTree* octree = nullptr;
 
 private:
 	std::string scene_name;

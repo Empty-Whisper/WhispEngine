@@ -94,7 +94,6 @@ private:
 
 public:
 	GameObject* root = nullptr; //TODO: Change this to private
-	OctreeTree* tree = nullptr;
 
 private:
 	//GameObject* root = nullptr;
