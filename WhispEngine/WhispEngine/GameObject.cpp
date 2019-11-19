@@ -274,18 +274,42 @@ void GameObject::Attach(GameObject * parent)
 	parent->children.push_back(this);
 }
 
-bool GameObject::HasChild(GameObject * child)
+bool GameObject::HasAnyStaticChild() const
 {
-	bool ret = false;
+	for (auto i = children.begin(); i != children.end(); i++) {
+		if ((*i)->IsStatic())
+			return true;
+		if (!(*i)->children.empty())
+			if ((*i)->HasAnyStaticChild())
+				return true;
+	}
+	return false;
+}
+
+bool GameObject::HasDynamicParent(std::vector<GameObject*>& parents) const
+{
+	if (parent != nullptr && parent != App->object_manager->GetRoot()) {
+		if (!parent->IsStatic()) {
+			parents.push_back(parent);
+			parent->HasDynamicParent(parents);
+			return true;
+		}
+		if (parent->HasDynamicParent(parents))
+			return true;
+	}
+	return false;
+}
+
+bool GameObject::HasChild(GameObject * child) const
+{
 	for (auto it_child = children.begin(); it_child != children.end(); it_child++) {
 		if ((*it_child) == child)
-			ret = true;
-		if (ret)
-			break;
+			return true;
 		if (!(*it_child)->children.empty())
-			ret = (*it_child)->HasChild(child);
+			if ((*it_child)->HasChild(child))
+				return true;
 	}
-	return ret;
+	return false;
 }
 
 bool GameObject::Save(nlohmann::json & node)

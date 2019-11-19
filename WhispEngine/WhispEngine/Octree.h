@@ -20,7 +20,7 @@ public:
 
 	void Render() const;
 
-	void Recalculate(const AABB& new_limit, GameObject* root);
+	void Recalculate();
 
 	void Clear();
 

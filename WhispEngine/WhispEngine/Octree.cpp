@@ -33,6 +33,7 @@ void OctreeTree::Insert(GameObject * obj)
 		if (root != nullptr) {
 			if (!root->section.Contains(mesh->GetAABB())) {
 				LOG("Object %s not inside boundary min(%.2f, %.2f, %.2f) max(%.2f, %.2f, %.2f)", obj->GetName(), root->section.MinX(), root->section.MinY(), root->section.MinZ(), root->section.MaxX(), root->section.MaxY(), root->section.MaxZ());
+				Recalculate();
 				return;
 			}
 			root->Insert(obj);
@@ -43,6 +44,7 @@ void OctreeTree::Insert(GameObject * obj)
 void OctreeTree::Remove(GameObject * obj)
 {
 	root->Remove(obj);
+	Recalculate();
 }
 
 void OctreeTree::Render() const
@@ -50,12 +52,12 @@ void OctreeTree::Render() const
 	root->Render();
 }
 
-void OctreeTree::Recalculate(const AABB & new_limit, GameObject * root_obj)
+void OctreeTree::Recalculate()
 {
 	Clear();
-	root->section = new_limit;
 	std::vector<GameObject*> objects;
-	App->object_manager->GetAllGameObjects(root_obj, objects);
+	root->section = App->object_manager->GetMaxAABB(App->object_manager->GetRoot(), objects);
+
 	for (auto object = objects.begin(); object != objects.end(); object++) {
 		Insert(*object);
 	}
@@ -67,6 +69,7 @@ void OctreeTree::Clear()
 		for (auto child = root->children.begin(); child != root->children.end(); child++)
 			delete *child;
 		root->children.clear();
+		root->is_leaf = true;
 	}
 }
 

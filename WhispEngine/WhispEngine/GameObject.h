@@ -51,7 +51,9 @@ public:
 
 	void Detach();
 	void Attach(GameObject* parent);
-	bool HasChild(GameObject* child);
+	bool HasChild(GameObject* child) const;
+	bool HasAnyStaticChild() const;
+	bool HasDynamicParent(std::vector<GameObject*>& parents) const;
 
 	bool Save(nlohmann::json &node);
 

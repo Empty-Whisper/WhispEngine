@@ -53,7 +53,8 @@ public:
 	void DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
-	void GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector);
+	void GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector) const;
+	const AABB GetMaxAABB(GameObject* obj, std::vector<GameObject*> &vector) const;
 	GameObject*	GetSelected() const;
 	void		SetSelected(GameObject* select);
 
