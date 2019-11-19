@@ -32,9 +32,9 @@ private:
 };
 
 template<typename TYPE>
-bool OctreeTree::Intersect(std::vector<GameObject*>& objects, const TYPE &primitive) const // Definition in .h to fix linker problems
+bool OctreeTree::Intersect(std::vector<GameObject*>& to_fill, const TYPE &primitive) const // Definition in .h to fix linker problems
 {
-	return root->Intersect(objects, primitive);
+	return root->Intersect(to_fill, primitive);
 }
 
 class OctreeNode
@@ -68,17 +68,17 @@ private:
 };
 
 template<typename TYPE>
-inline bool OctreeNode::Intersect(std::vector<GameObject*>& objects, const TYPE & primitive) const
+inline bool OctreeNode::Intersect(std::vector<GameObject*>& to_fill, const TYPE & primitive) const
 {
 	if (primitive.Intersects(section))
 	{
 		for (std::vector<GameObject*>::const_iterator it = objects.begin(); it != objects.end(); ++it)
 		{
 			if (primitive.Intersects((*it)->GetAABB()))
-				objects.push_back(*it);
+				to_fill.push_back(*it);
 		}
 		for (auto i = children.begin(); i != children.end(); ++i)
-			if (*i != nullptr) (*i)->Intersect(objects, primitive);
+			if (*i != nullptr) (*i)->Intersect(to_fill, primitive);
 	}
-	return !objects.empty();
+	return !to_fill.empty();
 }

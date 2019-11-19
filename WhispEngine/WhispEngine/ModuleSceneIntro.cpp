@@ -41,7 +41,6 @@ bool ModuleSceneIntro::Start()
 
 	scene_name.assign("SampleScene");
 
-	
 	return ret;
 }
 
@@ -62,15 +61,6 @@ update_status ModuleSceneIntro::Update()
 	BROFILER_CATEGORY("Scene", Profiler::Color::Orange);
 	if (show_grid)
 		DrawGrid();
-
-	std::vector<GameObject*> intersections;
-	ComponentMesh* mesh = nullptr;
-	if(App->object_manager->GetSelected() != nullptr)
-		if (App->object_manager->GetSelected()->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
-			if (octree->Intersect(intersections, mesh->GetAABB())) {
-				LOG("CAGATE");
-			}
-		}
 
 	glDisable(GL_LIGHTING);
 	octree->Render();

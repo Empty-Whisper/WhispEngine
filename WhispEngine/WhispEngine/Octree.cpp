@@ -96,9 +96,9 @@ bool OctreeNode::Insert(GameObject * obj)
 			return true;
 		}
 		else {							 // if not
-			RecalculateNode();				// and recalculate its objects
+			RecalculateNode();				// will recalculate its objects
 
-			Subdivide();					// will subdivide, creating new 8 child nodes
+			Subdivide();					// and subdivide, creating new 8 child nodes
 
 		}
 	}
