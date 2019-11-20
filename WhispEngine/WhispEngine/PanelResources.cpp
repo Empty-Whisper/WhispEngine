@@ -48,6 +48,9 @@ void PanelResources::DrawNode(const char * path)
 						}
 						App->importer->Import((entry.path().u8string() + ".meta").c_str());
 						break;
+					case FileSystem::Format::SCENE:
+						App->LoadScene(entry.path().u8string().c_str());
+						break;
 					default:
 						break;
 					}

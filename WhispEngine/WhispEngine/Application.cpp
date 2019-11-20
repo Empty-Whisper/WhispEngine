@@ -137,9 +137,10 @@ void Application::SaveScene()
 	want_to_save_scene = true;
 }
 
-void Application::LoadScene()
+void Application::LoadScene(const char * path)
 {
 	want_to_load_scene = true;
+	scene_path.assign(path);
 }
 
 void Application::LoadDefaultConfiguration()
@@ -215,7 +216,8 @@ void Application::FinishUpdate()
 
 	if (want_to_load_scene) {
 		want_to_load_scene = false;
-		scene_intro->LoadScene();
+		scene_intro->LoadScene(scene_path.c_str());
+		scene_path.clear();
 	}
 
 	if (want_to_load || want_to_load_def) {
