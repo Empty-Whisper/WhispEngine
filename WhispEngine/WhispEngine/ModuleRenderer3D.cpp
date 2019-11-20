@@ -151,14 +151,13 @@ update_status ModuleRenderer3D::PreUpdate()
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glLoadMatrixf(App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr());
+	glLoadMatrixf(App->camera->GetEditorCamera()->GetProjectionMatrix().ptr());
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
-	glLoadMatrixf(App->camera->GetCurrentCamera()->GetViewMatrix().ptr());
+	glLoadMatrixf(App->camera->GetEditorCamera()->GetViewMatrix().ptr());
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	//lights[0].SetPos(App->camera-Position.x, App->camera->Position.y, App->camera->Position.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -205,7 +204,7 @@ update_status ModuleRenderer3D::PostUpdate()
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->GetEditorCamera()->GetViewMatrix().ptr());
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);

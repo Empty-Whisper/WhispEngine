@@ -7,6 +7,16 @@
 
 class GameObject;
 
+enum CameraMovementType
+{
+	FRONT,
+	BACK,
+	RIGHT,
+	LEFT,
+	UP,
+	DOWN,
+};
+
 class Camera
 {
 public: 
@@ -33,6 +43,15 @@ public:
 	void SetVectorDirectionFront(const float3 &pos);
 	void SetVectorDirectionUp(const float3 &pos);
 
+	//Camera - Editor
+	void Movement(CameraMovementType type, const float& speed);
+	void CameraViewRotation(const float2& pos);
+	void NormalizeQuat(math::Quat& quat);
+	void FocusObject(const AABB& aabb);
+	void OrbitObject(const float3& center, const float2& pos);
+
+	void Look(const float3& look_pos);
+
 	//Culling
 	void DrawInsideFrustum();
 	bool BboxIntersectsFrustum(const AABB& box);
@@ -40,6 +59,11 @@ public:
 public:
 	bool	frustum_culling = true;
 	bool	is_main_camera = false;
+	bool	is_focusing = false;
+	int		offset_reference_focus = 0;
+	int		focus_speed = 0;
+
+
 private:
 	Frustum frustum;
 	float	aspect_ratio = 0.0f;
@@ -55,31 +79,19 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
-
-	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec3 &Spot);
-	void FocusObject(vec3 newPos);
-	void Move(const vec3 &Movement);
-	void MoveCameraByMouse(vec3 newPos, float speed);
-	void MoveCameraOffsetByMouse(vec3 newPos, float speed);
-	float* GetViewMatrix();
 	
 	Camera* CreateCamera();
 	void DeleteCamera(Camera* camera);
 	void DeleteVectorCameras();
+	Camera* GetEditorCamera();
 	Camera* GetCurrentCamera();
 	void SetCurrentCamera(Camera* camera);
 
 private:
 
-	void CalculateViewMatrix();
-	vec3 CalculateMouseMotion();
-	void ResetIsMovingCamera();
-	const vec3 GetTransformPosition();
+	void MoveCameraOutScene();
 
 public:
-	
-	vec3 X, Y, Z, Position, Reference;
 
 	float sensiblity = 0.f;
 	int movement_speed = 0;
@@ -93,11 +105,6 @@ public:
 	Camera* editor_camera = nullptr;
 	Camera* current_camera = nullptr;
 	std::vector<Camera*> cameras;
-
-
-	mat4x4 ViewMatrix, ViewMatrixInverse;
-
-	bool is_focusing = false;
 	bool is_moving_camera = false;
 
 };

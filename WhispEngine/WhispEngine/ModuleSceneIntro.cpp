@@ -29,9 +29,6 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
-	
-	App->camera->Move(vec3(5.0f, 3.0f, 5.0f));
-	App->camera->LookAt(vec3(0.f, 0.f, 0.f));
 
 	GenerateGrid(10);
 
