@@ -26,8 +26,10 @@ void PanelScene::Update()
 			panel_size = current_viewport_size;
 
 			App->renderer3D->CanResize();
-			//App->renderer3D->OnResize(panel_pos.x, panel_pos.y);
-			ImGuizmo::SetRect(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y, current_viewport_size.x, current_viewport_size.y);
+
+
+			App->renderer3D->OnResize(panel_size.x, panel_size.y);
+			ImGuizmo::SetRect(panel_pos.x, panel_pos.y, panel_size.x, panel_size.y);
 
 		}
 		panel_pos = ImGui::GetWindowPos();

@@ -193,6 +193,7 @@ update_status ModuleRenderer3D::PostUpdate()
 		glMatrixMode(GL_PROJECTION);
 		ProjectionMatrix = perspective(60.0f, (float)size.x / (float)size.y, 0.125f, 512.0f);
 		glLoadMatrixf(&ProjectionMatrix);
+
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
