@@ -1,7 +1,9 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include "MathGeoLib/include/Geometry/AABB.h"
+#include "MathGeoLib/include/Geometry/Ray.h"
 
 class GameObject;
 class OctreeNode;
@@ -26,6 +28,8 @@ public:
 
 	template<typename TYPE>
 	bool Intersect(std::vector<GameObject*>& objects, const TYPE & primitive) const;
+	template<typename TYPE>
+	bool Intersect(std::map<float, GameObject*>& objects, const TYPE & primitive) const;
 
 private:
 	OctreeNode* root = nullptr;
@@ -36,6 +40,14 @@ bool OctreeTree::Intersect(std::vector<GameObject*>& to_fill, const TYPE &primit
 {
 	return root->Intersect(to_fill, primitive);
 }
+
+template<typename TYPE>
+inline bool OctreeTree::Intersect(std::map<float, GameObject*>& to_fill, const TYPE & primitive) const
+{
+	return root->Intersect(to_fill, primitive);
+}
+
+
 
 class OctreeNode
 {
@@ -56,6 +68,8 @@ private:
 
 	template<typename TYPE>
 	bool Intersect(std::vector<GameObject*>& objects, const TYPE & primitive) const;
+	template<typename TYPE>
+	bool Intersect(std::map<float, GameObject*>& objects, const TYPE & primitive) const;
 
 private:
 	std::vector<GameObject*> objects;
@@ -76,6 +90,24 @@ inline bool OctreeNode::Intersect(std::vector<GameObject*>& to_fill, const TYPE 
 		{
 			if (primitive.Intersects((*it)->GetAABB()))
 				to_fill.push_back(*it);
+		}
+		for (auto i = children.begin(); i != children.end(); ++i)
+			if (*i != nullptr) (*i)->Intersect(to_fill, primitive);
+	}
+	return !to_fill.empty();
+}
+
+template<typename TYPE>
+inline bool OctreeNode::Intersect(std::map<float, GameObject*>& to_fill, const TYPE & primitive) const
+{
+	if (primitive.Intersects(section))
+	{
+		for (std::vector<GameObject*>::const_iterator it = objects.begin(); it != objects.end(); ++it)
+		{
+			float nearDis, dummy;
+			if (primitive.Intersects((*it)->GetAABB(), nearDis, dummy)) {
+				to_fill.insert(std::pair<float, GameObject*>(nearDis, *it));
+			}
 		}
 		for (auto i = children.begin(); i != children.end(); ++i)
 			if (*i != nullptr) (*i)->Intersect(to_fill, primitive);

@@ -62,9 +62,11 @@ update_status ModuleSceneIntro::Update()
 	if (show_grid)
 		DrawGrid();
 
-	glDisable(GL_LIGHTING);
-	octree->Render();
-	glEnable(GL_LIGHTING);
+	if (show_octree) {
+		glDisable(GL_LIGHTING);
+		octree->Render();
+		glEnable(GL_LIGHTING);
+	}
 
 	return UPDATE_CONTINUE;
 }

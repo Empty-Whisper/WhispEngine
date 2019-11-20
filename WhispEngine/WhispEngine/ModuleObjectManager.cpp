@@ -18,20 +18,6 @@ bool ModuleObjectManager::Start()
 	root = new GameObject(nullptr);
 	root->SetName("Root");
 	App->importer->Import("Assets/Textures/Checker.dds");
-	
-
-	GameObject* test = CreateGameObject(root);
-	test->SetStatic(true);
-
-	for (int i = 0; i < 20; i++) {
-		GameObject* test2 = CreateGameObject(test);
-		test2->SetStatic(true);
-		((ComponentTransform*)test2->GetComponent(ComponentType::TRANSFORM))->SetPosition(App->random->Randomf(-50, 50), App->random->Randomf(-50, 50), App->random->Randomf(-50, 50));
-		ComponentMesh* mesh = (ComponentMesh*)test2->CreateComponent(ComponentType::MESH);
-		mesh->mesh = CreateMeshPrimitive(Primitives::CUBE, mesh);
-		mesh->CalulateAABB_OBB();
-		App->scene_intro->octree->Insert(test2);
-	}
 
 	return true;
 }

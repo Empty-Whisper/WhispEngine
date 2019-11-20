@@ -28,6 +28,7 @@ public:
 	uint grid_id = 0;
 	uint grid_vertex_size = 0;
 	bool show_grid = true;
+	bool show_octree = false;
 
 	OctreeTree* octree = nullptr;
 
