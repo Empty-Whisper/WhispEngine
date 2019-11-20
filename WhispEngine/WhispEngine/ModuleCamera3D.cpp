@@ -351,10 +351,10 @@ void Camera::CameraViewRotation(const float2& pos)
 	math::Quat quat_rotation_x = math::Quat::RotateY(pos.x);
 	math::Quat quat_rotation_y = math::Quat::RotateAxisAngle(frustum.WorldRight(), pos.y);
 
-	NormalizeQuat(quat_rotation_x); NormalizeQuat(quat_rotation_y);
+	MulQuat(quat_rotation_x); MulQuat(quat_rotation_y);
 }
 
-void Camera::NormalizeQuat(math::Quat & quat)
+void Camera::MulQuat(math::Quat & quat)
 {
 	frustum.up = quat.Mul(frustum.up).Normalized();
 	frustum.front = quat.Mul(frustum.front).Normalized();

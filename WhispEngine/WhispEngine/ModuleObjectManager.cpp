@@ -248,36 +248,27 @@ void ModuleObjectManager::UpdateGuizmo()
 	if (gizmoOperation == ImGuizmo::OPERATION::SCALE)
 		guizmoApply = ImGuizmo::MODE::WORLD;
 
+	ChangeGuizmoOperation(gizmoOperation);
 
+	float4x4 global_transform = ((ComponentTransform*)GetSelected()->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed();
+	float4x4 moved_transformation;
+	float matrix_properties[16];
 
+	ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(), App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(), gizmoOperation, guizmoApply, global_transform.ptr(), matrix_properties);
+	FillMatrix(moved_transformation, matrix_properties);
+	
 	std::vector<GameObject*> selected_and_childs;
-
 	if (selected != nullptr)
 	{
 		selected_and_childs.push_back(selected);
 		GetChildsFrom(selected, selected_and_childs);
 	}
 
-	//for (auto it : selected_and_childs)
 	for (std::vector<GameObject*>::iterator i = selected_and_childs.begin(); i != selected_and_childs.end(); ++i)
 	{
-		ChangeGuizmoOperation(gizmoOperation);
+		
 
-		float t[16];
-
-		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(),
-			App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(),
-			gizmoOperation,
-			ImGuizmo::MODE::WORLD,
-			((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed().ptr(), t);
-
-		float4x4 moved_transformation = float4x4(
-			t[0], t[4], t[8], t[12],
-			t[1], t[5], t[9], t[13],
-			t[2], t[6], t[10], t[14],
-			t[3], t[7], t[11], t[15]);
-
-		if (ImGuizmo::IsUsing()/* && can_move*/)
+		if (ImGuizmo::IsUsing())
 		{
 			switch (gizmoOperation)
 			{
@@ -312,36 +303,15 @@ void ModuleObjectManager::UpdateGuizmo()
 			last_moved_transformation = float4x4::identity;
 		}
 	}
+}
 
-	if (ImGuizmo::IsOver() || ImGuizmo::IsUsing())
-	{
-		//can_pick = false;
-	}
-	else
-	{
-		//can_pick = true;
-	}
-
-
-
-	//if (selected != nullptr)
-	//{
-	//	selected_and_childs.push_back(selected);
-	//	GetChildsFrom(selected, selected_and_childs);
-	//}
-
-	//ChangeGuizmoOperation(gizmoOperation);
-
-	//float4x4 global_transform_trans = ((ComponentTransform*)(selected)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed();
-
-	//ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(),
-	//	App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(),
-	//	gizmoOperation,
-	//	ImGuizmo::MODE::WORLD,
-	//	global_transform_trans.ptr());
-
-	//((ComponentTransform*)(selected)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(global_transform_trans.Tra)
-	//selected->transform->SetGlobalTransform(new_trans);
+void ModuleObjectManager::FillMatrix(float4x4 &matrix, float o[])
+{
+	matrix = float4x4(
+		o[0], o[4], o[8], o[12],
+		o[1], o[5], o[9], o[13],
+		o[2], o[6], o[10], o[14],
+		o[3], o[7], o[11], o[15]);
 }
 
 void ModuleObjectManager::ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation)
@@ -356,6 +326,11 @@ void ModuleObjectManager::ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperat
 		gizmoOperation = ImGuizmo::OPERATION::SCALE;
 	}
 
+}
+
+void ModuleObjectManager::ChangeGuizmoMode(ImGuizmo::MODE & gizmoMode)
+{
+	this->guizmoMode = gizmoMode;
 }
 
 void ModuleObjectManager::AddTexture(Texture * tex)

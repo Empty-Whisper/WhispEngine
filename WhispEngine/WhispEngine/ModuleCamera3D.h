@@ -46,7 +46,7 @@ public:
 	//Camera - Editor
 	void Movement(CameraMovementType type, const float& speed);
 	void CameraViewRotation(const float2& pos);
-	void NormalizeQuat(math::Quat& quat);
+	void MulQuat(math::Quat& quat);
 	void FocusObject(const AABB& aabb);
 	void OrbitObject(const float3& center, const float2& pos);
 

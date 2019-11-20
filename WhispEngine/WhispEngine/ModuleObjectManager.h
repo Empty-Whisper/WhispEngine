@@ -78,7 +78,9 @@ public:
 	void FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
 	void FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
 	void UpdateGuizmo();
+	void FillMatrix(float4x4 &matrix,float o[]);
 	void ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation);
+	void ChangeGuizmoMode(ImGuizmo::MODE &gizmoMode);
 
 	void Demo();
 
@@ -102,8 +104,8 @@ private:
 	// ========================================================
 
 	ImGuizmo::OPERATION   gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
-	ImGuizmo::MODE        guizmoMode = ImGuizmo::MODE::LOCAL;
-	math::float4x4			  last_moved_transformation = float4x4::identity;
+	ImGuizmo::MODE        guizmoMode = ImGuizmo::MODE::WORLD;
+	math::float4x4		  last_moved_transformation = float4x4::identity;
 
 
 };

@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Application.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
+#include "Imgui/ImGuizmo.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
 {
@@ -78,6 +79,23 @@ void ComponentTransform::OnInspector()
 			CalculeLocalMatrix();
 		}
 		ImGui::PopID();
+
+
+		//Guizmo
+		ImGuizmo::MODE guizmoLocal = ImGuizmo::MODE::LOCAL;
+		ImGuizmo::MODE guizmoWorld = ImGuizmo::MODE::WORLD;
+		bool world_guizmo = !local_guizmo;
+
+		if (ImGui::Checkbox("Local", &local_guizmo))
+			App->object_manager->ChangeGuizmoMode(guizmoLocal);
+
+		ImGui::SameLine();
+
+		if (ImGui::Checkbox("Global", &world_guizmo))
+		{
+			local_guizmo = !local_guizmo;
+			App->object_manager->ChangeGuizmoMode(guizmoWorld);
+		}
 	}
 }
 
