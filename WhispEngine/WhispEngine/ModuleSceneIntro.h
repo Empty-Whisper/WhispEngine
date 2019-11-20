@@ -22,7 +22,7 @@ public:
 	void GenerateGrid(const int &width);
 
 	bool SaveScene();
-	bool LoadScene() const;
+	bool LoadScene(const char* scene) const;
 
 public:
 	uint grid_id = 0;

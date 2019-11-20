@@ -135,13 +135,13 @@ bool ModuleSceneIntro::SaveScene()
 	return ret;
 }
 
-bool ModuleSceneIntro::LoadScene() const
+bool ModuleSceneIntro::LoadScene(const char* scene) const
 {
 	bool ret = true;
 
-	nlohmann::json scene = App->dummy_file_system->OpenFile("Assets/SampleScene.scene");
+	nlohmann::json scene_file = App->dummy_file_system->OpenFile(scene);
 
-	auto it = scene.begin();
+	auto it = scene_file.begin();
 	ret = App->object_manager->LoadGameObjects((*it)["GameObjects"]);
 
 	return ret;

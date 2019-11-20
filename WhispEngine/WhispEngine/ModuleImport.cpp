@@ -76,7 +76,7 @@ bool ModuleImport::Import(const char * path)
 		ret = material->Import(path);
 		break;
 	case FileSystem::Format::SCENE:
-		ret = App->scene_intro->LoadScene();
+		ret = App->scene_intro->LoadScene(path);
 		break;
 	case FileSystem::Format::FBX:
 		ret = model->Import(path);

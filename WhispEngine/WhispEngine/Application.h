@@ -68,6 +68,7 @@ private:
 
 	bool want_to_save_scene = false;
 	bool want_to_load_scene = false;
+	std::string scene_path;
 
 	std::string log_buff;
 
@@ -87,7 +88,7 @@ public:
 	void SaveConfiguration();
 	void LoadConfiguration();
 	void SaveScene();
-	void LoadScene();
+	void LoadScene(const char * path);
 	void LoadDefaultConfiguration();
 
 	void SetAppName(const char* name);

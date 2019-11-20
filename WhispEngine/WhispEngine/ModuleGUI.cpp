@@ -123,7 +123,7 @@ update_status ModuleGUI::MainMenuBar()
 
 			if (ImGui::MenuItem("Load Scene"))
 			{
-				App->LoadScene();
+				//App->LoadScene();
 			}
 
 			if (ImGui::MenuItem("Quit"))
