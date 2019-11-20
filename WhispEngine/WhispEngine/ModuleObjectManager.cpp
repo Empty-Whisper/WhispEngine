@@ -266,7 +266,7 @@ void ModuleObjectManager::UpdateGuizmo()
 
 	for (std::vector<GameObject*>::iterator i = selected_and_childs.begin(); i != selected_and_childs.end(); ++i)
 	{
-		if (ImGuizmo::IsUsing())
+		if (ImGuizmo::IsUsing() && !App->camera->is_moving_camera)
 		{
 			float4x4 position_matrix = float4x4::identity;
 			float4x4 rotation_matrix = float4x4::identity;
