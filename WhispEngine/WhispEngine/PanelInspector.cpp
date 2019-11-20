@@ -29,7 +29,94 @@ void PanelInspector::Update()
 				sel->SetName(name);
 			}
 
-			ImGui::SameLine(); App->gui->HelpMarker("(?)", "Right Click on component header to Delete (only not obligatory)");
+			ImGui::SameLine();
+			bool to_static = sel->IsStatic();
+			static bool has_child_static = false;
+			static bool has_parent_dynamic = false;
+			if (ImGui::Checkbox("Static", &to_static)) {
+				sel->SetStatic(to_static);
+				if (to_static) {
+					std::vector<GameObject*> parent;
+					if (sel->HasDynamicParent(parent)) {
+						has_parent_dynamic = true;
+						ImGui::OpenPopup("Change Children");
+					}
+					else {
+						if (sel->children.empty()) {
+							sel->SetStatic(to_static);
+							App->scene_intro->octree->Insert(sel);
+						}
+						else {
+							ImGui::OpenPopup("Change Children");
+						}
+					}
+				}
+				else {
+					if (sel->children.empty()) {
+						sel->SetStatic(to_static);
+						App->scene_intro->octree->Remove(sel);
+					}
+					else {
+						if (sel->HasAnyStaticChild())
+							has_child_static = true;
+						ImGui::OpenPopup("Change Children");
+					}
+				}
+			}
+			if (ImGui::BeginPopupModal("Change Children", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+				if (!has_child_static && !has_parent_dynamic)
+					ImGui::Text("Do you want to change children to %s?\n", to_static ? "static" : "dynamic");
+				else if (has_parent_dynamic)
+					ImGui::Text("GameObject %s has as minimum one parent dynamic. Dynamic GameObjects cannot\nhave static child. This action will change all children from to dynamic objects.\nDo you want to continue?\n", sel->GetName());
+				else if(has_child_static)
+					ImGui::Text("GameObject %s has as minimum one child static. Dynamic GameObjects cannot\nhave static child. This action will change all children to dynamic objects.\nDo you want to continue?\n", sel->GetName());
+				ImGui::Separator();
+				
+				if (ImGui::Button(has_parent_dynamic ? "Yes, change parent and children" : "Yes, change children")) {
+					if (to_static)
+						App->scene_intro->octree->Insert(sel);
+					else
+						App->scene_intro->octree->Remove(sel);
+
+					sel->SetStatic(to_static);
+
+					std::vector<GameObject*> objects;
+					if (has_parent_dynamic)
+						sel->HasDynamicParent(objects);
+					App->object_manager->GetAllGameObjects(sel, objects);
+
+					for (auto i = objects.begin(); i != objects.end(); ++i) {
+						if ((*i)->IsStatic() != to_static) {
+							(*i)->SetStatic(to_static);
+							if (to_static)
+								App->scene_intro->octree->Insert(*i);
+							else
+								App->scene_intro->octree->Remove(*i);
+						}
+					}
+					ImGui::CloseCurrentPopup();
+					has_child_static = false;
+					has_parent_dynamic = false;
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("No")) {
+					if (!has_child_static && !has_parent_dynamic) {
+						sel->SetStatic(to_static);
+						if (to_static)
+							App->scene_intro->octree->Insert(sel);
+						else
+							App->scene_intro->octree->Remove(sel);
+					}
+					else
+						sel->SetStatic(!to_static);
+
+					ImGui::CloseCurrentPopup();
+					has_child_static = false;
+					has_parent_dynamic = false;
+				}
+				ImGui::EndPopup();
+			}
+			//ImGui::SameLine(); App->gui->HelpMarker("(?)", "Right Click on component header to Delete (only in component not obligatory)");
 
 			for (auto i = sel->components.begin(); i != sel->components.end(); i++) {
 				ImGui::PushID(*i);

@@ -283,8 +283,11 @@ void ModuleCamera3D::MoveCameraOffsetByMouse(vec3 newPos, float speed)
 {
 	GameObject* sel = App->object_manager->GetSelected();
 	if (sel != nullptr) {
-		float3 center = ((ComponentMesh*)sel->GetComponent(ComponentType::MESH))->GetAABB().CenterPoint(); //Get GameObject selected position
-		Reference = vec3(center.x, center.y, center.z);
+		ComponentMesh* mesh = (ComponentMesh*)sel->GetComponent(ComponentType::MESH);
+		if (mesh != nullptr) {
+			float3 center = mesh->GetAABB().CenterPoint(); //Get GameObject selected position
+			Reference = vec3(center.x, center.y, center.z);
+		}
 	}
 	else
 		Reference = vec3(0, 0, 0);

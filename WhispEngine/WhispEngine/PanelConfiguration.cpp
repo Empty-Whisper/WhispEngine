@@ -191,6 +191,7 @@ void PanelConfiguration::Render()
 	ImGui::Checkbox("Fill faces", &App->renderer3D->fill);
 	ImGui::Separator();
 	ImGui::Checkbox("Show grid", &App->scene_intro->show_grid);
+	ImGui::Checkbox("Show Octree", &App->scene_intro->show_octree);
 	ImGui::ColorPicker3("Background Color", App->renderer3D->background_color);
 	ImGui::Separator();
 

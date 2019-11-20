@@ -19,6 +19,7 @@
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("SceneIntro");
+	octree = new OctreeTree(float3(-100, -100, -100), float3(100, 100, 100), 1);
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -39,7 +40,7 @@ bool ModuleSceneIntro::Start()
 	App->importer->Import("Assets/Models/BakerHouse.fbx.meta");
 
 	scene_name.assign("SampleScene");
-	
+
 	return ret;
 }
 
@@ -60,6 +61,12 @@ update_status ModuleSceneIntro::Update()
 	BROFILER_CATEGORY("Scene", Profiler::Color::Orange);
 	if (show_grid)
 		DrawGrid();
+
+	if (show_octree) {
+		glDisable(GL_LIGHTING);
+		octree->Render();
+		glEnable(GL_LIGHTING);
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -98,6 +105,9 @@ bool ModuleSceneIntro::CleanUp()
 	LOG("Unloading Intro scene");
 
 	glDeleteBuffers(1, &grid_id);
+
+	if (octree != nullptr)
+		delete octree;
 
 	return true;
 }

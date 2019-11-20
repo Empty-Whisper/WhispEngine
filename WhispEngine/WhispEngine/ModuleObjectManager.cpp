@@ -82,19 +82,46 @@ GameObject * ModuleObjectManager::GetRoot() const
 {
 	return root;
 }
-void ModuleObjectManager::GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector)
+
+void ModuleObjectManager::GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector) const
 {
 
 	if (!obj->children.empty()) {
 
 		for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 			vector.push_back(*i);
-
+			
 			GetAllGameObjects(*i, vector);
+		}
+	}
+}
 
+const AABB ModuleObjectManager::GetMaxAABB(GameObject * obj, std::vector<GameObject*> &objects) const
+{
+	float3 max_point, min_point;
+	max_point = min_point = float3::zero;
+	GetAllGameObjects(obj, objects);
+	ComponentMesh* mesh = nullptr;
+	for (auto i = objects.begin(); i != objects.end(); ++i) {
+		if ((*i)->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
+			AABB obj_aabb = mesh->GetAABB();
+			if (max_point.x < obj_aabb.MaxX())
+				max_point.x = obj_aabb.MaxX();
+			if (max_point.y < obj_aabb.MaxY())
+				max_point.y = obj_aabb.MaxY();
+			if (max_point.z < obj_aabb.MaxZ())
+				max_point.z = obj_aabb.MaxZ();
+
+			if (min_point.x > obj_aabb.MinX())
+				min_point.x = obj_aabb.MinX();
+			if (min_point.y > obj_aabb.MinY())
+				min_point.y = obj_aabb.MinY();
+			if (min_point.z > obj_aabb.MinZ())
+				min_point.z = obj_aabb.MinZ();
 		}
 	}
 
+	return AABB(min_point, max_point);
 }
 
 GameObject * ModuleObjectManager::GetSelected() const

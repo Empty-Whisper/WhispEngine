@@ -48,6 +48,7 @@
     <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="ModuleObjectManager.cpp" />
     <ClCompile Include="ModuleShortCut.cpp" />
+    <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfiguration.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="ModuleImport.h" />
     <ClInclude Include="ModuleObjectManager.h" />
     <ClInclude Include="ModuleShortCut.h" />
+    <ClInclude Include="Octree.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PanelConfiguration.h" />

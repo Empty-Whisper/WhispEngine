@@ -46,7 +46,7 @@ enum class Normals {
 
 class ComponentMesh : public Component
 {
-	friend class Mesh_info;
+	friend struct Mesh_info;
 public:
 	ComponentMesh(GameObject *parent);
 	~ComponentMesh();

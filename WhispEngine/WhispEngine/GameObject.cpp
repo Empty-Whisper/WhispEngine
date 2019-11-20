@@ -60,58 +60,9 @@ void GameObject::DrawBoundingBoxAABB()
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	if (mesh == nullptr)
 		return;
-	AABB aabb = mesh->GetAABB();
-
-	float MinX = aabb.MinX();
-	float MinY = aabb.MinY();
-	float MinZ = aabb.MinZ();
-	float MaxX = aabb.MaxX();
-	float MaxY = aabb.MaxY();
-	float MaxZ = aabb.MaxZ();
 	glDisable(GL_LIGHTING);
-	glBegin(GL_LINES);
-
-	glColor3f(0.f, 1.f, 0.f);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MaxX, MinY, MinZ);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MinY, MaxZ);
-
-	glVertex3f(MinX, MinY, MinZ);
-	glVertex3f(MinX, MaxY, MinZ);
-
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MaxX, MinY, MinZ);
-
-	glVertex3f(MaxX, MinY, MaxZ);
-	glVertex3f(MinX, MinY, MaxZ);
-
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MinY, MaxZ);
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MaxX, MaxY, MaxZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
-
-	glVertex3f(MinX, MaxY, MinZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MinX, MinY, MaxZ);
-	glVertex3f(MinX, MaxY, MaxZ);
-
-	glVertex3f(MaxX, MinY, MinZ);
-	glVertex3f(MaxX, MaxY, MinZ);
+	mesh->GetAABB().Draw(0.f, 1.f, 0.f);
 	glEnable(GL_LIGHTING);
-
-	glEnd();
 }
 
 void GameObject::DrawBoundingBoxOBB()
@@ -167,6 +118,14 @@ void GameObject::DrawBoundingBoxOBB()
 
 	glEnd();
 }
+AABB GameObject::GetAABB() const
+{
+	ComponentMesh* mesh = nullptr;
+	if (TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
+		return mesh->GetAABB();
+	}
+	return AABB();
+}
 // --------------------------------------------------------------------------------------------------------------------------------
 
 Component * GameObject::CreateComponent(const ComponentType & type)
@@ -212,7 +171,7 @@ void GameObject::DeleteComponent(Component * comp)
 	components_to_delete.push_back(comp);
 }
 
-Component * GameObject::GetComponent(const ComponentType & type)
+Component * GameObject::GetComponent(const ComponentType & type) const
 {
 	for (auto i = components.cbegin(); i != components.cend(); ++i) {
 		if (*i != nullptr)
@@ -222,12 +181,22 @@ Component * GameObject::GetComponent(const ComponentType & type)
 	return nullptr;
 }
 
+bool GameObject::TryGetComponent(const ComponentType & type, Component *& comp) const
+{
+	Component* component = GetComponent(type);
+	if (component != nullptr) {
+		comp = component;
+		return true;
+	}
+	return false;
+}
+
 bool GameObject::HasComponent(const ComponentType & type)
 {
 	for (auto comp = components.begin(); comp != components.end(); comp++)
 		if ((*comp)->GetType() == type)
 			return true;
-
+	
 	return false;
 }
 
@@ -239,6 +208,16 @@ bool GameObject::IsActive() const
 void GameObject::SetActive(const bool & to_active)
 {
 	active = to_active;
+}
+
+bool GameObject::IsStatic() const
+{
+	return obj_static;
+}
+
+void GameObject::SetStatic(bool to_static)
+{
+	obj_static = to_static;
 }
 
 const char * GameObject::GetName() const
@@ -295,18 +274,42 @@ void GameObject::Attach(GameObject * parent)
 	parent->children.push_back(this);
 }
 
-bool GameObject::HasChild(GameObject * child)
+bool GameObject::HasAnyStaticChild() const
 {
-	bool ret = false;
+	for (auto i = children.begin(); i != children.end(); i++) {
+		if ((*i)->IsStatic())
+			return true;
+		if (!(*i)->children.empty())
+			if ((*i)->HasAnyStaticChild())
+				return true;
+	}
+	return false;
+}
+
+bool GameObject::HasDynamicParent(std::vector<GameObject*>& parents) const
+{
+	if (parent != nullptr && parent != App->object_manager->GetRoot()) {
+		if (!parent->IsStatic()) {
+			parents.push_back(parent);
+			parent->HasDynamicParent(parents);
+			return true;
+		}
+		if (parent->HasDynamicParent(parents))
+			return true;
+	}
+	return false;
+}
+
+bool GameObject::HasChild(GameObject * child) const
+{
 	for (auto it_child = children.begin(); it_child != children.end(); it_child++) {
 		if ((*it_child) == child)
-			ret = true;
-		if (ret)
-			break;
+			return true;
 		if (!(*it_child)->children.empty())
-			ret = (*it_child)->HasChild(child);
+			if ((*it_child)->HasChild(child))
+				return true;
 	}
-	return ret;
+	return false;
 }
 
 bool GameObject::Save(nlohmann::json & node)

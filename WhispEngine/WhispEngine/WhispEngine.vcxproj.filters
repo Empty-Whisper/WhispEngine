@@ -318,8 +318,11 @@
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>GameObject\Components</Filter>
     </ClCompile>
-    <ClCompile Include="JsonHelper.cpp">
+    <ClCompile Include="Octree.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonHelper.cpp">
+      <Filter>Tools\JSON</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -704,8 +707,11 @@
     <ClInclude Include="ComponentCamera.h">
       <Filter>GameObject\Components</Filter>
     </ClInclude>
-    <ClInclude Include="JsonHelper.h">
+    <ClInclude Include="Octree.h">
       <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonHelper.h">
+      <Filter>Tools\JSON</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

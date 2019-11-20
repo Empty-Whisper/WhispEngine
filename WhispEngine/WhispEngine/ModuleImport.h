@@ -4,7 +4,7 @@
 struct aiNode;
 struct aiScene;
 class GameObject;
-class Texture;
+struct Texture;
 class ModelImporter;
 class MaterialImporter;
 class MeshImporter;
