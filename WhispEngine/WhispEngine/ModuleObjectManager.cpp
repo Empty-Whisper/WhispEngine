@@ -266,23 +266,25 @@ void ModuleObjectManager::UpdateGuizmo()
 
 	for (std::vector<GameObject*>::iterator i = selected_and_childs.begin(); i != selected_and_childs.end(); ++i)
 	{
-		
-
 		if (ImGuizmo::IsUsing())
 		{
+			float4x4 position_matrix = float4x4::identity;
+			float4x4 rotation_matrix = float4x4::identity;
+			float4x4 scale_matrix = float4x4::identity;
+
 			switch (gizmoOperation)
 			{
 			case ImGuizmo::OPERATION::TRANSLATE:
 			{
-				float4x4 new_trans = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(new_trans);
+				position_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(position_matrix);
 			}
 			break;
 
 			case ImGuizmo::OPERATION::ROTATE:
 			{
-				float4x4 new_trans = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(new_trans);
+				rotation_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(rotation_matrix);
 			}
 			break;
 			case ImGuizmo::OPERATION::SCALE:
@@ -290,8 +292,8 @@ void ModuleObjectManager::UpdateGuizmo()
 				float4x4 save_trans = moved_transformation;
 				moved_transformation = moved_transformation * last_moved_transformation.Inverted();
 
-				float4x4 new_trans = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(new_trans);
+				scale_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
 
 				last_moved_transformation = save_trans;
 			}
@@ -305,7 +307,7 @@ void ModuleObjectManager::UpdateGuizmo()
 	}
 }
 
-void ModuleObjectManager::FillMatrix(float4x4 &matrix, float o[])
+void ModuleObjectManager::FillMatrix(float4x4 & matrix, float o[])
 {
 	matrix = float4x4(
 		o[0], o[4], o[8], o[12],
