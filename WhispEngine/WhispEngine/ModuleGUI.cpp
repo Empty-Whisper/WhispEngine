@@ -205,6 +205,9 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::EndMenu();
 
 		}		
+		ImGui::SameLine(ImGui::GetWindowWidth() - 90);
+		HelpMarker("(?)Info", "Right click        - View around \nWASD + Right click - Move through viewport\nShift              - Speed up\nAlt + Right click  - Zoom\nScroll wheel       - Fast Zoom\nMiddle mouse       - Move X/Y viewport\nF                  - Focus object\nAlt + Left click   - Orbit object");
+
 
 	}
 	ImGui::EndMainMenuBar();
