@@ -15,6 +15,8 @@
 #include <windows.h>
 #include <stdio.h>
 
+typedef unsigned long long uint64;
+
 #define RELEASE( x )\
     {\
        if( x != nullptr )\

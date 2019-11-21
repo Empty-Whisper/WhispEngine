@@ -15,6 +15,7 @@
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
 #include "ModuleFileSystem.h"
+#include "ModuleResources.h"
 #include "Random.h"
 #include "JsonHelper.h"
 
@@ -25,15 +26,16 @@
 class Application
 {
 public:
-	ModuleWindow* window = nullptr;
-	ModuleInput* input = nullptr;
-	ModuleSceneIntro* scene_intro = nullptr;
-	ModuleRenderer3D* renderer3D = nullptr;
-	ModuleCamera3D* camera = nullptr;
-	ModuleGUI* gui = nullptr;
-	ModuleShortCut* shortcut = nullptr;
-	ModuleObjectManager* object_manager = nullptr;
-	ModuleImport* importer = nullptr;
+	ModuleWindow*			window			= nullptr;
+	ModuleInput*			input			= nullptr;
+	ModuleSceneIntro*		scene_intro		= nullptr;
+	ModuleRenderer3D*		renderer3D		= nullptr;
+	ModuleCamera3D*			camera			= nullptr;
+	ModuleGUI*				gui				= nullptr;
+	ModuleShortCut*			shortcut		= nullptr;
+	ModuleObjectManager*	object_manager	= nullptr;
+	ModuleImport*			importer		= nullptr;
+	ModuleResources*		resources		= nullptr;
 	//ModuleFileSystem* file_system = nullptr;
 
 public:

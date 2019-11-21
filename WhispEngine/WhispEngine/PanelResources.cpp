@@ -46,7 +46,7 @@ void PanelResources::DrawNode(const char * path)
 								LOG("FAILED to import %s", entry.path().u8string());
 							}
 						}
-						App->importer->Import((entry.path().u8string() + ".meta").c_str());
+						App->resources->Get(App->dummy_file_system->GetMeta((entry.path().u8string() + ".meta").c_str()))->LoadToMemory();
 						break;
 					case FileSystem::Format::SCENE:
 						App->LoadScene(entry.path().u8string().c_str());

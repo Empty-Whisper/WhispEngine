@@ -150,11 +150,11 @@ void PanelCreate::Update()
 
 		ImGui::NewLine();
 		if (ImGui::Button("Create")) {
-			App->object_manager->CreatePrimitive((Primitives)(iterator - items.begin()), data);
+			//App->object_manager->CreatePrimitive((Primitives)(iterator - items.begin()), data);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Demo")) {
-			App->object_manager->Demo();
+			//App->object_manager->Demo();
 		}
 
 

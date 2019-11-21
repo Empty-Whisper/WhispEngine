@@ -48,6 +48,6 @@ private:
 
 	bool select_tex = false;
 
-	Texture* texture = nullptr;
+	uint64 uid = 0u;
 };
 

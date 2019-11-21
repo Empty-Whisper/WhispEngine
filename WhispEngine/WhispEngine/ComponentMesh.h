@@ -12,37 +12,11 @@
 
 class GameObject;
 class ComponentMesh;
-
-template <typename T>
-struct Buffer {
-	uint id = 0;
-	uint size = 0;
-	T* data = nullptr;
-};
-
-struct Mesh_info {
-	friend class ComponentMesh;
-
-	Mesh_info(ComponentMesh* mesh);
-	~Mesh_info();
-
-	void SetGLBuffers();
-
-	Buffer<float> vertex;
-	Buffer<uint> index;
-	Buffer<float> face_normals;
-	Buffer<float> vertex_normals;
-	Buffer<float> tex_coords;
-
-	uint64_t uid = 0u;
-
-	ComponentMesh* component = nullptr;
-};
+class ResourceMesh;
 
 enum class Normals {
 	NONE = 0, FACE, VERTEX, MAX
 };
-
 
 class ComponentMesh : public Component
 {
@@ -55,10 +29,10 @@ public:
 
 	void Update();
 
-	void Draw();
-	void DrawWireFrame();
-	void DrawOutline();
-	void DrawNormals();
+	void Draw(const ResourceMesh* mesh);
+	void DrawWireFrame(const ResourceMesh* mesh);
+	void DrawOutline(const ResourceMesh* mesh);
+	void DrawNormals(const ResourceMesh* mesh);
 
 	void OnInspector();
 
@@ -70,9 +44,8 @@ public:
 	void Load(const nlohmann::json &node) override;
 
 public:
-	Mesh_info* mesh = nullptr;
+	uint64 uid = 0u;
 	Normals normals_state = Normals::NONE;
-
 
 private:
 	bool active = true;

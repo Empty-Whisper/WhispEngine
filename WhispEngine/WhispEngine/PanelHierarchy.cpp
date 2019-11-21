@@ -68,7 +68,7 @@ void PanelHierarchy::Update()
 				}
 				ImGui::Separator();
 				if (ImGui::BeginMenu("3D Object")) {
-					if (ImGui::Selectable("Cube")) // TODO: Do a for loop or a ImGui::Combo
+					/*if (ImGui::Selectable("Cube")) // TODO: Do a for loop or a ImGui::Combo
 						App->object_manager->CreatePrimitive(Primitives::CUBE, Object_data());
 					if (ImGui::Selectable("Tetrahedron"))
 						App->object_manager->CreatePrimitive(Primitives::TETRAHEDRON, Object_data());
@@ -87,7 +87,7 @@ void PanelHierarchy::Update()
 					if (ImGui::Selectable("Cone"))
 						App->object_manager->CreatePrimitive(Primitives::CONE, Object_data());
 					if (ImGui::Selectable("Cylinder"))
-						App->object_manager->CreatePrimitive(Primitives::CYLINDER, Object_data());
+						App->object_manager->CreatePrimitive(Primitives::CYLINDER, Object_data());*/
 					ImGui::EndMenu();
 				}
 				ImGui::EndPopup();

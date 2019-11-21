@@ -63,9 +63,9 @@ bool ModuleImport::CleanUp()
 	return true;
 }
 
-bool ModuleImport::Import(const char * path)
+bool ModuleImport::Import(const char * path, uint64 &uid)
 {
-	bool ret = false;
+	bool ret = true;
 	switch (App->dummy_file_system->GetFormat(path))
 	{
 	case FileSystem::Format::JSON:
@@ -73,18 +73,18 @@ bool ModuleImport::Import(const char * path)
 	case FileSystem::Format::DDS:
 	case FileSystem::Format::PNG:
 	case FileSystem::Format::JPG:
-		ret = material->Import(path);
+		uid = material->Import(path);
 		break;
 	case FileSystem::Format::SCENE:
 		ret = App->scene_intro->LoadScene(path);
 		break;
 	case FileSystem::Format::FBX:
-		ret = model->Import(path);
+		uid = model->Import(path);
 		break;
 	case FileSystem::Format::MODEL:
-		ret = model->Load(path);
+		//uid = model->Load(path);
 		break;
-	case FileSystem::Format::META: {
+	/*case FileSystem::Format::META: {
 		char* f_uid = App->dummy_file_system->GetData(path);
 		if (f_uid == nullptr) {
 			LOG("Failed to open meta file, trying to reload asset...");
@@ -131,12 +131,18 @@ bool ModuleImport::Import(const char * path)
 			}
 		}
 	}
-		break;
+		break;*/
 	default:
 		LOG("Failed to load %s. Format not setted", path);
 		break;
 	}
 	return ret;
+}
+
+bool ModuleImport::Import(const char * path)
+{
+	uint64 uid = 0u;
+	return Import(path, uid);
 }
 
 void ModuleImport::CreateLibrary()

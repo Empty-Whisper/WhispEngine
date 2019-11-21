@@ -85,7 +85,8 @@ update_status ModuleInput::PollEvents()
 		case SDL_DROPFILE:
 			char* file = e.drop.file;
 
-			App->importer->Import(file);
+			uint64 tmp = 0u;
+			App->importer->Import(file, tmp);
 
 			SDL_free(file);
 			break;

@@ -13,19 +13,14 @@ ComponentMaterial::~ComponentMaterial()
 {
 }
 
-void ComponentMaterial::SetTexture(Texture * texture)
-{
-	this->texture = texture;
-}
-
 const bool ComponentMaterial::HasTexture() const
 {
-	return texture != nullptr;
+	return uid != 0u;
 }
 
 const uint ComponentMaterial::GetIDTexture() const
 {
-	return texture->id;
+	return uid;
 }
 
 void ComponentMaterial::OnInspector()
@@ -37,7 +32,7 @@ void ComponentMaterial::OnInspector()
 		ImGui::ColorEdit4("Face Color", face_color);
 		ImGui::ColorEdit4("Wireframe Color", wire_color);
 
-		if (texture != nullptr) {
+		/*if (texture != nullptr) {
 			ImGui::Text("%s", texture->path.data());
 			if (ImGui::Button("Change Texture")) {
 				select_tex = true;
@@ -76,23 +71,21 @@ void ComponentMaterial::OnInspector()
 
 				ImGui::End();
 			}
-		}
+		}*/
 	}
 }
 
 void ComponentMaterial::Save(nlohmann::json & node)
 {
-	if (texture != nullptr)
-		node["texture"] = texture->uid;
+	node["Resource"] = uid;
 	App->json->AddColor4("face color", face_color, node);
 	App->json->AddColor4("wire color", wire_color, node);
 }
 
 void ComponentMaterial::Load(const nlohmann::json & node)
 {
-	texture = App->object_manager->FindTexture(node.value("texture", 0u));
-	if (texture == nullptr)
-		texture = App->importer->material->Load(node.value("texture", 0u));
+	uid = node.value("Resource", 0u);
+	App->resources->LoadToMemory(uid);
 	float* fcolor = App->json->GetColor4("face color", node);
 	float* wcolor = App->json->GetColor4("wire color", node);
 

@@ -36,8 +36,7 @@ bool ModuleSceneIntro::Start()
 
 	GenerateGrid(10);
 
-	App->importer->Import("Assets/Models/BakerHouse.fbx");
-	App->importer->Import("Assets/Models/BakerHouse.fbx.meta");
+	//App->importer->Import("Assets/Models/BakerHouse.fbx");
 
 	scene_name.assign("SampleScene");
 

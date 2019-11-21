@@ -13,7 +13,7 @@ public:
 	MeshImporter();
 	~MeshImporter();
 
-	bool Import(const uint64_t &uid, const aiMesh* mesh, const aiScene* scene);
+	uint64 Import(const char* path, const aiMesh* mesh, const uint64 &parent_uid);
 	bool Load(const uint64_t &uid, Mesh_info * mesh);
 };
 

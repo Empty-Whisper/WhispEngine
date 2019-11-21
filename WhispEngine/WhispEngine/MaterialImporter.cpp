@@ -1,6 +1,8 @@
 #include "MaterialImporter.h"
 #include "Application.h"
 
+#include "ResourceTexture.h"
+
 // Devil ---------------------------------------------------------
 #include "DevIL/include/IL/il.h"
 #include "DevIL/include/IL/ilu.h"
@@ -24,47 +26,52 @@ MaterialImporter::~MaterialImporter()
 {
 }
 
-bool MaterialImporter::Import(const char * path, uint64_t * const uid)
+
+uint64 MaterialImporter::Import(const char * path)
 {
-	bool ret = true;
-
-	uint64_t id = 0u;
-
+	std::string file = App->dummy_file_system->GetFileFromPath(path);
 	std::string mat_path;
-	if (App->dummy_file_system->IsInSubDirectory(TEXTURE_A_FOLDER, App->dummy_file_system->GetFileFromPath(path).c_str(), &mat_path)) {
+	if (App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str(), &mat_path)) {
 		if (App->dummy_file_system->Exists((mat_path + ".meta").c_str())) {
 			if (App->dummy_file_system->IsMetaVaild((mat_path + ".meta").c_str())) {
-				if (uid != nullptr)
-					*uid = App->dummy_file_system->GetMeta((mat_path + ".meta").c_str());
-				return false;
+				return App->dummy_file_system->GetMeta((mat_path + ".meta").c_str());
 			}
 			else {
 				LOG("Meta %s not vaild, recreating...", path);
-				id = App->dummy_file_system->GetMeta((mat_path + ".meta").c_str());
+				App->dummy_file_system->RemoveFile((mat_path + ".meta").c_str());
 			}
-		}
-		else {
-			id = App->dummy_file_system->GenerateMetaFile((mat_path + ".meta").c_str());
 		}
 	}
 	else {
-		mat_path.assign((TEXTURE_A_FOLDER + App->dummy_file_system->GetFileFromPath(path)));
+		LOG("File not found in Assets folder, trying to find file in fbx folder...")
+			mat_path.assign(std::string(TEXTURE_A_FOLDER) + file);
 		if (!CopyFile(path, mat_path.data(), FALSE)) {
 			wchar_t buf[256];
 			FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 				NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 				buf, (sizeof(buf) / sizeof(wchar_t)), NULL);
-			LOG("Failed to copy fbx in Assets folder, Error: %s", buf);
+			LOG("Failed to copy texture in Assets folder, Error: %s", buf);
+			return 0U;
 		}
 	}
 
+	
+	bool success = true;
 	if (App->dummy_file_system->GetPathFormat(mat_path.c_str()).compare("tga") == 0) {
-		ret = ilLoad(IL_TGA, mat_path.c_str());
+		success = ilLoad(IL_TGA, mat_path.c_str());
 	}
 	else
-		ret = ilLoadImage(mat_path.c_str());
+		success = ilLoadImage(mat_path.c_str());
 
-	if (ret) {
+	if (success) {
+		ResourceTexture* mat = (ResourceTexture*)App->resources->CreateResource(Resource::Type::TEXTURE);
+
+		App->dummy_file_system->GenerateMetaFile(mat_path.c_str(), mat->GetUID());
+
+		mat->SetFile(mat_path.c_str());
+		mat->SetResourcePath(std::string(MATERIAL_L_FOLDER + std::to_string(mat->GetUID()) + ".dds").c_str());
+		mat->Set(ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0);
+
 		ILuint size;
 		if (App->dummy_file_system->GetFormat(mat_path.c_str()) != FileSystem::Format::DDS) {
 			ILubyte *data = nullptr;
@@ -75,86 +82,43 @@ bool MaterialImporter::Import(const char * path, uint64_t * const uid)
 				if (ilSaveL(IL_DDS, data, size) > 0) { // Save to buffer with the ilSaveIL function
 					if (App->dummy_file_system->Exists(MATERIAL_L_FOLDER) == false)
 						App->dummy_file_system->CreateDir(MATERIAL_L_FOLDER);
-					ret = App->dummy_file_system->SaveData(data, size, (std::string(MATERIAL_L_FOLDER + std::to_string(id) + ".dds").c_str()));
+					App->dummy_file_system->SaveData(data, size, mat->GetLibraryPath());
 				}
+				else
+					LOG("Failed to generate DDS");
 				RELEASE_ARRAY(data);
+				return mat->GetUID();
 			}
+			else
+				LOG("Size of image is 0");
 		}
 		else {
 			if (App->dummy_file_system->Exists(MATERIAL_L_FOLDER) == false)
 				App->dummy_file_system->CreateDir(MATERIAL_L_FOLDER);
-			if (CopyFile(path, (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(path)).c_str(), FALSE)) {
-				rename((MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(path)).c_str(), (MATERIAL_L_FOLDER + std::to_string(id) + ".dds").c_str());
+
+			if (CopyFile(file.c_str(), (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str(), FALSE)) {
+				rename((MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str(), mat->GetLibraryPath());
+				return mat->GetUID();
 			}
 			else {
-				LOG("Failed to copy material in Library folder, Cannot copy %s in %s", path, (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(path)).c_str());
+				LOG("Failed to copy material in Library folder, Cannot copy %s in %s", file.c_str(), (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str());
 			}
 		}
-		if (uid != nullptr)
-			*uid = id;
 	}
 	else {
-		LOG("Cannot open image with path %s, Error: %i", path, ilGetError());
+		LOG("Cannot open image with path %s, Error: %i", file, ilGetError());
 	}
-
-	return ret;
+	return 0u;
 }
 
-Texture* MaterialImporter::Load(const char * path)
+
+uint64 MaterialImporter::Import(const char * path, const aiMaterial * material)
 {
-	Texture* ret = nullptr;
-
-	uint64_t uid = std::stoull(App->dummy_file_system->GetFileNameFromPath(path));
-	std::vector<Texture*>* vtex = App->object_manager->GetTextures();
-	for (auto i = vtex->begin(); i != vtex->end(); i++) {
-		if ((*i)->uid == uid)
-			if (App->dummy_file_system->GetFormat(path) == App->dummy_file_system->GetFormat((*i)->path.data())) {
-				LOG("Texture already loaded, returning the texture already loaded...");
-				return *i;
-			}
+	aiString tex_path;
+	if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, NULL, &tex_path) == aiReturn_FAILURE) {
+		LOG("Cannot get texture %s from %s model", tex_path.C_Str(), path);
+		return 0U;
 	}
 
-	if (App->dummy_file_system->Exists(path) == false) {
-		// TODO?: Recreate library
-	}
-
-	ILuint devilID = 0;
-
-	ilGenImages(1, &devilID);
-	ilBindImage(devilID);
-
-	ilutRenderer(ILUT_OPENGL);  // Switch the renderer
-
-	if (!ilLoadImage(path)) {
-		auto error = ilGetError();
-		LOG("Failed to load texture with path: %s. Error: %s", path, ilGetString(error));
-	}
-	else {
-		ret = new Texture(ilutGLBindTexImage(), path, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), uid);
-
-		// Upload pixels into texture
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-		glBindTexture(GL_TEXTURE_2D, ret->id);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-
-		// Setup filtering parameters for display
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-		App->object_manager->AddTexture(ret);
-		LOG("Loaded successfully texture: %s", path);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
-	ilDeleteImages(1, &devilID);
-	return ret;
-}
-
-Texture * MaterialImporter::Load(const uint64_t & uid)
-{
-	return Load((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str());
+	return Import(tex_path.C_Str());
 }

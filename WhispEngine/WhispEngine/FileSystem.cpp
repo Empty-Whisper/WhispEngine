@@ -69,6 +69,25 @@ FileSystem::Format FileSystem::GetFormat(const char * file) const
 	return FileSystem::Format::NONE;
 }
 
+Resource::Type FileSystem::GetResourceType(const char * file) const
+{
+	switch (GetFormat(file))
+	{
+	case FileSystem::Format::DDS:
+	case FileSystem::Format::JPG:
+	case FileSystem::Format::PNG:
+		return Resource::Type::TEXTURE;
+		break;
+	case FileSystem::Format::FBX:
+		return Resource::Type::MODEL;
+		break;
+	default:
+		LOG("%s has not any extension that correspond to a resource", file);
+		break;
+	}
+	return Resource::Type::NONE;
+}
+
 std::string FileSystem::GetPathFormat(const char* path) const
 {
 	std::string f(path);
@@ -117,7 +136,7 @@ std::string FileSystem::GetFileFromPath(const char * file) const
 	}
 	std::reverse(buffer.begin(), buffer.end());
 
-	return buffer.data();
+	return buffer;
 }
 
 std::string FileSystem::GetFileDirectory(const char * file_path) const
@@ -244,13 +263,17 @@ bool FileSystem::HasMeta(const char * file)
 
 uint64_t FileSystem::GenerateMetaFile(const char * meta_path)
 {
-	uint64_t meta = App->random->RandomGUID();
+	return GenerateMetaFile(meta_path, App->random->RandomGUID());
+}
+
+uint64_t FileSystem::GenerateMetaFile(const char * file_path, const uint64 & force_uid)
+{
 	char* meta_data = new char[sizeof(uint64_t)];
-	memcpy(meta_data, &meta, sizeof(uint64_t));
-	App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t), meta_path);
+	memcpy(meta_data, &force_uid, sizeof(uint64_t));
+	App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t), (std::string(file_path) + ".meta").c_str());
 	delete[] meta_data;
 
-	return meta;
+	return force_uid;
 }
 
 uint64_t FileSystem::GetMeta(const char * mata_path) const
