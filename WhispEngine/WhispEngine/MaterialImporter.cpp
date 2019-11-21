@@ -96,12 +96,12 @@ uint64 MaterialImporter::Import(const char * path)
 			if (App->dummy_file_system->Exists(MATERIAL_L_FOLDER) == false)
 				App->dummy_file_system->CreateDir(MATERIAL_L_FOLDER);
 
-			if (CopyFile(file.c_str(), (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str(), FALSE)) {
+			if (CopyFile(mat_path.c_str(), (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str(), FALSE)) {
 				rename((MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str(), mat->GetLibraryPath());
 				return mat->GetUID();
 			}
 			else {
-				LOG("Failed to copy material in Library folder, Cannot copy %s in %s", file.c_str(), (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str());
+				LOG("Failed to copy material in Library folder, Cannot copy %s in %s", mat_path.c_str(), (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str());
 			}
 		}
 	}

@@ -63,6 +63,9 @@ FileSystem::Format FileSystem::GetFormat(const char * file) const
 	else if (buffer.compare("scene") == 0) {
 		return FileSystem::Format::SCENE;
 	}
+	else if (buffer.compare("tga") == 0) {
+		return FileSystem::Format::TGA;
+	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());
 
@@ -173,7 +176,7 @@ bool FileSystem::CreateDir(const char * path)
 
 bool FileSystem::RemoveFile(const char * path)
 {
-	if (std::experimental::filesystem::remove(path) == 0) {
+	if (std::experimental::filesystem::remove(path) == true) {
 		LOG("Removed %s successfully", path);
 		return true;
 	}
