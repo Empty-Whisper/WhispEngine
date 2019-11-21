@@ -51,6 +51,9 @@ void ComponentCamera::OnInspector()
 
 		if(ImGui::Checkbox("Main Camera", &camera->is_main_camera))
 			App->camera->SetGameCamera(camera);
+		
+		if(ImGui::Checkbox("Frustum Culling", &App->camera->activate_frustum_culling))
+			App->camera->SetGameCamera(camera);
 	}
 }
 

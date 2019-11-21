@@ -42,7 +42,11 @@ void ComponentMesh::Update()
 	}
 	if(App->renderer3D->fill) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		//if (object->is_inside_frustum)
+
+
+		if (!App->camera->activate_frustum_culling)
+			Draw();
+		else if (object->is_inside_frustum)
 			Draw();
 	}
 	DrawNormals();

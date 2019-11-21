@@ -57,7 +57,6 @@ public:
 	bool BboxIntersectsFrustum(const AABB& box);
 
 public:
-	bool	frustum_culling = true;
 	bool	is_main_camera = false;
 	bool	is_focusing = false;
 	int		offset_reference_focus = 0;
@@ -106,5 +105,6 @@ public:
 	Camera* game_camera = nullptr;
 	std::vector<Camera*> cameras;
 	bool is_moving_camera = false;
+	bool activate_frustum_culling = false;
 
 };

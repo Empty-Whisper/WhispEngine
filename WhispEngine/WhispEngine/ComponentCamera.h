@@ -23,7 +23,6 @@ public:
 
 	void DrawFrustum();
 
-
 private:
 	Camera* camera = nullptr;
 };
