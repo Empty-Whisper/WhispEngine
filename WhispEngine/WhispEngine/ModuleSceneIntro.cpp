@@ -39,11 +39,23 @@ bool ModuleSceneIntro::Start()
 
 update_status ModuleSceneIntro::PreUpdate()
 {
-	//Start Buffer Frame ----------------------------------
-	glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->frame_buffer);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.1, 0.1, 0.1, 1.f);
-	//-----------------------------------------------------
+
+	if (App->renderer3D->is_rendering_scenene)
+	{
+		//Start Buffer Frame ----------------------------------
+		glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->scene_viewport->frame_buffer);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(0.1, 0.1, 0.1, 1.f);
+		//-----------------------------------------------------
+	}
+	else
+	{
+		//Start Buffer Frame ----------------------------------
+		glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->game_viewport->frame_buffer);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(0.1, 0.1, 0.1, 1.f);
+		//-----------------------------------------------------
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -60,12 +72,6 @@ update_status ModuleSceneIntro::Update()
 
 update_status ModuleSceneIntro::PostUpdate()
 {
-	// Start Buffer Frame ----------------------------------
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, App->renderer3D->render_texture);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	// -----------------------------------------------------
 
 	return UPDATE_CONTINUE;
 }

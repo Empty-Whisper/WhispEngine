@@ -83,13 +83,13 @@ public:
 	Camera* CreateCamera();
 	void DeleteCamera(Camera* camera);
 	void DeleteVectorCameras();
-	Camera* GetEditorCamera();
-	Camera* GetCurrentCamera();
-	void SetCurrentCamera(Camera* camera);
+	Camera* GetSceneCamera();
+	Camera* GetGameCamera();
+	void SetGameCamera(Camera* camera);
 
 private:
 
-	void MoveCameraOutScene();
+	void MoveCameraOutScene(bool & is_moving);
 
 public:
 
@@ -102,8 +102,8 @@ public:
 	int slowness_zoom_in_out = 0;
 
 public:
-	Camera* editor_camera = nullptr;
-	Camera* current_camera = nullptr;
+	Camera* scene_camera = nullptr;
+	Camera* game_camera = nullptr;
 	std::vector<Camera*> cameras;
 	bool is_moving_camera = false;
 

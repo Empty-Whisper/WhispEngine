@@ -28,9 +28,9 @@ update_status ModuleObjectManager::Update()
 	BROFILER_CATEGORY("GameObject Manager", Profiler::Color::MediumSpringGreen);
 
 	UpdateGameObject(root);
-	//UpdateGuizmo();
+
 	//Camera
-	App->camera->GetCurrentCamera()->DrawInsideFrustum();
+	App->camera->GetGameCamera()->DrawInsideFrustum();
 
 	return UPDATE_CONTINUE;
 }
@@ -146,7 +146,7 @@ void ModuleObjectManager::MousePick()
 		float normalized_x = (first_normalized_x * 2) - 1;
 		float normalized_y = 1 - (first_normalized_y * 2);
 
-		LineSegment picking = App->camera->GetCurrentCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
+		LineSegment picking = App->camera->GetSceneCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
 
 		float distance = 99999999999;
 		GameObject* closest = nullptr;
@@ -254,7 +254,7 @@ void ModuleObjectManager::UpdateGuizmo()
 	float4x4 moved_transformation;
 	float matrix_properties[16];
 
-	ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(), App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(), gizmoOperation, guizmoApply, global_transform.ptr(), matrix_properties);
+	ImGuizmo::Manipulate(App->camera->GetSceneCamera()->GetViewMatrix().ptr(), App->camera->GetSceneCamera()->GetProjectionMatrix().ptr(), gizmoOperation, guizmoApply, global_transform.ptr(), matrix_properties);
 	FillMatrix(moved_transformation, matrix_properties);
 	
 	std::vector<GameObject*> selected_and_childs;

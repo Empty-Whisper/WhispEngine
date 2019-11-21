@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "SDL/include/SDL_opengl.h"
 #include "PanelScene.h"
+#include "PanelGame.h"
 #include "Brofiler/Brofiler.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
@@ -12,6 +13,10 @@
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Renderer");
+
+	scene_viewport = CreateViewport();
+	game_viewport = CreateViewport();
+
 }
 
 // Destructor
@@ -132,22 +137,19 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 	}
 
 	// Projection matrix for
-	InitTextureBuffers();
+	InitTextureBuffers(scene_viewport);
+	InitTextureBuffers(game_viewport);
 	return ret;
 }
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate()
 {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glLoadMatrixf(App->camera->GetEditorCamera()->GetProjectionMatrix().ptr());
+	/*GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
+	GetGameViewport()->SetMatrix(App->camera->GetGameCamera());*/
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetEditorCamera()->GetViewMatrix().ptr());
-
-	// light 0 on cam pos
-	lights[0].SetPos(App->camera->GetEditorCamera()->GetFrustum().pos.x, App->camera->GetEditorCamera()->GetFrustum().pos.y, App->camera->GetEditorCamera()->GetFrustum().pos.z);
+	//Light 0 on cam pos
+	lights[0].SetPos(App->camera->GetSceneCamera()->GetFrustum().pos.x, App->camera->GetSceneCamera()->GetFrustum().pos.y, App->camera->GetSceneCamera()->GetFrustum().pos.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -157,11 +159,61 @@ update_status ModuleRenderer3D::PreUpdate()
 
 update_status ModuleRenderer3D::Update()
 {
+	/*GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
+	GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);*/
+	
+	if (!is_rendering_scenene)
+	{
+		// SCENE ============================================================================================ =
+		GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
+		GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, App->renderer3D->render_texture);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
+		// DockSpace
+		if (scene_viewport->can_resize)
+		{
+			ResizeDockspace(App->gui->scene->GetPanelSize(), scene_viewport);
+			scene_viewport->can_resize = false;
+		}
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glLoadIdentity();
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(App->camera->GetSceneCamera()->GetViewMatrix().ptr());
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
+
+		is_rendering_scenene = true;
+	}
+	else
+	{
+		// Game =============================================================================================
+		GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
+		GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);
+
+		//Dockspace
+		if (game_viewport->can_resize)
+		{
+			ResizeDockspace(App->gui->game->GetPanelSize(), game_viewport);
+			game_viewport->can_resize = false;
+		}
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glLoadIdentity();
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(App->camera->GetGameCamera()->GetViewMatrix().ptr());
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
+		
+		is_rendering_scenene = false;
+	}
+
+
+
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -173,33 +225,36 @@ update_status ModuleRenderer3D::PostUpdate()
 
 	SDL_GL_SwapWindow(App->window->window);
 
-	// DockSpace
-	if (can_resize)
+	//// DockSpace
+	//if (scene_viewport->can_resize)
+	//{
+	//	ResizeDockspace(App->gui->scene->GetPanelSize(), scene_viewport);
+	//	scene_viewport->can_resize = false;
+	//}
+	//
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//glLoadIdentity();
+
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadMatrixf(App->camera->GetSceneCamera()->GetViewMatrix().ptr());
+
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
+
+	/*if (game_viewport->can_resize)
 	{
-		ImVec2 size = App->gui->scene->GetPanelSize();
-
-		glViewport(0, 0, size.x, size.y);
-
-		glMatrixMode(GL_PROJECTION);
-		ProjectionMatrix = perspective(60.0f, (float)size.x / (float)size.y, 0.125f, 512.0f);
-		glLoadMatrixf(&ProjectionMatrix);
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
-		UpdateTextureBuffers(size.x, size.y);
-		can_resize = false;
+		ResizeDockspace(App->gui->game->GetPanelSize(), game_viewport);
+		game_viewport->can_resize = false;
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetEditorCamera()->GetViewMatrix().ptr());
+	glLoadMatrixf(App->camera->GetGameCamera()->GetViewMatrix().ptr());
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
-
+	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);*/
 	return UPDATE_CONTINUE;
 }
 
@@ -234,41 +289,87 @@ bool ModuleRenderer3D::Load(nlohmann::json & node)
 	return true;
 }
 
-const bool ModuleRenderer3D::CanResize()
+Viewport * ModuleRenderer3D::CreateViewport()
 {
-	return can_resize = true;
+	Viewport* viewport = nullptr;
+	viewport = new Viewport;
+
+	return viewport;
 }
 
-void ModuleRenderer3D::OnResize(int width, int height)
+Viewport * ModuleRenderer3D::GetSceneViewport()
 {
-	App->camera->GetCurrentCamera()->SetAspectRatio((float)width / (float)height);
+	return scene_viewport;
+}
+
+Viewport * ModuleRenderer3D::GetGameViewport()
+{
+	return game_viewport;
+}
+
+void ModuleRenderer3D::SetSceneViewport(Viewport * viewport)
+{
+	if (viewport != nullptr)
+		scene_viewport = viewport;
+
+}
+
+void ModuleRenderer3D::SetGameViewport(Viewport * viewport)
+{
+	if (viewport != nullptr)
+		game_viewport = viewport;
+}
+
+const bool ModuleRenderer3D::CanResize(Viewport * viewport)
+{
+	return viewport->can_resize = true;
+}
+
+void ModuleRenderer3D::ResizeDockspace(ImVec2 size, Viewport* viewport)
+{
+	glViewport(0, 0, size.x, size.y);
+
+	glMatrixMode(GL_PROJECTION);
+	ProjectionMatrix = perspective(60.0f, (float)size.x / (float)size.y, 0.125f, 512.0f);
+	glLoadMatrixf(&ProjectionMatrix);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	UpdateTextureBuffers(size.x, size.y, viewport);
+}
+
+void ModuleRenderer3D::OnResize(int width, int height, Camera* camera)
+{
+	camera->SetAspectRatio((float)width / (float)height);
 
 	//glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	glLoadMatrixf(App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr());
+	glLoadMatrixf(camera->GetProjectionMatrix().ptr());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::InitTextureBuffers()
+void ModuleRenderer3D::InitTextureBuffers(Viewport* viewport)
 {
-	glGenRenderbuffers(1, &depth_render_buffer);
-	glGenTextures(1, &render_texture);
-	glGenFramebuffers(1, &frame_buffer);
+	glGenRenderbuffers(1, &viewport->depth_render_buffer);
+	glGenTextures(1, &viewport->render_texture);
+	glGenFramebuffers(1, &viewport->frame_buffer);
+
 }
 
-void ModuleRenderer3D::UpdateTextureBuffers(int width, int height)
+void ModuleRenderer3D::UpdateTextureBuffers(int width, int height, Viewport* viewport)
 {
 	// Depth
-	glBindRenderbuffer(GL_RENDERBUFFER, depth_render_buffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, viewport->depth_render_buffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	// Texture
-	glBindTexture(GL_TEXTURE_2D, render_texture);
+	glBindTexture(GL_TEXTURE_2D, viewport->render_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -278,9 +379,9 @@ void ModuleRenderer3D::UpdateTextureBuffers(int width, int height)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Depth and Texture to Frame buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depth_render_buffer);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, viewport->frame_buffer);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, viewport->depth_render_buffer);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, viewport->render_texture, 0);
 
 	// If program can generate the texture 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -291,4 +392,26 @@ void ModuleRenderer3D::UpdateTextureBuffers(int width, int height)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+Viewport::Viewport()
+{
+}
 
+void Viewport::SetMatrix(Camera * camera)
+{
+	//Set ProjectionMatrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glLoadMatrixf(camera->GetProjectionMatrix().ptr());
+
+	//Set ViewMatrix
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(camera->GetViewMatrix().ptr());
+}
+
+void Viewport::UpdateBind(uint texture_id)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}

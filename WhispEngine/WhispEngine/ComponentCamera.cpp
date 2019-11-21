@@ -50,7 +50,7 @@ void ComponentCamera::OnInspector()
 			camera->SetFarZ(zFar);
 
 		if(ImGui::Checkbox("Main Camera", &camera->is_main_camera))
-			App->camera->SetCurrentCamera(camera);
+			App->camera->SetGameCamera(camera);
 	}
 }
 

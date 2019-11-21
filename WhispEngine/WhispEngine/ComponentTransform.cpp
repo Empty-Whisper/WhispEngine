@@ -86,6 +86,7 @@ void ComponentTransform::OnInspector()
 		ImGuizmo::MODE guizmoWorld = ImGuizmo::MODE::WORLD;
 		bool world_guizmo = !local_guizmo;
 
+		ImGui::Separator();
 		if (ImGui::Checkbox("Local", &local_guizmo))
 			App->object_manager->ChangeGuizmoMode(guizmoLocal);
 

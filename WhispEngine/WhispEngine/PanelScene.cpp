@@ -25,10 +25,9 @@ void PanelScene::Update()
 		{
 			panel_size = current_viewport_size;
 
-			App->renderer3D->CanResize();
+			App->renderer3D->CanResize(App->renderer3D->GetSceneViewport());
+			App->renderer3D->OnResize(panel_size.x, panel_size.y, App->camera->GetSceneCamera());
 
-
-			App->renderer3D->OnResize(panel_size.x, panel_size.y);
 			ImGuizmo::SetRect(panel_pos.x, panel_pos.y, panel_size.x, panel_size.y);
 
 		}
@@ -37,12 +36,11 @@ void PanelScene::Update()
 
 		// Guizmo
 		ImGuizmo::SetDrawlist();
-
-		//App->renderer3D->OnResize(panel_pos.x, panel_pos.y);
 		ImGuizmo::SetRect(panel_pos.x, panel_pos.y, current_viewport_size.x, current_viewport_size.y);
 
 		// Render inside Window
-		ImGui::Image((ImTextureID)App->renderer3D->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)App->renderer3D->scene_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+		
 		//  Check if some obj is selected
 		if (App->object_manager->GetSelected() != nullptr)
 		{
