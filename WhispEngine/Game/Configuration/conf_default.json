@@ -37,6 +37,9 @@
                 },
                 "scene": {
                     "start_enabled": true
+                }, 
+                "game": {
+                    "start_enabled": true
                 }
             }
         },

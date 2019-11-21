@@ -13,6 +13,8 @@ PanelScene::~PanelScene()
 
 void PanelScene::Update()
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0,0) );
+
 	if (ImGui::Begin("#Scene", &active)) 
 	{
 		ImGui::SameLine(ImGui::GetWindowWidth() - 70);
@@ -53,6 +55,8 @@ void PanelScene::Update()
 			ImGuizmo::Enable(false);
 	}
 	ImGui::End();
+	ImGui::PopStyleVar();
+
 }
 
 const ImVec2 PanelScene::GetPanelSize()

@@ -21,16 +21,6 @@ ModuleRenderer3D::~ModuleRenderer3D()
 // Called before render is available
 bool ModuleRenderer3D::Init(nlohmann::json &node)
 {
-	//OnResize(App->window->screen_width, App->window->screen_height);
-	//ImGuizmo::SetRect(0, 0, App->window->screen_width, App->window->screen_height);
-	//ImGuizmo::Enable(true);
-
-	//// Set Guizmo Config ----------------------------------------------
-	//ImGuizmo::Enable(true);
-	//ImGuizmo::SetRect(min.x, min.y, current_viewport_size.x, current_viewport_size.y);
-	//ImGuizmo::SetDrawlist();
-
-
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 	

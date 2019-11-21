@@ -19,6 +19,7 @@
 #include "PanelCreate.h"
 #include "PanelInspector.h"
 #include "PanelScene.h"
+#include "PanelGame.h"
 #include "Brofiler/Brofiler.h"
 
 
@@ -62,6 +63,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_4));
 	panels.push_back(inspector = new PanelInspector(node["panels"]["inspector"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_5));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
+	panels.push_back(game = new PanelGame(node["panels"]["game"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_7));
 
 	ImGuizmo::Enable(true);
 
@@ -132,6 +134,7 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Create", "Shift+4", &create->active);
 			ImGui::MenuItem("Inspector", "Shift+5", &inspector->active);
 			ImGui::MenuItem("Scene", "Shift+6", &scene->active);
+			ImGui::MenuItem("Game", "Shift+7", &game->active);
 			ImGui::MenuItem("Style Editor", "", &show_style_window);
 			ImGui::EndMenu();
 

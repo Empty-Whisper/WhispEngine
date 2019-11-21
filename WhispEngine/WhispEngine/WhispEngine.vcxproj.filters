@@ -297,6 +297,9 @@
     <ClCompile Include="Imgui\ImGuizmo.cpp">
       <Filter>Tools\Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="PanelGame.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -652,6 +655,9 @@
     </ClInclude>
     <ClInclude Include="Imgui\ImGuizmo.h">
       <Filter>Tools\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelGame.h">
+      <Filter>UI_Elements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
