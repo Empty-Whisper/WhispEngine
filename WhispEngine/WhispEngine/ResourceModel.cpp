@@ -92,6 +92,7 @@ void ResourceModel::CreateObjects(GameObject * container, const nlohmann::json &
 		ComponentMesh* mesh = (ComponentMesh*)child->CreateComponent(ComponentType::MESH);
 		mesh->uid = (uint64)data.value("meshId", (uint64)0u);
 		App->resources->LoadToMemory(mesh->uid);
+		mesh->SetAABB();
 	}
 
 	if (data.value("materialId", 0u) != 0u) {

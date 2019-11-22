@@ -213,6 +213,7 @@ void ComponentMesh::OnInspector()
 			ResourceMesh* mesh = (ResourceMesh*)App->resources->Get(uid);
 			if (mesh != nullptr) {
 				ImGui::Text("%i triangles (%i vertices, %i indices)", mesh->index.size / 9, mesh->vertex.size, mesh->index.size / 3);
+				ImGui::TextColored(ImVec4(1.f, 0.f, 1.f, 1.f), "References: %u", mesh->GetReferences());
 
 				ImGui::Checkbox("Face Normals", &view_face_normals);
 				ImGui::Checkbox("Vertex Normals", &view_vertex_normals);
@@ -251,6 +252,15 @@ void ComponentMesh::OnInspector()
 			}
 		}
 	}
+}
+
+void ComponentMesh::SetAABB()
+{
+	ResourceMesh* m = (ResourceMesh*)App->resources->Get(uid);
+	
+	local_box.SetNegativeInfinity();
+	local_box.Enclose((float3*)m->vertex.data, m->vertex.size);
+	CalulateAABB_OBB();
 }
 
 AABB ComponentMesh::GetAABB() const

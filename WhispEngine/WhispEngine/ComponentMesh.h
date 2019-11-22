@@ -36,6 +36,7 @@ public:
 
 	void OnInspector();
 
+	void SetAABB();
 	AABB GetAABB() const;
 	void CalulateAABB_OBB();
 	OBB  GetOBB() const;
