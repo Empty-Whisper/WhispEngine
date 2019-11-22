@@ -4,23 +4,23 @@
 #include "Timer.h"
 #include "PerfTimer.h"
 #include "Module.h"
-#include "ModuleWindow.h"
-#include "ModuleInput.h"
-#include "ModuleSceneIntro.h"
-#include "ModuleRenderer3D.h"
-#include "ModuleCamera3D.h"
-#include "ModuleGUI.h"
 #include "FileSystem.h"
-#include "ModuleShortCut.h"
-#include "ModuleImport.h"
-#include "ModuleObjectManager.h"
-#include "ModuleFileSystem.h"
+#include "Random.h"
 #include "Random.h"
 #include "JsonHelper.h"
-
 #include "HardwareInfo.h"
 
 #include <list>
+
+class ModuleWindow;
+class ModuleInput;
+class ModuleSceneIntro;
+class ModuleRenderer3D;
+class ModuleCamera3D;
+class ModuleGUI;
+class ModuleShortCut;
+class ModuleObjectManager;
+class ModuleImport;
 
 class Application
 {

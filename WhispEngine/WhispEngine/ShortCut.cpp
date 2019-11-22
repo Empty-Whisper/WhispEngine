@@ -1,5 +1,7 @@
 #include "ShortCut.h"
 #include "Application.h"
+#include "ModuleShortCut.h"
+#include "ModuleInput.h"
 
 ShortCut::ShortCut()
 {

@@ -2,9 +2,11 @@
 #include "Module.h"
 #include "ComponentMesh.h"
 #include "Assimp/include/mesh.h"
+#include "Imgui/ImGuizmo.h"
 #include "Octree.h"
-
 #include "GameObject.h"
+#include "MathGeoLib/include/Math/float4x4.h"
+//#include "Imgui/imgui.h"
 
 enum class Primitives {
 	NONE = -1,
@@ -53,10 +55,12 @@ public:
 	void DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
-	void GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector) const;
+	void GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const
 	const AABB GetMaxAABB(GameObject* obj, std::vector<GameObject*> &vector) const;
 	GameObject*	GetSelected() const;
-	void		SetSelected(GameObject* select);
+	void SetSelected(GameObject* select);
+
+	void MousePick();
 
 	std::vector<Texture*>* GetTextures();
 	Texture* FindTexture(const uint64_t &uid);
@@ -77,14 +81,16 @@ public:
 	Mesh_info* CreateMeshPrimitive(const Primitives &type, ComponentMesh* component);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 
-	void   FillNormals(Mesh_info * ret, const float * normals = nullptr);
-	float* CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude = 0.5f);
-	void   FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces);
-	void   FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
-	void   FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
-	void   FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
-
-	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	void FillNormals(Mesh_info * ret, const float * normals = nullptr);
+	void FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces);
+	void FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
+	void FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
+	void FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
+	void UpdateGuizmo();
+	void FillMatrix(float4x4 &matrix,float o[]);
+	void ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation);
+	void ChangeGuizmoMode(ImGuizmo::MODE &gizmoMode);
+ 	float* CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude = 0.5f);
 
 	void Demo();
 
@@ -106,5 +112,11 @@ private:
 	std::vector<Texture*> textures; //TEMPORARY
 
 	// ========================================================
+
+	ImGuizmo::OPERATION   gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE        guizmoMode = ImGuizmo::MODE::WORLD;
+	math::float4x4		  last_moved_transformation = float4x4::identity;
+
+
 };
 

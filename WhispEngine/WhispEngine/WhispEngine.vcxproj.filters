@@ -318,6 +318,11 @@
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>GameObject\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Imgui\ImGuizmo.cpp">
+      <Filter>Tools\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelGame.cpp">
+      <Filter>UI_Elements</Filter>
     <ClCompile Include="Octree.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
@@ -707,6 +712,11 @@
     <ClInclude Include="ComponentCamera.h">
       <Filter>GameObject\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Imgui\ImGuizmo.h">
+      <Filter>Tools\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelGame.h">
+      <Filter>UI_Elements</Filter>
     <ClInclude Include="Octree.h">
       <Filter>Tools</Filter>
     </ClInclude>

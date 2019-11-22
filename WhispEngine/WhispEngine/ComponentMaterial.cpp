@@ -4,6 +4,9 @@
 #include "Application.h"
 #include "MaterialImporter.h"
 
+#include "ModuleInput.h"
+#include "ModuleObjectManager.h"
+
 ComponentMaterial::ComponentMaterial(GameObject* parent) : Component(parent, ComponentType::MATERIAL)
 {
 }

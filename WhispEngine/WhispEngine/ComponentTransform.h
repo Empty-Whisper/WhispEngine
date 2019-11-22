@@ -29,7 +29,8 @@ public:
 
 	void SetLocalMatrix(const math::float4x4 &matrix);
 	void SetLocalMatrix(const float3 &_pos, const Quat& _rot, const float3 &_scale);
-	
+	void SetGlobalMatrix(const math::float4x4 &matrix);
+
 	void CalculeLocalMatrix();
 	void CalculateGlobalMatrix();
 
@@ -49,6 +50,8 @@ private:
 
 	math::float4x4 local_matrix = math::float4x4::identity;
 	math::float4x4 global_matrix = math::float4x4::identity;
+
+	bool local_guizmo = false;
 
 };
 #endif

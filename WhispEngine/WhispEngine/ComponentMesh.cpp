@@ -1,11 +1,17 @@
 #include "ComponentMesh.h"
 #include "Application.h"
 #include "Globals.h"
+
+#include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleObjectManager.h"
+
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MeshImporter.h"
 #include "ComponentTransform.h"
+
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
@@ -49,7 +55,12 @@ void ComponentMesh::Update()
 	}
 	if(App->renderer3D->fill) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		Draw();
+
+
+		if (!App->camera->activate_frustum_culling)
+			Draw();
+		else if (object->is_inside_frustum)
+			Draw();
 	}
 	DrawNormals();
 	glColor3f(0.f, 0.f, 0.f);
@@ -72,41 +83,44 @@ ComponentMesh::~ComponentMesh()
 
 void ComponentMesh::Draw()
 {
+	
 	glColor3f(1.f, 1.f, 1.f);
 
-	if (mesh->tex_coords.data != nullptr) {
-		if (material->IsActive()) {
-			if (material->HasTexture()) {
-				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-				glBindTexture(GL_TEXTURE_2D, material->GetIDTexture());
-			}
-			else {
-				glColor3fv(material->GetFaceColor());
-			}
-		}
-	}
-
-	if (mesh->vertex.data != nullptr) {
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
-
 		if (mesh->tex_coords.data != nullptr) {
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords.id);
-			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-		}
-		if (mesh->vertex_normals.data != nullptr) {
-			glEnableClientState(GL_NORMAL_ARRAY);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex_normals.id);
-			glNormalPointer(GL_FLOAT, 0, NULL);
+			if (material->IsActive()) {
+				if (material->HasTexture()) {
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					glBindTexture(GL_TEXTURE_2D, material->GetIDTexture());
+				}
+				else {
+					glColor3fv(material->GetFaceColor());
+				}
+			}
 		}
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
-		glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
-	}
+		if (mesh->vertex.data != nullptr) {
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindTexture(GL_TEXTURE_2D, 0);
+			if (mesh->tex_coords.data != nullptr) {
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->tex_coords.id);
+				glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+			}
+			if (mesh->vertex_normals.data != nullptr) {
+				glEnableClientState(GL_NORMAL_ARRAY);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex_normals.id);
+				glNormalPointer(GL_FLOAT, 0, NULL);
+			}
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->index.id);
+			glDrawElements(GL_TRIANGLES, mesh->index.size, GL_UNSIGNED_INT, NULL);
+		}
+
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	
+	
 }
 
 void ComponentMesh::DrawWireFrame() {
