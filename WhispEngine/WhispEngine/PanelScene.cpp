@@ -64,9 +64,12 @@ void PanelScene::Update()
 
 	if (active_preview)
 	{
-		if (ImGui::Begin("Camerea Preview", &active))
+		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+		if (ImGui::Begin("Camerea Preview", &active, ImGuiWindowFlags_NoDecoration  || ImGuiWindowFlags_NoDocking || ImGuiWindowFlags_NoResize || ImGuiWindowFlags_NoMove || ImGuiWindowFlags_NoInputs || ImGuiWindowFlags_NoBringToFrontOnFocus))
 		{
-			ImGui::SetWindowPos(ImVec2(panel_pos.x * 1.7f, panel_pos.y * 1.7f));
+			ImVec2 preview_size = ImGui::GetWindowSize();
+
+			ImGui::SetWindowPos(ImVec2(panel_pos.x + panel_size.x - preview_size.x, panel_pos.y + panel_size.y - preview_size.y));
 			ImGui::SetWindowSize(ImVec2(316, 252));
 			ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
 			ImGui::Image((ImTextureID)App->renderer3D->game_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
@@ -74,6 +77,8 @@ void PanelScene::Update()
 
 		}
 		ImGui::End();
+		ImGui::PopStyleVar();
+
 	}
 	
 }
