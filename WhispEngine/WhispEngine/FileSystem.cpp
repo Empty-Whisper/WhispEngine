@@ -283,7 +283,7 @@ uint64_t FileSystem::GenerateMetaFile(const char * file_path, const uint64 & for
 	return force_uid;
 }
 
-uint64_t FileSystem::GetUIDMetaFrom(const char * mata_path) const
+uint64_t FileSystem::GetUIDFromMeta(const char * mata_path) const
 {
 	char* f_uid = App->dummy_file_system->GetData(mata_path);
 	if (f_uid == nullptr) {

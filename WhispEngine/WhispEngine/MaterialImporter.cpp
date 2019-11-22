@@ -26,21 +26,33 @@ MaterialImporter::~MaterialImporter()
 {
 }
 
-
-uint64 MaterialImporter::Import(const char * path)
+uint64 MaterialImporter::Import(const char * path, const aiMaterial * material, const uint64 & force_uid)
 {
+	uint64 meta = force_uid;
+	if (meta == 0u)
+		meta = App->random->RandomGUID();
+
+	if (material != nullptr) {
+		aiString tex_path;
+		if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, NULL, &tex_path) == aiReturn_FAILURE) {
+			LOG("Cannot get texture %s from %s model", tex_path.C_Str(), path);
+			return 0U;
+		}
+		path = tex_path.C_Str();
+	}
+
 	std::string file = App->dummy_file_system->GetFileFromPath(path);
 	std::string mat_path;
 	if (App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str(), &mat_path)) {
 		if (App->dummy_file_system->Exists((mat_path + ".meta").c_str())) {
 			if (App->dummy_file_system->IsMetaVaild((mat_path + ".meta").c_str())) {
-				Resource* res = App->resources->CreateResource(Resource::Type::TEXTURE, App->dummy_file_system->GetUIDMetaFrom((mat_path + ".meta").c_str()));
+				Resource* res = App->resources->CreateResource(Resource::Type::TEXTURE, App->dummy_file_system->GetUIDFromMeta((mat_path + ".meta").c_str()));
 				// TODO: load resource
 				return res->GetUID();
 			}
 			else {
 				LOG("Meta %s not vaild, recreating...", path);
-				App->dummy_file_system->RemoveFile((mat_path + ".meta").c_str());
+				meta = App->dummy_file_system->GetUIDFromMeta((mat_path + ".meta").c_str());
 			}
 		}
 	}
@@ -66,7 +78,7 @@ uint64 MaterialImporter::Import(const char * path)
 		success = ilLoadImage(mat_path.c_str());
 
 	if (success) {
-		ResourceTexture* mat = (ResourceTexture*)App->resources->CreateResource(Resource::Type::TEXTURE);
+		ResourceTexture* mat = (ResourceTexture*)App->resources->CreateResource(Resource::Type::TEXTURE, meta);
 
 		App->dummy_file_system->GenerateMetaFile(mat_path.c_str(), mat->GetUID());
 
@@ -111,16 +123,4 @@ uint64 MaterialImporter::Import(const char * path)
 		LOG("Cannot open image with path %s, Error: %i", file, ilGetError());
 	}
 	return 0u;
-}
-
-
-uint64 MaterialImporter::Import(const char * path, const aiMaterial * material)
-{
-	aiString tex_path;
-	if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, NULL, &tex_path) == aiReturn_FAILURE) {
-		LOG("Cannot get texture %s from %s model", tex_path.C_Str(), path);
-		return 0U;
-	}
-
-	return Import(tex_path.C_Str());
 }

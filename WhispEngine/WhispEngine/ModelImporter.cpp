@@ -33,6 +33,7 @@ uint64 ModelImporter::Import(const char * path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		bool want_to_generate_meta = true;
 		std::string new_path;
 
 		if (!App->dummy_file_system->IsInSubDirectory(MODEL_A_FOLDER, App->dummy_file_system->GetFileFromPath(path).data())) {
@@ -45,12 +46,14 @@ uint64 ModelImporter::Import(const char * path)
 			}
 		}
 
+		std::vector<uint64> uid_meshes, uid_materials;
+
 		// .meta -------------------------------------------------------------
 		uint64_t meta = 0u;
 		if (App->dummy_file_system->IsInSubDirectory(MODEL_A_FOLDER, (App->dummy_file_system->GetFileFromPath(path) + ".meta").data())) {
 			if (App->dummy_file_system->IsMetaVaild((std::string(path) + ".meta").data())) {
 				LOG("File %s already imported", App->dummy_file_system->GetFileFromPath(path).data());
-				meta = App->dummy_file_system->GetUIDMetaFrom((std::string(path) + ".meta").data());
+				meta = App->dummy_file_system->GetUIDFromMeta((std::string(path) + ".meta").data());
 				Resource* res = App->resources->CreateResource(Resource::Type::MODEL, meta);
 				res->SetFile(path);
 				res->SetResourcePath((MODEL_L_FOLDER + std::to_string(meta) + ".whispModel").c_str());
@@ -86,7 +89,34 @@ uint64 ModelImporter::Import(const char * path)
 				return res->GetUID();
 			}
 			else {
-				meta = App->dummy_file_system->GetUIDMetaFrom((std::string(path) + ".meta").data());
+				meta = App->dummy_file_system->GetUIDFromMeta((std::string(path) + ".meta").data());
+
+				char* data = App->dummy_file_system->GetData((std::string(path) + ".meta").data());
+				if (data != nullptr) {
+					char* cursor = data + sizeof(uint64);
+
+					uint n_meshes = 0u;
+					memcpy(&n_meshes, cursor, sizeof(uint));
+					cursor += sizeof(uint);
+					for (int i = 0; i < n_meshes; i++) {
+						uint64 uid = 0u;
+						memcpy(&uid, cursor, sizeof(uint64));
+						uid_meshes.push_back(uid);
+						cursor += sizeof(uint64);
+					}
+
+					uint n_materials = 0u;
+					std::memcpy(&n_materials, cursor, sizeof(uint));
+					cursor += sizeof(uint);
+					for (int i = 0; i < n_materials; i++) {
+						uint64 uid = 0u;
+						std::memcpy(&uid, cursor, sizeof(uint64));
+						uid_materials.push_back(uid);
+						cursor += sizeof(uint64);
+					}
+
+					delete[] data;
+				}
 			}
 		}
 		// -------------------------------------------------------------------
@@ -101,19 +131,34 @@ uint64 ModelImporter::Import(const char * path)
 		}
 		else {
 			model = (ResourceModel*)App->resources->CreateResource(Resource::Type::MODEL, meta);
+			want_to_generate_meta = false;
 		}
 		
 		model->SetFile(path);
 		model->SetResourcePath((MODEL_L_FOLDER + std::to_string(model->GetUID()) + std::string(".whispModel")).c_str());
 
-		std::vector<uint64> uid_meshes, uid_materials;
+		bool equals = uid_meshes.size() == scene->mNumMeshes;
+		want_to_generate_meta = !equals;
+		if (!equals) uid_meshes.clear();
 
 		for (int i = 0; i < scene->mNumMeshes; ++i) {
-			uid_meshes.push_back(App->importer->mesh->Import(path, scene->mMeshes[i], model->GetUID()));
+			if (equals)
+				App->importer->mesh->Import(path, scene->mMeshes[i], model->GetUID(), uid_meshes[i]);
+			else {
+				uid_meshes.push_back(App->importer->mesh->Import(path, scene->mMeshes[i], model->GetUID()));
+			}
 		}
 
+		equals = uid_materials.size() == scene->mNumMaterials;
+		want_to_generate_meta = !equals;
+		if (!equals) uid_materials.clear();
+
 		for (int i = 0; i < scene->mNumMaterials; ++i) {
-			uid_materials.push_back(App->importer->material->Import(path, scene->mMaterials[i]));
+			if (equals)
+				App->importer->material->Import(path, scene->mMaterials[i], uid_materials[i]);
+			else {
+				uid_materials.push_back(App->importer->material->Import(path, scene->mMaterials[i]));
+			}
 		}
 
 		model->CalculateHierarchy(scene->mRootNode, scene, uid_meshes, uid_materials, nullptr);
@@ -124,32 +169,35 @@ uint64 ModelImporter::Import(const char * path)
 			App->dummy_file_system->CreateDir(MODEL_L_FOLDER);
 		}
 
-		uint size = sizeof(uint) * 2 + sizeof(uint64_t) * uid_meshes.size() + sizeof(uint64_t) * uid_materials.size();
-		char* data = new char[size];
-		memset(data, 0, size);
-		char* cursor = data;
+		if (want_to_generate_meta) {
+			uint size = sizeof(uint) * 2 + sizeof(uint64_t) * uid_meshes.size() + sizeof(uint64_t) * uid_materials.size();
+			char* data = new char[size];
+			memset(data, 0, size);
+			char* cursor = data;
 
-		uint bytes = sizeof(uint);
-		uint n_meshes = uid_meshes.size();
-		memcpy(cursor, &n_meshes, bytes);
+			uint bytes = sizeof(uint);
+			uint n_meshes = uid_meshes.size();
+			memcpy(cursor, &n_meshes, bytes);
 
-		cursor += bytes;
-		bytes = sizeof(uint64_t) * n_meshes;
-		memcpy(cursor, uid_meshes.data(), bytes);
+			cursor += bytes;
+			bytes = sizeof(uint64_t) * n_meshes;
+			memcpy(cursor, uid_meshes.data(), bytes);
 
-		cursor += bytes;
-		bytes = sizeof(uint);
-		uint n_materials = uid_materials.size();
-		memcpy(cursor, &n_materials, bytes);
+			cursor += bytes;
+			bytes = sizeof(uint);
+			uint n_materials = uid_materials.size();
+			memcpy(cursor, &n_materials, bytes);
 
-		cursor += bytes;
-		bytes = sizeof(uint64_t) * n_materials;
-		memcpy(cursor, uid_materials.data(), bytes);
+			cursor += bytes;
+			bytes = sizeof(uint64_t) * n_materials;
+			memcpy(cursor, uid_materials.data(), bytes);
 
-		App->dummy_file_system->GenerateMetaFile(path, model->GetUID(), data, size);
+			App->dummy_file_system->GenerateMetaFile(path, model->GetUID(), data, size);
+			delete[] data;
+		}
+
 		model->Save();
 
-		delete[] data;
 		aiReleaseImport(scene);
 		LOG("Time to load FBX: %u", SDL_GetTicks() - ticks);
 	}

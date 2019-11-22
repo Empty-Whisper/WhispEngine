@@ -44,7 +44,7 @@ public:
 	bool HasMeta(const char* file);
 	uint64_t GenerateMetaFile(const char* meta_path);
 	uint64_t GenerateMetaFile(const char* meta_path, const uint64& force_uid, const void * addition_data = nullptr, const uint& size_addition_data = 0u);
-	uint64_t GetUIDMetaFrom(const char* mata_path) const;
+	uint64_t GetUIDFromMeta(const char* mata_path) const;
 
 	bool SaveData(const void* data, const uint &size, const char* path);
 

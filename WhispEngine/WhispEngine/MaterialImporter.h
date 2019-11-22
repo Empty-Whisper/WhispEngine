@@ -14,7 +14,6 @@ public:
 	~MaterialImporter();
 
 
-	uint64 Import(const char * path);
-	uint64 Import(const char* path, const aiMaterial* material);
+	uint64 Import(const char* path, const aiMaterial* material = nullptr, const uint64 &force_uid = 0u);
 };
 

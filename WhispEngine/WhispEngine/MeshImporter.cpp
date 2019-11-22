@@ -14,9 +14,13 @@ MeshImporter::~MeshImporter()
 {
 }
 
-uint64 MeshImporter::Import(const char * path, const aiMesh * mesh, const uint64 &parent_uid)
+uint64 MeshImporter::Import(const char * path, const aiMesh * mesh, const uint64 &parent_uid, const uint64 &force_uid)
 {
-	ResourceMesh* ret = (ResourceMesh*)App->resources->CreateResource(Resource::MESH);
+	uint64 meta = force_uid;
+	if (meta == 0u)
+		meta = App->random->RandomGUID();
+
+	ResourceMesh* ret = (ResourceMesh*)App->resources->CreateResource(Resource::MESH, meta);
 
 	ret->SetFile(path);
 	ret->SetResourcePath(std::string(MESH_L_FOLDER + std::to_string(ret->GetUID()) + ".whispMesh").data());
