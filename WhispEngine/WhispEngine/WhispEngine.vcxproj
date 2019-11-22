@@ -48,6 +48,7 @@
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImport.cpp" />
     <ClCompile Include="ModuleObjectManager.cpp" />
+    <ClCompile Include="ModuleResources.cpp" />
     <ClCompile Include="ModuleShortCut.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Panel.cpp" />
@@ -104,6 +105,10 @@
     <ClCompile Include="ModuleSceneIntro.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceMesh.cpp" />
+    <ClCompile Include="ResourceModel.cpp" />
+    <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="ShortCut.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
@@ -149,6 +154,7 @@
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleImport.h" />
     <ClInclude Include="ModuleObjectManager.h" />
+    <ClInclude Include="ModuleResources.h" />
     <ClInclude Include="ModuleShortCut.h" />
     <ClInclude Include="Octree.h" />
     <ClInclude Include="Panel.h" />
@@ -237,6 +243,10 @@
     <ClInclude Include="PCG\pcg_random.hpp" />
     <ClInclude Include="PCG\pcg_uint128.hpp" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceMesh.h" />
+    <ClInclude Include="ResourceModel.h" />
+    <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="ShortCut.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>

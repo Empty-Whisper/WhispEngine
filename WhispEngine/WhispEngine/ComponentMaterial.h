@@ -2,21 +2,6 @@
 #include "Component.h"
 #include <string>
 
-struct Texture
-{
-	Texture(const uint &id, const char* path, const int& width, const int& height, const uint64_t& file_uid);
-
-	uint id = 0u;
-	uint64_t uid = 0u;
-	std::string name;
-	std::string path;
-
-	bool visible_on_inspector = true;
-
-	int width = -1;
-	int height = -1;
-};
-
 class ComponentMaterial :
 	public Component
 {
@@ -26,7 +11,6 @@ public:
 
 public:
 
-	void			SetTexture(Texture *texture);
 	const bool		HasTexture() const;
 	const uint		GetIDTexture() const;
 
@@ -48,6 +32,7 @@ private:
 
 	bool select_tex = false;
 
-	Texture* texture = nullptr;
+public:
+	uint64 uid = 0u;
 };
 

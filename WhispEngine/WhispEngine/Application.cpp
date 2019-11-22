@@ -11,6 +11,7 @@
 #include "ModuleShortCut.h"
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
+#include "ModuleResources.h"
 
 Application::Application()
 {
@@ -23,6 +24,7 @@ Application::Application()
 	shortcut =			new ModuleShortCut();
 	importer =			new ModuleImport();
 	object_manager =	new ModuleObjectManager();
+	resources =			new ModuleResources();
 	//file_system =		new ModuleFileSystem();		------------Unused for now--------------------
 
 	// The order of calls is very important!
@@ -33,6 +35,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(resources);
 	//AddModule(file_system);
 	AddModule(shortcut);
 	AddModule(importer);

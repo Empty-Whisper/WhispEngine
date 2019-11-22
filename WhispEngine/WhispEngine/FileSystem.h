@@ -1,13 +1,15 @@
 #pragma once
 #include "JSON/json.hpp"
 #include "Globals.h"
+#include "Resource.h"
 
 class FileSystem
 {
 public:
 	enum class Format {
 		NONE = -1,
-		JSON, FBX, DDS, PNG, JPG,
+		JSON, FBX, 
+		DDS, PNG, JPG, TGA,
 		MODEL, MESH, META, SCENE,
 		MAX
 	};
@@ -21,6 +23,7 @@ public:
 	void			SaveFile(const char* path, const nlohmann::json &to_save);
 
 	FileSystem::Format GetFormat(const char* file) const;
+	Resource::Type	   GetResourceType(const char* file) const;
 	std::string GetPathFormat(const char* path) const;
 	std::string GetFileNameFromPath(const char* file) const;
 	std::string GetFileFromPath(const char* file) const;
@@ -40,7 +43,8 @@ public:
 	bool IsMetaVaild(const char* path);
 	bool HasMeta(const char* file);
 	uint64_t GenerateMetaFile(const char* meta_path);
-	uint64_t GetMeta(const char* mata_path) const;
+	uint64_t GenerateMetaFile(const char* meta_path, const uint64& force_uid, const void * addition_data = nullptr, const uint& size_addition_data = 0u);
+	uint64_t GetUIDFromMeta(const char* mata_path) const;
 
 	bool SaveData(const void* data, const uint &size, const char* path);
 

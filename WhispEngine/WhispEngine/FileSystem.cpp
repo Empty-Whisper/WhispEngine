@@ -63,10 +63,32 @@ FileSystem::Format FileSystem::GetFormat(const char * file) const
 	else if (buffer.compare("scene") == 0) {
 		return FileSystem::Format::SCENE;
 	}
+	else if (buffer.compare("tga") == 0) {
+		return FileSystem::Format::TGA;
+	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());
 
 	return FileSystem::Format::NONE;
+}
+
+Resource::Type FileSystem::GetResourceType(const char * file) const
+{
+	switch (GetFormat(file))
+	{
+	case FileSystem::Format::DDS:
+	case FileSystem::Format::JPG:
+	case FileSystem::Format::PNG:
+		return Resource::Type::TEXTURE;
+		break;
+	case FileSystem::Format::FBX:
+		return Resource::Type::MODEL;
+		break;
+	default:
+		LOG("%s has not any extension that correspond to a resource", file);
+		break;
+	}
+	return Resource::Type::NONE;
 }
 
 std::string FileSystem::GetPathFormat(const char* path) const
@@ -117,7 +139,7 @@ std::string FileSystem::GetFileFromPath(const char * file) const
 	}
 	std::reverse(buffer.begin(), buffer.end());
 
-	return buffer.data();
+	return buffer;
 }
 
 std::string FileSystem::GetFileDirectory(const char * file_path) const
@@ -154,7 +176,7 @@ bool FileSystem::CreateDir(const char * path)
 
 bool FileSystem::RemoveFile(const char * path)
 {
-	if (std::experimental::filesystem::remove(path) == 0) {
+	if (std::experimental::filesystem::remove(path) == true) {
 		LOG("Removed %s successfully", path);
 		return true;
 	}
@@ -244,16 +266,24 @@ bool FileSystem::HasMeta(const char * file)
 
 uint64_t FileSystem::GenerateMetaFile(const char * meta_path)
 {
-	uint64_t meta = App->random->RandomGUID();
-	char* meta_data = new char[sizeof(uint64_t)];
-	memcpy(meta_data, &meta, sizeof(uint64_t));
-	App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t), meta_path);
-	delete[] meta_data;
-
-	return meta;
+	return GenerateMetaFile(meta_path, App->random->RandomGUID());
 }
 
-uint64_t FileSystem::GetMeta(const char * mata_path) const
+uint64_t FileSystem::GenerateMetaFile(const char * file_path, const uint64 & force_uid, const void * addition_data, const uint& size_addition_data)
+{
+	char* meta_data = new char[sizeof(uint64_t) + size_addition_data];
+	memcpy(meta_data, &force_uid, sizeof(uint64_t));
+	if (size_addition_data > 0u) {
+		char* cursor = meta_data + sizeof(uint64_t);
+		memcpy(cursor, addition_data, size_addition_data);
+	}
+	App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t) + size_addition_data, (std::string(file_path) + ".meta").c_str());
+	delete[] meta_data;
+
+	return force_uid;
+}
+
+uint64_t FileSystem::GetUIDFromMeta(const char * mata_path) const
 {
 	char* f_uid = App->dummy_file_system->GetData(mata_path);
 	if (f_uid == nullptr) {
@@ -278,7 +308,7 @@ bool FileSystem::SaveData(const void * data, const uint &size, const char * path
 
 char * FileSystem::GetData(const char * path)
 {
-	std::ifstream file(path);
+	std::ifstream file(path, std::ios::binary);
 
 	if (!file) {
 		LOG("Failed to open %s", path);

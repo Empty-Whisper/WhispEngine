@@ -194,8 +194,11 @@ void ModuleCamera3D::DeleteCamera(Camera * camera)
 		GameObject* sel = App->object_manager->GetSelected();
 		AABB aabb = AABB(-float3::one, float3::one);
 
-		if (sel != nullptr)
-			aabb = ((ComponentMesh*)sel->GetComponent(ComponentType::MESH))->GetAABB();
+		if (sel != nullptr) {
+			ComponentMesh* mesh = (ComponentMesh*)sel->GetComponent(ComponentType::MESH);
+			if (mesh != nullptr)
+				aabb = mesh->GetAABB();
+		}
 
 		float3 center = aabb.CenterPoint();
 

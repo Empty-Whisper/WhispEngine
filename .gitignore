@@ -63,7 +63,7 @@ StyleCopReport.xml
 *_p.c
 *_i.h
 *.ilk
-*.meta
+# *.meta commented to upload assets
 *.obj
 *.iobj
 *.pch

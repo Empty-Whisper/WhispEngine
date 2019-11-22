@@ -2,6 +2,7 @@
 #include "Imgui/imgui.h"
 #include <experimental/filesystem>
 #include "Application.h"
+#include "ModuleResources.h"
 #include "Globals.h"
 
 #include "ModuleImport.h"
@@ -39,16 +40,10 @@ void PanelResources::DrawNode(const char * path)
 					FileSystem::Format format = App->dummy_file_system->GetFormat(entry.path().extension().u8string().c_str());
 					switch (format)
 					{
-					case FileSystem::Format::JPG:
-					case FileSystem::Format::PNG:
-					case FileSystem::Format::DDS:
 					case FileSystem::Format::FBX:
-						if (!App->dummy_file_system->Exists((entry.path().u8string() + ".meta").c_str())) {
-							if (App->importer->Import(entry.path().u8string().c_str()) == false) {
-								LOG("FAILED to import %s", entry.path().u8string());
-							}
+						if (App->dummy_file_system->Exists((entry.path().u8string() + ".meta").c_str())) {
+							App->resources->Get(App->dummy_file_system->GetUIDFromMeta((entry.path().u8string() + ".meta").c_str()))->LoadToMemory();
 						}
-						App->importer->Import((entry.path().u8string() + ".meta").c_str());
 						break;
 					case FileSystem::Format::SCENE:
 						App->LoadScene(entry.path().u8string().c_str());

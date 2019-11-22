@@ -7,22 +7,26 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleObjectManager.h"
 
+#include "ModuleResources.h"
+
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MeshImporter.h"
+#include "ResourceMesh.h"
 #include "ComponentTransform.h"
 
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
 	material = (ComponentMaterial*)parent->CreateComponent(ComponentType::MATERIAL);
-	if (mesh != nullptr)
-		mesh->component = this;
 }
 
 void ComponentMesh::Update()
 {
+	if (uid == 0u)
+		return;
+	ResourceMesh* mesh = (ResourceMesh*)App->resources->Get(uid);
 	if (mesh == nullptr)
 		return;
 
@@ -45,25 +49,23 @@ void ComponentMesh::Update()
 		glEnable(GL_POLYGON_OFFSET_LINE);
 		glPolygonOffset(-1.f, 1.f);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		DrawWireFrame();
+		DrawWireFrame(mesh);
 	}
 	if (object->GetSelect() != ObjectSelected::NONE)
 	{
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 1, -1);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-		DrawOutline();
+		DrawOutline(mesh);
 	}
 	if(App->renderer3D->fill) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-
 		if (!App->camera->activate_frustum_culling)
-			Draw();
+			Draw(mesh);
 		else if (object->is_inside_frustum)
-			Draw();
+			Draw(mesh);
 	}
-	DrawNormals();
+	DrawNormals(mesh);
 	glColor3f(0.f, 0.f, 0.f);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -72,7 +74,8 @@ void ComponentMesh::Update()
 
 ComponentMesh::~ComponentMesh()
 {
-	delete mesh;
+	App->resources->FreeMemory(uid);
+
 	if (object->GetComponent(ComponentType::MATERIAL) != nullptr) {
 		if (material != nullptr) {
 			object->components.erase(std::find(object->components.begin(), object->components.end(), material));
@@ -82,7 +85,7 @@ ComponentMesh::~ComponentMesh()
 	}
 }
 
-void ComponentMesh::Draw()
+void ComponentMesh::Draw(const ResourceMesh* mesh)
 {
 	
 	glColor3f(1.f, 1.f, 1.f);
@@ -124,7 +127,7 @@ void ComponentMesh::Draw()
 	
 }
 
-void ComponentMesh::DrawWireFrame() {
+void ComponentMesh::DrawWireFrame(const ResourceMesh* mesh) {
 	glDisable(GL_LIGHTING);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertex.id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -134,7 +137,7 @@ void ComponentMesh::DrawWireFrame() {
 	glEnable(GL_LIGHTING);
 }
 
-void ComponentMesh::DrawOutline()
+void ComponentMesh::DrawOutline(const ResourceMesh* mesh)
 {
 	if (glIsEnabled(GL_STENCIL_TEST))
 	{
@@ -149,7 +152,7 @@ void ComponentMesh::DrawOutline()
 		glStencilFunc(GL_ALWAYS, 1, -1);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-		Draw();
+		Draw(mesh);
 
 		// Render the thick wireframe version.
 
@@ -169,7 +172,7 @@ void ComponentMesh::DrawOutline()
 		}		
 		glPolygonMode(GL_FRONT, GL_LINE);
 
-		DrawWireFrame();
+		DrawWireFrame(mesh);
 
 
 		/*--------------------------------------*/
@@ -181,9 +184,8 @@ void ComponentMesh::DrawOutline()
 
 }
 
-void ComponentMesh::DrawNormals()
+void ComponentMesh::DrawNormals(const ResourceMesh* mesh)
 {
-
 	if (view_face_normals) {
 		if (mesh->face_normals.data != nullptr) {
 			glColor3f(0.f, 1.f, 0.f);
@@ -222,21 +224,25 @@ void ComponentMesh::OnInspector()
 			ImGui::EndPopup();
 		}
 
-		if (mesh != nullptr) {
-			ImGui::Text("%i triangles (%i vertices, %i indices)", mesh->index.size / 9, mesh->vertex.size, mesh->index.size / 3);
+		if (uid != 0U) {
+			ResourceMesh* mesh = (ResourceMesh*)App->resources->Get(uid);
+			if (mesh != nullptr) {
+				ImGui::Text("%i triangles (%i vertices, %i indices)", mesh->index.size / 9, mesh->vertex.size, mesh->index.size / 3);
+				ImGui::TextColored(ImVec4(1.f, 0.f, 1.f, 1.f), "References: %u", mesh->GetReferences());
 
-			ImGui::Checkbox("Face Normals", &view_face_normals);
-			ImGui::Checkbox("Vertex Normals", &view_vertex_normals);
+				ImGui::Checkbox("Face Normals", &view_face_normals);
+				ImGui::Checkbox("Vertex Normals", &view_vertex_normals);
 
-			ImGui::Separator();
-			
-			ImGui::Checkbox("Bounding Box", &object->see_bounding_box);
+				ImGui::Separator();
+
+				ImGui::Checkbox("Bounding Box", &object->see_bounding_box);
+			}
 		}
 		else {
 			if (ImGui::Button("Set Resource"))
 				ImGui::OpenPopup("primitive_popup");
 			if (ImGui::BeginPopup("primitive_popup")) {
-				if (ImGui::Selectable("Cube")) // TODO: Do a for loop or a ImGui::Combo
+				/*if (ImGui::Selectable("Cube")) // TODO: Do a for loop or a ImGui::Combo
 					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CUBE, this);
 				if (ImGui::Selectable("Tetrahedron"))
 					mesh = App->object_manager->CreateMeshPrimitive(Primitives::TETRAHEDRON, this);
@@ -256,11 +262,20 @@ void ComponentMesh::OnInspector()
 					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CONE, this);
 				if (ImGui::Selectable("Cylinder"))
 					mesh = App->object_manager->CreateMeshPrimitive(Primitives::CYLINDER, this);
-
+					*/
 				ImGui::EndPopup();
 			}
 		}
 	}
+}
+
+void ComponentMesh::SetAABB()
+{
+	ResourceMesh* m = (ResourceMesh*)App->resources->Get(uid);
+	
+	local_box.SetNegativeInfinity();
+	local_box.Enclose((float3*)m->vertex.data, m->vertex.size);
+	CalulateAABB_OBB();
 }
 
 AABB ComponentMesh::GetAABB() const
@@ -284,71 +299,11 @@ OBB ComponentMesh::GetOBB() const
 
 void ComponentMesh::Save(nlohmann::json & node)
 {
-	node["MeshId"] = mesh->uid;
+	node["MeshId"] = uid;
 }
 
 void ComponentMesh::Load(const nlohmann::json & node)
 {
-	if (mesh == nullptr)
-		mesh = new Mesh_info(this);
-
-	mesh->uid = node["MeshId"];
-	App->importer->mesh->Load(mesh->uid, mesh);
-}
-
-Mesh_info::Mesh_info(ComponentMesh * mesh)
-{
-	component = mesh;
-}
-
-Mesh_info::~Mesh_info()
-{
-	if (vertex.data != nullptr)
-		delete[] vertex.data;
-	if (index.data != nullptr)
-		delete[] index.data;
-	if (face_normals.data != nullptr)
-		delete[] face_normals.data;
-	if (vertex_normals.data != nullptr)
-		delete[] vertex_normals.data;
-	if (tex_coords.data != nullptr)
-		delete[] tex_coords.data;
-
-	glDeleteBuffers(1, &vertex.id);
-	glDeleteBuffers(1, &index.id);
-	glDeleteBuffers(1, &face_normals.id);
-	glDeleteBuffers(1, &tex_coords.id);
-}
-
-void Mesh_info::SetGLBuffers()
-{
-	glGenBuffers(1, &vertex.id);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex.id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertex.size * 3, vertex.data, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &index.id);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index.id);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * index.size, index.data, GL_STATIC_DRAW);
-
-	if (face_normals.data != nullptr) {
-		glGenBuffers(1, &face_normals.id);
-		glBindBuffer(GL_ARRAY_BUFFER, face_normals.id);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * face_normals.size, face_normals.data, GL_STATIC_DRAW);
-	}
-
-	if (tex_coords.data != nullptr) {
-		glGenBuffers(1, &tex_coords.id);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tex_coords.id);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * tex_coords.size * 3, tex_coords.data, GL_STATIC_DRAW);
-	}
-
-	if (vertex_normals.data != nullptr) {
-		glGenBuffers(1, &vertex_normals.id);
-		glBindBuffer(GL_ARRAY_BUFFER, vertex_normals.id);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertex_normals.size, vertex_normals.data, GL_STATIC_DRAW);
-	}
-
-	component->local_box.SetNegativeInfinity();
-	component->local_box.Enclose((float3*)vertex.data, vertex.size);
-	component->CalulateAABB_OBB();
+	uid = node["MeshId"];
+	App->resources->LoadToMemory(uid);
 }

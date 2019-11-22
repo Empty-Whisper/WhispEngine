@@ -6,6 +6,8 @@
 #include "ComponentMaterial.h"
 #include "ModuleObjectManager.h"
 #include "Globals.h"
+#include "ModuleResources.h"
+#include "ResourceMesh.h"
 
 MeshImporter::MeshImporter()
 {
@@ -16,18 +18,28 @@ MeshImporter::~MeshImporter()
 {
 }
 
-bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh, const aiScene* scene)
+uint64 MeshImporter::Import(const char * path, const aiMesh * mesh, const uint64 &parent_uid, const uint64 &force_uid)
 {
+	uint64 meta = force_uid;
+	if (meta == 0u)
+		meta = App->random->RandomGUID();
+
+	ResourceMesh* ret = (ResourceMesh*)App->resources->CreateResource(Resource::MESH, meta);
+
+	ret->SetFile(path);
+	ret->SetResourcePath(std::string(MESH_L_FOLDER + std::to_string(ret->GetUID()) + ".whispMesh").data());
+	ret->parent = parent_uid;
+
 	/*length_name | num_vertex | num_index | num_face_normals | num_vertex_normals | num_tex_normals | ¿AABB?
 
 	name | vertex | index | face_normals | vertex_normals | tex_normals*/
 
-	std::string name(mesh->mName.C_Str());
+	ret->name.assign(mesh->mName.C_Str());
+
 	uint header[5] = { mesh->mNumVertices, mesh->mNumFaces * 3, mesh->mNumFaces * 3 * 2, mesh->mNumVertices, mesh->mNumVertices };
 
 	uint size =
 		sizeof(header) +								//header
-		sizeof(uint64_t) +								//texture uid
 		sizeof(float) * mesh->mNumVertices * 3 + 		//vertex
 		sizeof(uint) * mesh->mNumFaces * 9 + 			//index
 		sizeof(float) * mesh->mNumFaces * 2 * 3 * 3 + 	//face_normals
@@ -40,18 +52,6 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh, const aiScene
 
 	uint bytes = sizeof(header);
 	memcpy(cursor, header, bytes);
-
-	cursor += bytes;
-	bytes = sizeof(uint64_t);
-
-	aiMaterial* aimaterial = scene->mMaterials[mesh->mMaterialIndex];
-	aiString path;
-	if (aimaterial->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &path) == aiReturn_SUCCESS) {
-		LOG("Diffuse texture found: %s", path.C_Str());
-		uint64_t uid_tex = 0u;
-		App->importer->material->Import(path.C_Str(), &uid_tex);
-		memcpy(cursor, &uid_tex, bytes);
-	}
 
 	cursor += bytes;
 	bytes = sizeof(float) * mesh->mNumVertices * 3;
@@ -77,14 +77,14 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh, const aiScene
 
 		bytes = sizeof(float) * mesh->mNumFaces * 2 * 3 * 3;
 		float* face_normals = App->object_manager->CalculateFaceNormals((float*)mesh->mVertices, mesh->mNumFaces * 9 * 2, mesh->mNumFaces * 9, indices);
-		memcpy(cursor, face_normals, bytes); 
+		memcpy(cursor, face_normals, bytes);
 		delete[] face_normals;
 	}
 	else {
 		cursor += sizeof(uint) * mesh->mNumFaces * 9 + sizeof(float) * mesh->mNumFaces * 2 * 3 * 3;
 		LOG("Mesh has not faces");
 	}
-	
+
 	if (mesh->HasNormals()) {
 		cursor += bytes;
 		bytes = sizeof(float) * mesh->mNumVertices * 3;
@@ -94,7 +94,7 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh, const aiScene
 		cursor += sizeof(float) * mesh->mNumVertices * 3;
 		LOG("Mesh has not normals");
 	}
-	
+
 	if (mesh->HasTextureCoords(0)) {
 		cursor += bytes;
 		bytes = sizeof(float) * mesh->mNumVertices * 3;
@@ -103,84 +103,12 @@ bool MeshImporter::Import(const uint64_t &uid, const aiMesh* mesh, const aiScene
 	else {
 		LOG("Mesh has not texture coords");
 	}
-	
+
 	if (App->dummy_file_system->Exists(MESH_L_FOLDER) == false)
 		App->dummy_file_system->CreateDir(MESH_L_FOLDER);
 
-	App->dummy_file_system->SaveData(data, size, std::string(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").data());
+	App->dummy_file_system->SaveData(data, size, ret->GetLibraryPath());
 	delete[] data;
 
-	return true;
+	return ret->GetUID();
 }
-
-bool MeshImporter::Load(const uint64_t & uid, Mesh_info * mesh)
-{
-	std::string path(MESH_L_FOLDER + std::to_string(uid) + ".whispMesh");
-
-	char * data = App->dummy_file_system->GetData(path.c_str());
-	
-	if (data == nullptr) {
-		LOG("Failed, mesh with uid %" PRIu64 " not found", uid);
-		return false;
-	}
-	char* cursor = data;
-	mesh->uid = uid;
-
-	uint header[5];
-	uint bytes = sizeof(header);
-	memcpy(header, cursor, bytes);
-
-	cursor += bytes;
-	bytes = sizeof(uint64_t);
-	uint64_t mat_uid = 0u;
-	memcpy(&mat_uid, cursor, bytes);
-	if (mat_uid != 0u) {
-		std::string mat_path(MATERIAL_L_FOLDER + std::to_string(mat_uid) + ".dds");
-		if (mesh->component->object->HasComponent(ComponentType::MATERIAL) == false)
-			mesh->component->object->CreateComponent(ComponentType::MATERIAL);
-		((ComponentMaterial*)mesh->component->object->GetComponent(ComponentType::MATERIAL))->SetTexture(App->importer->material->Load(mat_path.c_str()));
-	}
-
-	uint num_vertices		= header[0];
-	uint num_index			= header[1];
-	uint num_face_normals	= header[2];
-	uint num_vertex_normals = header[3];
-	uint num_tex_coords		= header[4];
-
-	cursor += bytes;
-	mesh->vertex.size = num_vertices;
-	bytes = sizeof(float) * mesh->vertex.size * 3;
-	mesh->vertex.data = new float[mesh->vertex.size * 3];
-	memcpy(mesh->vertex.data, cursor, bytes);
-
-	cursor += bytes;
-
-	mesh->index.size = num_index * 3;
-	bytes = num_index * sizeof(uint);
-	mesh->index.data = new uint[mesh->index.size];
-	memcpy(mesh->index.data, cursor, bytes);
-
-	cursor += bytes;
-	mesh->face_normals.size = num_face_normals * 3;
-	bytes = mesh->face_normals.size * sizeof(float);
-	mesh->face_normals.data = new float[mesh->face_normals.size];
-	memcpy(mesh->face_normals.data, cursor, bytes);
-
-	cursor += bytes;
-	mesh->vertex_normals.size = num_vertex_normals * 3;
-	bytes = mesh->vertex_normals.size * sizeof(float);
-	mesh->vertex_normals.data = new float[mesh->vertex_normals.size];
-	memcpy(mesh->vertex_normals.data, cursor, bytes);
-
-	cursor += bytes;
-	mesh->tex_coords.size = num_tex_coords;
-	bytes = mesh->tex_coords.size * sizeof(float)*3;
-	mesh->tex_coords.data = new float[mesh->tex_coords.size*3];
-	memcpy(mesh->tex_coords.data, cursor, bytes);
-
-	mesh->SetGLBuffers();
-
-	delete[] data;
-	return true;
-}
-

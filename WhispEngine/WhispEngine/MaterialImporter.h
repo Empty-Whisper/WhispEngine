@@ -1,6 +1,8 @@
 #pragma once
 #include "Importer.h"
 #include "SDL/include/SDL_config.h"
+#include "Assimp/include/material.h"
+#include "Globals.h"
 
 struct Texture;
 
@@ -11,8 +13,7 @@ public:
 	MaterialImporter();
 	~MaterialImporter();
 
-	bool Import(const char* path, uint64_t * const uid = nullptr);
-	Texture* Load(const char* path);
-	Texture* Load(const uint64_t &uid);
+
+	uint64 Import(const char* path, const aiMaterial* material = nullptr, const uint64 &force_uid = 0u);
 };
 

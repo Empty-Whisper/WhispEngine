@@ -23,6 +23,7 @@ public:
 
 	bool CleanUp();
 
+	bool Import(const char* path, uint64 & output);
 	bool Import(const char* path);
 
 private:
