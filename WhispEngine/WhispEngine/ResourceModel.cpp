@@ -58,13 +58,11 @@ bool ResourceModel::LoadInMemory()
 		return false;
 	}
 
-	GameObject* container = App->object_manager->CreateGameObject(nullptr);
 	if (data.is_object()) {
 		nlohmann::json::iterator object = data.begin();
-		container->SetName(object.key().c_str());
 		if ((*object).is_array()) {
 			for (nlohmann::json::iterator it = (*object).begin(); it != (*object).end(); it++) {
-				CreateObjects(container, *it);
+				CreateObjects(nullptr, *it);
 			}
 		}
 	}

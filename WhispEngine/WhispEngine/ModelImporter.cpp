@@ -50,12 +50,43 @@ uint64 ModelImporter::Import(const char * path)
 		if (App->dummy_file_system->IsInSubDirectory(MODEL_A_FOLDER, (App->dummy_file_system->GetFileFromPath(path) + ".meta").data())) {
 			if (App->dummy_file_system->IsMetaVaild((std::string(path) + ".meta").data())) {
 				LOG("File %s already imported", App->dummy_file_system->GetFileFromPath(path).data());
-				Resource* res = App->resources->CreateResource(Resource::Type::MODEL, App->dummy_file_system->GetMeta((std::string(path) + ".meta").data()));
+				meta = App->dummy_file_system->GetUIDMetaFrom((std::string(path) + ".meta").data());
+				Resource* res = App->resources->CreateResource(Resource::Type::MODEL, meta);
+				res->SetFile(path);
+				res->SetResourcePath((MODEL_L_FOLDER + std::to_string(meta) + ".whispModel").c_str());
+				
 				//TODO: Load Resource
+				char* data = App->dummy_file_system->GetData((std::string(path) + ".meta").data());
+				if (data != nullptr) {
+					char* cursor = data + sizeof(uint64);
+
+					uint n_meshes = 0u;
+					memcpy(&n_meshes, cursor, sizeof(uint));
+					cursor += sizeof(uint);
+					for (int i = 0; i < n_meshes; i++) {
+						uint64 uid = 0u;
+						memcpy(&uid, cursor, sizeof(uint64));
+						App->resources->CreateResource(Resource::Type::MESH, uid);
+						cursor += sizeof(uint64);
+					}
+
+					uint n_materials = 0u;
+					std::memcpy(&n_materials, cursor, sizeof(uint));
+					cursor += sizeof(uint);
+					for (int i = 0; i < n_materials; i++) {
+						uint64 uid = 0u;
+						std::memcpy(&uid, cursor, sizeof(uint64));
+						App->resources->CreateResource(Resource::Type::TEXTURE, uid);
+						cursor += sizeof(uint64);
+					}
+
+					delete[] data;
+				}
+
 				return res->GetUID();
 			}
 			else {
-				meta = App->dummy_file_system->GetMeta((std::string(path) + ".meta").data());
+				meta = App->dummy_file_system->GetUIDMetaFrom((std::string(path) + ".meta").data());
 			}
 		}
 		// -------------------------------------------------------------------
@@ -64,9 +95,14 @@ uint64 ModelImporter::Import(const char * path)
 		uint ticks = SDL_GetTicks(); //timer
 		PerfTimer timer;
 
-		ResourceModel* model = meta == 0u ? (ResourceModel*)App->resources->CreateResource(Resource::Type::MODEL) : (ResourceModel*)App->resources->CreateResource(Resource::Type::MODEL, meta);
+		ResourceModel* model = nullptr;
+		if (meta == 0u) {
+			model = (ResourceModel*)App->resources->CreateResource(Resource::Type::MODEL);
+		}
+		else {
+			model = (ResourceModel*)App->resources->CreateResource(Resource::Type::MODEL, meta);
+		}
 		
-		App->dummy_file_system->GenerateMetaFile(path, model->GetUID());
 		model->SetFile(path);
 		model->SetResourcePath((MODEL_L_FOLDER + std::to_string(model->GetUID()) + std::string(".whispModel")).c_str());
 
@@ -88,8 +124,32 @@ uint64 ModelImporter::Import(const char * path)
 			App->dummy_file_system->CreateDir(MODEL_L_FOLDER);
 		}
 
+		uint size = sizeof(uint) * 2 + sizeof(uint64_t) * uid_meshes.size() + sizeof(uint64_t) * uid_materials.size();
+		char* data = new char[size];
+		memset(data, 0, size);
+		char* cursor = data;
+
+		uint bytes = sizeof(uint);
+		uint n_meshes = uid_meshes.size();
+		memcpy(cursor, &n_meshes, bytes);
+
+		cursor += bytes;
+		bytes = sizeof(uint64_t) * n_meshes;
+		memcpy(cursor, uid_meshes.data(), bytes);
+
+		cursor += bytes;
+		bytes = sizeof(uint);
+		uint n_materials = uid_materials.size();
+		memcpy(cursor, &n_materials, bytes);
+
+		cursor += bytes;
+		bytes = sizeof(uint64_t) * n_materials;
+		memcpy(cursor, uid_materials.data(), bytes);
+
+		App->dummy_file_system->GenerateMetaFile(path, model->GetUID(), data, size);
 		model->Save();
 
+		delete[] data;
 		aiReleaseImport(scene);
 		LOG("Time to load FBX: %u", SDL_GetTicks() - ticks);
 	}

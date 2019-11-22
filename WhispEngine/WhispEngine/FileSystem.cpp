@@ -269,17 +269,21 @@ uint64_t FileSystem::GenerateMetaFile(const char * meta_path)
 	return GenerateMetaFile(meta_path, App->random->RandomGUID());
 }
 
-uint64_t FileSystem::GenerateMetaFile(const char * file_path, const uint64 & force_uid)
+uint64_t FileSystem::GenerateMetaFile(const char * file_path, const uint64 & force_uid, const void * addition_data, const uint& size_addition_data)
 {
-	char* meta_data = new char[sizeof(uint64_t)];
+	char* meta_data = new char[sizeof(uint64_t) + size_addition_data];
 	memcpy(meta_data, &force_uid, sizeof(uint64_t));
-	App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t), (std::string(file_path) + ".meta").c_str());
+	if (size_addition_data > 0u) {
+		char* cursor = meta_data + sizeof(uint64_t);
+		memcpy(cursor, addition_data, size_addition_data);
+	}
+	App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t) + size_addition_data, (std::string(file_path) + ".meta").c_str());
 	delete[] meta_data;
 
 	return force_uid;
 }
 
-uint64_t FileSystem::GetMeta(const char * mata_path) const
+uint64_t FileSystem::GetUIDMetaFrom(const char * mata_path) const
 {
 	char* f_uid = App->dummy_file_system->GetData(mata_path);
 	if (f_uid == nullptr) {
@@ -304,7 +308,7 @@ bool FileSystem::SaveData(const void * data, const uint &size, const char * path
 
 char * FileSystem::GetData(const char * path)
 {
-	std::ifstream file(path);
+	std::ifstream file(path, std::ios::binary);
 
 	if (!file) {
 		LOG("Failed to open %s", path);

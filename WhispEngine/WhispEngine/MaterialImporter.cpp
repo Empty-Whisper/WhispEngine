@@ -34,7 +34,7 @@ uint64 MaterialImporter::Import(const char * path)
 	if (App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str(), &mat_path)) {
 		if (App->dummy_file_system->Exists((mat_path + ".meta").c_str())) {
 			if (App->dummy_file_system->IsMetaVaild((mat_path + ".meta").c_str())) {
-				Resource* res = App->resources->CreateResource(Resource::Type::TEXTURE, App->dummy_file_system->GetMeta((mat_path + ".meta").c_str()));
+				Resource* res = App->resources->CreateResource(Resource::Type::TEXTURE, App->dummy_file_system->GetUIDMetaFrom((mat_path + ".meta").c_str()));
 				// TODO: load resource
 				return res->GetUID();
 			}
