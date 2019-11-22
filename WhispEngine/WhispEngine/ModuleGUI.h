@@ -11,6 +11,7 @@ class PanelHierarchy;
 class PanelCreate;
 class PanelInspector;
 class PanelScene;
+class PanelGame;
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
@@ -62,4 +63,5 @@ private:
 
 public:
 	PanelScene* scene = nullptr;
+	PanelGame* game = nullptr;
 };

@@ -3,6 +3,10 @@
 #include "ComponentTransform.h"
 #include "MeshImporter.h"
 #include "MaterialImporter.h"
+#include "ModuleImport.h"
+
+#include "ModuleObjectManager.h"
+#include "ModuleResources.h"
 
 #include "Brofiler/Brofiler.h"
 

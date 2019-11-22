@@ -2,6 +2,14 @@
 #include "ComponentTransform.h"
 #include "Application.h"
 #include "Brofiler/Brofiler.h"
+#include "Imgui/ImGuizmo.h"
+#include "PanelScene.h"
+
+#include "ModuleInput.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleGUI.h"
+#include "ModuleImport.h"
+#include "ModuleRenderer3D.h"
 
 ModuleObjectManager::ModuleObjectManager()
 {
@@ -29,7 +37,7 @@ update_status ModuleObjectManager::Update()
 	UpdateGameObject(root);
 
 	//Camera
-	App->camera->GetCurrentCamera()->DrawInsideFrustum();
+	App->camera->GetGameCamera()->DrawInsideFrustum();
 
 	return UPDATE_CONTINUE;
 }
@@ -77,15 +85,15 @@ GameObject * ModuleObjectManager::GetRoot() const
 	return root;
 }
 
-void ModuleObjectManager::GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector) const
+void ModuleObjectManager::GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const
 {
 
 	if (!obj->children.empty()) {
 
 		for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
 			vector.push_back(*i);
-			
-			GetAllGameObjects(*i, vector);
+
+			GetChildsFrom(*i, vector);
 		}
 	}
 }
@@ -94,7 +102,7 @@ const AABB ModuleObjectManager::GetMaxAABB(GameObject * obj, std::vector<GameObj
 {
 	float3 max_point, min_point;
 	max_point = min_point = float3::zero;
-	GetAllGameObjects(obj, objects);
+	GetChildsFrom(obj, objects);
 	ComponentMesh* mesh = nullptr;
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		if ((*i)->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
@@ -134,6 +142,79 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 		if (select != nullptr)
 			select->Select();
 		selected = select;
+	}
+}
+
+void ModuleObjectManager::MousePick()
+{
+	static ImVec2 scene_position;
+	static ImVec2 scene_size;
+
+	scene_position = App->gui->scene->GetPanelPos();
+	scene_size = App->gui->scene->GetPanelSize();
+	scene_size = { scene_position.x + scene_size.x, scene_position.y + scene_size.y };
+
+
+
+	Rect window = { (int)scene_position.x, (int)scene_position.y, (int)scene_size.x, (int)scene_size.y };
+	float2 mouse_pos = {(float)App->input->GetMouseX(), (float)App->input->GetMouseY()};
+
+	//Point Rect Formula
+	if (mouse_pos.x >= window.left && mouse_pos.x <= window.right && mouse_pos.y > window.top && mouse_pos.y < window.bottom)
+	{
+		//The point (1, 1) corresponds to the top-right corner of the near plane
+		//(-1, -1) is bottom-left
+
+		float first_normalized_x = (mouse_pos.x - window.left) / (window.right - window.left);
+		float first_normalized_y = (mouse_pos.y - window.top) / (window.bottom - window.top);
+
+		float normalized_x = (first_normalized_x * 2) - 1;
+		float normalized_y = 1 - (first_normalized_y * 2);
+
+		LineSegment picking = App->camera->GetSceneCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
+
+		float distance = 99999999999;
+		GameObject* closest = nullptr;
+
+		std::vector<GameObject*> game_objects;
+		GetChildsFrom(root, game_objects);
+
+		//kdtree->GetElementsToTest(picking, 0, App->camera->GetCurrentCamera()->GetFarPlaneDistance(), gos);   //Need to be finished Octree
+
+		for (std::vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
+		{
+			bool hit;
+			float dist;
+			//(*it)->TestRay(picking, hit, dist); //Need to be finihed AABB
+
+			if (hit)
+			{
+				if (dist < distance)
+				{
+					distance = dist;
+					closest = (*it);
+				}
+			}
+		}
+
+		if (closest != nullptr)
+		{
+			std::vector<GameObject*> selected_and_childs;
+			if (selected != nullptr)
+			{
+				selected_and_childs.push_back(selected);
+				GetChildsFrom(selected, selected_and_childs);
+			}
+
+			for (std::vector<GameObject*>::iterator it = selected_and_childs.begin(); it != selected_and_childs.end();)
+			{
+				(*it)->Deselect();
+				it = selected_and_childs.erase(it);
+			}
+
+			//TODO solve this
+			GetChildsFrom(closest, selected_and_childs);
+		}
 	}
 }
 
@@ -185,47 +266,141 @@ bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject
 	return ret;
 }
 
-const char * ModuleObjectManager::PrimitivesToString(const Primitives prim)
+//const char * ModuleObjectManager::PrimitivesToString(const Primitives prim)
+//{
+//	const char* name = nullptr;
+//	switch (prim)
+//	{
+//	case Primitives::CUBE:
+//		name = "Cube";
+//		break;
+//	case Primitives::TETRAHEDRON:
+//		name = "Tetrahedron";
+//		break;
+//	case Primitives::OCTAHEDRON:
+//		name = "Octahedron";
+//		break;
+//	case Primitives::DODECAHEDRON:
+//		name = "Dodecahedron";
+//		break;
+//	case Primitives::ICOSAHEDRON:
+//		name = "Icosahedron";
+//		break;
+//	case Primitives::SPHERE:
+//		name = "Sphere";
+//		break;
+//	case Primitives::HEMISPHERE:
+//		name = "Hemisphere";
+//		break;
+//	case Primitives::TORUS:
+//		name = "Torus";
+//		break;
+//	case Primitives::CONE:
+//		name = "Cone";
+//		break;
+//	case Primitives::CYLINDER:
+//		name = "Cylinder";
+//		break;
+//	default:
+//		LOG("Added more primitives than expected, add the missing primitives to the for");
+//		break;
+//	}
+//
+//	return name;
+//}
+
+void ModuleObjectManager::UpdateGuizmo()
 {
-	const char* name = nullptr;
-	switch (prim)
+	ImGuizmo::MODE guizmoApply = guizmoMode;
+
+	if (gizmoOperation == ImGuizmo::OPERATION::SCALE)
+		guizmoApply = ImGuizmo::MODE::WORLD;
+
+	ChangeGuizmoOperation(gizmoOperation);
+
+	float4x4 global_transform = ((ComponentTransform*)GetSelected()->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed();
+	float4x4 moved_transformation;
+	float matrix_properties[16];
+
+	ImGuizmo::Manipulate(App->camera->GetSceneCamera()->GetViewMatrix().ptr(), App->camera->GetSceneCamera()->GetProjectionMatrix().ptr(), gizmoOperation, guizmoApply, global_transform.ptr(), matrix_properties);
+	FillMatrix(moved_transformation, matrix_properties);
+	
+	std::vector<GameObject*> selected_and_childs;
+	if (selected != nullptr)
 	{
-	case Primitives::CUBE:
-		name = "Cube";
-		break;
-	case Primitives::TETRAHEDRON:
-		name = "Tetrahedron";
-		break;
-	case Primitives::OCTAHEDRON:
-		name = "Octahedron";
-		break;
-	case Primitives::DODECAHEDRON:
-		name = "Dodecahedron";
-		break;
-	case Primitives::ICOSAHEDRON:
-		name = "Icosahedron";
-		break;
-	case Primitives::SPHERE:
-		name = "Sphere";
-		break;
-	case Primitives::HEMISPHERE:
-		name = "Hemisphere";
-		break;
-	case Primitives::TORUS:
-		name = "Torus";
-		break;
-	case Primitives::CONE:
-		name = "Cone";
-		break;
-	case Primitives::CYLINDER:
-		name = "Cylinder";
-		break;
-	default:
-		LOG("Added more primitives than expected, add the missing primitives to the for");
-		break;
+		selected_and_childs.push_back(selected);
+		GetChildsFrom(selected, selected_and_childs);
 	}
 
-	return name;
+	for (std::vector<GameObject*>::iterator i = selected_and_childs.begin(); i != selected_and_childs.end(); ++i)
+	{
+		if (ImGuizmo::IsUsing() && !App->camera->is_moving_camera)
+		{
+			float4x4 position_matrix = float4x4::identity;
+			float4x4 rotation_matrix = float4x4::identity;
+			float4x4 scale_matrix = float4x4::identity;
+
+			switch (gizmoOperation)
+			{
+			case ImGuizmo::OPERATION::TRANSLATE:
+			{
+				position_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(position_matrix);
+			}
+			break;
+
+			case ImGuizmo::OPERATION::ROTATE:
+			{
+				rotation_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(rotation_matrix);
+			}
+			break;
+			case ImGuizmo::OPERATION::SCALE:
+			{
+				float4x4 save_trans = moved_transformation;
+				moved_transformation = moved_transformation * last_moved_transformation.Inverted();
+
+				scale_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
+
+				last_moved_transformation = save_trans;
+			}
+			break;
+			}
+		}
+		else
+		{
+			last_moved_transformation = float4x4::identity;
+		}
+	}
+}
+
+void ModuleObjectManager::FillMatrix(float4x4 & matrix, float o[])
+{
+	matrix = float4x4(
+		o[0], o[4], o[8], o[12],
+		o[1], o[5], o[9], o[13],
+		o[2], o[6], o[10], o[14],
+		o[3], o[7], o[11], o[15]);
+}
+
+void ModuleObjectManager::ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation)
+{
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		gizmoOperation = ImGuizmo::OPERATION::ROTATE;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+		gizmoOperation = ImGuizmo::OPERATION::SCALE;
+	}
+
+}
+
+void ModuleObjectManager::ChangeGuizmoMode(ImGuizmo::MODE & gizmoMode)
+{
+	this->guizmoMode = gizmoMode;
 }
 
 

@@ -1,6 +1,7 @@
 #include "Component.h"
 #include "Application.h"
 #include "GameObject.h"
+#include "ModuleInput.h"
 
 Component::Component(GameObject * parent, ComponentType type) : object(parent), type(type)
 {

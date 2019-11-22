@@ -1,6 +1,9 @@
 #include "PanelAbout.h"
 #include "Application.h"
 
+#include "ModuleSceneIntro.h"
+#include "ModuleImport.h"
+
 PanelAbout::PanelAbout(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	: Panel("Configuration", start_active, shortcut1, shortcut2, shortcut3)
 {

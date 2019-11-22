@@ -2,6 +2,10 @@
 #include "Application.h"
 #include "Imgui/imgui.h"
 
+#include "ModuleSceneIntro.h"
+#include "ModuleGUI.h"
+#include "ModuleObjectManager.h"
+
 PanelInspector::PanelInspector(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	:Panel("Inspector", start_active, shortcut1, shortcut2, shortcut3)
 {
@@ -83,7 +87,7 @@ void PanelInspector::Update()
 					std::vector<GameObject*> objects;
 					if (has_parent_dynamic)
 						sel->HasDynamicParent(objects);
-					App->object_manager->GetAllGameObjects(sel, objects);
+					App->object_manager->GetChildsFrom(sel, objects);
 
 					for (auto i = objects.begin(); i != objects.end(); ++i) {
 						if ((*i)->IsStatic() != to_static) {

@@ -1,31 +1,38 @@
 #include "ComponentCamera.h"
 #include "GameObject.h"
 #include "MathGeoLib/include/Math/float3.h"
+#include "ComponentTransform.h"
 #include "Application.h"
+#include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleGUI.h"
+#include "PanelScene.h"
+#include "ModuleObjectManager.h"
 
 
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)
 {
 	camera = App->camera->CreateCamera();
-
 }
 
 ComponentCamera::~ComponentCamera()
 {
+	App->camera->DeleteCamera(camera);
 }
 
 void ComponentCamera::Update()
 {
-	//camera->SetPosition(App->object_manager->GetSelected()->/*GetOwner()->transform->GetLocalPosition()*/);
-	//camera->SetZDir(GetOwner()->transform->GetGlobalTransform().WorldZ());
-	//camera->SetYDir(GetOwner()->transform->GetGlobalTransform().WorldY());
-
 	float3 corners[8];
 	camera->GetAllCorners(corners);
+
+	//Update Component Transform
+	camera->SetTransformPosition(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetPosition());
+	camera->SetVectorDirectionFront(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().WorldZ());
+	camera->SetVectorDirectionUp(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().WorldY());
+	
+	//Debug Drawing
 	DrawFrustum();
 
-	
-	
 }
 
 void ComponentCamera::OnInspector()
@@ -47,8 +54,23 @@ void ComponentCamera::OnInspector()
 		if (ImGui::DragFloat("zFar", (float*)&zFar, 0.1f, zNear, 1000))
 			camera->SetFarZ(zFar);
 
-		if(ImGui::Checkbox("Main Camera", &camera->main_camera))
-			App->camera->SetCurrentCamera(camera);
+		ImGui::Separator();
+
+		ImGui::Checkbox("Camera Preview", &App->gui->scene->preview_checkbox);
+		
+		ImGui::Checkbox("Frustum Culling", &App->camera->activate_frustum_culling);
+
+		ImGui::Separator();
+
+		if(ImGui::Checkbox("Main Camera", &checkbox_main_camera))
+			is_main_camera = true;
+
+		if (checkbox_main_camera && is_main_camera)
+		{
+			App->camera->SetGameCamera(camera);
+			is_main_camera = false;
+		}
+
 	}
 }
 
@@ -64,9 +86,9 @@ void ComponentCamera::DrawFrustum()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 
-	glColor3f(0, 0, 255);
+	glColor3f(0, 0, 100);
 
-	glLineWidth(3.f);
+	glLineWidth(1.f);
 
 	glBegin(GL_QUADS);
 

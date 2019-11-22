@@ -2,8 +2,9 @@
 
 #include "Application.h"
 #include "ModuleObjectManager.h"
-
+#include "ModuleRenderer3D.h"
 #include "ComponentTransform.h"
+#include "ModuleSceneIntro.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"

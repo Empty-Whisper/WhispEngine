@@ -3,6 +3,9 @@
 #include "GameObject.h"
 #include "Application.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
+#include "Imgui/ImGuizmo.h"
+#include "ModuleGUI.h"
+#include "ModuleObjectManager.h"
 #include "Imgui/imgui_internal.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
@@ -85,7 +88,26 @@ void ComponentTransform::OnInspector()
 		}
 		ImGui::PopID();
 
-		if (object->IsStatic()) {
+
+		//Guizmo
+		ImGuizmo::MODE guizmoLocal = ImGuizmo::MODE::LOCAL;
+		ImGuizmo::MODE guizmoWorld = ImGuizmo::MODE::WORLD;
+		bool world_guizmo = !local_guizmo;
+
+		ImGui::Separator();
+		if (ImGui::Checkbox("Local", &local_guizmo))
+			App->object_manager->ChangeGuizmoMode(guizmoLocal);
+
+		ImGui::SameLine();
+
+		if (ImGui::Checkbox("Global", &world_guizmo))
+		{
+			local_guizmo = !local_guizmo;
+			App->object_manager->ChangeGuizmoMode(guizmoWorld);
+		}
+
+		if (object->IsStatic()) 
+		{
 			ImGui::PopItemFlag();
 			ImGui::PopStyleVar();
 		}
@@ -143,6 +165,18 @@ void ComponentTransform::SetLocalMatrix(const float3 &_pos, const Quat& _rot, co
 	scale	 = _scale;
 	local_matrix = float4x4::FromTRS(position, rotation, scale);
 }
+
+void ComponentTransform::SetGlobalMatrix(const math::float4x4 & matrix)
+{
+	global_matrix = matrix;
+
+	if (object->parent != nullptr)
+	{
+		float4x4 _local_matrix = ((ComponentTransform*)object->parent->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Inverted() * global_matrix;
+		SetLocalMatrix(_local_matrix);
+	}
+}
+
 
 void ComponentTransform::CalculeLocalMatrix()
 {

@@ -19,8 +19,8 @@
 #include "PanelCreate.h"
 #include "PanelInspector.h"
 #include "PanelScene.h"
+#include "PanelGame.h"
 #include "PanelResources.h"
-
 #include "Brofiler/Brofiler.h"
 
 
@@ -63,8 +63,11 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(hierarchy = new PanelHierarchy(node["panels"]["hierarchy"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_3));
 	panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_4));
 	panels.push_back(inspector = new PanelInspector(node["panels"]["inspector"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_5));
+	panels.push_back(game = new PanelGame(node["panels"]["game"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_7));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
 	panels.push_back(new PanelResources());
+
+	ImGuizmo::Enable(true);
 
 	return true;
 }
@@ -75,6 +78,7 @@ update_status ModuleGUI::PreUpdate()
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 
 	return UPDATE_CONTINUE;
 }
@@ -142,6 +146,7 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Create", "Shift+4", &create->active);
 			ImGui::MenuItem("Inspector", "Shift+5", &inspector->active);
 			ImGui::MenuItem("Scene", "Shift+6", &scene->active);
+			ImGui::MenuItem("Game", "Shift+7", &game->active);
 			ImGui::MenuItem("Style Editor", "", &show_style_window);
 			ImGui::EndMenu();
 
@@ -212,6 +217,9 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::EndMenu();
 
 		}		
+		ImGui::SameLine(ImGui::GetWindowWidth() - 90);
+		HelpMarker("(?)Info", "Right click        - View around \nWASD + Right click - Move through viewport\nShift              - Speed up\nAlt + Right click  - Zoom\nScroll wheel       - Fast Zoom\nMiddle mouse       - Move X/Y viewport\nF                  - Focus object\nAlt + Left click   - Orbit object");
+
 
 	}
 	ImGui::EndMainMenuBar();

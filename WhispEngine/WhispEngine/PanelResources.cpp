@@ -4,6 +4,8 @@
 #include "Application.h"
 #include "Globals.h"
 
+#include "ModuleImport.h"
+
 PanelResources::PanelResources()
 {
 }

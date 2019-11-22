@@ -2,9 +2,12 @@
 #include "Module.h"
 #include "ComponentMesh.h"
 #include "Assimp/include/mesh.h"
+#include "Imgui/ImGuizmo.h"
 #include "Octree.h"
-
 #include "GameObject.h"
+#include "MathGeoLib/include/Math/float4x4.h"
+#include "MathGeoLib/include/Geometry/AABB.h"
+//#include "Imgui/imgui.h"
 
 enum class Primitives {
 	NONE = -1,
@@ -53,15 +56,21 @@ public:
 	void DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
-	void GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector) const;
+	void GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const;
 	const AABB GetMaxAABB(GameObject* obj, std::vector<GameObject*> &vector) const;
 	GameObject*	GetSelected() const;
-	void		SetSelected(GameObject* select);
-	
+	void SetSelected(GameObject* select);
+
+	void MousePick();
+
 	bool SaveGameObjects(nlohmann::json &file);
 	bool LoadGameObjects(const nlohmann::json &file);
 	bool LoadGameObject(const nlohmann::json &node, GameObject* parent);
 
+	void UpdateGuizmo();
+	void ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation);
+	void ChangeGuizmoMode(ImGuizmo::MODE &gizmoMode);
+	void FillMatrix(float4x4 &matrix,float o[]);
 	// =========================================================== old
 	//TODO mesh: set all mesh creation functions in Mesh_info class----------------------------------------------------------------------------------------------------------
 
@@ -70,6 +79,7 @@ public:
 
 	Mesh_info* CreateMeshPrimitive(const Primitives &type, ComponentMesh* component);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
+
 
 	void   FillNormals(Mesh_info * ret, const float * normals = nullptr);*/
 	float* CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude = 0.5f);
@@ -80,12 +90,19 @@ public:
 	*/
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	/*void FillNormals(Mesh_info * ret, const float * normals = nullptr);
+	void FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces);
+	void FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
+	void FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);
+	void FillTextureCoords(Mesh_info* mesh, const float* textureCoords);
+ 	float* CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude = 0.5f);*/
+
 	//void Demo();
 
 	// =========================================================== !old
 
 private:
-	const char* PrimitivesToString(const Primitives prim);
+	//const char* PrimitivesToString(const Primitives prim);
 
 public:
 	GameObject* root = nullptr; //TODO: Change this to private
@@ -94,5 +111,9 @@ private:
 	//GameObject* root = nullptr;
 
 	GameObject* selected = nullptr;
+
+	ImGuizmo::OPERATION   gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE        guizmoMode = ImGuizmo::MODE::WORLD;
+	math::float4x4		  last_moved_transformation = float4x4::identity;
 };
 

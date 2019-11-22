@@ -2,6 +2,12 @@
 #include "Application.h"
 //#include "Imgui/imgui.h"
 
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleGUI.h"
+#include "ModuleRenderer3D.h"
+
 
 PanelConfiguration::PanelConfiguration(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	: Panel("Configuration", start_active, shortcut1, shortcut2, shortcut3)

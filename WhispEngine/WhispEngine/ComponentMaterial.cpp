@@ -4,6 +4,11 @@
 #include "Application.h"
 #include "MaterialImporter.h"
 #include "ResourceTexture.h"
+#include "ModuleImport.h"
+#include "ModuleInput.h"
+#include "ModuleObjectManager.h"
+#include "ModuleResources.h"
+#include "Resource.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* parent) : Component(parent, ComponentType::MATERIAL)
 {
