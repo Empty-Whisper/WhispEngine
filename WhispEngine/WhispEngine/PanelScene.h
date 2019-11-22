@@ -21,6 +21,7 @@ public:
 
 public:
 	bool active_preview = false;
+	bool preview_checkbox = true;
 private:
 	ImVec2 panel_size = { 0.f, 0.f};
 	ImVec2 panel_pos = { 0.f, 0.f};

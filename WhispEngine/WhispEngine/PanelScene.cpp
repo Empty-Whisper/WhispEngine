@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ComponentCamera.h"
-
+#include "PanelInspector.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleObjectManager.h"
 
@@ -65,18 +65,22 @@ void PanelScene::Update()
 	ImGui::End();
 	ImGui::PopStyleVar();
 
-	if (active_preview)
+	if (active_preview && preview_checkbox)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		if (ImGui::Begin("Camerea Preview", &active, ImGuiWindowFlags_NoDecoration  || ImGuiWindowFlags_NoDocking || ImGuiWindowFlags_NoResize || ImGuiWindowFlags_NoMove || ImGuiWindowFlags_NoInputs || ImGuiWindowFlags_NoBringToFrontOnFocus))
+		if (ImGui::Begin("Camerea Preview", &active, ImGuiWindowFlags_NoDocking || ImGuiWindowFlags_NoInputs))
 		{
-			ImVec2 preview_size = ImGui::GetWindowSize();
-
-			ImGui::SetWindowPos(ImVec2(panel_pos.x + panel_size.x - preview_size.x - 20, panel_pos.y + panel_size.y - preview_size.y));
-			ImGui::SetWindowSize(ImVec2(316, 252));
+			static bool init_window = true;
+			if (init_window)
+			{
+				ImVec2 preview_size = ImVec2(200, 200);
+				ImGui::SetWindowPos(ImVec2(panel_pos.x + panel_size.x - preview_size.x - 20, panel_pos.y + panel_size.y - preview_size.y));
+				ImGui::SetWindowSize(preview_size);
+				init_window = false;
+			}
+			
 			ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
 			ImGui::Image((ImTextureID)App->renderer3D->game_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
-						ImGui::SetWindowSize(ImVec2(316, 252));
 
 		}
 		ImGui::End();
