@@ -11,6 +11,7 @@
 #include "ModuleShortCut.h"
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
+#include "ModuleResources.h"
 
 Application::Application()
 {

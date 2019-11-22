@@ -2,7 +2,10 @@
 #include "Assimp/include/scene.h"
 #include "Application.h"
 #include "JSON/json.hpp"
+
 #include "ComponentTransform.h"
+#include "ModuleObjectManager.h"
+#include "ModuleResources.h"
 
 ResourceModel::ResourceModel(const uint64 & uid) : Resource(uid, Resource::Type::MODEL)
 {

@@ -1,6 +1,8 @@
 #include "ResourceMesh.h"
 #include "Application.h"
 
+#include "glew-2.1.0/include/GL/glew.h"
+
 ResourceMesh::ResourceMesh(const uint64& uid) : Resource(uid, Resource::Type::MESH)
 {
 }

@@ -2,6 +2,7 @@
 #include "Imgui/imgui.h"
 #include <experimental/filesystem>
 #include "Application.h"
+#include "ModuleResources.h"
 #include "Globals.h"
 
 #include "ModuleImport.h"

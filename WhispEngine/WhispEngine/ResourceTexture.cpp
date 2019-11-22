@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "MaterialImporter.h"
 
+#include "glew-2.1.0/include/GL/glew.h"
+
 // Devil ---------------------------------------------------------
 #include "DevIL/include/IL/il.h"
 #include "DevIL/include/IL/ilu.h"

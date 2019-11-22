@@ -17,6 +17,8 @@
 #include "MaterialImporter.h"
 #include "MeshImporter.h"
 
+#include "ModuleResources.h"
+
 #include <filesystem>
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")

@@ -3,6 +3,7 @@
 #include "ResourceModel.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "ModuleImport.h"
 
 ModuleResources::ModuleResources()
 {

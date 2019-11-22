@@ -6,6 +6,7 @@
 #include "ComponentMaterial.h"
 #include "ModuleObjectManager.h"
 #include "Globals.h"
+#include "ModuleResources.h"
 #include "ResourceMesh.h"
 
 MeshImporter::MeshImporter()
