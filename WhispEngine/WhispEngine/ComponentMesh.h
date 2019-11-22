@@ -11,6 +11,7 @@
 
 
 class GameObject;
+class ComponentMesh;
 
 template <typename T>
 struct Buffer {
@@ -20,6 +21,9 @@ struct Buffer {
 };
 
 struct Mesh_info {
+	friend class ComponentMesh;
+
+	Mesh_info(ComponentMesh* mesh);
 	~Mesh_info();
 
 	void SetGLBuffers();
@@ -30,9 +34,9 @@ struct Mesh_info {
 	Buffer<float> vertex_normals;
 	Buffer<float> tex_coords;
 
-	AABB local_box;
-	AABB aabb;
-	OBB obb;
+	uint64_t uid = 0u;
+
+	ComponentMesh* component = nullptr;
 };
 
 enum class Normals {
@@ -42,6 +46,7 @@ enum class Normals {
 
 class ComponentMesh : public Component
 {
+	friend struct Mesh_info;
 public:
 	ComponentMesh(GameObject *parent);
 	~ComponentMesh();
@@ -55,10 +60,14 @@ public:
 	void DrawOutline();
 	void DrawNormals();
 
-	void SetMaterial(ComponentMaterial * mat);
-
 	void OnInspector();
-	math::float3 CalculateRadius();
+
+	AABB GetAABB() const;
+	void CalulateAABB_OBB();
+	OBB  GetOBB() const;
+
+	void Save(nlohmann::json &node) override;
+	void Load(const nlohmann::json &node) override;
 
 public:
 	Mesh_info* mesh = nullptr;
@@ -74,5 +83,9 @@ private:
 	/*Linked to a material to know if it has to use a color or a texture.
 	  Check every frame if exist a material in GameObject will consume a lot of resources*/
 	ComponentMaterial * material = nullptr;
+
+	AABB local_box;
+	AABB aabb;
+	OBB obb;
 };
 

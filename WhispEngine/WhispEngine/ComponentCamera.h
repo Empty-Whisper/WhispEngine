@@ -22,6 +22,8 @@ public:
 	void OnInspector();
 
 	void DrawFrustum();
+  
+	void Save(nlohmann::json &node);
 
 private:
 	Camera* camera = nullptr;

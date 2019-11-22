@@ -3,6 +3,7 @@
 #include "ComponentMesh.h"
 #include "Assimp/include/mesh.h"
 #include "Imgui/ImGuizmo.h"
+#include "Octree.h"
 #include "GameObject.h"
 #include "MathGeoLib/include/Math/float4x4.h"
 //#include "Imgui/imgui.h"
@@ -54,22 +55,30 @@ public:
 	void DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
-	void GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector);
+	void GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const
+	const AABB GetMaxAABB(GameObject* obj, std::vector<GameObject*> &vector) const;
 	GameObject*	GetSelected() const;
 	void SetSelected(GameObject* select);
 
 	void MousePick();
 
 	std::vector<Texture*>* GetTextures();
+	Texture* FindTexture(const uint64_t &uid);
+
+	bool SaveGameObjects(nlohmann::json &file);
+	bool LoadGameObjects(const nlohmann::json &file);
+	bool LoadGameObject(const nlohmann::json &node, GameObject* parent);
 
 	// ========================================== old
 
 	void AddTexture(Texture *tex);
 
-	Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords);
-	Mesh_info* CreateMesh(const aiMesh *mesh);
+	//TODO mesh: set all mesh creation functions in Mesh_info class----------------------------------------------------------------------------------------------------------
 
-	Mesh_info* CreateMeshPrimitive(const Primitives &type);
+	Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords, ComponentMesh* component);
+	Mesh_info* CreateMesh(const aiMesh *mesh, ComponentMesh* component);
+
+	Mesh_info* CreateMeshPrimitive(const Primitives &type, ComponentMesh* component);
 	bool CreatePrimitive(const Primitives &type, const Object_data &data);
 
 	void FillNormals(Mesh_info * ret, const float * normals = nullptr);
@@ -81,6 +90,7 @@ public:
 	void FillMatrix(float4x4 &matrix,float o[]);
 	void ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation);
 	void ChangeGuizmoMode(ImGuizmo::MODE &gizmoMode);
+ 	float* CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude = 0.5f);
 
 	void Demo();
 

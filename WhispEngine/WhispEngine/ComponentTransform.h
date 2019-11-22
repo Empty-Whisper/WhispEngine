@@ -20,12 +20,17 @@ public:
 	void OnInspector();
 
 	void SetPosition(const float& x, const float& y, const float& z);
+	void SetPosition(const float3 & pos);
 	void SetRotation(const float& w, const float& x, const float& y, const float& z);
+	void SetRotation(const Quat & rot);
 	void SetScale(const float& x, const float& y, const float& z);
 
+	void SetScale(const float3 & _scale);
+
 	void SetLocalMatrix(const math::float4x4 &matrix);
+	void SetLocalMatrix(const float3 &_pos, const Quat& _rot, const float3 &_scale);
 	void SetGlobalMatrix(const math::float4x4 &matrix);
-	
+
 	void CalculeLocalMatrix();
 	void CalculateGlobalMatrix();
 
@@ -33,6 +38,9 @@ public:
 	math::float4x4 GetGlobalMatrix() const;
 
 	math::float3 GetPosition() const;
+
+	void Save(nlohmann::json& node) override;
+	void Load(const nlohmann::json& node) override;
 
 private:
 	math::float3 position = math::float3::zero;

@@ -190,7 +190,37 @@ void ModuleCamera3D::DeleteCamera(Camera * camera)
 {
 	for (std::vector<Camera*>::iterator i = cameras.begin(); i != cameras.end();)
 	{
-		if (camera == (*i))
+		GameObject* sel = App->object_manager->GetSelected();
+		AABB aabb = AABB(-float3::one, float3::one);
+
+		if (sel != nullptr)
+			aabb = ((ComponentMesh*)sel->GetComponent(ComponentType::MESH))->GetAABB();
+		
+		actual_camera_position = Position;
+		float3 center = aabb.CenterPoint();
+		reference_position = vec3(center.x, center.y, center.z);
+
+		LookAt(reference_position);
+
+		vec3 diff = reference_position - actual_camera_position;
+		diff = { abs(diff.x),
+				 abs(diff.y),
+				 abs(diff.z)
+		};
+
+		float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
+
+		vec3 vector = newPos - reference_position;
+		
+		float object_length = length(normalize(vector) * aabb.Diagonal().Length());
+
+		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
+		if (component_mesh == nullptr)
+			object_length = (float)offset_reference;
+
+		
+
+		if (mag_diff >= object_length + offset_reference)
 		{
 			delete(*i);
 			cameras.erase(i);
@@ -203,10 +233,13 @@ void ModuleCamera3D::DeleteCamera(Camera * camera)
 
 void ModuleCamera3D::DeleteVectorCameras()
 {
-	for (std::vector<Camera*>::iterator camera = cameras.begin(); camera != cameras.end();)
-	{
-		delete (*camera);
-		camera = cameras.erase(camera);
+	GameObject* sel = App->object_manager->GetSelected();
+	if (sel != nullptr) {
+		ComponentMesh* mesh = (ComponentMesh*)sel->GetComponent(ComponentType::MESH);
+		if (mesh != nullptr) {
+			float3 center = mesh->GetAABB().CenterPoint(); //Get GameObject selected position
+			Reference = vec3(center.x, center.y, center.z);
+		}
 	}
 }
 
@@ -457,17 +490,12 @@ void Camera::DrawInsideFrustum()
 
 	for (std::vector<GameObject*>::iterator go = game_objects.begin(); go != game_objects.end(); ++go)
 	{
-		//TODO: Move Frustrum Position when game object is moved
-		//TODO: Find Bug Bbox static and duplicated in da house
-		//TODO: DrawObject if is inside
-
 		if ((*go)->GetAABB().IsFinite())
 		{
 			if (BboxIntersectsFrustum((*go)->GetAABB()))
 				(*go)->is_inside_frustum = true;			
 			else
 				(*go)->is_inside_frustum = false;
-			
 		}		
 	}
 }

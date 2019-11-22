@@ -40,6 +40,8 @@
 #include "Triangle.h"
 #include "Capsule.h"
 
+#include "../../../SDL/include/SDL_opengl.h"
+
 #ifdef MATH_GRAPHICSENGINE_INTEROP
 #include "VertexBuffer.h"
 #endif
@@ -94,6 +96,51 @@ void AABB::SetFrom(const float3 *pointArray, int numPoints)
 		return;
 	for(int i = 0; i < numPoints; ++i)
 		Enclose(pointArray[i]);
+}
+
+void AABB::Draw(const float & r, const float & g, const float & b) const
+{
+	glBegin(GL_LINES);
+
+	glColor3f(r, g, b);
+
+	glVertex3f(minPoint.x, minPoint.y, minPoint.z);
+	glVertex3f(maxPoint.x, minPoint.y, minPoint.z);
+
+	glVertex3f(minPoint.x, minPoint.y, minPoint.z);
+	glVertex3f(minPoint.x, minPoint.y, maxPoint.z);
+
+	glVertex3f(minPoint.x, minPoint.y, minPoint.z);
+	glVertex3f(minPoint.x, maxPoint.y, minPoint.z);
+
+	glVertex3f(maxPoint.x, minPoint.y, maxPoint.z);
+	glVertex3f(maxPoint.x, minPoint.y, minPoint.z);
+
+	glVertex3f(maxPoint.x, minPoint.y, maxPoint.z);
+	glVertex3f(minPoint.x, minPoint.y, maxPoint.z);
+
+	glVertex3f(maxPoint.x, maxPoint.y, maxPoint.z);
+	glVertex3f(maxPoint.x, minPoint.y, maxPoint.z);
+
+	glVertex3f(maxPoint.x, maxPoint.y, maxPoint.z);
+	glVertex3f(minPoint.x, maxPoint.y, maxPoint.z);
+
+	glVertex3f(maxPoint.x, maxPoint.y, maxPoint.z);
+	glVertex3f(maxPoint.x, maxPoint.y, minPoint.z);
+
+	glVertex3f(minPoint.x, maxPoint.y, minPoint.z);
+	glVertex3f(maxPoint.x, maxPoint.y, minPoint.z);
+
+	glVertex3f(minPoint.x, maxPoint.y, minPoint.z);
+	glVertex3f(minPoint.x, maxPoint.y, maxPoint.z);
+
+	glVertex3f(minPoint.x, minPoint.y, maxPoint.z);
+	glVertex3f(minPoint.x, maxPoint.y, maxPoint.z);
+
+	glVertex3f(maxPoint.x, minPoint.y, minPoint.z);
+	glVertex3f(maxPoint.x, maxPoint.y, minPoint.z);
+
+	glEnd();
 }
 
 Polyhedron AABB::ToPolyhedron() const
@@ -155,7 +202,7 @@ bool AABB::IsDegenerate() const
 
 float3 AABB::CenterPoint() const
 {
-	return (minPoint + maxPoint) / 2.f;
+	return (minPoint + maxPoint) * 0.5f;
 }
 
 float3 AABB::PointInside(float x, float y, float z) const
@@ -372,7 +419,7 @@ float3 AABB::Size() const
 
 float3 AABB::HalfSize() const
 {
-	return Size() / 2.f;
+	return Size() * 0.5f;
 }
 
 float AABB::Volume() const

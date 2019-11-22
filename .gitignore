@@ -17,6 +17,7 @@
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
+Library/
 x64/
 x86/
 bld/
@@ -328,3 +329,5 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+*.whispModel
+*.whispMesh

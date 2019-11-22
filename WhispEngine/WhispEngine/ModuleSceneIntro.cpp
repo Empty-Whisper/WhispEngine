@@ -21,6 +21,7 @@
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("SceneIntro");
+	octree = new OctreeTree(float3(-100, -100, -100), float3(100, 100, 100), 1);
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -34,8 +35,11 @@ bool ModuleSceneIntro::Start()
 
 	GenerateGrid(10);
 
-	App->importer->ImportFbx("Assets/Models/BakerHouse.fbx");
-	
+	App->importer->Import("Assets/Models/BakerHouse.fbx");
+	App->importer->Import("Assets/Models/BakerHouse.fbx.meta");
+
+	scene_name.assign("SampleScene");
+
 	return ret;
 }
 
@@ -69,6 +73,12 @@ update_status ModuleSceneIntro::Update()
 	if (show_grid)
 		DrawGrid();
 
+	if (show_octree) {
+		glDisable(GL_LIGHTING);
+		octree->Render();
+		glEnable(GL_LIGHTING);
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -101,6 +111,9 @@ bool ModuleSceneIntro::CleanUp()
 
 	glDeleteBuffers(1, &grid_id);
 
+	if (octree != nullptr)
+		delete octree;
+
 	return true;
 }
 
@@ -122,4 +135,29 @@ void ModuleSceneIntro::GenerateGrid(const int & width)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(int) * grid_vertex_size, grid, GL_STATIC_DRAW);
 	
 	delete[] grid;
+}
+
+bool ModuleSceneIntro::SaveScene()
+{
+	bool ret = true;
+
+	nlohmann::json scene;
+
+	ret = App->object_manager->SaveGameObjects(scene[scene_name.c_str()]);
+
+	App->dummy_file_system->SaveFile((ASSETS_FOLDER + scene_name + ".scene").c_str(), scene);
+
+	return ret;
+}
+
+bool ModuleSceneIntro::LoadScene(const char* scene) const
+{
+	bool ret = true;
+
+	nlohmann::json scene_file = App->dummy_file_system->OpenFile(scene);
+
+	auto it = scene_file.begin();
+	ret = App->object_manager->LoadGameObjects((*it)["GameObjects"]);
+
+	return ret;
 }

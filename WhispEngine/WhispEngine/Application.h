@@ -6,6 +6,8 @@
 #include "Module.h"
 #include "FileSystem.h"
 #include "Random.h"
+#include "Random.h"
+#include "JsonHelper.h"
 #include "HardwareInfo.h"
 
 #include <list>
@@ -32,6 +34,7 @@ public:
 	ModuleShortCut* shortcut = nullptr;
 	ModuleObjectManager* object_manager = nullptr;
 	ModuleImport* importer = nullptr;
+	//ModuleFileSystem* file_system = nullptr;
 
 public:
 
@@ -63,6 +66,10 @@ private:
 	bool want_to_load = false;
 	bool want_to_load_def = false;
 
+	bool want_to_save_scene = false;
+	bool want_to_load_scene = false;
+	std::string scene_path;
+
 	std::string log_buff;
 
 public:
@@ -80,6 +87,8 @@ public:
 	void SaveLogFile();
 	void SaveConfiguration();
 	void LoadConfiguration();
+	void SaveScene();
+	void LoadScene(const char * path);
 	void LoadDefaultConfiguration();
 
 	void SetAppName(const char* name);
@@ -88,9 +97,11 @@ public:
 	const char* GetOrganizationName() const;
 	const char* GetVersion() const;
 
+	// Helpers
 	HardwareInfo *hardware = nullptr;
-	FileSystem *file_system = nullptr;
+	FileSystem *dummy_file_system = nullptr;
 	Random* random = nullptr;
+	JsonHelper* json = nullptr;
 
 private:
 
