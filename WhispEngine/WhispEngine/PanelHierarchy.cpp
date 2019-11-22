@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Imgui/imgui_internal.h"
 
+#include "ModuleInput.h"
 #include "ModuleObjectManager.h"
 
 PanelHierarchy::PanelHierarchy(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)

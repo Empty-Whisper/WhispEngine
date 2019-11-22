@@ -8,6 +8,8 @@
 #include "ComponentTransform.h"
 #include "Brofiler/Brofiler.h"
 
+#include "ModuleInput.h"
+#include "ModuleGUI.h"
 #include "ModuleObjectManager.h"
 
 #include "MathGeoLib/include/Geometry/AABB.h"

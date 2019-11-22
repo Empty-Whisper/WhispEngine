@@ -5,6 +5,7 @@
 #include "Light.h"
 #include "ComponentMaterial.h"
 #include "ModuleCamera3D.h"
+#include "ModuleInput.h"
 
 #define MAX_LIGHTS 8
 

@@ -5,6 +5,7 @@
 #include "MathGeoLib/include/Math/MathFunc.h"
 #include "Imgui/ImGuizmo.h"
 
+#include "ModuleGUI.h"
 #include "ModuleObjectManager.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)

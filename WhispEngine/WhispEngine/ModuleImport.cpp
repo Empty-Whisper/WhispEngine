@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "ModuleObjectManager.h"
-
+#include "ModuleRenderer3D.h"
 #include "ComponentTransform.h"
 
 #include "Assimp/include/cimport.h"

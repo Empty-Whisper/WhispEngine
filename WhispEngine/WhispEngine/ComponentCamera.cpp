@@ -3,6 +3,8 @@
 #include "MathGeoLib/include/Math/float3.h"
 #include "ComponentTransform.h"
 #include "Application.h"
+#include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
 
 
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)

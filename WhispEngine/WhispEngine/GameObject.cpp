@@ -5,7 +5,7 @@
 #include "ComponentCamera.h"
 #include "Application.h"
 #include "MathGeoLib/include/MathGeoLib.h"
-
+#include "ModuleRenderer3D.h"
 #include "ModuleObjectManager.h"
 
 GameObject::GameObject(GameObject * parent) : parent(parent)

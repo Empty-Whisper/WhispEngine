@@ -2,7 +2,14 @@
 #include "Brofiler/Brofiler.h"
 #include <fstream>
 
-
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleGUI.h"
+#include "ModuleShortCut.h"
+#include "ModuleImport.h"
 #include "ModuleObjectManager.h"
 
 Application::Application()

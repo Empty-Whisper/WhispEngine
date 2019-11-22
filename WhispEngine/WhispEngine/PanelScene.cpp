@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ComponentCamera.h"
 
+#include "ModuleRenderer3D.h"
 #include "ModuleObjectManager.h"
 
 PanelScene::PanelScene(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3) 
@@ -71,7 +72,7 @@ void PanelScene::Update()
 		{
 			ImVec2 preview_size = ImGui::GetWindowSize();
 
-			ImGui::SetWindowPos(ImVec2(panel_pos.x + panel_size.x - preview_size.x, panel_pos.y + panel_size.y - preview_size.y));
+			ImGui::SetWindowPos(ImVec2(panel_pos.x + panel_size.x - preview_size.x - 20, panel_pos.y + panel_size.y - preview_size.y));
 			ImGui::SetWindowSize(ImVec2(316, 252));
 			ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
 			ImGui::Image((ImTextureID)App->renderer3D->game_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));

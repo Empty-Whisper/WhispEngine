@@ -1,10 +1,15 @@
 #include "ComponentMesh.h"
 #include "Application.h"
 #include "Globals.h"
+
+#include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleObjectManager.h"
+
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
 
-#include "ModuleObjectManager.h"
+
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {

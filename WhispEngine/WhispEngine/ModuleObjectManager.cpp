@@ -5,6 +5,12 @@
 #include "Imgui/ImGuizmo.h"
 #include "PanelScene.h"
 
+#include "ModuleInput.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleGUI.h"
+#include "ModuleImport.h"
+#include "ModuleRenderer3D.h"
+
 ModuleObjectManager::ModuleObjectManager()
 {
 	name.assign("ObjectManager");

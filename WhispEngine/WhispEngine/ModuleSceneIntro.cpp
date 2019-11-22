@@ -1,10 +1,12 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleRenderer3D.h"
 
 #include "Imgui/imgui.h"
 #include "ComponentMesh.h"
 #include "Brofiler/Brofiler.h"
+#include "ModuleImport.h"
 
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"

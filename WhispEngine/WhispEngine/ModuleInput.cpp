@@ -5,6 +5,11 @@
 #include "Imgui/imgui_impl_sdl.h"
 #include "Imgui/imgui_impl_opengl3.h"
 #include "Brofiler/Brofiler.h"
+
+#include "ModuleWindow.h"
+#include "ModuleSceneIntro.h"
+#include "ModuleImport.h"
+
 #define MAX_KEYS 300
 
 
