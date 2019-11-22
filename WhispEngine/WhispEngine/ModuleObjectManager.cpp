@@ -91,7 +91,7 @@ GameObject * ModuleObjectManager::GetRoot() const
 	return root;
 }
 
-void ModuleObjectManager::GetAllGameObjects(GameObject* &obj, std::vector<GameObject*> &vector) const
+void ModuleObjectManager::GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const
 {
 
 	if (!obj->children.empty()) {
@@ -108,7 +108,7 @@ const AABB ModuleObjectManager::GetMaxAABB(GameObject * obj, std::vector<GameObj
 {
 	float3 max_point, min_point;
 	max_point = min_point = float3::zero;
-	GetAllGameObjects(obj, objects);
+	GetChildsFrom(obj, objects);
 	ComponentMesh* mesh = nullptr;
 	for (auto i = objects.begin(); i != objects.end(); ++i) {
 		if ((*i)->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {

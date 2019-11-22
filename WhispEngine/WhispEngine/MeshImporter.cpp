@@ -2,6 +2,9 @@
 #include "Application.h"
 #include "Assimp/include/scene.h"
 #include "MaterialImporter.h"
+#include "ModuleImport.h"
+#include "ComponentMaterial.h"
+#include "ModuleObjectManager.h"
 #include "Globals.h"
 
 MeshImporter::MeshImporter()

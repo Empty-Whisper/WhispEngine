@@ -104,8 +104,10 @@ void ComponentTransform::OnInspector()
 		{
 			local_guizmo = !local_guizmo;
 			App->object_manager->ChangeGuizmoMode(guizmoWorld);
+		}
 
-      if (object->IsStatic()) {
+		if (object->IsStatic()) 
+		{
 			ImGui::PopItemFlag();
 			ImGui::PopStyleVar();
 		}

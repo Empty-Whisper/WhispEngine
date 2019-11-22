@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Imgui/imgui.h"
 
+#include "ModuleSceneIntro.h"
 #include "ModuleGUI.h"
 #include "ModuleObjectManager.h"
 
@@ -86,7 +87,7 @@ void PanelInspector::Update()
 					std::vector<GameObject*> objects;
 					if (has_parent_dynamic)
 						sel->HasDynamicParent(objects);
-					App->object_manager->GetAllGameObjects(sel, objects);
+					App->object_manager->GetChildsFrom(sel, objects);
 
 					for (auto i = objects.begin(); i != objects.end(); ++i) {
 						if ((*i)->IsStatic() != to_static) {

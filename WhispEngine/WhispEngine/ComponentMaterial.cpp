@@ -3,7 +3,7 @@
 #include "ComponentMesh.h"
 #include "Application.h"
 #include "MaterialImporter.h"
-
+#include "ModuleImport.h"
 #include "ModuleInput.h"
 #include "ModuleObjectManager.h"
 

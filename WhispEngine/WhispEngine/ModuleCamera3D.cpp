@@ -196,31 +196,9 @@ void ModuleCamera3D::DeleteCamera(Camera * camera)
 		if (sel != nullptr)
 			aabb = ((ComponentMesh*)sel->GetComponent(ComponentType::MESH))->GetAABB();
 		
-		actual_camera_position = Position;
 		float3 center = aabb.CenterPoint();
-		reference_position = vec3(center.x, center.y, center.z);
-
-		LookAt(reference_position);
-
-		vec3 diff = reference_position - actual_camera_position;
-		diff = { abs(diff.x),
-				 abs(diff.y),
-				 abs(diff.z)
-		};
-
-		float mag_diff = sqrt((diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z));
-
-		vec3 vector = newPos - reference_position;
 		
-		float object_length = length(normalize(vector) * aabb.Diagonal().Length());
-
-		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
-		if (component_mesh == nullptr)
-			object_length = (float)offset_reference;
-
-		
-
-		if (mag_diff >= object_length + offset_reference)
+		if ((*i) != nullptr)
 		{
 			delete(*i);
 			cameras.erase(i);
@@ -238,7 +216,6 @@ void ModuleCamera3D::DeleteVectorCameras()
 		ComponentMesh* mesh = (ComponentMesh*)sel->GetComponent(ComponentType::MESH);
 		if (mesh != nullptr) {
 			float3 center = mesh->GetAABB().CenterPoint(); //Get GameObject selected position
-			Reference = vec3(center.x, center.y, center.z);
 		}
 	}
 }

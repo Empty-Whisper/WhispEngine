@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Globals.h"
 
+#include "ModuleImport.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleObjectManager.h"

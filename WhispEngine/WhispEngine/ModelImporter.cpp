@@ -2,7 +2,8 @@
 #include "Application.h"
 #include "ComponentTransform.h"
 #include "MeshImporter.h"
-
+#include "ModuleObjectManager.h"
+#include "ModuleImport.h"""
 #include "Brofiler/Brofiler.h"
 
 #include "Assimp/include/cimport.h"

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "ComponentMesh.h"
 #include "Application.h"
+#include "ModuleObjectManager.h"
 
 OctreeTree::OctreeTree(const AABB & boundary, const int & capacity)
 {

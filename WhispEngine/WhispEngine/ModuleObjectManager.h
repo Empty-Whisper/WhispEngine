@@ -6,6 +6,7 @@
 #include "Octree.h"
 #include "GameObject.h"
 #include "MathGeoLib/include/Math/float4x4.h"
+#include "MathGeoLib/include/Geometry/AABB.h"
 //#include "Imgui/imgui.h"
 
 enum class Primitives {
@@ -55,7 +56,7 @@ public:
 	void DestroyGameObject(GameObject* obj);
 
 	GameObject* GetRoot() const;
-	void GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const
+	void GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const;
 	const AABB GetMaxAABB(GameObject* obj, std::vector<GameObject*> &vector) const;
 	GameObject*	GetSelected() const;
 	void SetSelected(GameObject* select);

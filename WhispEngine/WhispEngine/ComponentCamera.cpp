@@ -5,6 +5,8 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleGUI.h"
+#include "PanelScene.h"
 
 
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)
@@ -51,11 +53,18 @@ void ComponentCamera::OnInspector()
 		if (ImGui::DragFloat("zFar", (float*)&zFar, 0.1f, zNear, 1000))
 			camera->SetFarZ(zFar);
 
-		if(ImGui::Checkbox("Main Camera", &camera->is_main_camera))
-			App->camera->SetGameCamera(camera);
+		ImGui::Separator();
+
+		ImGui::Checkbox("Camera Preview", &App->gui->scene->preview_checkbox);
 		
 		if(ImGui::Checkbox("Frustum Culling", &App->camera->activate_frustum_culling))
 			App->camera->SetGameCamera(camera);
+
+		ImGui::Separator();
+
+		if (ImGui::Checkbox("Main Camera", &camera->is_main_camera))
+			App->camera->SetGameCamera(camera);
+
 	}
 }
 

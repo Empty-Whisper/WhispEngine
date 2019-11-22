@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "Brofiler/Brofiler.h"
 #include "ModuleImport.h"
+#include "ModuleObjectManager.h"
 
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"
