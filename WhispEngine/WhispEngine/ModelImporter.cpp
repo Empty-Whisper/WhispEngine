@@ -69,7 +69,9 @@ uint64 ModelImporter::Import(const char * path)
 					for (int i = 0; i < n_meshes; i++) {
 						uint64 uid = 0u;
 						memcpy(&uid, cursor, sizeof(uint64));
-						App->resources->CreateResource(Resource::Type::MESH, uid);
+						Resource* res = App->resources->CreateResource(Resource::Type::MESH, uid);
+						res->SetFile(path);
+						res->SetResourcePath((MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").c_str());
 						cursor += sizeof(uint64);
 					}
 

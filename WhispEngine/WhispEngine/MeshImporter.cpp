@@ -50,9 +50,6 @@ uint64 MeshImporter::Import(const char * path, const aiMesh * mesh, const uint64
 	memcpy(cursor, header, bytes);
 
 	cursor += bytes;
-	bytes = sizeof(uint64_t);
-
-	cursor += bytes;
 	bytes = sizeof(float) * mesh->mNumVertices * 3;
 	memcpy(cursor, mesh->mVertices, bytes);
 

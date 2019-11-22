@@ -67,7 +67,7 @@ bool ResourceModel::LoadInMemory()
 		}
 	}
 
-	return true;
+	return false; // Return false bcs if return true it will add a reference to the resource and cannot generate more
 }
 
 bool ResourceModel::FreeMemory()
@@ -88,10 +88,11 @@ void ResourceModel::CreateObjects(GameObject * container, const nlohmann::json &
 	);
 	transform->CalculateGlobalMatrix();
 
-	ComponentMesh* mesh = (ComponentMesh*)child->CreateComponent(ComponentType::MESH);
-	mesh->uid = data.value("meshId", 0u);
-	if (mesh->uid != 0u)
+	if (data.value("meshId", 0u) != 0u) {
+		ComponentMesh* mesh = (ComponentMesh*)child->CreateComponent(ComponentType::MESH);
+		mesh->uid = (uint64)data.value("meshId", (uint64)0u);
 		App->resources->LoadToMemory(mesh->uid);
+	}
 
 	if (data.find("children") != data.end()) {
 		for (nlohmann::json::const_iterator it = data["children"].begin(); it != data["children"].end(); it++) {

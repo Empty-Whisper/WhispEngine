@@ -79,8 +79,14 @@ bool ModuleResources::LoadToMemory(const uint64 &uid)
 bool ModuleResources::FreeMemory(const uint64 & uid)
 {
 	Resource* res = Get(uid);
-	if (res != nullptr)
-		return res->FreeMemory();
+	if (res != nullptr) {
+		if (res->references > 1) {
+			res->references--;
+		}
+		else {
+			return res->FreeMemory();
+		}
+	}
 	return false;
 }
 
