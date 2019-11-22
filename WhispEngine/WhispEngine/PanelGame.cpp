@@ -1,6 +1,7 @@
 #include "PanelGame.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "PanelScene.h"
 
 PanelGame::PanelGame(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
 	: Panel("Game", start_active, shortcut1, shortcut2, shortcut3)
@@ -36,6 +37,8 @@ void PanelGame::Update()
 	}
 	ImGui::End();
 	ImGui::PopStyleVar();
+
+	App->gui->scene->active_preview = false;
 }
 
 const ImVec2 PanelGame::GetPanelSize()

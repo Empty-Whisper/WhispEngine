@@ -162,8 +162,59 @@ update_status ModuleRenderer3D::Update()
 	/*GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
 	GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);*/
 	
+	//if (!is_rendering_scenene)
+	//{
+
+	//	// SCENE ============================================================================================ =
+	//	GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
+	//	GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
+
+	//	// DockSpace
+	//	if (scene_viewport->can_resize)
+	//	{
+	//		ResizeDockspace(App->gui->scene->GetPanelSize(), scene_viewport, App->camera->GetSceneCamera());
+	//		scene_viewport->can_resize = false;
+	//	}
+
+	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//	glLoadIdentity();
+
+	//	glMatrixMode(GL_MODELVIEW);
+	//	glLoadMatrixf(App->camera->GetSceneCamera()->GetViewMatrix().ptr());
+
+	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
+
+	//	is_rendering_scenene = true;
+	//}
+	//else
+	//{
+	//	// Game =============================================================================================
+	//	GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
+	//	GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);
+
+	//	//Dockspace
+	//	if (game_viewport->can_resize)
+	//	{
+	//		ResizeDockspace(App->gui->game->GetPanelSize(), game_viewport, App->camera->GetGameCamera());
+	//		game_viewport->can_resize = false;
+	//	}
+
+	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//	glLoadIdentity();
+
+	//	glMatrixMode(GL_MODELVIEW);
+	//	glLoadMatrixf(App->camera->GetGameCamera()->GetViewMatrix().ptr());
+
+	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
+	//	
+	//	is_rendering_scenene = false;
+	//}
+
 	if (!is_rendering_scenene)
 	{
+
 		// SCENE ============================================================================================ =
 		GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
 		GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
@@ -171,7 +222,7 @@ update_status ModuleRenderer3D::Update()
 		// DockSpace
 		if (scene_viewport->can_resize)
 		{
-			ResizeDockspace(App->gui->scene->GetPanelSize(), scene_viewport);
+			ResizeDockspace(App->gui->scene->GetPanelSize(), scene_viewport, App->camera->GetSceneCamera());
 			scene_viewport->can_resize = false;
 		}
 
@@ -195,7 +246,7 @@ update_status ModuleRenderer3D::Update()
 		//Dockspace
 		if (game_viewport->can_resize)
 		{
-			ResizeDockspace(App->gui->game->GetPanelSize(), game_viewport);
+			ResizeDockspace(App->gui->game->GetPanelSize(), game_viewport, App->camera->GetGameCamera());
 			game_viewport->can_resize = false;
 		}
 
@@ -207,11 +258,9 @@ update_status ModuleRenderer3D::Update()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
-		
+
 		is_rendering_scenene = false;
 	}
-
-
 
 	
 
@@ -325,14 +374,16 @@ const bool ModuleRenderer3D::CanResize(Viewport * viewport)
 	return viewport->can_resize = true;
 }
 
-void ModuleRenderer3D::ResizeDockspace(ImVec2 size, Viewport* viewport)
+void ModuleRenderer3D::ResizeDockspace(ImVec2 size, Viewport* viewport, Camera* camera)
 {
 	glViewport(0, 0, size.x, size.y);
 
 	glMatrixMode(GL_PROJECTION);
-	ProjectionMatrix = perspective(60.0f, (float)size.x / (float)size.y, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
+	//ProjectionMatrix = perspective(60.0f, (float)size.x / (float)size.y, 0.125f, 512.0f);
+	//glLoadMatrixf(&ProjectionMatrix);
+	glLoadMatrixf((GLfloat*)&camera->GetFrustum().ProjectionMatrix());
 
+	//TODO: Poner el projection matrix del frustum
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 

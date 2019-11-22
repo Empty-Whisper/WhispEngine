@@ -60,7 +60,7 @@ public:
 	void SetSceneViewport(Viewport* viewport);
 	void SetGameViewport(Viewport* viewport);
 	const bool CanResize(Viewport* viewport);
-	void ResizeDockspace(ImVec2 size, Viewport* viewport);
+	void ResizeDockspace(ImVec2 size, Viewport* viewport, Camera* camera);
 
 public:
 	Light lights[MAX_LIGHTS];

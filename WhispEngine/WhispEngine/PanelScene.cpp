@@ -1,6 +1,7 @@
 #include "PanelScene.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ComponentCamera.h"
 
 PanelScene::PanelScene(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3) 
 	: Panel("Scene", start_active, shortcut1, shortcut2, shortcut3)
@@ -46,13 +47,35 @@ void PanelScene::Update()
 		{
 			ImGuizmo::Enable(true);
 			App->object_manager->UpdateGuizmo();
+
+			if (((ComponentCamera*)(App->object_manager->GetSelected())->GetComponent(ComponentType::CAMERA)) != nullptr)
+				active_preview = true;
+			else
+				active_preview = false;
 		}
 		else
+		{
 			ImGuizmo::Enable(false);
+			active_preview = false;
+		}
 	}
 	ImGui::End();
 	ImGui::PopStyleVar();
 
+	if (active_preview)
+	{
+		if (ImGui::Begin("Camerea Preview", &active))
+		{
+			ImGui::SetWindowPos(ImVec2(panel_pos.x * 1.7f, panel_pos.y * 1.7f));
+			ImGui::SetWindowSize(ImVec2(316, 252));
+			ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
+			ImGui::Image((ImTextureID)App->renderer3D->game_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+						ImGui::SetWindowSize(ImVec2(316, 252));
+
+		}
+		ImGui::End();
+	}
+	
 }
 
 const ImVec2 PanelScene::GetPanelSize()

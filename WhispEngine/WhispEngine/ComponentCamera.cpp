@@ -69,9 +69,9 @@ void ComponentCamera::DrawFrustum()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 
-	glColor3f(0, 0, 255);
+	glColor3f(0, 0, 100);
 
-	glLineWidth(3.f);
+	glLineWidth(1.f);
 
 	glBegin(GL_QUADS);
 
