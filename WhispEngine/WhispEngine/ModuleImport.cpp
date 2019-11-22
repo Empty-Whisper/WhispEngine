@@ -168,6 +168,9 @@ void ModuleImport::CreateFiles(const char* directory)
 					if (App->dummy_file_system->IsMetaVaild((path + ".meta").c_str()) == false) {
 						App->importer->Import(path.c_str());
 					}
+					else {
+						App->resources->ImportFile(path.c_str());
+					}
 				}
 				else {
 					App->importer->Import(path.c_str());

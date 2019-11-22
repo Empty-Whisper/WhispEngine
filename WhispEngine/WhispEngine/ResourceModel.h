@@ -28,8 +28,6 @@ public:
 	ResourceModel(const uint64& uid);
 	~ResourceModel();
 
-	HierarchyInfo GetModel() const;
-
 	HierarchyInfo CalculateHierarchy(const aiNode* node, const aiScene* scene, const std::vector<uint64>& meshes, const std::vector<uint64>& materials, HierarchyInfo * node_from);
 
 	bool LoadInMemory() override;
@@ -41,7 +39,7 @@ private:
 	void SaveNode(const HierarchyInfo& parent, nlohmann::json & node);
 	void CreateObjects(GameObject * container, const nlohmann::json & data);
 
-private:
+public:
 	HierarchyInfo model;
 };
 

@@ -12,11 +12,6 @@ ResourceModel::~ResourceModel()
 {
 }
 
-ResourceModel::HierarchyInfo ResourceModel::GetModel() const
-{
-	return model;
-}
-
 ResourceModel::HierarchyInfo ResourceModel::CalculateHierarchy(const aiNode * node, const aiScene * scene, const std::vector<uint64>& meshes, const std::vector<uint64>& materials, ResourceModel::HierarchyInfo * node_from)
 {
 	HierarchyInfo info;

@@ -50,7 +50,12 @@ uint64 ModelImporter::Import(const char * path)
 		if (App->dummy_file_system->IsInSubDirectory(MODEL_A_FOLDER, (App->dummy_file_system->GetFileFromPath(path) + ".meta").data())) {
 			if (App->dummy_file_system->IsMetaVaild((std::string(path) + ".meta").data())) {
 				LOG("File %s already imported", App->dummy_file_system->GetFileFromPath(path).data());
-				return App->dummy_file_system->GetMeta((std::string(path) + ".meta").data());
+				Resource* res = App->resources->CreateResource(Resource::Type::MODEL, App->dummy_file_system->GetMeta((std::string(path) + ".meta").data()));
+				//TODO: Load Resource
+				return res->GetUID();
+			}
+			else {
+				meta = App->dummy_file_system->GetMeta((std::string(path) + ".meta").data());
 			}
 		}
 		// -------------------------------------------------------------------
@@ -59,7 +64,8 @@ uint64 ModelImporter::Import(const char * path)
 		uint ticks = SDL_GetTicks(); //timer
 		PerfTimer timer;
 
-		ResourceModel* model = (ResourceModel*)App->resources->CreateResource(Resource::Type::MODEL);
+		ResourceModel* model = meta == 0u ? (ResourceModel*)App->resources->CreateResource(Resource::Type::MODEL) : (ResourceModel*)App->resources->CreateResource(Resource::Type::MODEL, meta);
+		
 		App->dummy_file_system->GenerateMetaFile(path, model->GetUID());
 		model->SetFile(path);
 		model->SetResourcePath((MODEL_L_FOLDER + std::to_string(model->GetUID()) + std::string(".whispModel")).c_str());
@@ -76,7 +82,7 @@ uint64 ModelImporter::Import(const char * path)
 
 		model->CalculateHierarchy(scene->mRootNode, scene, uid_meshes, uid_materials, nullptr);
 
-		model->GetModel().name = App->dummy_file_system->GetFileNameFromPath(path);
+		model->model.name = App->dummy_file_system->GetFileNameFromPath(path);
 			 
 		if (App->dummy_file_system->Exists(MODEL_L_FOLDER) == false) {
 			App->dummy_file_system->CreateDir(MODEL_L_FOLDER);
