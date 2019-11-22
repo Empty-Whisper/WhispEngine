@@ -36,8 +36,14 @@ bool ModuleSceneIntro::Start()
 
 	GenerateGrid(10);
 
+	GameObject* obj = App->object_manager->CreateGameObject(nullptr);
+	obj->SetName("Main Camera");
+	Component* component_camera = obj->CreateComponent(ComponentType::CAMERA);
+
 	App->importer->Import("Assets/Models/BakerHouse.fbx");
 	App->importer->Import("Assets/Models/BakerHouse.fbx.meta");
+
+	
 
 	scene_name.assign("SampleScene");
 

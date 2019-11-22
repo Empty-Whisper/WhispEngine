@@ -7,6 +7,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleGUI.h"
 #include "PanelScene.h"
+#include "ModuleObjectManager.h"
 
 
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)
@@ -57,13 +58,18 @@ void ComponentCamera::OnInspector()
 
 		ImGui::Checkbox("Camera Preview", &App->gui->scene->preview_checkbox);
 		
-		if(ImGui::Checkbox("Frustum Culling", &App->camera->activate_frustum_culling))
-			App->camera->SetGameCamera(camera);
+		ImGui::Checkbox("Frustum Culling", &App->camera->activate_frustum_culling);
 
 		ImGui::Separator();
 
-		if (ImGui::Checkbox("Main Camera", &camera->is_main_camera))
+		if(ImGui::Checkbox("Main Camera", &checkbox_main_camera))
+			is_main_camera = true;
+
+		if (checkbox_main_camera && is_main_camera)
+		{
 			App->camera->SetGameCamera(camera);
+			is_main_camera = false;
+		}
 
 	}
 }

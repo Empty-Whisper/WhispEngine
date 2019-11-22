@@ -6,6 +6,9 @@
 #include "ComponentMesh.h"
 #include "Octree.h"
 
+class GameObject;
+class Component;
+
 class ModuleSceneIntro : public Module
 {
 public:

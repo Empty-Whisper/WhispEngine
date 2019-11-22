@@ -27,5 +27,8 @@ public:
 
 private:
 	Camera* camera = nullptr;
+public:
+	bool	checkbox_main_camera = false;
+	bool	is_main_camera = true;
 };
 

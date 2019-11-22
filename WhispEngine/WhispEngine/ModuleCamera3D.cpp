@@ -6,6 +6,7 @@
 #include "MathGeoLib/include/Math/float2.h"
 #include "PanelScene.h"
 #include "ComponentTransform.h"
+#include "ComponentCamera.h"
 #include "Brofiler/Brofiler.h"
 
 #include "ModuleInput.h"
@@ -162,7 +163,7 @@ update_status ModuleCamera3D::Update()
 				scene_camera->CameraViewRotation(rotation_position);
 				is_moving_camera = true;
 			}
-			
+
 		}
 		if (!ImGui::IsAnyItemActive() && App->object_manager->GetSelected() != nullptr) {
 			if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
@@ -195,9 +196,9 @@ void ModuleCamera3D::DeleteCamera(Camera * camera)
 
 		if (sel != nullptr)
 			aabb = ((ComponentMesh*)sel->GetComponent(ComponentType::MESH))->GetAABB();
-		
+
 		float3 center = aabb.CenterPoint();
-		
+
 		if ((*i) != nullptr)
 		{
 			delete(*i);
@@ -233,7 +234,25 @@ Camera * ModuleCamera3D::GetGameCamera()
 void ModuleCamera3D::SetGameCamera(Camera * camera)
 {
 	if (camera != nullptr)
+	{
+		std::vector<GameObject*> gameobjects;
+		App->object_manager->GetChildsFrom(App->object_manager->root, gameobjects);
+
+		for (GameObject* go : gameobjects)
+		{
+			ComponentCamera* camera_component = (ComponentCamera*)go->GetComponent(ComponentType::CAMERA);
+
+			if (camera_component != nullptr)
+			{
+				camera_component->checkbox_main_camera = false;
+			}
+		}
+		
+		ComponentCamera* actual_camera_component = (ComponentCamera*)App->object_manager->GetSelected()->GetComponent(ComponentType::CAMERA);
+		actual_camera_component->checkbox_main_camera = true;
 		game_camera = camera;
+		
+	}
 }
 
 // -----------------------------------------------------------------

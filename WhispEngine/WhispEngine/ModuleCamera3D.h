@@ -57,7 +57,6 @@ public:
 	bool BboxIntersectsFrustum(const AABB& box);
 
 public:
-	bool	is_main_camera = false;
 	bool	is_focusing = false;
 	int		offset_reference_focus = 0;
 	int		focus_speed = 0;

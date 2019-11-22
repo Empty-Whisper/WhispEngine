@@ -68,12 +68,12 @@ void PanelScene::Update()
 	if (active_preview && preview_checkbox)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		if (ImGui::Begin("Camerea Preview", &active, ImGuiWindowFlags_NoDocking || ImGuiWindowFlags_NoInputs))
+		if (ImGui::Begin("Camerea Preview", &active, ImGuiWindowFlags_NoDocking))
 		{
 			static bool init_window = true;
 			if (init_window)
 			{
-				ImVec2 preview_size = ImVec2(200, 200);
+				ImVec2 preview_size = ImVec2(225, 225);
 				ImGui::SetWindowPos(ImVec2(panel_pos.x + panel_size.x - preview_size.x - 20, panel_pos.y + panel_size.y - preview_size.y));
 				ImGui::SetWindowSize(preview_size);
 				init_window = false;
