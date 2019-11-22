@@ -3,6 +3,7 @@
 class ResourceTexture :
 	public Resource
 {
+	friend class ComponentMaterial;
 public:
 	ResourceTexture(const uint64& uid);
 	~ResourceTexture();

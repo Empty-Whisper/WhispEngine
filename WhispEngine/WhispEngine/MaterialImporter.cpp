@@ -31,7 +31,7 @@ uint64 MaterialImporter::Import(const char * path, const aiMaterial * material, 
 	uint64 meta = force_uid;
 	if (meta == 0u)
 		meta = App->random->RandomGUID();
-
+	
 	if (material != nullptr) {
 		aiString tex_path;
 		if (material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, NULL, &tex_path) == aiReturn_FAILURE) {
@@ -42,12 +42,16 @@ uint64 MaterialImporter::Import(const char * path, const aiMaterial * material, 
 	}
 
 	std::string file = App->dummy_file_system->GetFileFromPath(path);
-	std::string mat_path;
+	std::string mat_path(path);
 	if (App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str(), &mat_path)) {
 		if (App->dummy_file_system->Exists((mat_path + ".meta").c_str())) {
 			if (App->dummy_file_system->IsMetaVaild((mat_path + ".meta").c_str())) {
-				Resource* res = App->resources->CreateResource(Resource::Type::TEXTURE, App->dummy_file_system->GetUIDFromMeta((mat_path + ".meta").c_str()));
+				meta = App->dummy_file_system->GetUIDFromMeta((mat_path + ".meta").c_str());
+				Resource* res = App->resources->CreateResource(Resource::Type::TEXTURE, meta);
+				res->SetFile(mat_path.c_str());
+				res->SetResourcePath((MATERIAL_L_FOLDER + std::to_string(meta) + ".dds").c_str());
 				// TODO: load resource
+				
 				return res->GetUID();
 			}
 			else {
@@ -70,7 +74,7 @@ uint64 MaterialImporter::Import(const char * path, const aiMaterial * material, 
 	}
 
 	
-	bool success = true;
+	bool success = false;
 	if (App->dummy_file_system->GetPathFormat(mat_path.c_str()).compare("tga") == 0) {
 		success = ilLoad(IL_TGA, mat_path.c_str());
 	}

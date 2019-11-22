@@ -18,7 +18,7 @@ void PanelAbout::Update()
 		static ImVec2 logo_size(106, 163);
 
 		ImGui::Text("Version"); ImGui::SameLine(); ImGui::Text(App->GetVersion());
-		ImGui::Image((ImTextureID)App->importer->logo_txt->id, logo_size);
+		//ImGui::Image((ImTextureID)App->importer->logo_txt->id, logo_size); TODO: Commented this, sorry :(
 
 		ImGui::Separator();
 		ImGui::NewLine();

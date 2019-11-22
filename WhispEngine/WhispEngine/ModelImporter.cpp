@@ -36,10 +36,12 @@ uint64 ModelImporter::Import(const char * path)
 		bool want_to_generate_meta = true;
 		std::string new_path;
 
-		if (!App->dummy_file_system->IsInSubDirectory(MODEL_A_FOLDER, App->dummy_file_system->GetFileFromPath(path).data())) {
+		if (!App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, App->dummy_file_system->GetFileFromPath(path).data())) {
+			if (App->dummy_file_system->Exists(MODEL_A_FOLDER) == false)
+				App->dummy_file_system->CreateDir(MODEL_A_FOLDER);
 			new_path = (MODEL_A_FOLDER + App->dummy_file_system->GetFileFromPath(path));
 			if (!CopyFile(path, new_path.data(), FALSE)) {
-				LOG("Failed to copy fbx in Assets folder, Error: %s", GetLastError());
+				LOG("Failed to copy fbx in Assets folder", path);
 			}
 			else {
 				path = new_path.data();
@@ -50,7 +52,7 @@ uint64 ModelImporter::Import(const char * path)
 
 		// .meta -------------------------------------------------------------
 		uint64_t meta = 0u;
-		if (App->dummy_file_system->IsInSubDirectory(MODEL_A_FOLDER, (App->dummy_file_system->GetFileFromPath(path) + ".meta").data())) {
+		if (App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, (App->dummy_file_system->GetFileFromPath(path) + ".meta").data())) {
 			if (App->dummy_file_system->IsMetaVaild((std::string(path) + ".meta").data())) {
 				LOG("File %s already imported", App->dummy_file_system->GetFileFromPath(path).data());
 				meta = App->dummy_file_system->GetUIDFromMeta((std::string(path) + ".meta").data());
@@ -75,19 +77,20 @@ uint64 ModelImporter::Import(const char * path)
 						cursor += sizeof(uint64);
 					}
 
-					uint n_materials = 0u;
+					/*uint n_materials = 0u;
 					std::memcpy(&n_materials, cursor, sizeof(uint));
 					cursor += sizeof(uint);
 					for (int i = 0; i < n_materials; i++) {
 						uint64 uid = 0u;
 						std::memcpy(&uid, cursor, sizeof(uint64));
-						App->resources->CreateResource(Resource::Type::TEXTURE, uid);
+						Resource* res = App->resources->CreateResource(Resource::Type::TEXTURE, uid);
+						res->SetResourcePath((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str());
 						cursor += sizeof(uint64);
-					}
+					}*/
 
 					delete[] data;
 				}
-
+				aiReleaseImport(scene);
 				return res->GetUID();
 			}
 			else {

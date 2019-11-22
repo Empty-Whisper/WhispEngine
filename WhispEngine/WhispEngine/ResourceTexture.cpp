@@ -14,6 +14,9 @@ ResourceTexture::ResourceTexture(const uint64& uid) : Resource(uid, Resource::Ty
 
 ResourceTexture::~ResourceTexture()
 {
+	if (references > 0u)
+		FreeMemory();
+	references = 0u;
 }
 
 bool ResourceTexture::Set(const uint & width, const uint & height, const uint & id)
@@ -30,17 +33,19 @@ bool ResourceTexture::LoadInMemory()
 	/*if (App->dummy_file_system->Exists(path) == false) {
 		// TODO?: Recreate library
 	}*/
-
-	ilGenImages(1, &buffer_id);
-	ilBindImage(buffer_id);
+	ILuint image_id = 0;
+	ilGenImages(1, &image_id);
+	ilBindImage(image_id);
 
 	ilutRenderer(ILUT_OPENGL);  // Switch the renderer
 
-	if (!ilLoadImage(file.c_str())) {
+	if (!ilLoadImage(resource_path.c_str())) {
 		auto error = ilGetError();
 		LOG("Failed to load texture with path: %s. Error: %s", file.c_str(), ilGetString(error));
 	}
 	else {
+
+		Set(ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilutGLBindTexImage());
 		// Upload pixels into texture
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -56,7 +61,7 @@ bool ResourceTexture::LoadInMemory()
 		glBindTexture(GL_TEXTURE_2D, 0); // Deselect buffer
 	}
 
-	ilDeleteImages(1, &buffer_id);
+	ilDeleteImages(1, &image_id);
 	return true;
 }
 

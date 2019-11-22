@@ -8,6 +8,9 @@ ResourceMesh::ResourceMesh(const uint64& uid) : Resource(uid, Resource::Type::ME
 
 ResourceMesh::~ResourceMesh()
 {
+	if (references > 0u)
+		FreeMemory();
+	references = 0u;
 }
 
 bool ResourceMesh::LoadInMemory()

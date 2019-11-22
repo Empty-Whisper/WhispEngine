@@ -94,6 +94,16 @@ void ResourceModel::CreateObjects(GameObject * container, const nlohmann::json &
 		App->resources->LoadToMemory(mesh->uid);
 	}
 
+	if (data.value("materialId", 0u) != 0u) {
+		ComponentMaterial * mat = nullptr;
+		if (!child->TryGetComponent(ComponentType::MATERIAL, (Component*&)mat)) {
+			mat = (ComponentMaterial*)child->CreateComponent(ComponentType::MATERIAL);
+		}
+		
+		mat->uid = (uint64)data.value("materialId", (uint64)0u);
+		App->resources->LoadToMemory(mat->uid);
+	}
+
 	if (data.find("children") != data.end()) {
 		for (nlohmann::json::const_iterator it = data["children"].begin(); it != data["children"].end(); it++) {
 			CreateObjects(child, *it);

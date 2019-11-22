@@ -3,6 +3,8 @@
 #include "Resource.h"
 #include "Globals.h"
 
+class ResourceTexture;
+
 class ModuleResources :
 	public Module
 {
@@ -21,6 +23,8 @@ public:
 
 	const Resource* Get(const uint64& uid) const;
 		  Resource* Get(const uint64& uid);
+
+	bool GetTextures(std::vector<ResourceTexture*>& to_fill);
 
 private:
 	std::map<uint64_t, Resource*> resources;
