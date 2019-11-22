@@ -8,6 +8,8 @@
 #include "ComponentTransform.h"
 #include "Brofiler/Brofiler.h"
 
+#include "ModuleObjectManager.h"
+
 #include "MathGeoLib/include/Geometry/AABB.h"
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {

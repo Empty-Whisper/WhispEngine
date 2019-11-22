@@ -5,6 +5,9 @@
 #include "ComponentCamera.h"
 #include "Application.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+
+#include "ModuleObjectManager.h"
+
 GameObject::GameObject(GameObject * parent) : parent(parent)
 {
 	if (parent != nullptr)

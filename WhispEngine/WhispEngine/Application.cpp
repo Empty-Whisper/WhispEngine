@@ -2,6 +2,9 @@
 #include "Brofiler/Brofiler.h"
 #include <fstream>
 
+
+#include "ModuleObjectManager.h"
+
 Application::Application()
 {
 	window =			new ModuleWindow();

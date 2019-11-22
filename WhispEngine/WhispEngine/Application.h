@@ -13,10 +13,10 @@
 #include "FileSystem.h"
 #include "ModuleShortCut.h"
 #include "ModuleImport.h"
-#include "ModuleObjectManager.h"
 #include "Random.h"
-
 #include "HardwareInfo.h"
+
+class ModuleObjectManager;
 
 #include <list>
 
