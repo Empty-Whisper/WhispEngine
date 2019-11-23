@@ -177,3 +177,8 @@ bool ModuleSceneIntro::CreateEmptyScene(const char * path)
 
 	return SaveScene();
 }
+
+std::string ModuleSceneIntro::GetSceneName() const
+{
+	return App->dummy_file_system->GetFileNameFromPath(scene_path.c_str());
+}

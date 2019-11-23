@@ -66,7 +66,7 @@ public:
 
 private:
 	bool active = true;
-	bool obj_static = false;
+	bool is_static = false;
 	std::string name;
 	ObjectSelected obj_selected = ObjectSelected::NONE;
 	std::vector<Component*> components_to_delete;

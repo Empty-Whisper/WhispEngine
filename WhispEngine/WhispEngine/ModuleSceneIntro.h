@@ -28,6 +28,8 @@ public:
 	bool LoadScene(const char* scene) const;
 	bool CreateEmptyScene(const char* name);
 
+	std::string GetSceneName() const;
+
 public:
 	uint grid_id = 0;
 	uint grid_vertex_size = 0;

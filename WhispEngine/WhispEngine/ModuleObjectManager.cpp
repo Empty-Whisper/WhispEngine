@@ -260,6 +260,7 @@ bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject
 	obj->SetName(node.value("name", "GameObject").c_str());
 	obj->UID = node["UID"];
 	obj->SetActive(node["active"]);
+	obj->SetStatic(node.value("static", false));
 	obj->GetComponent(ComponentType::TRANSFORM)->Load(node);
 
 	for (auto i = node["Components"].begin(); i != node["Components"].end(); ++i) {
