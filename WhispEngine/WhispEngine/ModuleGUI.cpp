@@ -99,12 +99,12 @@ update_status ModuleGUI::Update()
 
 		if (ImGui::Button("Yes, Save and create a new one")) {
 			App->SaveScene();
-			OpenSaveWindow();
+			OpenSaveWindow(true);
 			open_modal_new_scene = false;
 			ImGui::CloseCurrentPopup();
 		}
 		if (ImGui::Button("Create without save")) {
-			OpenSaveWindow();
+			OpenSaveWindow(true);
 			open_modal_new_scene = false;
 			ImGui::CloseCurrentPopup();
 		}
@@ -160,7 +160,7 @@ update_status ModuleGUI::MainMenuBar()
 
 			if (ImGui::MenuItem("Save Scene as"))
 			{
-				OpenSaveWindow();
+				OpenSaveWindow(false);
 			}
 
 			if (ImGui::MenuItem("Load Scene"))
@@ -232,6 +232,13 @@ update_status ModuleGUI::MainMenuBar()
 
 			ImGui::EndMenu();
 
+		}
+
+		if (ImGui::BeginMenu("Debug Tools")) {
+			if (ImGui::MenuItem("Octree")) {
+				App->scene_intro->DebugOctree();
+			}
+			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Help"))
@@ -309,7 +316,7 @@ void ModuleGUI::OpenLoadWindow()
 		SetCurrentDirectoryA(current_dir);
 }
 
-void ModuleGUI::OpenSaveWindow()
+void ModuleGUI::OpenSaveWindow(bool create_empty)
 {
 	char filename[MAX_PATH];
 
@@ -342,7 +349,12 @@ void ModuleGUI::OpenSaveWindow()
 			path.append(".scene");
 		}
 		
-		App->scene_intro->CreateEmptyScene(path.c_str());
+		if (create_empty)
+			App->scene_intro->CreateEmptyScene(path.c_str());
+		else {
+			App->scene_intro->scene_path.assign(path);
+			App->scene_intro->SaveScene();
+		}
 
 		if (!App->dummy_file_system->IsInDirectory(SCENE_A_FOLDER, file.c_str()))
 			if (!App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str()))

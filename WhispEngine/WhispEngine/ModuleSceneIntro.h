@@ -28,6 +28,8 @@ public:
 	bool LoadScene(const char* scene) const;
 	bool CreateEmptyScene(const char* name);
 
+	void DebugOctree();
+
 	std::string GetSceneName() const;
 
 public:
@@ -38,6 +40,5 @@ public:
 
 	OctreeTree* octree = nullptr;
 
-private:
 	std::string scene_path;
 };

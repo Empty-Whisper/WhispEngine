@@ -309,4 +309,5 @@ void ComponentMesh::Load(const nlohmann::json & node)
 {
 	uid = node["MeshId"];
 	App->resources->LoadToMemory(uid);
+	SetAABB();
 }

@@ -7,9 +7,11 @@
 
 #include "Imgui/imgui.h"
 #include "ComponentMesh.h"
+#include "ComponentTransform.h"
 #include "Brofiler/Brofiler.h"
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
+#include "ModuleResources.h"
 
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"
@@ -182,6 +184,19 @@ bool ModuleSceneIntro::CreateEmptyScene(const char * path)
 	scene_path.assign(path);
 
 	return SaveScene();
+}
+
+void ModuleSceneIntro::DebugOctree()
+{
+	if (App->dummy_file_system->Exists("Assets/Scenes/Octree.scene")) {
+		LoadScene("Assets/Scenes/Octree.scene");
+		scene_path.assign("Assets/Scenes/Octree.scene");
+		show_octree = true;
+		octree->Recalculate();
+	}
+	else {
+		LOG("Assets/Scenes/Octree.scene does not exist");
+	}
 }
 
 std::string ModuleSceneIntro::GetSceneName() const
