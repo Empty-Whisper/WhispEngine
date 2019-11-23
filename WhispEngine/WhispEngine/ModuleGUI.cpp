@@ -68,7 +68,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(inspector = new PanelInspector(node["panels"]["inspector"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_5));
 	panels.push_back(game = new PanelGame(node["panels"]["game"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_7));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
-	panels.push_back(new PanelResources());
+	panels.push_back(resources = new PanelResources(node["panels"]["resources"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_8));
 
 	ImGuizmo::Enable(true);
 
@@ -186,6 +186,7 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Inspector", "Shift+5", &inspector->active);
 			ImGui::MenuItem("Scene", "Shift+6", &scene->active);
 			ImGui::MenuItem("Game", "Shift+7", &game->active);
+			ImGui::MenuItem("Resources", "Shift+8", &resources->active);
 			ImGui::MenuItem("Style Editor", "", &show_style_window);
 			ImGui::EndMenu();
 

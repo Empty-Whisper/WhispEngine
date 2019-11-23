@@ -40,7 +40,10 @@
             },
             "game": {
               "start_enabled": true
-            }
+            },
+			"resources": {
+			  "start_enabled": true
+			}
           }
         },
         "Window": {

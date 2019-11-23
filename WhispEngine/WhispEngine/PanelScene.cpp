@@ -19,7 +19,7 @@ void PanelScene::Update()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0,0) );
 
-	if (ImGui::Begin("#Scene", &active)) 
+	if (ImGui::Begin("Scene", &active)) 
 	{
 	
 		ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();

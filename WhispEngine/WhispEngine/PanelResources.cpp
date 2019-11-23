@@ -7,7 +7,8 @@
 
 #include "ModuleImport.h"
 
-PanelResources::PanelResources()
+PanelResources::PanelResources(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
+	: Panel("Inspector", start_active, shortcut1, shortcut2, shortcut3)
 {
 }
 
