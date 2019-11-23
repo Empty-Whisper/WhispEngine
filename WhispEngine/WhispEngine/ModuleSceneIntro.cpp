@@ -147,8 +147,12 @@ bool ModuleSceneIntro::SaveScene()
 	nlohmann::json scene;
 
 	std::string name = App->dummy_file_system->GetFileNameFromPath(scene_path.c_str());
+	
+	Camera* cam = App->camera->GetSceneCamera();
+	App->json->AddFloat3("position", cam->GetPosition(), scene["Camera"]);
+	//App->json->AddQuaternion("rotation", cam->GetRotation(), scene["Camera"]); TODO: Create a function to get the quaternion that represent frustum rotation
 
-	ret = App->object_manager->SaveGameObjects(scene[name.c_str()]);
+	ret = App->object_manager->SaveGameObjects(scene);
 
 	if (App->dummy_file_system->GetFormat(scene_path.c_str()) != FileSystem::Format::SCENE)
 		scene_path.append(".scene");
@@ -164,8 +168,10 @@ bool ModuleSceneIntro::LoadScene(const char* scene) const
 
 	nlohmann::json scene_file = App->dummy_file_system->OpenFile(scene);
 	
-	auto it = scene_file.begin();
-	ret = App->object_manager->LoadGameObjects((*it)["GameObjects"]);
+	Camera* cam = App->camera->GetSceneCamera();
+	cam->SetTransformPosition(App->json->GetFloat3("position", scene_file["Camera"]));
+
+	ret = App->object_manager->LoadGameObjects(scene_file["GameObjects"]);
 
 	return ret;
 }

@@ -238,10 +238,10 @@ bool ModuleObjectManager::LoadGameObjects(const nlohmann::json & it)
 {
 	bool ret = true;
 
-	auto object = *it.begin();
 	DestroyGameObject(root);
+	root = new GameObject(nullptr);
+	auto object = *it.begin();
 	if (it.size() == 1) {
-		root = new GameObject(nullptr);
 		root->UID = object["UID"];
 
 		for (auto i = object["Children"].cbegin(); i != object["Children"].cend(); i++) {
