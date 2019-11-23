@@ -91,6 +91,31 @@ update_status ModuleGUI::Update()
 	BROFILER_CATEGORY("GUI", Profiler::Color::Purple);
 
 	update_status ret = MainMenuBar();
+
+	if (open_modal_new_scene)
+		ImGui::OpenPopup("A");
+	if (ImGui::BeginPopupModal("A", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		ImGui::Text("Actual Scene might not be saved since last change. Do you want to save?");
+
+		if (ImGui::Button("Yes, Save and create a new one")) {
+			App->SaveScene();
+			OpenSaveWindow();
+			open_modal_new_scene = false;
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("Create without save")) {
+			OpenSaveWindow();
+			open_modal_new_scene = false;
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("Cancel")) {
+			open_modal_new_scene = false;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
 	Dockspace();
 	for (auto i = panels.begin(); i != panels.end(); ++i) {
 		if ((*i)->IsActive()) {
@@ -125,7 +150,7 @@ update_status ModuleGUI::MainMenuBar()
 		{
 			if (ImGui::MenuItem("New Scene"))
 			{
-				OpenSaveWindow();
+				open_modal_new_scene = true;
 			}
 
 			if (ImGui::MenuItem("Save Scene"))
@@ -147,10 +172,11 @@ update_status ModuleGUI::MainMenuBar()
 			{
 				ret = update_status::UPDATE_STOP;
 			}
+			
 
 			ImGui::EndMenu();
 		}
-
+		
 		if (ImGui::BeginMenu("Windows"))
 		{
 			ImGui::MenuItem("Configuration", "Shift+1", &config->active);

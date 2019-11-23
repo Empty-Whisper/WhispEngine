@@ -56,6 +56,8 @@ private:
 	bool show_style_window = false;
 	bool show_demo_create = false;
 
+	bool open_modal_new_scene = false;
+
 	std::vector<Panel*> panels;
 
 	ImGuiTextBuffer buffer;
