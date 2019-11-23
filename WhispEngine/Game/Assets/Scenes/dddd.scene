@@ -1,0 +1,147 @@
+{
+    "dddd": {
+        "GameObjects": [
+            {
+                "Children": [
+                    {
+                        "Children": [
+                            {
+                                "Children": [
+                                    {
+                                        "Children": null,
+                                        "Components": [
+                                            {
+                                                "Resource": 217382129080912832,
+                                                "active": true,
+                                                "face color": [
+                                                    1.0,
+                                                    1.0,
+                                                    1.0,
+                                                    1.0
+                                                ],
+                                                "type": 2,
+                                                "wire color": [
+                                                    0.0,
+                                                    0.0,
+                                                    0.0,
+                                                    0.0
+                                                ]
+                                            },
+                                            {
+                                                "MeshId": 15693691919912448000,
+                                                "active": true,
+                                                "type": 1
+                                            }
+                                        ],
+                                        "UID": 9653711255318616064,
+                                        "active": true,
+                                        "name": "Plane.004",
+                                        "position": [
+                                            0.0,
+                                            -0.17722618579864502,
+                                            0.14849865436553955
+                                        ],
+                                        "rotation": [
+                                            1.0,
+                                            0.0,
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale": [
+                                            1.0,
+                                            1.0,
+                                            1.0
+                                        ]
+                                    }
+                                ],
+                                "Components": [
+                                    {
+                                        "Resource": 217382129080912832,
+                                        "active": true,
+                                        "face color": [
+                                            1.0,
+                                            1.0,
+                                            1.0,
+                                            1.0
+                                        ],
+                                        "type": 2,
+                                        "wire color": [
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "MeshId": 5409070872278538240,
+                                        "active": true,
+                                        "type": 1
+                                    }
+                                ],
+                                "UID": 2779577828958054912,
+                                "active": true,
+                                "name": "Cylinder.001",
+                                "position": [
+                                    0.0,
+                                    0.0,
+                                    0.0
+                                ],
+                                "rotation": [
+                                    0.7071067094802856,
+                                    -0.7071068286895752,
+                                    0.0,
+                                    0.0
+                                ],
+                                "scale": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "Components": null,
+                        "UID": 11997755647053156352,
+                        "active": true,
+                        "name": "coke",
+                        "position": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ],
+                "Components": null,
+                "UID": 16820278940039821312,
+                "active": true,
+                "name": "Root",
+                "position": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        ]
+    }
+}

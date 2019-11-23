@@ -26,6 +26,7 @@ public:
 
 	bool SaveScene();
 	bool LoadScene(const char* scene) const;
+	bool CreateEmptyScene(const char* name);
 
 public:
 	uint grid_id = 0;
@@ -36,5 +37,5 @@ public:
 	OctreeTree* octree = nullptr;
 
 private:
-	std::string scene_name;
+	std::string scene_path;
 };

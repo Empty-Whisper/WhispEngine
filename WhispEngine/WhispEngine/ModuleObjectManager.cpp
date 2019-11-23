@@ -80,6 +80,13 @@ void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 	delete obj;
 }
 
+void ModuleObjectManager::ResetObjects()
+{
+	delete root;
+	root = new GameObject(nullptr);
+	root->SetName("Root");
+}
+
 GameObject * ModuleObjectManager::GetRoot() const
 {
 	return root;

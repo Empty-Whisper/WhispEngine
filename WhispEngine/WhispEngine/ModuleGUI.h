@@ -38,6 +38,14 @@ public:
 
 	update_status MainMenuBar();
 
+	void OpenLoadWindow();
+
+private:
+	/* Function to open Modal windows to save and load files with windows API. 
+	See documentation here: https://docs.microsoft.com/es-es/windows/win32/dlgbox/open-and-save-as-dialog-boxes?redirectedfrom=MSDN
+	*/
+	void OpenSaveWindow();
+
 public:
 	void Log(const char* str);
 	void Dockspace();

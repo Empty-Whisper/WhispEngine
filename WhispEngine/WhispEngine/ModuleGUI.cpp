@@ -21,6 +21,9 @@
 #include "PanelScene.h"
 #include "PanelGame.h"
 #include "PanelResources.h"
+
+#include "ModuleSceneIntro.h"
+
 #include "Brofiler/Brofiler.h"
 
 
@@ -120,14 +123,24 @@ update_status ModuleGUI::MainMenuBar()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("New Scene"))
+			{
+				OpenSaveWindow();
+			}
+
 			if (ImGui::MenuItem("Save Scene"))
 			{
 				App->SaveScene();
 			}
 
+			if (ImGui::MenuItem("Save Scene as"))
+			{
+				OpenSaveWindow();
+			}
+
 			if (ImGui::MenuItem("Load Scene"))
 			{
-				//App->LoadScene();
+				OpenLoadWindow();
 			}
 
 			if (ImGui::MenuItem("Quit"))
@@ -225,6 +238,94 @@ update_status ModuleGUI::MainMenuBar()
 	ImGui::EndMainMenuBar();
 
 	return ret;
+}
+
+void ModuleGUI::OpenLoadWindow()
+{
+	char filename[MAX_PATH];
+
+	char current_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, current_dir);
+
+	std::string dir = std::string(current_dir) + "\\" + "Assets\\Scenes";
+
+	OPENFILENAME ofn;
+	ZeroMemory(&filename, sizeof(filename));
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = NULL;  // If you have a window to center over, put its HANDLE here
+	ofn.lpstrFilter = "Whisp Scene\0*.scene\0";
+	ofn.lpstrFile = filename;
+	ofn.lpstrInitialDir = dir.c_str();
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrTitle = "Save new scene";
+	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_OVERWRITEPROMPT;
+
+	if (GetOpenFileNameA(&ofn))
+	{
+		SetCurrentDirectoryA(current_dir);
+
+		std::string file = App->dummy_file_system->GetFileFromPath(filename);
+		std::string path = App->dummy_file_system->GetRelativePathToAssets(filename);
+
+		if (App->dummy_file_system->GetFormat(file.c_str()) != FileSystem::Format::SCENE) {
+			LOG("File is not a scene file, cannot open");
+		}
+		else {
+			if (!App->dummy_file_system->IsInDirectory(SCENE_A_FOLDER, file.c_str()))
+				if (!App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str()))
+					LOG("Scene file not in Assets folder, we recommend you to work in Assets folder");
+
+			App->LoadScene(path.c_str());
+		}
+	}
+	else
+		SetCurrentDirectoryA(current_dir);
+}
+
+void ModuleGUI::OpenSaveWindow()
+{
+	char filename[MAX_PATH];
+
+	char current_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, current_dir);
+
+	std::string dir = std::string(current_dir) + "\\" + "Assets\\Scenes";
+
+	OPENFILENAME ofn;
+	ZeroMemory(&filename, sizeof(filename));
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = NULL;  // If you have a window to center over, put its HANDLE here
+	ofn.lpstrFilter = "Whisp Scene\0*.scene\0";
+	ofn.lpstrFile = filename;
+	ofn.lpstrInitialDir = dir.c_str();
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrTitle = "Save new scene";
+	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_OVERWRITEPROMPT;
+
+	if (GetSaveFileNameA(&ofn))
+	{
+		SetCurrentDirectoryA(current_dir);
+
+		std::string file = App->dummy_file_system->GetFileFromPath(filename);
+		std::string path = App->dummy_file_system->GetRelativePathToAssets(filename);
+
+		if (App->dummy_file_system->GetFormat(file.c_str()) != FileSystem::Format::SCENE) {
+			file.append(".scene");
+			path.append(".scene");
+		}
+		
+		App->scene_intro->CreateEmptyScene(path.c_str());
+
+		if (!App->dummy_file_system->IsInDirectory(SCENE_A_FOLDER, file.c_str()))
+			if (!App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str()))
+				LOG("Scene file not in Assets folder, we recommend you to work in Assets folder");
+	}
+	else
+	{
+		SetCurrentDirectoryA(current_dir);
+	}
 }
 
 update_status ModuleGUI::PostUpdate()
