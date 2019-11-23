@@ -62,13 +62,9 @@ void ComponentCamera::OnInspector()
 
 		ImGui::Separator();
 
-		if(ImGui::Checkbox("Main Camera", &checkbox_main_camera))
-			is_main_camera = true;
-
-		if (checkbox_main_camera && is_main_camera)
-		{
+		if (ImGui::Checkbox("Main Camera", &is_main_camera)) {
+			if(is_main_camera)
 			App->camera->SetGameCamera(camera);
-			is_main_camera = false;
 		}
 
 	}
@@ -135,4 +131,22 @@ void ComponentCamera::DrawFrustum()
 
 void ComponentCamera::Save(nlohmann::json & node)
 {
+	node["is_main_camera"] = is_main_camera;
+	node["checkbox_main_camera"] = checkbox_main_camera; // TODO: delete this bool
+
+	node["aspect_ratio"] =	camera->GetAspectRatio();
+	node["vertical_fov"] =	camera->GetVerticalFOV();
+	node["far_plane"] =		camera->GetFarZ();
+	node["near_plane"] =    camera->GetNearZ();
+}
+
+void ComponentCamera::Load(const nlohmann::json & node)
+{
+	is_main_camera = node["is_main_camera"];
+	checkbox_main_camera = node["checkbox_main_camera"];
+
+	camera->SetAspectRatio(node["aspect_ratio"]);
+	camera->SetFOV(node["vertical_fov"]);
+	camera->SetFarZ(node["far_plane"]);
+	camera->SetNearZ(node["near_plane"]);
 }

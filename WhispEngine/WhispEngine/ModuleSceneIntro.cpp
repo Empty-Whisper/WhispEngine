@@ -157,7 +157,7 @@ bool ModuleSceneIntro::LoadScene(const char* scene) const
 	bool ret = true;
 
 	nlohmann::json scene_file = App->dummy_file_system->OpenFile(scene);
-
+	
 	auto it = scene_file.begin();
 	ret = App->object_manager->LoadGameObjects((*it)["GameObjects"]);
 

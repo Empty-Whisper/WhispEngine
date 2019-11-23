@@ -29,6 +29,7 @@ public:
 	const float GetVerticalFOV() const;
 	const float4x4 GetViewMatrix() const;
 	const float4x4 GetProjectionMatrix() const;
+	const float GetAspectRatio() const;
 	void GetAllCorners(float3* corners);
 
 	const float3 GetPosition();

@@ -19,7 +19,10 @@
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
-	material = (ComponentMaterial*)parent->CreateComponent(ComponentType::MATERIAL);
+	if (parent->HasComponent(ComponentType::MATERIAL))
+		material = (ComponentMaterial*)parent->GetComponent(ComponentType::MATERIAL);
+	else
+		material = (ComponentMaterial*)parent->CreateComponent(ComponentType::MATERIAL);
 }
 
 void ComponentMesh::Update()

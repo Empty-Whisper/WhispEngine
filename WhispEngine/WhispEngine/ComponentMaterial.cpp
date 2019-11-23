@@ -44,7 +44,8 @@ void ComponentMaterial::OnInspector()
 
 		if (uid != 0u) {
 			ResourceTexture * texture = (ResourceTexture*)App->resources->Get(uid);
-			ImGui::Text("%s", texture->GetFile());
+			if (texture != nullptr)
+				ImGui::Text("%s", texture->GetFile());
 			if (ImGui::Button("Change Texture")) {
 				select_tex = true;
 			}
@@ -95,7 +96,7 @@ void ComponentMaterial::Save(nlohmann::json & node)
 
 void ComponentMaterial::Load(const nlohmann::json & node)
 {
-	uid = node.value("Resource", 0u);
+	uid = (uint64)node.value("Resource", (uint64)0u);
 	App->resources->LoadToMemory(uid);
 	float* fcolor = App->json->GetColor4("face color", node);
 	float* wcolor = App->json->GetColor4("wire color", node);

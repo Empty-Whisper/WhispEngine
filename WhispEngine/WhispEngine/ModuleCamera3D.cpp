@@ -179,9 +179,7 @@ update_status ModuleCamera3D::Update()
 // -----------------------------------------------------------------
 Camera * ModuleCamera3D::CreateCamera()
 {
-	Camera* cam = nullptr;
-
-	cam = new Camera;
+	Camera* cam = new Camera();
 	cameras.push_back(cam);
 
 	return cam;
@@ -189,27 +187,10 @@ Camera * ModuleCamera3D::CreateCamera()
 
 void ModuleCamera3D::DeleteCamera(Camera * camera)
 {
-	for (std::vector<Camera*>::iterator i = cameras.begin(); i != cameras.end();)
-	{
-		GameObject* sel = App->object_manager->GetSelected();
-		AABB aabb = AABB(-float3::one, float3::one);
-
-		if (sel != nullptr) {
-			ComponentMesh* mesh = (ComponentMesh*)sel->GetComponent(ComponentType::MESH);
-			if (mesh != nullptr)
-				aabb = mesh->GetAABB();
-		}
-
-		float3 center = aabb.CenterPoint();
-
-		if ((*i) != nullptr)
-		{
-			delete(*i);
-			cameras.erase(i);
-			break;
-		}
-		else
-			++i;
+	auto i = std::find(cameras.begin(), cameras.end(), camera);
+	if (i != cameras.end()) {
+		delete *i;
+		cameras.erase(i);
 	}
 }
 
@@ -478,6 +459,11 @@ const float4x4 Camera::GetViewMatrix() const
 const float4x4 Camera::GetProjectionMatrix() const
 {
 	return frustum.ProjectionMatrix().Transposed();
+}
+
+const float Camera::GetAspectRatio() const
+{
+	return aspect_ratio;
 }
 
 
