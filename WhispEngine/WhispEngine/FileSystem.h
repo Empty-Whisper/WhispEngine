@@ -28,6 +28,7 @@ public:
 	std::string GetFileNameFromPath(const char* file) const;
 	std::string GetFileFromPath(const char* file) const;
 	std::string GetFileDirectory(const char* file_path) const;
+	std::string GetRelativePathToAssets(const char* full_path) const;
 
 	bool IsFileSupported(const char* path) const;
 

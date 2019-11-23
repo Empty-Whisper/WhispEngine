@@ -80,6 +80,13 @@ void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 	delete obj;
 }
 
+void ModuleObjectManager::ResetObjects()
+{
+	delete root;
+	root = new GameObject(nullptr);
+	root->SetName("Root");
+}
+
 GameObject * ModuleObjectManager::GetRoot() const
 {
 	return root;
@@ -231,10 +238,10 @@ bool ModuleObjectManager::LoadGameObjects(const nlohmann::json & it)
 {
 	bool ret = true;
 
-	auto object = *it.begin();
 	DestroyGameObject(root);
+	root = new GameObject(nullptr);
+	auto object = *it.begin();
 	if (it.size() == 1) {
-		root = new GameObject(nullptr);
 		root->UID = object["UID"];
 
 		for (auto i = object["Children"].cbegin(); i != object["Children"].cend(); i++) {
@@ -253,6 +260,7 @@ bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject
 	obj->SetName(node.value("name", "GameObject").c_str());
 	obj->UID = node["UID"];
 	obj->SetActive(node["active"]);
+	obj->SetStatic(node.value("static", false));
 	obj->GetComponent(ComponentType::TRANSFORM)->Load(node);
 
 	for (auto i = node["Components"].begin(); i != node["Components"].end(); ++i) {

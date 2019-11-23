@@ -214,12 +214,12 @@ void GameObject::SetActive(const bool & to_active)
 
 bool GameObject::IsStatic() const
 {
-	return obj_static;
+	return is_static;
 }
 
 void GameObject::SetStatic(bool to_static)
 {
-	obj_static = to_static;
+	is_static = to_static;
 }
 
 const char * GameObject::GetName() const
@@ -323,6 +323,7 @@ bool GameObject::Save(nlohmann::json & node)
 	object["active"] = active;
 	object["UID"] = UID;
 	object["name"] = name;
+	object["static"] = is_static;
 	GetComponent(ComponentType::TRANSFORM)->Save(object);
 
 	nlohmann::json component;

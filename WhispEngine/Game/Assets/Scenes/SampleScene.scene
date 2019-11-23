@@ -1,263 +1,71 @@
 {
-    "SampleScene": {
-        "GameObjects": [
-            {
-                "Children": [
-                    {
-                        "Children": [
-                            {
-                                "Children": null,
-                                "Components": [
-                                    {
-                                        "active": true,
-                                        "face color": [
-                                            1.0,
-                                            1.0,
-                                            1.0,
-                                            1.0
-                                        ],
-                                        "texture": 3752261963053401600,
-                                        "type": 2,
-                                        "wire color": [
-                                            0.0,
-                                            0.0,
-                                            0.0,
-                                            0.0
-                                        ]
-                                    },
-                                    {
-                                        "MeshId": 13391746949110824960,
-                                        "active": true,
-                                        "type": 1
-                                    }
-                                ],
-                                "UID": 1885039166270564096,
-                                "active": true,
-                                "name": "Chimney",
-                                "position": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "rotation": [
-                                    0.7071067094802856,
-                                    -0.7071068286895752,
-                                    0.0,
-                                    0.0
-                                ],
-                                "scale": [
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            },
-                            {
-                                "Children": null,
-                                "Components": [
-                                    {
-                                        "active": true,
-                                        "face color": [
-                                            1.0,
-                                            1.0,
-                                            1.0,
-                                            1.0
-                                        ],
-                                        "texture": 3752261963053401600,
-                                        "type": 2,
-                                        "wire color": [
-                                            0.0,
-                                            0.0,
-                                            0.0,
-                                            0.0
-                                        ]
-                                    },
-                                    {
-                                        "MeshId": 9968649612032880640,
-                                        "active": true,
-                                        "type": 1
-                                    }
-                                ],
-                                "UID": 12289277813696354304,
-                                "active": true,
-                                "name": "Baker_house",
-                                "position": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "rotation": [
-                                    0.7071067094802856,
-                                    -0.7071068286895752,
-                                    0.0,
-                                    0.0
-                                ],
-                                "scale": [
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            }
-                        ],
-                        "Components": null,
-                        "UID": 13624709236864679936,
-                        "active": true,
-                        "name": "BakerHouse",
-                        "position": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "rotation": [
-                            0.5,
-                            0.5,
-                            -0.5,
-                            0.5
-                        ],
-                        "scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    },
-                    {
-                        "Children": [
-                            {
-                                "Children": [
-                                    {
-                                        "Children": null,
-                                        "Components": [
-                                            {
-                                                "active": true,
-                                                "face color": [
-                                                    1.0,
-                                                    1.0,
-                                                    1.0,
-                                                    1.0
-                                                ],
-                                                "texture": 9874411469795123200,
-                                                "type": 2,
-                                                "wire color": [
-                                                    0.0,
-                                                    0.0,
-                                                    0.0,
-                                                    0.0
-                                                ]
-                                            },
-                                            {
-                                                "MeshId": 9378237078438244352,
-                                                "active": true,
-                                                "type": 1
-                                            }
-                                        ],
-                                        "UID": 4219715396767141888,
-                                        "active": true,
-                                        "name": "Plane.004",
-                                        "position": [
-                                            0.0,
-                                            -0.17722618579864502,
-                                            0.14849853515625
-                                        ],
-                                        "rotation": [
-                                            1.0,
-                                            0.0,
-                                            0.0,
-                                            0.0
-                                        ],
-                                        "scale": [
-                                            1.0,
-                                            1.0,
-                                            1.0
-                                        ]
-                                    }
-                                ],
-                                "Components": [
-                                    {
-                                        "active": true,
-                                        "face color": [
-                                            1.0,
-                                            1.0,
-                                            1.0,
-                                            1.0
-                                        ],
-                                        "texture": 9595469107306061824,
-                                        "type": 2,
-                                        "wire color": [
-                                            0.0,
-                                            0.0,
-                                            0.0,
-                                            0.0
-                                        ]
-                                    },
-                                    {
-                                        "MeshId": 11143598468166430720,
-                                        "active": true,
-                                        "type": 1
-                                    }
-                                ],
-                                "UID": 11585282496748210176,
-                                "active": true,
-                                "name": "Cylinder.001",
-                                "position": [
-                                    0.0,
-                                    0.0,
-                                    0.0
-                                ],
-                                "rotation": [
-                                    0.7071067094802856,
-                                    -0.7071068286895752,
-                                    0.0,
-                                    0.0
-                                ],
-                                "scale": [
-                                    1.0,
-                                    0.9999999403953552,
-                                    0.9999999403953552
-                                ]
-                            }
-                        ],
-                        "Components": null,
-                        "UID": 3237779758382588416,
-                        "active": true,
-                        "name": "coke",
-                        "position": [
-                            4.758058547973633,
-                            1.3246291875839233,
-                            0.0
-                        ],
-                        "rotation": [
-                            1.0,
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "scale": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ]
-                    }
-                ],
-                "Components": null,
-                "UID": 13240039805413283840,
-                "active": true,
-                "name": "Root",
-                "position": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    1.0,
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "scale": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            }
+    "Camera": {
+        "position": [
+            6.919999599456787,
+            5.499999523162842,
+            -15.35000228881836
         ]
-    }
+    },
+    "GameObjects": [
+        {
+            "Children": [
+                {
+                    "Children": null,
+                    "Components": [
+                        {
+                            "active": true,
+                            "aspect_ratio": 1.0,
+                            "checkbox_main_camera": true,
+                            "far_plane": 200.0,
+                            "is_main_camera": true,
+                            "near_plane": 1.0,
+                            "type": 4,
+                            "vertical_fov": 70.0
+                        }
+                    ],
+                    "UID": 16923383520638255104,
+                    "active": true,
+                    "name": "Main Camera",
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "static": false
+                }
+            ],
+            "Components": null,
+            "UID": 2534685992357931008,
+            "active": true,
+            "name": "Root",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "static": false
+        }
+    ]
 }

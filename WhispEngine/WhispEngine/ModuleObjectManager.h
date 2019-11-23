@@ -54,6 +54,7 @@ public:
 
 	GameObject* CreateGameObject(GameObject* parent);
 	void DestroyGameObject(GameObject* obj);
+	void ResetObjects();
 
 	GameObject* GetRoot() const;
 	void GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const;

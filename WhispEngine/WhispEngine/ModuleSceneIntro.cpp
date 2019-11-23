@@ -3,6 +3,8 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
 
+#include <string>
+
 #include "Imgui/imgui.h"
 #include "ComponentMesh.h"
 #include "Brofiler/Brofiler.h"
@@ -38,9 +40,9 @@ bool ModuleSceneIntro::Start()
 
 	GameObject* obj = App->object_manager->CreateGameObject(nullptr);
 	obj->SetName("Main Camera");
-	Component* component_camera = obj->CreateComponent(ComponentType::CAMERA);	
+	obj->CreateComponent(ComponentType::CAMERA);	
 
-	scene_name.assign("SampleScene");
+	scene_path.assign("Assets/Scenes/SampleScene.scene");
 
 	return ret;
 }
@@ -86,7 +88,6 @@ update_status ModuleSceneIntro::Update()
 
 update_status ModuleSceneIntro::PostUpdate()
 {
-
 	return UPDATE_CONTINUE;
 }
 
@@ -145,9 +146,18 @@ bool ModuleSceneIntro::SaveScene()
 
 	nlohmann::json scene;
 
-	ret = App->object_manager->SaveGameObjects(scene[scene_name.c_str()]);
+	std::string name = App->dummy_file_system->GetFileNameFromPath(scene_path.c_str());
+	
+	Camera* cam = App->camera->GetSceneCamera();
+	App->json->AddFloat3("position", cam->GetPosition(), scene["Camera"]);
+	//App->json->AddQuaternion("rotation", cam->GetRotation(), scene["Camera"]); TODO: Create a function to get the quaternion that represent frustum rotation
 
-	App->dummy_file_system->SaveFile((ASSETS_FOLDER + scene_name + ".scene").c_str(), scene);
+	ret = App->object_manager->SaveGameObjects(scene);
+
+	if (App->dummy_file_system->GetFormat(scene_path.c_str()) != FileSystem::Format::SCENE)
+		scene_path.append(".scene");
+
+	App->dummy_file_system->SaveFile(scene_path.c_str(), scene);
 
 	return ret;
 }
@@ -157,9 +167,24 @@ bool ModuleSceneIntro::LoadScene(const char* scene) const
 	bool ret = true;
 
 	nlohmann::json scene_file = App->dummy_file_system->OpenFile(scene);
+	
+	Camera* cam = App->camera->GetSceneCamera();
+	cam->SetTransformPosition(App->json->GetFloat3("position", scene_file["Camera"]));
 
-	auto it = scene_file.begin();
-	ret = App->object_manager->LoadGameObjects((*it)["GameObjects"]);
+	ret = App->object_manager->LoadGameObjects(scene_file["GameObjects"]);
 
 	return ret;
+}
+
+bool ModuleSceneIntro::CreateEmptyScene(const char * path)
+{
+	App->object_manager->ResetObjects();
+	scene_path.assign(path);
+
+	return SaveScene();
+}
+
+std::string ModuleSceneIntro::GetSceneName() const
+{
+	return App->dummy_file_system->GetFileNameFromPath(scene_path.c_str());
 }
