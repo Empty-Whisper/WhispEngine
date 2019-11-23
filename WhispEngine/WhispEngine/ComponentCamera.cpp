@@ -75,57 +75,50 @@ void ComponentCamera::DrawFrustum()
 	float3 vertices[8];
 	camera->GetFrustum().GetCornerPoints(vertices);
 
-	GLint previous[2];
-	
-	
-	glGetIntegerv(GL_POLYGON_MODE, previous);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
-
 	glColor3f(0, 0, 100);
 
-	glLineWidth(1.f);
+	glBegin(GL_LINES);
 
-	glBegin(GL_QUADS);
+	glVertex3fv((float*)&vertices[0]);
+	glVertex3fv((float*)&vertices[4]);
 
-	glVertex3fv((GLfloat*)&vertices[1]);
-	glVertex3fv((GLfloat*)&vertices[5]);
-	glVertex3fv((GLfloat*)&vertices[7]);
-	glVertex3fv((GLfloat*)&vertices[3]);
+	glVertex3fv((float*)&vertices[0]);
+	glVertex3fv((float*)&vertices[1]);
 
-	glVertex3fv((GLfloat*)&vertices[4]);
-	glVertex3fv((GLfloat*)&vertices[0]);
-	glVertex3fv((GLfloat*)&vertices[2]);
-	glVertex3fv((GLfloat*)&vertices[6]);
+	glVertex3fv((float*)&vertices[0]);
+	glVertex3fv((float*)&vertices[2]);
 
-	glVertex3fv((GLfloat*)&vertices[5]);
-	glVertex3fv((GLfloat*)&vertices[4]);
-	glVertex3fv((GLfloat*)&vertices[6]);
-	glVertex3fv((GLfloat*)&vertices[7]);
+	glVertex3fv((float*)&vertices[5]);
+	glVertex3fv((float*)&vertices[4]);
 
-	glVertex3fv((GLfloat*)&vertices[0]);
-	glVertex3fv((GLfloat*)&vertices[1]);
-	glVertex3fv((GLfloat*)&vertices[3]);
-	glVertex3fv((GLfloat*)&vertices[2]);
+	glVertex3fv((float*)&vertices[5]);
+	glVertex3fv((float*)&vertices[1]);
 
-	glVertex3fv((GLfloat*)&vertices[3]);
-	glVertex3fv((GLfloat*)&vertices[7]);
-	glVertex3fv((GLfloat*)&vertices[6]);
-	glVertex3fv((GLfloat*)&vertices[2]);
+	glVertex3fv((float*)&vertices[7]);
+	glVertex3fv((float*)&vertices[5]);
 
-	glVertex3fv((GLfloat*)&vertices[0]);
-	glVertex3fv((GLfloat*)&vertices[4]);
-	glVertex3fv((GLfloat*)&vertices[5]);
-	glVertex3fv((GLfloat*)&vertices[1]);
+	glVertex3fv((float*)&vertices[7]);
+	glVertex3fv((float*)&vertices[3]);
+
+	glVertex3fv((float*)&vertices[7]);
+	glVertex3fv((float*)&vertices[6]);
+
+	glVertex3fv((float*)&vertices[2]);
+	glVertex3fv((float*)&vertices[6]);
+
+	glVertex3fv((float*)&vertices[2]);
+	glVertex3fv((float*)&vertices[3]);
+
+	glVertex3fv((float*)&vertices[1]);
+	glVertex3fv((float*)&vertices[3]);
+
+	glVertex3fv((float*)&vertices[4]);
+	glVertex3fv((float*)&vertices[6]);
 
 	glEnd();
+	glLineWidth(1.f);
 
-	
-	glPolygonMode(GL_FRONT_AND_BACK, previous[0]);
-
-	glLineWidth(1.0f);
-
-	glColor3f(255, 255, 255);
+	glColor3f(1.f, 1.f, 1.f);
 
 }
 
