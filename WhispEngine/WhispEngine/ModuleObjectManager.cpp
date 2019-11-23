@@ -340,6 +340,13 @@ void ModuleObjectManager::UpdateGuizmo()
 			float4x4 rotation_matrix = float4x4::identity;
 			float4x4 scale_matrix = float4x4::identity;
 
+			if (*i!= nullptr) {
+				ComponentMesh* mesh = nullptr;
+				if ((*i)->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
+					mesh->CalulateAABB_OBB();
+				}
+			}
+
 			switch (gizmoOperation)
 			{
 			case ImGuizmo::OPERATION::TRANSLATE:
