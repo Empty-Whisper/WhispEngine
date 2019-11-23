@@ -159,7 +159,7 @@ std::string FileSystem::GetFileDirectory(const char * file_path) const
 bool FileSystem::IsFileSupported(const char * path) const
 {
 	FileSystem::Format form = GetFormat(path);
-	return form == FileSystem::Format::DDS || form == FileSystem::Format::FBX || form == FileSystem::Format::JPG || form == FileSystem::Format::PNG;
+	return form == FileSystem::Format::DDS || form == FileSystem::Format::FBX || form == FileSystem::Format::JPG || form == FileSystem::Format::PNG || form == FileSystem::Format::TGA;
 }
 
 bool FileSystem::CreateDir(const char * path)

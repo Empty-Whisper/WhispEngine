@@ -73,6 +73,7 @@ bool ModuleImport::Import(const char * path, uint64 &uid)
 	{
 	case FileSystem::Format::JSON:
 		break;
+	case FileSystem::Format::TGA:
 	case FileSystem::Format::DDS:
 	case FileSystem::Format::PNG:
 	case FileSystem::Format::JPG:
