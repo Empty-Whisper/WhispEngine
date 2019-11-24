@@ -40,11 +40,7 @@ bool ModuleSceneIntro::Start()
 
 	GenerateGrid(10);
 
-	GameObject* obj = App->object_manager->CreateGameObject(nullptr);
-	obj->SetName("Main Camera");
-	obj->CreateComponent(ComponentType::CAMERA);	
-
-	scene_path.assign("Assets/Scenes/SampleScene.scene");
+	LoadScene("Assets/Scenes/SampleScene.scene");
 
 	return ret;
 }

@@ -98,10 +98,11 @@ void ComponentMaterial::Load(const nlohmann::json & node)
 {
 	uid = (uint64)node.value("Resource", (uint64)0u);
 	App->resources->LoadToMemory(uid);
-	float* fcolor = App->json->GetColor4("face color", node);
-	float* wcolor = App->json->GetColor4("wire color", node);
 
+	float* fcolor = App->json->GetColor4("face color", node);
 	memcpy(face_color, fcolor, sizeof(float) * 4);
+
+	float* wcolor = App->json->GetColor4("wire color", node);
 	memcpy(wire_color, wcolor, sizeof(float) * 4);
 }
 
