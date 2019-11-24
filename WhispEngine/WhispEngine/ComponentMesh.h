@@ -58,6 +58,7 @@ private:
 	  Check every frame if exist a material in GameObject will consume a lot of resources*/
 	ComponentMaterial * material = nullptr;
 
+public:
 	AABB local_box;
 	AABB aabb;
 	OBB obb;

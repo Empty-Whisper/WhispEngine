@@ -404,14 +404,15 @@ void Camera::FocusObject(const AABB & aabb)
 	if (is_focusing)
 	{
 		GameObject* sel = App->object_manager->GetSelected();
-		AABB aabb = AABB(-float3::one, float3::one);
-
-		if (sel != nullptr)
-			aabb = sel->GetAABB();
 
 		actual_camera_position = frustum.pos;
 		math::float3 center = aabb.CenterPoint();
-		reference_position = math::float3(center.x, center.y, center.z);
+		ComponentTransform* trans = (ComponentTransform*)sel->GetComponent(ComponentType::TRANSFORM);
+
+		if (aabb.IsFinite())
+			reference_position = math::float3(center.x, center.y, center.z);
+		else
+			reference_position = trans->GetPosition();
 
 		Look(reference_position);
 

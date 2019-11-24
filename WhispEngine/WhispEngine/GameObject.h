@@ -36,6 +36,8 @@ public:
 	bool	   TryGetComponent(const ComponentType &type, Component* &comp) const;
 	bool	   HasComponent(const ComponentType &type);
 
+	void Raycast(const LineSegment& ray_cast, bool& intersect, float&  length);
+
 	bool IsActive() const;
 	void SetActive(const bool &to_active);
 

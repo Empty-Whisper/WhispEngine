@@ -7,7 +7,6 @@
 #include "GameObject.h"
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
-//#include "Imgui/imgui.h"
 
 enum class Primitives {
 	NONE = -1,
@@ -61,7 +60,7 @@ public:
 	GameObject*	GetSelected() const;
 	void SetSelected(GameObject* select);
 
-	void MousePick();
+	void MousePicking(); 
 
 	bool SaveGameObjects(nlohmann::json &file);
 	bool LoadGameObjects(const nlohmann::json &file);
@@ -105,11 +104,8 @@ private:
 	//const char* PrimitivesToString(const Primitives prim);
 
 public:
-	GameObject* root = nullptr; //TODO: Change this to private
-
+	GameObject* root = nullptr;
 private:
-	//GameObject* root = nullptr;
-
 	GameObject* selected = nullptr;
 
 	ImGuizmo::OPERATION   gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
