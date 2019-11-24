@@ -70,7 +70,7 @@ void PanelScene::Update()
 	if (active_preview && preview_checkbox)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		if (ImGui::Begin("Camerea Preview", &active, ImGuiWindowFlags_NoDocking))
+		if (ImGui::Begin("Camera Preview", &active, ImGuiWindowFlags_NoDocking))
 		{
 			static bool init_window = true;
 			if (init_window)
