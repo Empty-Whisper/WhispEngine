@@ -17,7 +17,7 @@
                             "aspect_ratio": 1.0,
                             "checkbox_main_camera": true,
                             "far_plane": 200.0,
-                            "is_main_camera": false,
+                            "is_main_camera": true,
                             "near_plane": 1.0,
                             "type": 4,
                             "vertical_fov": 70.0

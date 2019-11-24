@@ -12,6 +12,14 @@ Go to our github release page and download the las version .zip :
 
 Extract .zip files inside a folder and open the .exe file.
 
+## For Correction
+
+There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct better, more visual.
+
+* Octree: Main Menu Bar -> Octree -> Show scene
+* MousePicking: Main Menu Bar -> Mouse picking RayCast
+* AABB/OBB: In each ComponentMesh on inspector can change to visualize the two bounging boxes, aabb(green) obb(blue)
+
 #### Contols
 * View around:  	         	Right click
 * Move through viewport: 	WASD + Right click
@@ -34,9 +42,32 @@ Extract .zip files inside a folder and open the .exe file.
 * Resources:        	  Shift + 8
 * About: 	                  Shift + Control + A
 
-## Authors
-* **Christian Martínez** [christt105](https://github.com/christt105)
+## Authors and Division Of Tasks
+### **Christian Martínez** [christt105](https://github.com/christt105)
+* Hierarchy GameObjects
+* Components properties on inspector
+* Octree
+* Scene Serialization (Load and Save)
+* Part of Bounding Boxes
+* Own Format
+* **Resource manager** :D
+	* Library and Assets logic
+	* .meta file
+	* Reference Counting
+* Start/Pause/Stop and recover init state
+
 * **Marc Galvez** [optus23](https://github.com/optus23)
+* Transform Camera editor to Fustum
+* Camera class logic 
+* Frustum culling
+* Component Camer
+* Camera Preview
+* Game panel
+* Viewport class logic
+* Mouse Picking
+* Substract all Modules from App.h
+* Add Guizmos
+* Guizmos logic to Game Objects
 
 ## Innovations Assignment 2
 
@@ -46,9 +77,9 @@ Extract .zip files inside a folder and open the .exe file.
 * Own File System
 * Octree
 * Window Assets
-* 17. a. There is an “Asset” window that shows all user assets
-* 17. d. Upon start, all resources not managed inside Assets are generated in Library
-* An external window to Save & Load Scenes
+* Resource Panel shows all Assets in the project
+* Library/ is generated identically if it does not exist
+* An external window of Windows API to Save & Load Scenes
 
 ## Innovations Assignment 1
 * Docking
