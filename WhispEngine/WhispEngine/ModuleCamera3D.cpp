@@ -177,7 +177,7 @@ update_status ModuleCamera3D::Update()
 
 	//Check if exists any camera component
 	std::vector<GameObject*> all_game_objs;
-	App->object_manager->GetChildsFrom(App->object_manager->root, all_game_objs);
+	App->object_manager->GetChildsFrom(App->object_manager->root, all_game_objs); // TODO: Iterate all gameobjects costs a lot of ms, we have to optimize that :)
 
 	std::vector<GameObject*> obj_with_camera;
 	for (GameObject* i : all_game_objs)

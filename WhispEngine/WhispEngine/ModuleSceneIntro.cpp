@@ -52,7 +52,7 @@ bool ModuleSceneIntro::Start()
 update_status ModuleSceneIntro::PreUpdate()
 {
 
-	if (App->renderer3D->is_rendering_scenene)
+	if (App->renderer3D->is_rendering_scene)
 	{
 		//Start Buffer Frame ----------------------------------
 		glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->scene_viewport->frame_buffer);
