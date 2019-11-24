@@ -21,7 +21,7 @@ Extract .zip files inside a folder and open the .exe file.
 * Move X/Y viewport:	Middle mouse
 * Focus object:		F
 * Orbit object:		Alt + Left click
-* Deselect object	Click on any part of Hierarchy panel or out of an object
+* Deselect object		Click on any part of Hierarchy panel or out of an object in scene
 
 #### Panels Short Cuts
 * Configuration:         Shift + 1
@@ -30,8 +30,8 @@ Extract .zip files inside a folder and open the .exe file.
 * Create Shape:         Shift + 4
 * Inspector:         	  Shift + 5
 * Scene:         	  Shift + 6
-* Game:             Shift + 7
-* Resources:        Shift + 8
+* Game:             	  Shift + 7
+* Resources:        	  Shift + 8
 * About: 	                  Shift + Control + A
 
 ## Authors
@@ -40,6 +40,15 @@ Extract .zip files inside a folder and open the .exe file.
 
 ## Innovations Assignment 2
 
+* Two window panels for Scene and Game
+* Camera Preview like Unity
+* Change main Camera
+* Own File System
+* Octree
+* Window Assets
+* 17. a. There is an “Asset” window that shows all user assets
+* 17. d. Upon start, all resources not managed inside Assets are generated in Library
+* An external window to Save & Load Scenes
 
 ## Innovations Assignment 1
 * Docking
@@ -70,7 +79,7 @@ Extract .zip files inside a folder and open the .exe file.
 * [JSON parser v3.7](https://github.com/nlohmann/json)
 * [Glew v2](https://github.com/nigels-com/glew)
 * [par_shape.h](https://prideout.net/shapes)
-* [Assimp v4.1](http://www.assimp.org/)
+* [Assimp v5.0](http://www.assimp.org/)
 * [DevIL v1.8](http://openil.sourceforge.net/)
 * [GPU detect v1.1](https://github.com/MatthewKing/DeviceId)
 
