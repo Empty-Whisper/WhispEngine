@@ -8,6 +8,7 @@
 #include "ModuleGUI.h"
 #include "PanelScene.h"
 #include "ModuleObjectManager.h"
+#include "Imgui/imgui_internal.h"
 
 
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)
@@ -16,9 +17,7 @@ ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, Compone
 }
 
 ComponentCamera::~ComponentCamera()
-{
-	App->camera->DeleteCamera(camera);
-}
+{}
 
 void ComponentCamera::Update()
 {
@@ -62,10 +61,27 @@ void ComponentCamera::OnInspector()
 
 		ImGui::Separator();
 
-		if (ImGui::Checkbox("Main Camera", &is_main_camera)) {
-			if(is_main_camera)
-			App->camera->SetGameCamera(camera);
+		// Enable/Disable main camera checkbox if theres more than one =============================
+		if (only_one_camera) 
+		{
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		}
+
+		if (ImGui::Checkbox("Main Camera", &checkbox_main_camera))
+			is_main_camera = true;
+		if (checkbox_main_camera && is_main_camera)
+		{
+			App->camera->SetGameCamera(camera);
+			is_main_camera = false;
+		}
+
+		if (only_one_camera) 
+		{
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
+		// =================================================================================
 
 	}
 }

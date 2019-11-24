@@ -174,6 +174,26 @@ update_status ModuleCamera3D::Update()
 		}
 	}
 
+
+	//Check if exists any camera component
+	std::vector<GameObject*> all_game_objs;
+	App->object_manager->GetChildsFrom(App->object_manager->root, all_game_objs);
+
+	std::vector<GameObject*> obj_with_camera;
+	for (GameObject* i : all_game_objs)
+	{
+		if ((ComponentCamera*)i->GetComponent(ComponentType::CAMERA) != nullptr)
+		{
+			obj_with_camera.push_back(i);
+		}
+	}
+	if (obj_with_camera.size() == 1)
+		((ComponentCamera*)obj_with_camera[0]->GetComponent(ComponentType::CAMERA))->only_one_camera = true;
+	else
+		((ComponentCamera*)obj_with_camera[0]->GetComponent(ComponentType::CAMERA))->only_one_camera = false;
+
+	obj_with_camera.clear();
+
 	return UPDATE_CONTINUE;
 }
 
@@ -186,23 +206,12 @@ Camera * ModuleCamera3D::CreateCamera()
 	return cam;
 }
 
-void ModuleCamera3D::DeleteCamera(Camera * camera)
-{
-	auto i = std::find(cameras.begin(), cameras.end(), camera);
-	if (i != cameras.end()) {
-		delete *i;
-		cameras.erase(i);
-	}
-}
-
 void ModuleCamera3D::DeleteVectorCameras()
 {
-	GameObject* sel = App->object_manager->GetSelected();
-	if (sel != nullptr) {
-		ComponentMesh* mesh = (ComponentMesh*)sel->GetComponent(ComponentType::MESH);
-		if (mesh != nullptr) {
-			float3 center = mesh->GetAABB().CenterPoint(); //Get GameObject selected position
-		}
+	for (std::vector<Camera*>::iterator camera = cameras.begin(); camera != cameras.end();)
+	{
+		RELEASE (*camera);
+		camera = cameras.erase(camera);
 	}
 }
 
@@ -386,14 +395,15 @@ void Camera::FocusObject(const AABB & aabb)
 	if (is_focusing)
 	{
 		GameObject* sel = App->object_manager->GetSelected();
-		AABB aabb = AABB(-float3::one, float3::one);
-
-		if (sel != nullptr)
-			aabb = sel->GetAABB();
 
 		actual_camera_position = frustum.pos;
 		math::float3 center = aabb.CenterPoint();
-		reference_position = math::float3(center.x, center.y, center.z);
+		ComponentTransform* trans = (ComponentTransform*)sel->GetComponent(ComponentType::TRANSFORM);
+
+		if (aabb.IsFinite())
+			reference_position = math::float3(center.x, center.y, center.z);
+		else
+			reference_position = trans->GetPosition();
 
 		Look(reference_position);
 
@@ -474,14 +484,14 @@ void Camera::DrawInsideFrustum()
 	std::vector<GameObject*> game_objects;
 	App->object_manager->GetChildsFrom(App->object_manager->root, game_objects);
 
-	for (std::vector<GameObject*>::iterator go = game_objects.begin(); go != game_objects.end(); ++go)
+	for (GameObject* go : game_objects)
 	{
-		if ((*go)->GetAABB().IsFinite())
+		if (go->GetAABB().IsFinite())
 		{
-			if (BboxIntersectsFrustum((*go)->GetAABB()))
-				(*go)->is_inside_frustum = true;			
+			if (BboxIntersectsFrustum(go->GetAABB()))
+				go->is_inside_frustum = true;			
 			else
-				(*go)->is_inside_frustum = false;
+				go->is_inside_frustum = false;
 		}		
 	}
 }

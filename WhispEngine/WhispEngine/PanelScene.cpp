@@ -24,8 +24,9 @@ void PanelScene::Update()
 	
 		ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
 		
+		static bool first_time_resize = true;
 		//Check if window is Resized
-		if (current_viewport_size.x != panel_size.x || current_viewport_size.y != panel_size.y)
+		if ((current_viewport_size.x != panel_size.x || current_viewport_size.y != panel_size.y) || first_time_resize)
 		{
 			panel_size = current_viewport_size;
 
@@ -34,6 +35,7 @@ void PanelScene::Update()
 
 			ImGuizmo::SetRect(panel_pos.x, panel_pos.y, panel_size.x, panel_size.y);
 
+			first_time_resize = false;
 		}
 		panel_pos = ImGui::GetWindowPos();
 
@@ -68,7 +70,7 @@ void PanelScene::Update()
 	if (active_preview && preview_checkbox)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		if (ImGui::Begin("Camerea Preview", &active, ImGuiWindowFlags_NoDocking))
+		if (ImGui::Begin("Camera Preview", &active, ImGuiWindowFlags_NoDocking))
 		{
 			static bool init_window = true;
 			if (init_window)

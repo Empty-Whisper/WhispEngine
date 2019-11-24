@@ -1,7 +1,7 @@
 ﻿# 3D Game Engine: WhispEngine
 
 ## Current Version
-v Assignment1.3
+v Assignment2.0
 
 ## Description
 This is a 3D Game Engine made by Students at CITM (UPC) from Spain. 
@@ -21,22 +21,27 @@ Extract .zip files inside a folder and open the .exe file.
 * Move X/Y viewport:	Middle mouse
 * Focus object:		F
 * Orbit object:		Alt + Left click
-* Deselect object	Click on any part of Hierarchy panel
+* Deselect object	Click on any part of Hierarchy panel or out of an object
 
-#### Short Cuts
+#### Panels Short Cuts
 * Configuration:         Shift + 1
 * Console		  Shift + 2
 * Hierarchy:  	  Shift + 3
 * Create Shape:         Shift + 4
 * Inspector:         	  Shift + 5
-* Sene:         	  Shift + 6
+* Scene:         	  Shift + 6
+* Game:             Shift + 7
+* Resources:        Shift + 8
 * About: 	                  Shift + Control + A
 
 ## Authors
 * **Christian Martínez** [christt105](https://github.com/christt105)
 * **Marc Galvez** [optus23](https://github.com/optus23)
 
-## Innovations
+## Innovations Assignment 2
+
+
+## Innovations Assignment 1
 * Docking
 * Dockspace + Rendering inside a ImGui Window viewport
 * ImGui Panels can exist and work well outside SDL main window
@@ -61,6 +66,7 @@ Extract .zip files inside a folder and open the .exe file.
 * [PCG v0.9](http://www.pcg-random.org/)
 * [Mmgr](http://www.flipcode.com/archives/Presenting_A_Memory_Manager.shtml)
 * [ImGui](https://github.com/ocornut/imgui)
+* [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)
 * [JSON parser v3.7](https://github.com/nlohmann/json)
 * [Glew v2](https://github.com/nigels-com/glew)
 * [par_shape.h](https://prideout.net/shapes)

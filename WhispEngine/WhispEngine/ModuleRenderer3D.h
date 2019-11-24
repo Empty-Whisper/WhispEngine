@@ -54,7 +54,7 @@ public:
 
 	//ViewPort
 	Viewport* CreateViewport();
-
+	void DeleteViewport(Viewport* viewport);
 	Viewport* GetSceneViewport();
 	Viewport* GetGameViewport();
 

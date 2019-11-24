@@ -7,6 +7,9 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleObjectManager.h"
+#include "MathGeoLib/include/Geometry/LineSegment.h"
+#include "ModuleResources.h"
+#include "ResourceMesh.h"
 
 GameObject::GameObject(GameObject * parent) : parent(parent)
 {
@@ -126,7 +129,10 @@ AABB GameObject::GetAABB() const
 	if (TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
 		return mesh->GetAABB();
 	}
-	return AABB();
+
+	AABB ret;
+	ret.SetNegativeInfinity();
+	return ret;
 }
 // --------------------------------------------------------------------------------------------------------------------------------
 
@@ -200,6 +206,54 @@ bool GameObject::HasComponent(const ComponentType & type)
 			return true;
 	
 	return false;
+}
+
+void GameObject::Raycast(const LineSegment &ray_cast, bool &intersect, float &length)
+{
+	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
+	ComponentTransform* ctrans = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
+
+	length = 1e10;
+	intersect = false;
+
+	if (mesh != nullptr && mesh->GetAABB().IsFinite())
+	{
+		AABB aabb = mesh->aabb;
+		ResourceMesh* resource_mesh = (ResourceMesh*)App->resources->Get(mesh->uid);
+
+		if (ray_cast.Intersects(aabb) && resource_mesh != nullptr)
+		{
+			Triangle triangle_plane;
+			uint* indices = resource_mesh->index.data;
+			float* vertices = resource_mesh->vertex.data;
+			for (int i = 0; i < resource_mesh->index.size / 3;) // we need the dicide by three the index.size bcs we are looking for triangles
+			{
+				triangle_plane.a = (float3)&vertices[(3 * indices[i])], vertices[(indices[i] * 3) + 1u], &vertices[(indices[i] * 3) + 2u];
+				++i;
+				triangle_plane.b = (float3)&vertices[(3 * indices[i])], vertices[(indices[i] * 3) + 1u], &vertices[(indices[i] * 3) + 2u];
+				++i;
+				triangle_plane.c = (float3)&vertices[(3 * indices[i])], vertices[(indices[i] * 3) + 1u], &vertices[(indices[i] * 3) + 2u];
+				++i;
+
+				//This is used to do not change the origianl values with the Intesect reference function
+				Triangle new_triangle_plane;
+				float new_length;
+				float3 hit_point;
+
+				new_triangle_plane = triangle_plane;
+
+				LineSegment local_ray_cast(ray_cast);
+				local_ray_cast.Transform(ctrans->GetGlobalMatrix().Inverted());
+
+				if (local_ray_cast.Intersects(new_triangle_plane, &new_length, &hit_point) && new_length < length)
+				{
+					length = new_length;
+					intersect = true;
+				}
+			}
+		}
+	}
+
 }
 
 bool GameObject::IsActive() const

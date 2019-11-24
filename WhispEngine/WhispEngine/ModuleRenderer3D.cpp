@@ -317,7 +317,8 @@ bool ModuleRenderer3D::CleanUp()
 	LOG("Destroying 3D Renderer");
 
 	SDL_GL_DeleteContext(context);
-
+	DeleteViewport(game_viewport);
+	DeleteViewport(scene_viewport);
 	delete[] background_color;
 
 	return true;
@@ -349,6 +350,14 @@ Viewport * ModuleRenderer3D::CreateViewport()
 
 	return viewport;
 }
+
+void ModuleRenderer3D::DeleteViewport(Viewport * viewport)
+{
+	RELEASE(viewport);
+	viewport = nullptr;
+	
+}
+
 
 Viewport * ModuleRenderer3D::GetSceneViewport()
 {

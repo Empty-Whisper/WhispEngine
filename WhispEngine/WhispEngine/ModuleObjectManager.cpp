@@ -5,6 +5,8 @@
 #include "Imgui/ImGuizmo.h"
 #include "PanelScene.h"
 
+#include "PanelHierarchy.h"
+#include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleGUI.h"
@@ -34,6 +36,12 @@ update_status ModuleObjectManager::Update()
 {
 	BROFILER_CATEGORY("GameObject Manager", Profiler::Color::MediumSpringGreen);
 	glEnable(GL_LIGHTING);
+
+	//MousePicking
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+		MousePicking();
+
+	//Update GO
 	UpdateGameObject(root);
 
 	//Camera
@@ -94,13 +102,12 @@ GameObject * ModuleObjectManager::GetRoot() const
 
 void ModuleObjectManager::GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const
 {
-
 	if (!obj->children.empty()) {
 
-		for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
-			vector.push_back(*i);
+		for (auto i : obj->children) {
+			vector.push_back(i);
 
-			GetChildsFrom(*i, vector);
+			GetChildsFrom(i, vector);
 		}
 	}
 }
@@ -152,76 +159,76 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 	}
 }
 
-void ModuleObjectManager::MousePick()
+void ModuleObjectManager::MousePicking()
 {
-	static ImVec2 scene_position;
-	static ImVec2 scene_size;
+	//Calculate Scene & Mouse vectors
+	int window_x, window_y;
+	SDL_GetWindowPosition(App->window->window, &window_x, &window_y);
+	float2 window = {(float)window_x, (float)window_y};
 
-	scene_position = App->gui->scene->GetPanelPos();
-	scene_size = App->gui->scene->GetPanelSize();
-	scene_size = { scene_position.x + scene_size.x, scene_position.y + scene_size.y };
+	static ImVec2 scenePositionScreen;
+	static ImVec2 scenePosition;
+	static ImVec2 sceneSize;
 
+	scenePositionScreen = App->gui->scene->GetPanelPos();
+	scenePosition = { scenePositionScreen.x - window.x, scenePositionScreen.y - window.y };
 
+	sceneSize = App->gui->scene->GetPanelSize();
+	sceneSize = { scenePosition.x + sceneSize.x, scenePosition.y + sceneSize.y };
 
-	Rect window = { (int)scene_position.x, (int)scene_position.y, (int)scene_size.x, (int)scene_size.y };
-	float2 mouse_pos = {(float)App->input->GetMouseX(), (float)App->input->GetMouseY()};
+	float2 mousePos = {(float)App->input->GetMouseX(), (float)App->input->GetMouseY()};
 
 	//Point Rect Formula
-	if (mouse_pos.x >= window.left && mouse_pos.x <= window.right && mouse_pos.y > window.top && mouse_pos.y < window.bottom)
+	if (mousePos.x <= sceneSize.x && mousePos.x >= scenePosition.x && mousePos.y < sceneSize.y && mousePos.y > scenePosition.y)
 	{
-		//The point (1, 1) corresponds to the top-right corner of the near plane
-		//(-1, -1) is bottom-left
+		//Formula normalized vector
+		float2 normalizedVector((mousePos.x - scenePosition.x) / (sceneSize.x - scenePosition.x), (mousePos.y - scenePosition.y) / (sceneSize.y - scenePosition.y));
+		normalizedVector = { (normalizedVector.x * 2) - 1, 1 - (normalizedVector.y * 2) };
 
-		float first_normalized_x = (mouse_pos.x - window.left) / (window.right - window.left);
-		float first_normalized_y = (mouse_pos.y - window.top) / (window.bottom - window.top);
+		//RayCast
+		LineSegment ray_cast = App->camera->GetSceneCamera()->GetFrustum().UnProjectLineSegment(normalizedVector.x, normalizedVector.y);
+		float distance = 1e10;
 
-		float normalized_x = (first_normalized_x * 2) - 1;
-		float normalized_y = 1 - (first_normalized_y * 2);
+		GameObject* hitted = nullptr;
+		std::vector<GameObject*> all_game_objects;
+		GetChildsFrom(root, all_game_objects);
 
-		LineSegment picking = App->camera->GetSceneCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
-
-		float distance = 99999999999;
-		GameObject* closest = nullptr;
-
-		std::vector<GameObject*> game_objects;
-		GetChildsFrom(root, game_objects);
-
-		//kdtree->GetElementsToTest(picking, 0, App->camera->GetCurrentCamera()->GetFarPlaneDistance(), gos);   //Need to be finished Octree
-
-		for (std::vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
+		bool is_hitted = false;
+		for (GameObject* iterator : all_game_objects)
 		{
-			bool hit;
-			float dist;
-			//(*it)->TestRay(picking, hit, dist); //Need to be finihed AABB
+			float length; bool intersect;
+			//Raycast will use LineSegment to clarify if an aabb intersects with him
+			iterator->Raycast(ray_cast, intersect, length);
 
-			if (hit)
+			if (intersect && length < distance)
 			{
-				if (dist < distance)
-				{
-					distance = dist;
-					closest = (*it);
-				}
+				distance = length;
+				hitted = iterator;
+				is_hitted = true;
 			}
+			
 		}
-
-		if (closest != nullptr)
+		
+		if (!is_hitted && selected != nullptr && !ImGuizmo::IsOver() && !App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN)
 		{
 			std::vector<GameObject*> selected_and_childs;
-			if (selected != nullptr)
-			{
-				selected_and_childs.push_back(selected);
-				GetChildsFrom(selected, selected_and_childs);
-			}
+			selected_and_childs.push_back(selected);
+			GetChildsFrom(root, selected_and_childs);
 
-			for (std::vector<GameObject*>::iterator it = selected_and_childs.begin(); it != selected_and_childs.end();)
+			for (std::vector<GameObject*>::iterator iterator = selected_and_childs.begin(); iterator != selected_and_childs.end();)
 			{
-				(*it)->Deselect();
-				it = selected_and_childs.erase(it);
+				(*iterator)->Deselect();
+				iterator = selected_and_childs.erase(iterator);
+				SetSelected(nullptr);
 			}
-
-			//TODO solve this
-			GetChildsFrom(closest, selected_and_childs);
 		}
+		if (hitted != nullptr && !ImGuizmo::IsOver())
+		{
+			SetSelected(hitted);
+			std::vector<GameObject*> selected_and_childs;
+			GetChildsFrom(hitted, selected_and_childs);
+		}
+		
 	}
 }
 
@@ -340,7 +347,7 @@ void ModuleObjectManager::UpdateGuizmo()
 		GetChildsFrom(selected, selected_and_childs);
 	}
 
-	for (std::vector<GameObject*>::iterator i = selected_and_childs.begin(); i != selected_and_childs.end(); ++i)
+	for (GameObject* i : selected_and_childs)
 	{
 		if (ImGuizmo::IsUsing() && !App->camera->is_moving_camera)
 		{
@@ -348,19 +355,26 @@ void ModuleObjectManager::UpdateGuizmo()
 			float4x4 rotation_matrix = float4x4::identity;
 			float4x4 scale_matrix = float4x4::identity;
 
+			if (i != nullptr) {			
+				ComponentMesh* mesh = nullptr;
+				if (i->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
+					mesh->CalulateAABB_OBB();
+				}
+			}
+
 			switch (gizmoOperation)
 			{
 			case ImGuizmo::OPERATION::TRANSLATE:
 			{
-				position_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(position_matrix);
+				position_matrix = moved_transformation * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(position_matrix);
 			}
 			break;
 
 			case ImGuizmo::OPERATION::ROTATE:
 			{
-				rotation_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(rotation_matrix);
+				rotation_matrix = moved_transformation * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(rotation_matrix);
 			}
 			break;
 			case ImGuizmo::OPERATION::SCALE:
@@ -368,8 +382,8 @@ void ModuleObjectManager::UpdateGuizmo()
 				float4x4 save_trans = moved_transformation;
 				moved_transformation = moved_transformation * last_moved_transformation.Inverted();
 
-				scale_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
+				scale_matrix = moved_transformation * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
 
 				last_moved_transformation = save_trans;
 			}

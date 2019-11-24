@@ -21,6 +21,7 @@ class ModuleGUI;
 class ModuleShortCut;
 class ModuleObjectManager;
 class ModuleImport;
+class ModuleResources;
 
 class Application
 {
