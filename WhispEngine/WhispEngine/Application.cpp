@@ -227,7 +227,7 @@ const char * Application::GetVersion() const
 
 void Application::SetState(const GameState to_state)
 {
-#ifdef DEBUG
+#ifdef _DEBUG //We only want to get that message error while developing
 	std::string log("Cannot send ");
 	bool fail = false;
 	switch (to_state)
@@ -301,7 +301,7 @@ void Application::FinishUpdate()
 
 	if (want_to_save_scene) {
 		want_to_save_scene = false;
-		scene_intro->SaveScene();
+		scene_intro->SaveCurrentScene();
 	}
 
 	if (want_to_load_scene) {

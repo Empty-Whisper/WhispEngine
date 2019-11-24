@@ -24,7 +24,9 @@ public:
 
 	void GenerateGrid(const int &width);
 
-	bool SaveScene();
+	bool SaveCurrentScene();
+	bool SaveTemporaryScene() const;
+	bool LoadTemporaryScene();
 	bool LoadScene(const char* scene) const;
 	bool CreateEmptyScene(const char* name);
 

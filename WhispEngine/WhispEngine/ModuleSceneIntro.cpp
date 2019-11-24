@@ -142,7 +142,7 @@ void ModuleSceneIntro::GenerateGrid(const int & width)
 	delete[] grid;
 }
 
-bool ModuleSceneIntro::SaveScene()
+bool ModuleSceneIntro::SaveCurrentScene()
 {
 	bool ret = true;
 
@@ -160,6 +160,41 @@ bool ModuleSceneIntro::SaveScene()
 		scene_path.append(".scene");
 
 	App->file_system->SaveFile(scene_path.c_str(), scene);
+
+	return ret;
+}
+
+bool ModuleSceneIntro::SaveTemporaryScene() const
+{
+	bool ret = true;
+
+	nlohmann::json scene;
+
+	Camera* cam = App->camera->GetSceneCamera();
+	App->json->AddFloat3("position", cam->GetPosition(), scene["Camera"]);
+	//App->json->AddQuaternion("rotation", cam->GetRotation(), scene["Camera"]); TODO: Create a function to get the quaternion that represent frustum rotation
+
+	ret = App->object_manager->SaveGameObjects(scene);
+
+	App->file_system->SaveFile("Assets/Scenes/temporaryScene.scene", scene);
+
+	int attr = GetFileAttributes("Assets/Scenes/temporaryScene.scene");
+	if ((attr & FILE_ATTRIBUTE_HIDDEN) == 0) {
+		SetFileAttributes("Assets/Scenes/temporaryScene.scene", attr | FILE_ATTRIBUTE_HIDDEN);
+	}
+
+	return ret;
+}
+
+bool ModuleSceneIntro::LoadTemporaryScene()
+{
+	bool ret = true;
+
+	nlohmann::json scene_file = App->file_system->OpenFile("Assets/Scenes/temporaryScene.scene");
+
+	ret = App->object_manager->LoadGameObjects(scene_file["GameObjects"]);
+
+	App->file_system->RemoveFile("Assets/Scenes/temporaryScene.scene");
 
 	return ret;
 }
@@ -183,7 +218,7 @@ bool ModuleSceneIntro::CreateEmptyScene(const char * path)
 	App->object_manager->ResetObjects();
 	scene_path.assign(path);
 
-	return SaveScene();
+	return SaveCurrentScene();
 }
 
 void ModuleSceneIntro::DebugOctree()

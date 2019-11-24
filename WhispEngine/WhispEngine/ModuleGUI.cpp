@@ -1,4 +1,4 @@
-#include <fstream>
+﻿#include <fstream>
 #include <iomanip>
 
 #include "Application.h"
@@ -95,8 +95,8 @@ update_status ModuleGUI::Update()
 	update_status ret = MainMenuBar();
 
 	if (open_modal_new_scene)
-		ImGui::OpenPopup("A");
-	if (ImGui::BeginPopupModal("A", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		ImGui::OpenPopup("Modal Save Scene");
+	if (ImGui::BeginPopupModal("Modal Save Scene", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
 		ImGui::Text("Actual Scene might not be saved since last change. Do you want to save?");
 
 		if (ImGui::Button("Yes, Save and create a new one")) {
@@ -120,7 +120,7 @@ update_status ModuleGUI::Update()
 
 	Dockspace();
 
-	if (ImGui::Begin("##fddas", NULL, ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoCollapse |
+	if (ImGui::Begin("##playandpause", NULL, ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoCollapse |
 		ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration |
 		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize)) {
 		Application::GameState state = App->GetState();
@@ -131,10 +131,14 @@ update_status ModuleGUI::Update()
 		}
 
 		if (ImGui::Button("|>")) {
-			if (state == Application::GameState::NONE)
+			if (state == Application::GameState::NONE) {
 				App->SetState(Application::GameState::PLAY);
-			else
+				App->scene_intro->SaveTemporaryScene();
+			}
+			else {
 				App->SetState(Application::GameState::STOP);
+				App->scene_intro->LoadTemporaryScene();
+			}
 		}
 
 		ImGui::SameLine();
@@ -158,7 +162,7 @@ update_status ModuleGUI::Update()
 			pushed = true;
 		}
 
-		if (ImGui::Button("|| |>")) {
+		if (ImGui::Button("|>|")) {
 			if (state == Application::GameState::PAUSED)
 				App->SetState(Application::GameState::ONE_FRAME);
 		}
@@ -419,7 +423,7 @@ void ModuleGUI::OpenSaveWindow(bool create_empty)
 			App->scene_intro->CreateEmptyScene(path.c_str());
 		else {
 			App->scene_intro->scene_path.assign(path);
-			App->scene_intro->SaveScene();
+			App->scene_intro->SaveCurrentScene();
 		}
 
 		if (!App->file_system->IsInDirectory(SCENE_A_FOLDER, file.c_str()))
