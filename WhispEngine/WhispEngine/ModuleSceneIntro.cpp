@@ -81,6 +81,16 @@ update_status ModuleSceneIntro::Update()
 		glEnable(GL_LIGHTING);
 	}
 
+	if (show_mouse_raycast) {
+		glDisable(GL_LIGHTING);
+		glColor3f(0.f, 1.f, 0.f);
+		glBegin(GL_LINES);
+		glVertex3f(mouse_pick_0.x, mouse_pick_0.y, mouse_pick_0.z);
+		glVertex3f(mouse_pick_1.x, mouse_pick_1.y, mouse_pick_1.z);
+		glEnd();
+		glEnable(GL_LIGHTING);
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -195,7 +205,7 @@ bool ModuleSceneIntro::LoadTemporaryScene()
 	return ret;
 }
 
-bool ModuleSceneIntro::LoadScene(const char* scene) const
+bool ModuleSceneIntro::LoadScene(const char* scene)
 {
 	bool ret = true;
 
@@ -203,8 +213,11 @@ bool ModuleSceneIntro::LoadScene(const char* scene) const
 	
 	Camera* cam = App->camera->GetSceneCamera();
 	cam->SetTransformPosition(App->json->GetFloat3("position", scene_file["Camera"]));
+	scene_path.assign(scene);
 
 	ret = App->object_manager->LoadGameObjects(scene_file["GameObjects"]);
+
+	octree->Recalculate();
 
 	return ret;
 }
@@ -221,9 +234,7 @@ void ModuleSceneIntro::DebugOctree()
 {
 	if (App->file_system->Exists("Assets/Scenes/Octree.scene")) {
 		LoadScene("Assets/Scenes/Octree.scene");
-		scene_path.assign("Assets/Scenes/Octree.scene");
 		show_octree = true;
-		octree->Recalculate();
 	}
 	else {
 		LOG("Assets/Scenes/Octree.scene does not exist");

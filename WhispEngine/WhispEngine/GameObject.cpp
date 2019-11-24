@@ -65,9 +65,8 @@ void GameObject::DrawBoundingBoxAABB()
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	if (mesh == nullptr)
 		return;
-	glDisable(GL_LIGHTING);
+
 	mesh->GetAABB().Draw(0.f, 1.f, 0.f);
-	glEnable(GL_LIGHTING);
 }
 
 void GameObject::DrawBoundingBoxOBB()
