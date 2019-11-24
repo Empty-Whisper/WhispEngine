@@ -17,12 +17,22 @@ ResourceModel::~ResourceModel()
 
 ResourceModel::HierarchyInfo ResourceModel::CalculateHierarchy(const aiNode * node, const aiScene * scene, const std::vector<uint64>& meshes, const std::vector<uint64>& materials, ResourceModel::HierarchyInfo * node_from)
 {
+	// Assimp generates dummy Nodes to save transformations (makes me compile Assimp 5.0.0 bcs I think it was a bug :( #neverforget)
+	aiMatrix4x4 mat; //identity
+	while (std::string(node->mName.C_Str()).find("_$AssimpFbx$_") != std::string::npos) { //iterate nodes that contains dummy name
+		mat = mat * node->mTransformation;	// multiply its transform to don't lose the transformation
+		if (node->mNumChildren > 1)
+			LOG("FBX may not be loaded correctly");
+		node = node->mChildren[0];
+	}
+	
 	HierarchyInfo info;
 	info.parent = node_from;
 	info.name.assign(node->mName.C_Str());
-
+	
 	aiVector3D pos, scale; aiQuaternion rot;
-	node->mTransformation.Decompose(scale, rot, pos);
+	mat = mat * node->mTransformation;
+	mat.Decompose(scale, rot, pos);
 	info.position.Set(pos.x, pos.y, pos.z);
 	info.rotation.Set(rot.w, rot.x, rot.y, rot.z);
 	float div_scale = std::max(scale.x, scale.y);
@@ -38,7 +48,7 @@ ResourceModel::HierarchyInfo ResourceModel::CalculateHierarchy(const aiNode * no
 		for (int j = 0; j < node->mNumMeshes; ++j) {
 			HierarchyInfo child_mesh;
 			child_mesh.mesh = meshes[node->mMeshes[j]];
-			child_mesh.name.assign(scene->mMeshes[node->mMeshes[j]]->mName.C_Str());
+			child_mesh.name.assign(info.name + '_' + std::to_string(j));
 			info.children.push_back(child_mesh);
 		}
 	}

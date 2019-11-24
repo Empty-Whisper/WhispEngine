@@ -106,7 +106,7 @@ struct aiCamera
      */
     C_STRUCT aiString mName;
 
-    /** position of the camera relative to the coordinate space
+    /** Position of the camera relative to the coordinate space
      *  defined by the corresponding node.
      *
      *  The default value is 0|0|0.

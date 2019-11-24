@@ -31,13 +31,16 @@ void OctreeTree::Insert(GameObject * obj)
 		return;
 	ComponentMesh* mesh = nullptr;
 	if (obj->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
-		if (root != nullptr) {
-			if (!root->section.Contains(mesh->GetAABB())) {
-				LOG("Object %s not inside boundary min(%.2f, %.2f, %.2f) max(%.2f, %.2f, %.2f)", obj->GetName(), root->section.MinX(), root->section.MinY(), root->section.MinZ(), root->section.MaxX(), root->section.MaxY(), root->section.MaxZ());
-				Recalculate();
-				return;
+		if (mesh->GetAABB().IsFinite()) {
+			if (root != nullptr) {
+				if (!root->section.Contains(mesh->GetAABB())) {
+					LOG("Object %s not inside boundary min(%.2f, %.2f, %.2f) max(%.2f, %.2f, %.2f)", obj->GetName(), root->section.MinX(), root->section.MinY(), root->section.MinZ(), root->section.MaxX(), root->section.MaxY(), root->section.MaxZ());
+					LOG("%s", obj->GetName());
+					Recalculate();
+					return;
+				}
+				root->Insert(obj);
 			}
-			root->Insert(obj);
 		}
 	}
 }
