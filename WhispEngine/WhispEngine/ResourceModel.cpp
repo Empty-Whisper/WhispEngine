@@ -55,7 +55,7 @@ ResourceModel::HierarchyInfo ResourceModel::CalculateHierarchy(const aiNode * no
 
 bool ResourceModel::LoadInMemory()
 {
-	nlohmann::json data = App->dummy_file_system->OpenFile(resource_path.c_str());
+	nlohmann::json data = App->file_system->OpenFile(resource_path.c_str());
 	if (data == nullptr) {
 		LOG("Model %s not found", resource_path.c_str());
 		return false;
@@ -121,7 +121,7 @@ bool ResourceModel::Save()
 
 	SaveNode(model, json[file.c_str()]);
 
-	App->dummy_file_system->SaveFile(resource_path.c_str(), json);
+	App->file_system->SaveFile(resource_path.c_str(), json);
 
 	return true;
 }

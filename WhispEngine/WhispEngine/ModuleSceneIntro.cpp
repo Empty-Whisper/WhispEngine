@@ -148,7 +148,7 @@ bool ModuleSceneIntro::SaveScene()
 
 	nlohmann::json scene;
 
-	std::string name = App->dummy_file_system->GetFileNameFromPath(scene_path.c_str());
+	std::string name = App->file_system->GetFileNameFromPath(scene_path.c_str());
 	
 	Camera* cam = App->camera->GetSceneCamera();
 	App->json->AddFloat3("position", cam->GetPosition(), scene["Camera"]);
@@ -156,10 +156,10 @@ bool ModuleSceneIntro::SaveScene()
 
 	ret = App->object_manager->SaveGameObjects(scene);
 
-	if (App->dummy_file_system->GetFormat(scene_path.c_str()) != FileSystem::Format::SCENE)
+	if (App->file_system->GetFormat(scene_path.c_str()) != FileSystem::Format::SCENE)
 		scene_path.append(".scene");
 
-	App->dummy_file_system->SaveFile(scene_path.c_str(), scene);
+	App->file_system->SaveFile(scene_path.c_str(), scene);
 
 	return ret;
 }
@@ -168,7 +168,7 @@ bool ModuleSceneIntro::LoadScene(const char* scene) const
 {
 	bool ret = true;
 
-	nlohmann::json scene_file = App->dummy_file_system->OpenFile(scene);
+	nlohmann::json scene_file = App->file_system->OpenFile(scene);
 	
 	Camera* cam = App->camera->GetSceneCamera();
 	cam->SetTransformPosition(App->json->GetFloat3("position", scene_file["Camera"]));
@@ -188,7 +188,7 @@ bool ModuleSceneIntro::CreateEmptyScene(const char * path)
 
 void ModuleSceneIntro::DebugOctree()
 {
-	if (App->dummy_file_system->Exists("Assets/Scenes/Octree.scene")) {
+	if (App->file_system->Exists("Assets/Scenes/Octree.scene")) {
 		LoadScene("Assets/Scenes/Octree.scene");
 		scene_path.assign("Assets/Scenes/Octree.scene");
 		show_octree = true;
@@ -201,5 +201,5 @@ void ModuleSceneIntro::DebugOctree()
 
 std::string ModuleSceneIntro::GetSceneName() const
 {
-	return App->dummy_file_system->GetFileNameFromPath(scene_path.c_str());
+	return App->file_system->GetFileNameFromPath(scene_path.c_str());
 }

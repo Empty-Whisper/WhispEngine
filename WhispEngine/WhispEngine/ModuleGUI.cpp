@@ -24,6 +24,8 @@
 
 #include "ModuleSceneIntro.h"
 
+#include "Time.h"
+
 #include "Brofiler/Brofiler.h"
 
 
@@ -117,6 +119,69 @@ update_status ModuleGUI::Update()
 	}
 
 	Dockspace();
+
+	if (ImGui::Begin("##fddas", NULL, ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration |
+		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize)) {
+		Application::GameState state = App->GetState();
+		bool pushed = false;
+		if (state == Application::GameState::NONE) {
+			ImGui::PushStyleColor(ImGuiCol_Button, IMGUI_COLOR_ORANGE);
+			pushed = true;
+		}
+
+		if (ImGui::Button("|>")) {
+			if (state == Application::GameState::NONE)
+				App->SetState(Application::GameState::PLAY);
+			else
+				App->SetState(Application::GameState::STOP);
+		}
+
+		ImGui::SameLine();
+
+		if (state != Application::GameState::PAUSED && state != Application::GameState::NONE) {
+			ImGui::PushStyleColor(ImGuiCol_Button, IMGUI_COLOR_ORANGE);
+			pushed = true;
+		}
+
+		if (ImGui::Button("||")) {
+			if (state == Application::GameState::PLAYING)
+				App->SetState(Application::GameState::PAUSE);
+			else if (state == Application::GameState::PAUSED)
+				App->SetState(Application::GameState::REANUDE);
+		}
+
+		ImGui::SameLine();
+
+		if (state == Application::GameState::PAUSED) {
+			ImGui::PushStyleColor(ImGuiCol_Button, IMGUI_COLOR_ORANGE);
+			pushed = true;
+		}
+
+		if (ImGui::Button("|| |>")) {
+			if (state == Application::GameState::PAUSED)
+				App->SetState(Application::GameState::ONE_FRAME);
+		}
+
+		if (pushed)
+			ImGui::PopStyleColor();
+
+
+		ImGui::SameLine();
+
+		ImGui::TextColored(IMGUI_COLOR_ORANGE, "Game Time: ");
+		ImGui::SameLine();
+		ImGui::TextColored(IMGUI_COLOR_ORANGE, "Seconds Since Play: ");
+		ImGui::SameLine();
+		ImGui::Text("%.3f", Time->ReadSec());
+		ImGui::SameLine();
+		ImGui::TextColored(IMGUI_COLOR_ORANGE, "Delta Time: ");
+		ImGui::SameLine();
+		ImGui::Text("%.3f", Time->GetDeltaTime());
+
+		ImGui::End();
+	}
+
 	for (auto i = panels.begin(); i != panels.end(); ++i) {
 		if ((*i)->IsActive()) {
 			(*i)->Update();
@@ -299,15 +364,15 @@ void ModuleGUI::OpenLoadWindow()
 	{
 		SetCurrentDirectoryA(current_dir);
 
-		std::string file = App->dummy_file_system->GetFileFromPath(filename);
-		std::string path = App->dummy_file_system->GetRelativePathToAssets(filename);
+		std::string file = App->file_system->GetFileFromPath(filename);
+		std::string path = App->file_system->GetRelativePathToAssets(filename);
 
-		if (App->dummy_file_system->GetFormat(file.c_str()) != FileSystem::Format::SCENE) {
+		if (App->file_system->GetFormat(file.c_str()) != FileSystem::Format::SCENE) {
 			LOG("File is not a scene file, cannot open");
 		}
 		else {
-			if (!App->dummy_file_system->IsInDirectory(SCENE_A_FOLDER, file.c_str()))
-				if (!App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str()))
+			if (!App->file_system->IsInDirectory(SCENE_A_FOLDER, file.c_str()))
+				if (!App->file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str()))
 					LOG("Scene file not in Assets folder, we recommend you to work in Assets folder");
 
 			App->LoadScene(path.c_str());
@@ -342,10 +407,10 @@ void ModuleGUI::OpenSaveWindow(bool create_empty)
 	{
 		SetCurrentDirectoryA(current_dir);
 
-		std::string file = App->dummy_file_system->GetFileFromPath(filename);
-		std::string path = App->dummy_file_system->GetRelativePathToAssets(filename);
+		std::string file = App->file_system->GetFileFromPath(filename);
+		std::string path = App->file_system->GetRelativePathToAssets(filename);
 
-		if (App->dummy_file_system->GetFormat(file.c_str()) != FileSystem::Format::SCENE) {
+		if (App->file_system->GetFormat(file.c_str()) != FileSystem::Format::SCENE) {
 			file.append(".scene");
 			path.append(".scene");
 		}
@@ -357,8 +422,8 @@ void ModuleGUI::OpenSaveWindow(bool create_empty)
 			App->scene_intro->SaveScene();
 		}
 
-		if (!App->dummy_file_system->IsInDirectory(SCENE_A_FOLDER, file.c_str()))
-			if (!App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str()))
+		if (!App->file_system->IsInDirectory(SCENE_A_FOLDER, file.c_str()))
+			if (!App->file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str()))
 				LOG("Scene file not in Assets folder, we recommend you to work in Assets folder");
 	}
 	else

@@ -25,6 +25,13 @@ class ModuleImport;
 class Application
 {
 public:
+	enum GameState {
+		NONE = -1,
+		PLAY, PLAYING, REANUDE, PAUSE, PAUSED, STOP,
+		ONE_FRAME,
+		MAX
+	};
+public:
 	ModuleWindow*			window			= nullptr;
 	ModuleInput*			input			= nullptr;
 	ModuleSceneIntro*		scene_intro		= nullptr;
@@ -35,14 +42,13 @@ public:
 	ModuleObjectManager*	object_manager	= nullptr;
 	ModuleImport*			importer		= nullptr;
 	ModuleResources*		resources		= nullptr;
-	//ModuleFileSystem* file_system = nullptr;
+	//ModuleFileSystem* file_system_fs = nullptr;
 
 public:
 
 	uint	frame_count = 0;
 	int		framerate_cap = 60;
 	bool	apply_cap_frames = true;
-	bool	pause_game = false;
 
 	uint	last_sec_frame_count = 0;
 	uint	prev_last_sec_frame_count = 0;
@@ -71,6 +77,8 @@ private:
 	bool want_to_load_scene = false;
 	std::string scene_path;
 
+	GameState state = GameState::NONE;
+
 	std::string log_buff;
 
 public:
@@ -98,9 +106,12 @@ public:
 	const char* GetOrganizationName() const;
 	const char* GetVersion() const;
 
+	void SetState(const GameState to_state);
+	GameState GetState() const;
+
 	// Helpers
 	HardwareInfo *hardware = nullptr;
-	FileSystem *dummy_file_system = nullptr;
+	FileSystem *file_system = nullptr;
 	Random* random = nullptr;
 	JsonHelper* json = nullptr;
 

@@ -110,6 +110,7 @@
     <ClCompile Include="ResourceModel.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="ShortCut.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +249,7 @@
     <ClInclude Include="ResourceModel.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="ShortCut.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>

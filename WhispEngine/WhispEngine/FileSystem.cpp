@@ -288,7 +288,7 @@ uint64_t FileSystem::GenerateMetaFile(const char * file_path, const uint64 & for
 		char* cursor = meta_data + sizeof(uint64_t);
 		memcpy(cursor, addition_data, size_addition_data);
 	}
-	App->dummy_file_system->SaveData(meta_data, sizeof(uint64_t) + size_addition_data, (std::string(file_path) + ".meta").c_str());
+	App->file_system->SaveData(meta_data, sizeof(uint64_t) + size_addition_data, (std::string(file_path) + ".meta").c_str());
 	delete[] meta_data;
 
 	return force_uid;
@@ -296,7 +296,7 @@ uint64_t FileSystem::GenerateMetaFile(const char * file_path, const uint64 & for
 
 uint64_t FileSystem::GetUIDFromMeta(const char * mata_path) const
 {
-	char* f_uid = App->dummy_file_system->GetData(mata_path);
+	char* f_uid = App->file_system->GetData(mata_path);
 	if (f_uid == nullptr) {
 		LOG("Failed to open meta file");
 		return 0u;
