@@ -1,5 +1,35 @@
 # Changelog
 
+## [Assignment2] - 24/11/2019
+### Added
+
+- Hierarchy GameObjects
+- Components properties on inspector
+- Octree
+- Scene Serialization (Load and Save)
+- Part of Bounding Boxes
+- Own Format
+- Resource manager
+- Library and Assets logic
+- .meta file
+- Reference Counting
+- Start/Pause/Stop and recover init state
+- Transform Camera editor to Fustum
+- Camera class logic 
+- Frustum culling
+- Component Camer
+- Camera Preview
+- Game panel
+- Viewport class logic
+- Mouse Picking
+- Substract all Modules from App.h
+- Add Guizmos
+- Guizmos logic to Game Objects
+
+## Fixed
+- Now meshes have always same ID
+- Camera Movement
+
 ## [Assignment1.3] - 27/10/2019
 ### Added
 - Bounding Box
