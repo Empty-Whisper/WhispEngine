@@ -156,10 +156,21 @@ std::string FileSystem::GetFileDirectory(const char * file_path) const
 	return f;
 }
 
+std::string FileSystem::GetRelativePathToAssets(const char * full_path) const
+{
+	std::string buffer;
+	std::string org(full_path);
+
+	TCHAR NPath[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, NPath);
+
+	return org.substr(strlen(NPath)+1);
+}
+
 bool FileSystem::IsFileSupported(const char * path) const
 {
 	FileSystem::Format form = GetFormat(path);
-	return form == FileSystem::Format::DDS || form == FileSystem::Format::FBX || form == FileSystem::Format::JPG || form == FileSystem::Format::PNG;
+	return form == FileSystem::Format::DDS || form == FileSystem::Format::FBX || form == FileSystem::Format::JPG || form == FileSystem::Format::PNG || form == FileSystem::Format::TGA;
 }
 
 bool FileSystem::CreateDir(const char * path)

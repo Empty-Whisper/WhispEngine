@@ -60,13 +60,9 @@ void ComponentCamera::OnInspector()
 
 		ImGui::Separator();
 
-		if(ImGui::Checkbox("Main Camera", &checkbox_main_camera))
-			is_main_camera = true;
-
-		if (checkbox_main_camera && is_main_camera)
-		{
+		if (ImGui::Checkbox("Main Camera", &is_main_camera)) {
+			if(is_main_camera)
 			App->camera->SetGameCamera(camera);
-			is_main_camera = false;
 		}
 
 	}
@@ -77,60 +73,71 @@ void ComponentCamera::DrawFrustum()
 	float3 vertices[8];
 	camera->GetFrustum().GetCornerPoints(vertices);
 
-	GLint previous[2];
-	
-	
-	glGetIntegerv(GL_POLYGON_MODE, previous);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
-
 	glColor3f(0, 0, 100);
 
-	glLineWidth(1.f);
+	glBegin(GL_LINES);
 
-	glBegin(GL_QUADS);
+	glVertex3fv((float*)&vertices[0]);
+	glVertex3fv((float*)&vertices[4]);
 
-	glVertex3fv((GLfloat*)&vertices[1]);
-	glVertex3fv((GLfloat*)&vertices[5]);
-	glVertex3fv((GLfloat*)&vertices[7]);
-	glVertex3fv((GLfloat*)&vertices[3]);
+	glVertex3fv((float*)&vertices[0]);
+	glVertex3fv((float*)&vertices[1]);
 
-	glVertex3fv((GLfloat*)&vertices[4]);
-	glVertex3fv((GLfloat*)&vertices[0]);
-	glVertex3fv((GLfloat*)&vertices[2]);
-	glVertex3fv((GLfloat*)&vertices[6]);
+	glVertex3fv((float*)&vertices[0]);
+	glVertex3fv((float*)&vertices[2]);
 
-	glVertex3fv((GLfloat*)&vertices[5]);
-	glVertex3fv((GLfloat*)&vertices[4]);
-	glVertex3fv((GLfloat*)&vertices[6]);
-	glVertex3fv((GLfloat*)&vertices[7]);
+	glVertex3fv((float*)&vertices[5]);
+	glVertex3fv((float*)&vertices[4]);
 
-	glVertex3fv((GLfloat*)&vertices[0]);
-	glVertex3fv((GLfloat*)&vertices[1]);
-	glVertex3fv((GLfloat*)&vertices[3]);
-	glVertex3fv((GLfloat*)&vertices[2]);
+	glVertex3fv((float*)&vertices[5]);
+	glVertex3fv((float*)&vertices[1]);
 
-	glVertex3fv((GLfloat*)&vertices[3]);
-	glVertex3fv((GLfloat*)&vertices[7]);
-	glVertex3fv((GLfloat*)&vertices[6]);
-	glVertex3fv((GLfloat*)&vertices[2]);
+	glVertex3fv((float*)&vertices[7]);
+	glVertex3fv((float*)&vertices[5]);
 
-	glVertex3fv((GLfloat*)&vertices[0]);
-	glVertex3fv((GLfloat*)&vertices[4]);
-	glVertex3fv((GLfloat*)&vertices[5]);
-	glVertex3fv((GLfloat*)&vertices[1]);
+	glVertex3fv((float*)&vertices[7]);
+	glVertex3fv((float*)&vertices[3]);
+
+	glVertex3fv((float*)&vertices[7]);
+	glVertex3fv((float*)&vertices[6]);
+
+	glVertex3fv((float*)&vertices[2]);
+	glVertex3fv((float*)&vertices[6]);
+
+	glVertex3fv((float*)&vertices[2]);
+	glVertex3fv((float*)&vertices[3]);
+
+	glVertex3fv((float*)&vertices[1]);
+	glVertex3fv((float*)&vertices[3]);
+
+	glVertex3fv((float*)&vertices[4]);
+	glVertex3fv((float*)&vertices[6]);
 
 	glEnd();
+	glLineWidth(1.f);
 
-	
-	glPolygonMode(GL_FRONT_AND_BACK, previous[0]);
-
-	glLineWidth(1.0f);
-
-	glColor3f(255, 255, 255);
+	glColor3f(1.f, 1.f, 1.f);
 
 }
 
 void ComponentCamera::Save(nlohmann::json & node)
 {
+	node["is_main_camera"] = is_main_camera;
+	node["checkbox_main_camera"] = checkbox_main_camera; // TODO: delete this bool
+
+	node["aspect_ratio"] =	camera->GetAspectRatio();
+	node["vertical_fov"] =	camera->GetVerticalFOV();
+	node["far_plane"] =		camera->GetFarZ();
+	node["near_plane"] =    camera->GetNearZ();
+}
+
+void ComponentCamera::Load(const nlohmann::json & node)
+{
+	is_main_camera = node["is_main_camera"];
+	checkbox_main_camera = node["checkbox_main_camera"];
+
+	camera->SetAspectRatio(node["aspect_ratio"]);
+	camera->SetFOV(node["vertical_fov"]);
+	camera->SetFarZ(node["far_plane"]);
+	camera->SetNearZ(node["near_plane"]);
 }

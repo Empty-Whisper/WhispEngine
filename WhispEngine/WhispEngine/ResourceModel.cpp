@@ -32,7 +32,7 @@ ResourceModel::HierarchyInfo ResourceModel::CalculateHierarchy(const aiNode * no
 
 	if (node->mNumMeshes == 1) {
 		info.mesh = meshes[node->mMeshes[0]];
-		info.material = materials[scene->mMeshes[0]->mMaterialIndex];
+		info.material = materials[scene->mMeshes[node->mMeshes[0]]->mMaterialIndex];
 	}
 	else if (node->mNumMeshes > 1) {
 		for (int j = 0; j < node->mNumMeshes; ++j) {

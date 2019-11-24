@@ -19,6 +19,7 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 	name.assign("Camera3D");
 
 	scene_camera = CreateCamera();
+	scene_camera->SetFarZ(450.f);
 	game_camera = CreateCamera();
 }
 
@@ -179,9 +180,7 @@ update_status ModuleCamera3D::Update()
 // -----------------------------------------------------------------
 Camera * ModuleCamera3D::CreateCamera()
 {
-	Camera* cam = nullptr;
-
-	cam = new Camera;
+	Camera* cam = new Camera();
 	cameras.push_back(cam);
 
 	return cam;
@@ -451,6 +450,11 @@ const float4x4 Camera::GetViewMatrix() const
 const float4x4 Camera::GetProjectionMatrix() const
 {
 	return frustum.ProjectionMatrix().Transposed();
+}
+
+const float Camera::GetAspectRatio() const
+{
+	return aspect_ratio;
 }
 
 

@@ -53,6 +53,7 @@ public:
 
 	GameObject* CreateGameObject(GameObject* parent);
 	void DestroyGameObject(GameObject* obj);
+	void ResetObjects();
 
 	GameObject* GetRoot() const;
 	void GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const;
@@ -70,8 +71,10 @@ public:
 	void ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation);
 	void ChangeGuizmoMode(ImGuizmo::MODE &gizmoMode);
 	void FillMatrix(float4x4 &matrix,float o[]);
+
+	float* CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude = 0.5f);
 	// =========================================================== old
-	//TODO mesh: set all mesh creation functions in Mesh_info class----------------------------------------------------------------------------------------------------------
+	//TODO: Try to fix Primitives and old way to create meshes ----------------------------------------------------------------------------------------------------------
 
 	/*Mesh_info* CreateMesh(const uint &n_vertex, const float* vertex, const uint &n_index, const uint* index, const float* normals, const float* texCoords, ComponentMesh* component);
 	Mesh_info* CreateMesh(const aiMesh *mesh, ComponentMesh* component);
@@ -81,7 +84,6 @@ public:
 
 
 	void   FillNormals(Mesh_info * ret, const float * normals = nullptr);*/
-	float* CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude = 0.5f);
 	/*void   FillIndex(Mesh_info * ret, const uint & n_index, const aiFace* faces);
 	void   FillIndex(Mesh_info * ret, const uint & n_index, const uint* index);
 	void   FillVertex(Mesh_info * ret, const uint & n_vertex, const float* vertex);

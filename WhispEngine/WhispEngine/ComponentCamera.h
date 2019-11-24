@@ -23,7 +23,8 @@ public:
 
 	void DrawFrustum();
   
-	void Save(nlohmann::json &node);
+	void Save(nlohmann::json &node) override;
+	void Load(const nlohmann::json &node) override;
 
 private:
 	Camera* camera = nullptr;

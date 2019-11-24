@@ -55,6 +55,7 @@ void log(const char file[], int line, const char* format, ...);
 #define ASSETS_FOLDER "Assets/"
 #define MODEL_A_FOLDER "Assets/Models/"
 #define TEXTURE_A_FOLDER "Assets/Textures/"
+#define SCENE_A_FOLDER "Assets/Scenes/"
 
 #define LIBRARY_FOLDER "Library/"
 #define MODEL_L_FOLDER "Library/Models/"

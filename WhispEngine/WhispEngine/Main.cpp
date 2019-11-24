@@ -98,7 +98,7 @@ int main(int argc, char ** argv)
 	App->SaveLogFile();
 	delete App;
 	App = nullptr;
-	_CrtDumpMemoryLeaks();
 	
+	//_CrtDumpMemoryLeaks(); move to mmgr.cpp / false positive
 	return main_return;
 }

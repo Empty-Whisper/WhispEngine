@@ -80,7 +80,7 @@ uint64 ModelImporter::Import(const char * path)
 						res->SetResourcePath((MESH_L_FOLDER + std::to_string(uid) + ".whispMesh").c_str());
 						cursor += sizeof(uint64);
 					}
-
+					
 					/*uint n_materials = 0u;
 					std::memcpy(&n_materials, cursor, sizeof(uint));
 					cursor += sizeof(uint);
