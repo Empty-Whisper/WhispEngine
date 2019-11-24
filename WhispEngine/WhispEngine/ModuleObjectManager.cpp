@@ -389,8 +389,14 @@ void ModuleObjectManager::UpdateGuizmo()
 					{
 						for (GameObject* iterator : childs) //Iterate all objects
 						{
+							float4x4 transform_changed_save = last_transform;
+							last_transform = last_transform * transform_changed.Inverted();
+
 							scale_matrix = last_transform * ((ComponentTransform*)iterator->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
 							((ComponentTransform*)iterator->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
+							transform_changed = transform_changed_save;
+
+
 						}
 					}
 					else
@@ -405,7 +411,7 @@ void ModuleObjectManager::UpdateGuizmo()
 					}
 				}
 				
-				
+
 			}
 			break;
 			}
