@@ -351,7 +351,7 @@ void ModuleObjectManager::UpdateGuizmo()
 
 	for (GameObject* i : selected_and_childs)
 	{
-		if (ImGuizmo::IsUsing() && !App->camera->is_moving_camera)
+		if (ImGuizmo::IsUsing() && !App->camera->is_moving_camera && !App->object_manager->GetSelected()->IsStatic())
 		{
 			float4x4 position_matrix = float4x4::identity;
 			float4x4 rotation_matrix = float4x4::identity;
