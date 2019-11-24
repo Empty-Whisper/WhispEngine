@@ -1,4 +1,5 @@
 # Changelog
+
 ## [Assignment2] - 24/11/2019
 ### Added
 
@@ -26,8 +27,8 @@
 - Guizmos logic to Game Objects
 
 ## Fixed
-Now meshes have always same ID
-Camera Movement
+- Now meshes have always same ID
+- Camera Movement
 
 ## [Assignment1.3] - 27/10/2019
 ### Added
