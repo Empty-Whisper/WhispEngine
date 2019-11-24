@@ -114,8 +114,15 @@ update_status ModuleCamera3D::Update()
 				if (App->object_manager->GetSelected() != nullptr)
 				{
 					GameObject* obj_selected = App->object_manager->GetSelected();
-					math::float3 obj_position = ((ComponentTransform*)obj_selected->GetComponent(ComponentType::TRANSFORM))->GetPosition();
-					//math::float3 center = obj_selected->GetAABB().CenterPoint(); TODO: Fix This, center return always 0,0,0
+					math::float3 obj_position = float3::zero;
+					
+					ComponentMesh* mesh = nullptr;
+					if (obj_selected->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
+						obj_position = mesh->GetAABB().CenterPoint();
+					}
+					else {
+						obj_position = ((ComponentTransform*)obj_selected->GetComponent(ComponentType::TRANSFORM))->GetPosition();
+					}
 
 					math::float2 orbit_position(-App->input->GetMouseXMotion()*mou_speed, -App->input->GetMouseYMotion()*mou_speed);
 					scene_camera->OrbitObject(obj_position, orbit_position);
