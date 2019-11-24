@@ -44,12 +44,12 @@ uint64 MaterialImporter::Import(const char * path, const aiMaterial * material, 
 		path = tex_path.C_Str();
 	}
 
-	std::string file = App->dummy_file_system->GetFileFromPath(path);
+	std::string file = App->file_system->GetFileFromPath(path);
 	std::string mat_path(path);
-	if (App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str(), &mat_path)) {
-		if (App->dummy_file_system->Exists((mat_path + ".meta").c_str())) {
-			if (App->dummy_file_system->IsMetaVaild((mat_path + ".meta").c_str())) {
-				meta = App->dummy_file_system->GetUIDFromMeta((mat_path + ".meta").c_str());
+	if (App->file_system->IsInSubDirectory(ASSETS_FOLDER, file.c_str(), &mat_path)) {
+		if (App->file_system->Exists((mat_path + ".meta").c_str())) {
+			if (App->file_system->IsMetaVaild((mat_path + ".meta").c_str())) {
+				meta = App->file_system->GetUIDFromMeta((mat_path + ".meta").c_str());
 				Resource* res = App->resources->CreateResource(Resource::Type::TEXTURE, meta);
 				res->SetFile(mat_path.c_str());
 				res->SetResourcePath((MATERIAL_L_FOLDER + std::to_string(meta) + ".dds").c_str());
@@ -59,7 +59,7 @@ uint64 MaterialImporter::Import(const char * path, const aiMaterial * material, 
 			}
 			else {
 				LOG("Meta %s not vaild, recreating...", path);
-				meta = App->dummy_file_system->GetUIDFromMeta((mat_path + ".meta").c_str());
+				meta = App->file_system->GetUIDFromMeta((mat_path + ".meta").c_str());
 			}
 		}
 	}
@@ -78,7 +78,7 @@ uint64 MaterialImporter::Import(const char * path, const aiMaterial * material, 
 
 	
 	bool success = false;
-	if (App->dummy_file_system->GetPathFormat(mat_path.c_str()).compare("tga") == 0) {
+	if (App->file_system->GetPathFormat(mat_path.c_str()).compare("tga") == 0) {
 		success = ilLoad(IL_TGA, mat_path.c_str());
 	}
 	else
@@ -87,23 +87,23 @@ uint64 MaterialImporter::Import(const char * path, const aiMaterial * material, 
 	if (success) {
 		ResourceTexture* mat = (ResourceTexture*)App->resources->CreateResource(Resource::Type::TEXTURE, meta);
 
-		App->dummy_file_system->GenerateMetaFile(mat_path.c_str(), mat->GetUID());
+		App->file_system->GenerateMetaFile(mat_path.c_str(), mat->GetUID());
 
 		mat->SetFile(mat_path.c_str());
 		mat->SetResourcePath(std::string(MATERIAL_L_FOLDER + std::to_string(mat->GetUID()) + ".dds").c_str());
 		mat->Set(ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0);
 
 		ILuint size;
-		if (App->dummy_file_system->GetFormat(mat_path.c_str()) != FileSystem::Format::DDS) {
+		if (App->file_system->GetFormat(mat_path.c_str()) != FileSystem::Format::DDS) {
 			ILubyte *data = nullptr;
 			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
 			size = ilSaveL(IL_DDS, NULL, 0); // Get the size of the data buffer
 			if (size > 0) {
 				data = new ILubyte[size]; // allocate data buffer
 				if (ilSaveL(IL_DDS, data, size) > 0) { // Save to buffer with the ilSaveIL function
-					if (App->dummy_file_system->Exists(MATERIAL_L_FOLDER) == false)
-						App->dummy_file_system->CreateDir(MATERIAL_L_FOLDER);
-					App->dummy_file_system->SaveData(data, size, mat->GetLibraryPath());
+					if (App->file_system->Exists(MATERIAL_L_FOLDER) == false)
+						App->file_system->CreateDir(MATERIAL_L_FOLDER);
+					App->file_system->SaveData(data, size, mat->GetLibraryPath());
 				}
 				else
 					LOG("Failed to generate DDS");
@@ -114,15 +114,15 @@ uint64 MaterialImporter::Import(const char * path, const aiMaterial * material, 
 				LOG("Size of image is 0");
 		}
 		else {
-			if (App->dummy_file_system->Exists(MATERIAL_L_FOLDER) == false)
-				App->dummy_file_system->CreateDir(MATERIAL_L_FOLDER);
+			if (App->file_system->Exists(MATERIAL_L_FOLDER) == false)
+				App->file_system->CreateDir(MATERIAL_L_FOLDER);
 
-			if (CopyFile(mat_path.c_str(), (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str(), FALSE)) {
-				rename((MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str(), mat->GetLibraryPath());
+			if (CopyFile(mat_path.c_str(), (MATERIAL_L_FOLDER + App->file_system->GetFileFromPath(file.c_str())).c_str(), FALSE)) {
+				rename((MATERIAL_L_FOLDER + App->file_system->GetFileFromPath(file.c_str())).c_str(), mat->GetLibraryPath());
 				return mat->GetUID();
 			}
 			else {
-				LOG("Failed to copy material in Library folder, Cannot copy %s in %s", mat_path.c_str(), (MATERIAL_L_FOLDER + App->dummy_file_system->GetFileFromPath(file.c_str())).c_str());
+				LOG("Failed to copy material in Library folder, Cannot copy %s in %s", mat_path.c_str(), (MATERIAL_L_FOLDER + App->file_system->GetFileFromPath(file.c_str())).c_str());
 			}
 		}
 	}

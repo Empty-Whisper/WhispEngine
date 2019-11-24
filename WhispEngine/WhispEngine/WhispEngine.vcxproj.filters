@@ -342,6 +342,9 @@
     <ClCompile Include="ResourceTexture.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="Imgui\ImGuizmo.cpp" />
+    <ClCompile Include="PanelGame.cpp" />
+    <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -746,6 +749,9 @@
     <ClInclude Include="ResourceMesh.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Imgui\ImGuizmo.h" />
+    <ClInclude Include="PanelGame.h" />
+    <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

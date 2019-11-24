@@ -104,10 +104,10 @@ uint64 MeshImporter::Import(const char * path, const aiMesh * mesh, const uint64
 		LOG("Mesh has not texture coords");
 	}
 
-	if (App->dummy_file_system->Exists(MESH_L_FOLDER) == false)
-		App->dummy_file_system->CreateDir(MESH_L_FOLDER);
+	if (App->file_system->Exists(MESH_L_FOLDER) == false)
+		App->file_system->CreateDir(MESH_L_FOLDER);
 
-	App->dummy_file_system->SaveData(data, size, ret->GetLibraryPath());
+	App->file_system->SaveData(data, size, ret->GetLibraryPath());
 	delete[] data;
 
 	return ret->GetUID();

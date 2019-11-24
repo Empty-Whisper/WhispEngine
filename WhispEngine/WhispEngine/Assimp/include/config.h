@@ -120,7 +120,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 // ---------------------------------------------------------------------------
-/** @brief Maximum bone count per data for the SplitbyBoneCount step.
+/** @brief Maximum bone count per mesh for the SplitbyBoneCount step.
  *
  * Meshes are split until the maximum number of bones is reached. The default
  * value is AI_SBBC_DEFAULT_MAX_BONES, which may be altered at
@@ -298,10 +298,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     "PP_OG_EXCLUDE_LIST"
 
 // ---------------------------------------------------------------------------
-/** @brief  Set the maximum number of triangles in a data.
+/** @brief  Set the maximum number of triangles in a mesh.
  *
  * This is used by the "SplitLargeMeshes" PostProcess-Step to determine
- * whether a data must be split or not.
+ * whether a mesh must be split or not.
  * @note The default value is AI_SLM_DEFAULT_MAX_TRIANGLES
  * Property type: integer.
  */
@@ -314,10 +314,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 // ---------------------------------------------------------------------------
-/** @brief  Set the maximum number of vertices in a data.
+/** @brief  Set the maximum number of vertices in a mesh.
  *
  * This is used by the "SplitLargeMeshes" PostProcess-Step to determine
- * whether a data must be split or not.
+ * whether a mesh must be split or not.
  * @note The default value is AI_SLM_DEFAULT_MAX_VERTICES
  * Property type: integer.
  */
@@ -466,7 +466,7 @@ enum aiComponent
  * See the documentation to this step for further details. The property
  * is expected to be an integer, a bitwise combination of the
  * #aiComponent flags defined above in this header. The default
- * value is 0. Important: if no valid data is remaining after the
+ * value is 0. Important: if no valid mesh is remaining after the
  * step has been executed (e.g you thought it was funny to specify ALL
  * of the flags defined above) the import FAILS. Mainly because there is
  * no data to work on anymore ...
@@ -861,7 +861,7 @@ enum aiComponent
  *
  * Ogre meshes reference with material names, this does not tell Assimp the file
  * where it is located in. Assimp will try to find the source file in the following
- * order: <material-name>.material, <data-filename-base>.material and
+ * order: <material-name>.material, <mesh-filename-base>.material and
  * lastly the material name defined by this config property.
  * <br>
  * Property type: String. Default value: Scene.material.
@@ -1013,6 +1013,6 @@ enum aiComponent
  * Property type: Bool. Default value: undefined.
  */
 
-/* #undef ASSIMP_DOUBLE_PRECISION */
+//#cmakedefine ASSIMP_DOUBLE_PRECISION 1
 
 #endif // !! AI_CONFIG_H_INC

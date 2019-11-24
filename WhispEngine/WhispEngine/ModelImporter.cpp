@@ -32,18 +32,18 @@ uint64 ModelImporter::Import(const char * path)
 	BROFILER_CATEGORY("Import FBX", Profiler::Color::Green);
 	bool ret = true;
 
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	LOG("Importing fbx with path: %s", path);
-
+	
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		bool want_to_generate_meta = true;
 		std::string new_path;
 
-		if (!App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, App->dummy_file_system->GetFileFromPath(path).data())) {
-			if (App->dummy_file_system->Exists(MODEL_A_FOLDER) == false)
-				App->dummy_file_system->CreateDir(MODEL_A_FOLDER);
-			new_path = (MODEL_A_FOLDER + App->dummy_file_system->GetFileFromPath(path));
+		if (!App->file_system->IsInSubDirectory(ASSETS_FOLDER, App->file_system->GetFileFromPath(path).data())) {
+			if (App->file_system->Exists(MODEL_A_FOLDER) == false)
+				App->file_system->CreateDir(MODEL_A_FOLDER);
+			new_path = (MODEL_A_FOLDER + App->file_system->GetFileFromPath(path));
 			if (!CopyFile(path, new_path.data(), FALSE)) {
 				LOG("Failed to copy fbx in Assets folder", path);
 			}
@@ -56,16 +56,16 @@ uint64 ModelImporter::Import(const char * path)
 
 		// .meta -------------------------------------------------------------
 		uint64_t meta = 0u;
-		if (App->dummy_file_system->IsInSubDirectory(ASSETS_FOLDER, (App->dummy_file_system->GetFileFromPath(path) + ".meta").data())) {
-			if (App->dummy_file_system->IsMetaVaild((std::string(path) + ".meta").data())) {
-				LOG("File %s already imported", App->dummy_file_system->GetFileFromPath(path).data());
-				meta = App->dummy_file_system->GetUIDFromMeta((std::string(path) + ".meta").data());
+		if (App->file_system->IsInSubDirectory(ASSETS_FOLDER, (App->file_system->GetFileFromPath(path) + ".meta").data())) {
+			if (App->file_system->IsMetaVaild((std::string(path) + ".meta").data())) {
+				LOG("File %s already imported", App->file_system->GetFileFromPath(path).data());
+				meta = App->file_system->GetUIDFromMeta((std::string(path) + ".meta").data());
 				Resource* res = App->resources->CreateResource(Resource::Type::MODEL, meta);
 				res->SetFile(path);
 				res->SetResourcePath((MODEL_L_FOLDER + std::to_string(meta) + ".whispModel").c_str());
 				
 				//TODO: Load Resource
-				char* data = App->dummy_file_system->GetData((std::string(path) + ".meta").data());
+				char* data = App->file_system->GetData((std::string(path) + ".meta").data());
 				if (data != nullptr) {
 					char* cursor = data + sizeof(uint64);
 
@@ -98,9 +98,9 @@ uint64 ModelImporter::Import(const char * path)
 				return res->GetUID();
 			}
 			else {
-				meta = App->dummy_file_system->GetUIDFromMeta((std::string(path) + ".meta").data());
+				meta = App->file_system->GetUIDFromMeta((std::string(path) + ".meta").data());
 
-				char* data = App->dummy_file_system->GetData((std::string(path) + ".meta").data());
+				char* data = App->file_system->GetData((std::string(path) + ".meta").data());
 				if (data != nullptr) {
 					char* cursor = data + sizeof(uint64);
 
@@ -172,10 +172,10 @@ uint64 ModelImporter::Import(const char * path)
 
 		model->CalculateHierarchy(scene->mRootNode, scene, uid_meshes, uid_materials, nullptr);
 
-		model->model.name = App->dummy_file_system->GetFileNameFromPath(path);
+		model->model.name = App->file_system->GetFileNameFromPath(path);
 			 
-		if (App->dummy_file_system->Exists(MODEL_L_FOLDER) == false) {
-			App->dummy_file_system->CreateDir(MODEL_L_FOLDER);
+		if (App->file_system->Exists(MODEL_L_FOLDER) == false) {
+			App->file_system->CreateDir(MODEL_L_FOLDER);
 		}
 
 		if (want_to_generate_meta) {
@@ -201,7 +201,7 @@ uint64 ModelImporter::Import(const char * path)
 			bytes = sizeof(uint64_t) * n_materials;
 			memcpy(cursor, uid_materials.data(), bytes);
 
-			App->dummy_file_system->GenerateMetaFile(path, model->GetUID(), data, size);
+			App->file_system->GenerateMetaFile(path, model->GetUID(), data, size);
 			delete[] data;
 		}
 
