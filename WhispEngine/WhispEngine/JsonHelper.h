@@ -18,6 +18,6 @@ public:
 	void AddColor3(const char* name, const float *vector, nlohmann::json &node);
 	float* GetColor3(const char* name, const nlohmann::json &node);
 	void AddColor4(const char* name, const float *vector, nlohmann::json &node);
-	float* GetColor4(const char* name, const nlohmann::json &node);
+	void GetColor4(const char* name, const nlohmann::json &node, float *fill);
 };
 
