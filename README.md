@@ -56,7 +56,7 @@ There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct bett
 	* Reference Counting
 * Start/Pause/Stop and recover init state
 
-* **Marc Galvez** [optus23](https://github.com/optus23)
+### **Marc Galvez** [optus23](https://github.com/optus23)
 * Transform Camera editor to Fustum
 * Camera class logic 
 * Frustum culling
@@ -80,6 +80,7 @@ There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct bett
 * Resource Panel shows all Assets in the project
 * Library/ is generated identically if it does not exist
 * An external window of Windows API to Save & Load Scenes
+* Hidden Files like temporary scene when active play button
 
 ## Innovations Assignment 1
 * Docking
