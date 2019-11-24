@@ -380,9 +380,10 @@ void Camera::OrbitObject(const float3& center, const float2& pos)
 void Camera::CameraViewRotation(const float2& pos)
 {
 	math::Quat quat_rotation_x = math::Quat::RotateY(pos.x);
-	math::Quat quat_rotation_y = math::Quat::RotateAxisAngle(frustum.WorldRight(), pos.y);
+	MulQuat(quat_rotation_x);
 
-	MulQuat(quat_rotation_x); MulQuat(quat_rotation_y);
+	math::Quat quat_rotation_y = math::Quat::RotateAxisAngle(frustum.WorldRight(), pos.y);
+	 MulQuat(quat_rotation_y);
 }
 
 void Camera::MulQuat(math::Quat & quat)
