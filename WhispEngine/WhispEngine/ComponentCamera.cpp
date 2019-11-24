@@ -60,10 +60,20 @@ void ComponentCamera::OnInspector()
 
 		ImGui::Separator();
 
-		if (ImGui::Checkbox("Main Camera", &is_main_camera)) {
-			if(is_main_camera)
+
+
+		if (ImGui::Checkbox("Main Camera", &checkbox_main_camera))
+			is_main_camera = true;
+
+		if (checkbox_main_camera && is_main_camera)
+		{
 			App->camera->SetGameCamera(camera);
+			is_main_camera = false;
 		}
+		/*if (ImGui::Checkbox("Main Camera", &is_main_camera)) {
+			if(is_main_camera)
+				App->camera->SetGameCamera(camera);
+		}*/
 
 	}
 }
