@@ -35,7 +35,7 @@ bool ModuleCamera3D::Start()
 	sensiblity = 0.25f;  //  TODO: Save and Load this data in JSON
 	movement_speed = 10;  //  TODO: Save and Load this data in JSON
 	wheel_speed = 70;  //  TODO: Save and Load this data in JSON
-	slowness_middle_mouse = 50;  //  TODO: Save and Load this data in JSON
+	slowness_middle_mouse = 5;  //  TODO: Save and Load this data in JSON
 	slowness_zoom_in_out = 50;  //  TODO: Save and Load this data in JSON
 
 	return ret;
@@ -134,10 +134,10 @@ update_status ModuleCamera3D::Update()
 				last_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 				math::float2 mouse_vec = last_mouse_position - initial_mouse_position;
 
-				if (App->input->GetMouseXMotion() < 0 && App->input->GetMouseXMotion() > -50) scene_camera->Movement(CameraMovementType::LEFT, mouse_vec.x / (float)slowness_middle_mouse);
-				if (App->input->GetMouseXMotion() > 0) scene_camera->Movement(CameraMovementType::RIGHT, mouse_vec.x / (float)slowness_middle_mouse * -1);
-				if (App->input->GetMouseYMotion() < 0 && App->input->GetMouseYMotion() > -50)scene_camera->Movement(CameraMovementType::DOWN, mouse_vec.y / (float)slowness_middle_mouse * -1);
-				if (App->input->GetMouseYMotion() > 0)scene_camera->Movement(CameraMovementType::UP, mouse_vec.y / (float)slowness_middle_mouse);
+				if (App->input->GetMouseXMotion() < 0 && App->input->GetMouseXMotion() > -50) scene_camera->Movement(CameraMovementType::LEFT, (mouse_vec.x / (float)slowness_middle_mouse) * App->GetDeltaTime());
+				if (App->input->GetMouseXMotion() > 0) scene_camera->Movement(CameraMovementType::RIGHT, (mouse_vec.x / (float)slowness_middle_mouse * -1)* App->GetDeltaTime());
+				if (App->input->GetMouseYMotion() < 0 && App->input->GetMouseYMotion() > -50)scene_camera->Movement(CameraMovementType::DOWN, (mouse_vec.y / (float)slowness_middle_mouse * -1) * App->GetDeltaTime());
+				if (App->input->GetMouseYMotion() > 0)scene_camera->Movement(CameraMovementType::UP, (mouse_vec.y / (float)slowness_middle_mouse) * App->GetDeltaTime());
 				
 				initial_mouse_position = { (float)App->input->GetMouseX(), (float)App->input->GetMouseY() };
 				is_moving_camera = true;
