@@ -95,13 +95,12 @@ GameObject * ModuleObjectManager::GetRoot() const
 
 void ModuleObjectManager::GetChildsFrom(GameObject* &obj, std::vector<GameObject*> &vector) const
 {
-
 	if (!obj->children.empty()) {
 
-		for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
-			vector.push_back(*i);
+		for (auto i : obj->children) {
+			vector.push_back(i);
 
-			GetChildsFrom(*i, vector);
+			GetChildsFrom(i, vector);
 		}
 	}
 }
@@ -203,8 +202,6 @@ void ModuleObjectManager::MousePicking()
 			
 		}
 		
-		
-
 		if (!is_hitted && selected != nullptr && !ImGuizmo::IsOver() && !App->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN)
 		{
 			std::vector<GameObject*> selected_and_childs;
@@ -350,7 +347,7 @@ void ModuleObjectManager::UpdateGuizmo()
 			float4x4 rotation_matrix = float4x4::identity;
 			float4x4 scale_matrix = float4x4::identity;
 
-			if (*i != nullptr) {
+			if (*i != nullptr) {			
 				ComponentMesh* mesh = nullptr;
 				if ((*i)->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
 					mesh->CalulateAABB_OBB();
