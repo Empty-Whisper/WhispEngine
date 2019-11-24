@@ -112,6 +112,6 @@ private:
 
 	ImGuizmo::OPERATION   gizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 	ImGuizmo::MODE        guizmoMode = ImGuizmo::MODE::WORLD;
-	math::float4x4		  last_moved_transformation = float4x4::identity;
+	math::float4x4		  transform_changed = float4x4::identity;
 };
 

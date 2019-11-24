@@ -89,9 +89,9 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 		
 		//Initialize clear color
 		background_color = new float[3];
-		background_color[0] = 0.15f;
-		background_color[1] = 0.15f;
-		background_color[2] = 0.15f;
+		background_color[0] = 0.109f;
+		background_color[1] = 0.109f;
+		background_color[2] = 0.109f;
 		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
 
 		//Check for error

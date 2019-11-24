@@ -187,7 +187,7 @@ void ModuleObjectManager::MousePicking()
 
 		//RayCast
 		LineSegment ray_cast = App->camera->GetSceneCamera()->GetFrustum().UnProjectLineSegment(normalizedVector.x, normalizedVector.y);
-		float distance = 1e10;
+		float distance = 1000;
 
 		GameObject* hitted = nullptr;
 		std::vector<GameObject*> all_game_objects;
@@ -334,11 +334,11 @@ void ModuleObjectManager::UpdateGuizmo()
 	ChangeGuizmoOperation(gizmoOperation);
 
 	float4x4 global_transform = ((ComponentTransform*)GetSelected()->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().Transposed();
-	float4x4 moved_transformation;
+	float4x4 last_transform;
 	float matrix_properties[16];
 
 	ImGuizmo::Manipulate(App->camera->GetSceneCamera()->GetViewMatrix().ptr(), App->camera->GetSceneCamera()->GetProjectionMatrix().ptr(), gizmoOperation, guizmoApply, global_transform.ptr(), matrix_properties);
-	FillMatrix(moved_transformation, matrix_properties);
+	FillMatrix(last_transform, matrix_properties);
 	
 	std::vector<GameObject*> selected_and_childs;
 	if (selected != nullptr)
@@ -366,33 +366,54 @@ void ModuleObjectManager::UpdateGuizmo()
 			{
 			case ImGuizmo::OPERATION::TRANSLATE:
 			{
-				position_matrix = moved_transformation * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				position_matrix = last_transform * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
 				((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(position_matrix);
 			}
 			break;
 
 			case ImGuizmo::OPERATION::ROTATE:
 			{
-				rotation_matrix = moved_transformation * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				rotation_matrix = last_transform * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
 				((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(rotation_matrix);
 			}
 			break;
 			case ImGuizmo::OPERATION::SCALE:
 			{
-				float4x4 save_trans = moved_transformation;
-				moved_transformation = moved_transformation * last_moved_transformation.Inverted();
+				if (i == selected_and_childs[0]) //Only the selected, in other words the parent
+				{
+					std::vector<GameObject*> childs;
+					childs.push_back(i);
+					GetChildsFrom(i, childs);
 
-				scale_matrix = moved_transformation * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
+					if (childs.size() > 0)
+					{
+						for (GameObject* iterator : childs) //Iterate all objects
+						{
+							scale_matrix = last_transform * ((ComponentTransform*)iterator->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+							((ComponentTransform*)iterator->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
+						}
+					}
+					else
+					{
+						float4x4 transform_changed_save = last_transform;
+						last_transform = last_transform * transform_changed.Inverted();
 
-				last_moved_transformation = save_trans;
+						scale_matrix = last_transform * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+						((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
+
+						transform_changed = transform_changed_save;
+					}
+				}
+				
+				
 			}
 			break;
 			}
 		}
 		else
 		{
-			last_moved_transformation = float4x4::identity;
+			transform_changed = float4x4::identity;
+
 		}
 	}
 }

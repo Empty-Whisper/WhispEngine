@@ -188,7 +188,11 @@ update_status ModuleCamera3D::Update()
 		}
 	}
 	if (obj_with_camera.size() == 1)
+	{
 		((ComponentCamera*)obj_with_camera[0]->GetComponent(ComponentType::CAMERA))->only_one_camera = true;
+		((ComponentCamera*)obj_with_camera[0]->GetComponent(ComponentType::CAMERA))->checkbox_main_camera = true;
+		((ComponentCamera*)obj_with_camera[0]->GetComponent(ComponentType::CAMERA))->is_main_camera = true;
+	}
 	else
 		((ComponentCamera*)obj_with_camera[0]->GetComponent(ComponentType::CAMERA))->only_one_camera = false;
 

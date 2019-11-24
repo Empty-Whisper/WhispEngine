@@ -90,8 +90,7 @@ void ComponentCamera::DrawFrustum()
 {
 	float3 vertices[8];
 	camera->GetFrustum().GetCornerPoints(vertices);
-
-	glColor3f(0, 0, 100);
+	glColor3f(1.f, 1.f, 1.f);
 
 	glBegin(GL_LINES);
 
