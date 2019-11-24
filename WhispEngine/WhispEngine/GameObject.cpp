@@ -213,7 +213,8 @@ void GameObject::Raycast(const LineSegment &ray_cast, bool &intersect, float &le
 	ComponentMesh* mesh = (ComponentMesh*)GetComponent(ComponentType::MESH);
 	ComponentTransform* ctrans = (ComponentTransform*)GetComponent(ComponentType::TRANSFORM);
 
-	length = 1e10;
+	
+	length = 1000;
 	intersect = false;
 
 	if (mesh != nullptr && mesh->GetAABB().IsFinite())
@@ -226,7 +227,7 @@ void GameObject::Raycast(const LineSegment &ray_cast, bool &intersect, float &le
 			Triangle triangle_plane;
 			uint* indices = resource_mesh->index.data;
 			float* vertices = resource_mesh->vertex.data;
-			for (int i = 0; i < resource_mesh->index.size / 3;) // we need the dicide by three the index.size bcs we are looking for triangles
+			for (int i = 0; i < resource_mesh->index.size / 3;) // we need to divide by three the index.size bcs we are looking for triangles
 			{
 				triangle_plane.a = (float3)&vertices[(3 * indices[i])], vertices[(indices[i] * 3) + 1u], &vertices[(indices[i] * 3) + 2u];
 				++i;
@@ -243,7 +244,7 @@ void GameObject::Raycast(const LineSegment &ray_cast, bool &intersect, float &le
 				new_triangle_plane = triangle_plane;
 
 				LineSegment local_ray_cast(ray_cast);
-				local_ray_cast.Transform(ctrans->GetGlobalMatrix().Inverted());
+				local_ray_cast.Transform(ctrans->GetGlobalMatrix().Inverted()); //Transform once the ray into Game Object space to test against all triangles
 
 				if (local_ray_cast.Intersects(new_triangle_plane, &new_length, &hit_point) && new_length < length)
 				{
