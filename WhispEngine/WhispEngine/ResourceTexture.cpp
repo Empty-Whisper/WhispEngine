@@ -32,7 +32,7 @@ bool ResourceTexture::Set(const uint & width, const uint & height, const uint & 
 
 bool ResourceTexture::LoadInMemory()
 {
-	/*if (App->dummy_file_system->Exists(path) == false) {
+	/*if (App->file_system->Exists(path) == false) {
 		// TODO?: Recreate library
 	}*/
 	ILuint image_id = 0;

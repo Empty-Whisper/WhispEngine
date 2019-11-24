@@ -166,7 +166,7 @@ update_status ModuleRenderer3D::Update()
 	/*GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
 	GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);*/
 	
-	//if (!is_rendering_scenene)
+	//if (!is_rendering_scene)
 	//{
 
 	//	// SCENE ============================================================================================ =
@@ -189,7 +189,7 @@ update_status ModuleRenderer3D::Update()
 	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	//	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
 
-	//	is_rendering_scenene = true;
+	//	is_rendering_scene = true;
 	//}
 	//else
 	//{
@@ -213,10 +213,10 @@ update_status ModuleRenderer3D::Update()
 	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	//	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
 	//	
-	//	is_rendering_scenene = false;
+	//	is_rendering_scene = false;
 	//}
 
-	if (!is_rendering_scenene)
+	if (!is_rendering_scene) // TODO: Threads ;)
 	{
 
 		// SCENE ============================================================================================ =
@@ -239,7 +239,7 @@ update_status ModuleRenderer3D::Update()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
 
-		is_rendering_scenene = true;
+		is_rendering_scene = true;
 	}
 	else
 	{
@@ -263,7 +263,7 @@ update_status ModuleRenderer3D::Update()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
 
-		is_rendering_scenene = false;
+		is_rendering_scene = false;
 	}
 
 	

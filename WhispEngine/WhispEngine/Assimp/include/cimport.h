@@ -447,7 +447,7 @@ ASSIMP_API void aiSetImportPropertyString(
  * @param store Store to modify. Use #aiCreatePropertyStore to obtain a store.
  * @param szName Name of the configuration property to be set. All supported
  *   public properties are defined in the config.h header file (AI_CONFIG_XXX).
- * @param d_mat New value for the property
+ * @param mat New value for the property
  */
 ASSIMP_API void aiSetImportPropertyMatrix(
     C_STRUCT aiPropertyStore* store,
@@ -457,7 +457,7 @@ ASSIMP_API void aiSetImportPropertyMatrix(
 // --------------------------------------------------------------------------------
 /** Construct a quaternion from a 3x3 rotation matrix.
  *  @param quat Receives the output quaternion.
- *  @param d_mat Matrix to 'quaternionize'.
+ *  @param mat Matrix to 'quaternionize'.
  *  @see aiQuaternion(const aiMatrix3x3& pRotMatrix)
  */
 ASSIMP_API void aiCreateQuaternionFromMatrix(
@@ -468,7 +468,7 @@ ASSIMP_API void aiCreateQuaternionFromMatrix(
 /** Decompose a transformation matrix into its rotational, translational and
  *  scaling components.
  *
- * @param d_mat Matrix to decompose
+ * @param mat Matrix to decompose
  * @param scaling Receives the scaling component
  * @param rotation Receives the rotational component
  * @param position Receives the translational component.
@@ -482,14 +482,14 @@ ASSIMP_API void aiDecomposeMatrix(
 
 // --------------------------------------------------------------------------------
 /** Transpose a 4x4 matrix.
- *  @param d_mat Pointer to the matrix to be transposed
+ *  @param mat Pointer to the matrix to be transposed
  */
 ASSIMP_API void aiTransposeMatrix4(
     C_STRUCT aiMatrix4x4* mat);
 
 // --------------------------------------------------------------------------------
 /** Transpose a 3x3 matrix.
- *  @param d_mat Pointer to the matrix to be transposed
+ *  @param mat Pointer to the matrix to be transposed
  */
 ASSIMP_API void aiTransposeMatrix3(
     C_STRUCT aiMatrix3x3* mat);
@@ -497,7 +497,7 @@ ASSIMP_API void aiTransposeMatrix3(
 // --------------------------------------------------------------------------------
 /** Transform a vector by a 3x3 matrix
  *  @param vec Vector to be transformed.
- *  @param d_mat Matrix to transform the vector with.
+ *  @param mat Matrix to transform the vector with.
  */
 ASSIMP_API void aiTransformVecByMatrix3(
     C_STRUCT aiVector3D* vec,
@@ -506,7 +506,7 @@ ASSIMP_API void aiTransformVecByMatrix3(
 // --------------------------------------------------------------------------------
 /** Transform a vector by a 4x4 matrix
  *  @param vec Vector to be transformed.
- *  @param d_mat Matrix to transform the vector with.
+ *  @param mat Matrix to transform the vector with.
  */
 ASSIMP_API void aiTransformVecByMatrix4(
     C_STRUCT aiVector3D* vec,
@@ -532,14 +532,14 @@ ASSIMP_API void aiMultiplyMatrix3(
 
 // --------------------------------------------------------------------------------
 /** Get a 3x3 identity matrix.
- *  @param d_mat Matrix to receive its personal identity
+ *  @param mat Matrix to receive its personal identity
  */
 ASSIMP_API void aiIdentityMatrix3(
     C_STRUCT aiMatrix3x3* mat);
 
 // --------------------------------------------------------------------------------
 /** Get a 4x4 identity matrix.
- *  @param d_mat Matrix to receive its personal identity
+ *  @param mat Matrix to receive its personal identity
  */
 ASSIMP_API void aiIdentityMatrix4(
     C_STRUCT aiMatrix4x4* mat);

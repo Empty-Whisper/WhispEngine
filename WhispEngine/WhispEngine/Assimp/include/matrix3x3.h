@@ -127,7 +127,7 @@ public:
     /** @brief Returns a rotation matrix for a rotation around z
      *  @param a Rotation angle, in radians
      *  @param out Receives the output matrix
-     *  @return reference to the output matrix
+     *  @return Reference to the output matrix
      */
     static aiMatrix3x3t& RotationZ(TReal a, aiMatrix3x3t& out);
 
@@ -146,7 +146,7 @@ public:
     /** @brief Returns a translation matrix
      *  @param v Translation vector
      *  @param out Receives the output matrix
-     *  @return reference to the output matrix
+     *  @return Reference to the output matrix
      */
     static aiMatrix3x3t& Translation( const aiVector2t<TReal>& v, aiMatrix3x3t& out);
 

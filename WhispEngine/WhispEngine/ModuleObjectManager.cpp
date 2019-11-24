@@ -38,7 +38,7 @@ update_status ModuleObjectManager::Update()
 	glEnable(GL_LIGHTING);
 
 	//MousePicking
-	if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+	if (App->input->GetMouseButtonDown(1) && !App->input->GetKey(SDL_SCANCODE_LALT))
 		MousePicking();
 
 	//Update GO

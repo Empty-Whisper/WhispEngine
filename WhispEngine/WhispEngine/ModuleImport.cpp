@@ -21,7 +21,7 @@
 
 #include <filesystem>
 
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
+#pragma comment (lib, "Assimp/libx86/assimp-vc141-mtd.lib")
 
 
 ModuleImport::ModuleImport()
@@ -69,7 +69,7 @@ bool ModuleImport::CleanUp()
 bool ModuleImport::Import(const char * path, uint64 &uid)
 {
 	bool ret = true;
-	switch (App->dummy_file_system->GetFormat(path))
+	switch (App->file_system->GetFormat(path))
 	{
 	case FileSystem::Format::JSON:
 		break;
@@ -89,13 +89,13 @@ bool ModuleImport::Import(const char * path, uint64 &uid)
 		//uid = model->Load(path);
 		break;
 	/*case FileSystem::Format::META: {
-		char* f_uid = App->dummy_file_system->GetData(path);
+		char* f_uid = App->file_system->GetData(path);
 		if (f_uid == nullptr) {
 			LOG("Failed to open meta file, trying to reload asset...");
 			std::string s_path(path);
 			s_path.erase(s_path.end() - 5, s_path.end());
 			Import(s_path.c_str());
-			f_uid = App->dummy_file_system->GetData(path);
+			f_uid = App->file_system->GetData(path);
 			if (f_uid == nullptr) {
 				LOG("Failed another time to load meta file, aborting loading");
 				return false;
@@ -109,9 +109,9 @@ bool ModuleImport::Import(const char * path, uint64 &uid)
 		if (uid != 0u) {
 			std::string s_path(path);
 			s_path.erase(s_path.end() - 5, s_path.end());
-			switch (App->dummy_file_system->GetFormat(s_path.c_str())) {
+			switch (App->file_system->GetFormat(s_path.c_str())) {
 			case FileSystem::Format::FBX:
-				if (App->dummy_file_system->Exists((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str()) == false) {
+				if (App->file_system->Exists((MODEL_L_FOLDER + std::to_string(uid) + ".whispModel").c_str()) == false) {
 					LOG("Model referenced in meta does not exists, recreating from .meta...");
 					model->Import(s_path.c_str());
 				}
@@ -122,7 +122,7 @@ bool ModuleImport::Import(const char * path, uint64 &uid)
 			case FileSystem::Format::JPG:
 			case FileSystem::Format::PNG:
 			case FileSystem::Format::DDS:
-				if (App->dummy_file_system->Exists((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str()) == false) {
+				if (App->file_system->Exists((MATERIAL_L_FOLDER + std::to_string(uid) + ".dds").c_str()) == false) {
 					LOG("Texture referenced in meta does not exists, recreating from .meta...");
 					std::string s_path(path);
 					s_path.erase(s_path.end() - 5, s_path.end());
@@ -151,9 +151,9 @@ bool ModuleImport::Import(const char * path)
 
 void ModuleImport::CreateLibrary()
 {
-	if (App->dummy_file_system->Exists(LIBRARY_FOLDER) == false) {
+	if (App->file_system->Exists(LIBRARY_FOLDER) == false) {
 		LOG("Missing Library, generating...");
-		App->dummy_file_system->CreateDir(LIBRARY_FOLDER);
+		App->file_system->CreateDir(LIBRARY_FOLDER);
 	}
 
 	CreateFiles(ASSETS_FOLDER);
@@ -167,9 +167,9 @@ void ModuleImport::CreateFiles(const char* directory)
 		}
 		else {
 			std::string path = entry.path().u8string();
-			if (App->dummy_file_system->IsFileSupported(path.c_str())) {
-				if (App->dummy_file_system->HasMeta(path.c_str())) {
-					if (App->dummy_file_system->IsMetaVaild((path + ".meta").c_str()) == false) {
+			if (App->file_system->IsFileSupported(path.c_str())) {
+				if (App->file_system->HasMeta(path.c_str())) {
+					if (App->file_system->IsMetaVaild((path + ".meta").c_str()) == false) {
 						App->importer->Import(path.c_str());
 					}
 					else {

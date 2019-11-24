@@ -17,7 +17,7 @@ ResourceMesh::~ResourceMesh()
 
 bool ResourceMesh::LoadInMemory()
 {
-	char * data = App->dummy_file_system->GetData(resource_path.c_str());
+	char * data = App->file_system->GetData(resource_path.c_str());
 
 	if (data == nullptr) {
 		LOG("Failed, mesh with uid %" PRIu64 " not found", uid);
