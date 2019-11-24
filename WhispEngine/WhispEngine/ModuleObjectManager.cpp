@@ -187,7 +187,9 @@ void ModuleObjectManager::MousePicking()
 
 		//RayCast
 		LineSegment ray_cast = App->camera->GetSceneCamera()->GetFrustum().UnProjectLineSegment(normalizedVector.x, normalizedVector.y);
-		float distance = 1000;
+		float distance = 1000.f;
+		App->scene_intro->mouse_pick_0 = ray_cast.a;
+		App->scene_intro->mouse_pick_1 = ray_cast.b;
 
 		GameObject* hitted = nullptr;
 		std::vector<GameObject*> all_game_objects;
@@ -349,7 +351,7 @@ void ModuleObjectManager::UpdateGuizmo()
 
 	for (GameObject* i : selected_and_childs)
 	{
-		if (ImGuizmo::IsUsing() && !App->camera->is_moving_camera)
+		if (ImGuizmo::IsUsing() && !App->camera->is_moving_camera && !App->object_manager->GetSelected()->IsStatic())
 		{
 			float4x4 position_matrix = float4x4::identity;
 			float4x4 rotation_matrix = float4x4::identity;

@@ -12,6 +12,14 @@ Go to our github release page and download the las version .zip :
 
 Extract .zip files inside a folder and open the .exe file.
 
+## For Correction
+
+There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct better, more visual.
+
+* Octree: Main Menu Bar -> Octree -> Show scene
+* MousePicking: Main Menu Bar -> Mouse picking RayCast
+* AABB/OBB: In each ComponentMesh on inspector can change to visualize the two bounging boxes, aabb(green) obb(blue)
+
 #### Contols
 * View around:  	         	Right click
 * Move through viewport: 	WASD + Right click
@@ -21,7 +29,7 @@ Extract .zip files inside a folder and open the .exe file.
 * Move X/Y viewport:	Middle mouse
 * Focus object:		F
 * Orbit object:		Alt + Left click
-* Deselect object	Click on any part of Hierarchy panel or out of an object
+* Deselect object		Click on any part of Hierarchy panel or out of an object in scene
 
 #### Panels Short Cuts
 * Configuration:         Shift + 1
@@ -30,16 +38,48 @@ Extract .zip files inside a folder and open the .exe file.
 * Create Shape:         Shift + 4
 * Inspector:         	  Shift + 5
 * Scene:         	  Shift + 6
-* Game:             Shift + 7
-* Resources:        Shift + 8
+* Game:             	  Shift + 7
+* Resources:        	  Shift + 8
 * About: 	                  Shift + Control + A
 
-## Authors
-* **Christian Martínez** [christt105](https://github.com/christt105)
+## Authors and Division Of Tasks
+### **Christian Martínez** [christt105](https://github.com/christt105)
+* Hierarchy GameObjects
+* Components properties on inspector
+* Octree
+* Scene Serialization (Load and Save)
+* Part of Bounding Boxes
+* Own Format
+* **Resource manager** :D
+	* Library and Assets logic
+	* .meta file
+	* Reference Counting
+* Start/Pause/Stop and recover init state
+
 * **Marc Galvez** [optus23](https://github.com/optus23)
+* Transform Camera editor to Fustum
+* Camera class logic 
+* Frustum culling
+* Component Camer
+* Camera Preview
+* Game panel
+* Viewport class logic
+* Mouse Picking
+* Substract all Modules from App.h
+* Add Guizmos
+* Guizmos logic to Game Objects
 
 ## Innovations Assignment 2
 
+* Two window panels for Scene and Game
+* Camera Preview like Unity
+* Change main Camera
+* Own File System
+* Octree
+* Window Assets
+* Resource Panel shows all Assets in the project
+* Library/ is generated identically if it does not exist
+* An external window of Windows API to Save & Load Scenes
 
 ## Innovations Assignment 1
 * Docking
@@ -70,7 +110,7 @@ Extract .zip files inside a folder and open the .exe file.
 * [JSON parser v3.7](https://github.com/nlohmann/json)
 * [Glew v2](https://github.com/nigels-com/glew)
 * [par_shape.h](https://prideout.net/shapes)
-* [Assimp v4.1](http://www.assimp.org/)
+* [Assimp v5.0](http://www.assimp.org/)
 * [DevIL v1.8](http://openil.sourceforge.net/)
 * [GPU detect v1.1](https://github.com/MatthewKing/DeviceId)
 
