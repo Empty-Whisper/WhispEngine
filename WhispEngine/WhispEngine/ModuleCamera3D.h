@@ -79,7 +79,6 @@ public:
 	bool CleanUp();
 	
 	Camera* CreateCamera();
-	void DeleteCamera(Camera* camera);
 	void DeleteVectorCameras();
 	Camera* GetSceneCamera();
 	Camera* GetGameCamera();

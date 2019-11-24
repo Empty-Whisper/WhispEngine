@@ -187,40 +187,12 @@ Camera * ModuleCamera3D::CreateCamera()
 	return cam;
 }
 
-void ModuleCamera3D::DeleteCamera(Camera * camera)
-{
-	for (std::vector<Camera*>::iterator i = cameras.begin(); i != cameras.end();)
-	{
-		GameObject* sel = App->object_manager->GetSelected();
-		AABB aabb = AABB(-float3::one, float3::one);
-
-		if (sel != nullptr) {
-			ComponentMesh* mesh = (ComponentMesh*)sel->GetComponent(ComponentType::MESH);
-			if (mesh != nullptr)
-				aabb = mesh->GetAABB();
-		}
-
-		float3 center = aabb.CenterPoint();
-
-		if ((*i) != nullptr)
-		{
-			delete(*i);
-			cameras.erase(i);
-			break;
-		}
-		else
-			++i;
-	}
-}
-
 void ModuleCamera3D::DeleteVectorCameras()
 {
-	GameObject* sel = App->object_manager->GetSelected();
-	if (sel != nullptr) {
-		ComponentMesh* mesh = (ComponentMesh*)sel->GetComponent(ComponentType::MESH);
-		if (mesh != nullptr) {
-			float3 center = mesh->GetAABB().CenterPoint(); //Get GameObject selected position
-		}
+	for (std::vector<Camera*>::iterator camera = cameras.begin(); camera != cameras.end();)
+	{
+		RELEASE (*camera);
+		camera = cameras.erase(camera);
 	}
 }
 
