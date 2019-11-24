@@ -226,7 +226,7 @@ void GameObject::Raycast(const LineSegment &ray_cast, bool &intersect, float &le
 			Triangle triangle_plane;
 			uint* indices = resource_mesh->index.data;
 			float* vertices = resource_mesh->vertex.data;
-			for (int i = 0; i < resource_mesh->index.size / 3;)
+			for (int i = 0; i < resource_mesh->index.size / 3;) // we need the dicide by three the index.size bcs we are looking for triangles
 			{
 				triangle_plane.a = (float3)&vertices[(3 * indices[i])], vertices[(indices[i] * 3) + 1u], &vertices[(indices[i] * 3) + 2u];
 				++i;

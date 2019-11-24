@@ -174,6 +174,26 @@ update_status ModuleCamera3D::Update()
 		}
 	}
 
+
+	//Check if exists any camera component
+	std::vector<GameObject*> all_game_objs;
+	App->object_manager->GetChildsFrom(App->object_manager->root, all_game_objs);
+
+	std::vector<GameObject*> obj_with_camera;
+	for (GameObject* i : all_game_objs)
+	{
+		if ((ComponentCamera*)i->GetComponent(ComponentType::CAMERA) != nullptr)
+		{
+			obj_with_camera.push_back(i);
+		}
+	}
+	if (obj_with_camera.size() == 1)
+		((ComponentCamera*)obj_with_camera[0]->GetComponent(ComponentType::CAMERA))->only_one_camera = true;
+	else
+		((ComponentCamera*)obj_with_camera[0]->GetComponent(ComponentType::CAMERA))->only_one_camera = false;
+
+	obj_with_camera.clear();
+
 	return UPDATE_CONTINUE;
 }
 
