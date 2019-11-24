@@ -197,7 +197,7 @@ public:
     /** @brief Returns a rotation matrix for a rotation around the x axis
      *  @param a Rotation angle, in radians
      *  @param out Receives the output matrix
-     *  @return reference to the output matrix
+     *  @return Reference to the output matrix
      */
     static aiMatrix4x4t& RotationX(TReal a, aiMatrix4x4t& out);
 
@@ -205,7 +205,7 @@ public:
     /** @brief Returns a rotation matrix for a rotation around the y axis
      *  @param a Rotation angle, in radians
      *  @param out Receives the output matrix
-     *  @return reference to the output matrix
+     *  @return Reference to the output matrix
      */
     static aiMatrix4x4t& RotationY(TReal a, aiMatrix4x4t& out);
 
@@ -213,7 +213,7 @@ public:
     /** @brief Returns a rotation matrix for a rotation around the z axis
      *  @param a Rotation angle, in radians
      *  @param out Receives the output matrix
-     *  @return reference to the output matrix
+     *  @return Reference to the output matrix
      */
     static aiMatrix4x4t& RotationZ(TReal a, aiMatrix4x4t& out);
 
@@ -222,7 +222,7 @@ public:
      *  @param a Rotation angle, in radians
      *  @param axis Rotation axis, should be a normalized vector.
      *  @param out Receives the output matrix
-     *  @return reference to the output matrix
+     *  @return Reference to the output matrix
      */
     static aiMatrix4x4t& Rotation(TReal a, const aiVector3t<TReal>& axis,
             aiMatrix4x4t& out);
@@ -231,7 +231,7 @@ public:
     /** @brief Returns a translation matrix
      *  @param v Translation vector
      *  @param out Receives the output matrix
-     *  @return reference to the output matrix
+     *  @return Reference to the output matrix
      */
     static aiMatrix4x4t& Translation( const aiVector3t<TReal>& v, 
             aiMatrix4x4t& out);
@@ -240,7 +240,7 @@ public:
     /** @brief Returns a scaling matrix
      *  @param v Scaling vector
      *  @param out Receives the output matrix
-     *  @return reference to the output matrix
+     *  @return Reference to the output matrix
      */
     static aiMatrix4x4t& Scaling( const aiVector3t<TReal>& v, aiMatrix4x4t& out);
 

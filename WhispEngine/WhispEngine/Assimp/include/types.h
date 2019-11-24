@@ -151,7 +151,7 @@ struct aiRay {
 
 #endif // !__cplusplus
 
-    //! position and direction of the ray
+    //! Position and direction of the ray
     C_STRUCT aiVector3D pos, dir;
 }; // !struct aiRay
 
@@ -507,7 +507,7 @@ struct aiMemoryInfo
     /** Storage allocated for material data  */
     unsigned int materials;
 
-    /** Storage allocated for data data */
+    /** Storage allocated for mesh data */
     unsigned int meshes;
 
     /** Storage allocated for node data */

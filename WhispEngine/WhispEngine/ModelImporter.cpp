@@ -32,9 +32,10 @@ uint64 ModelImporter::Import(const char * path)
 	BROFILER_CATEGORY("Import FBX", Profiler::Color::Green);
 	bool ret = true;
 
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
+	const aiScene* scene = aiImportFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals |
+		aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
 	LOG("Importing fbx with path: %s", path);
-
+	
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		bool want_to_generate_meta = true;

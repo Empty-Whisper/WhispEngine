@@ -146,7 +146,7 @@ update_status ModuleGUI::Update()
 
 		if (ImGui::Button("||")) {
 			if (state == Application::GameState::PLAYING)
-				App->SetState(Application::GameState::PAUSE);
+				App->SetState(Application::GameState::PAUSE);			
 			else if (state == Application::GameState::PAUSED)
 				App->SetState(Application::GameState::REANUDE);
 		}

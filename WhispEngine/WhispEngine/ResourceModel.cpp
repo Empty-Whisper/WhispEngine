@@ -38,7 +38,7 @@ ResourceModel::HierarchyInfo ResourceModel::CalculateHierarchy(const aiNode * no
 		for (int j = 0; j < node->mNumMeshes; ++j) {
 			HierarchyInfo child_mesh;
 			child_mesh.mesh = meshes[node->mMeshes[j]];
-			child_mesh.name.assign(scene->mMeshes[node->mMeshes[j]]->mName.C_Str());
+			child_mesh.name.assign(info.name + '_' + std::to_string(j));
 			info.children.push_back(child_mesh);
 		}
 	}

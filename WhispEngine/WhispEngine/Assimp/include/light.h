@@ -127,7 +127,7 @@ struct aiLight
      */
     C_ENUM aiLightSourceType mType;
 
-    /** position of the light source in space. Relative to the
+    /** Position of the light source in space. Relative to the
      *  transformation of the node corresponding to the light.
      *
      *  The position is undefined for directional lights.

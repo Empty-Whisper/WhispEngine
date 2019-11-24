@@ -21,7 +21,7 @@
 
 #include <filesystem>
 
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
+#pragma comment (lib, "Assimp/libx86/assimp-vc141-mtd.lib")
 
 
 ModuleImport::ModuleImport()
