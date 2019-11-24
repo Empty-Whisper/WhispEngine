@@ -488,14 +488,14 @@ void Camera::DrawInsideFrustum()
 	std::vector<GameObject*> game_objects;
 	App->object_manager->GetChildsFrom(App->object_manager->root, game_objects);
 
-	for (std::vector<GameObject*>::iterator go = game_objects.begin(); go != game_objects.end(); ++go)
+	for (GameObject* go : game_objects)
 	{
-		if ((*go)->GetAABB().IsFinite())
+		if (go->GetAABB().IsFinite())
 		{
-			if (BboxIntersectsFrustum((*go)->GetAABB()))
-				(*go)->is_inside_frustum = true;			
+			if (BboxIntersectsFrustum(go->GetAABB()))
+				go->is_inside_frustum = true;			
 			else
-				(*go)->is_inside_frustum = false;
+				go->is_inside_frustum = false;
 		}		
 	}
 }

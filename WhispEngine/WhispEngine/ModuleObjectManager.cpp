@@ -339,7 +339,7 @@ void ModuleObjectManager::UpdateGuizmo()
 		GetChildsFrom(selected, selected_and_childs);
 	}
 
-	for (std::vector<GameObject*>::iterator i = selected_and_childs.begin(); i != selected_and_childs.end(); ++i)
+	for (GameObject* i : selected_and_childs)
 	{
 		if (ImGuizmo::IsUsing() && !App->camera->is_moving_camera)
 		{
@@ -347,9 +347,9 @@ void ModuleObjectManager::UpdateGuizmo()
 			float4x4 rotation_matrix = float4x4::identity;
 			float4x4 scale_matrix = float4x4::identity;
 
-			if (*i != nullptr) {			
+			if (i != nullptr) {			
 				ComponentMesh* mesh = nullptr;
-				if ((*i)->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
+				if (i->TryGetComponent(ComponentType::MESH, (Component*&)mesh)) {
 					mesh->CalulateAABB_OBB();
 				}
 			}
@@ -358,15 +358,15 @@ void ModuleObjectManager::UpdateGuizmo()
 			{
 			case ImGuizmo::OPERATION::TRANSLATE:
 			{
-				position_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(position_matrix);
+				position_matrix = moved_transformation * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(position_matrix);
 			}
 			break;
 
 			case ImGuizmo::OPERATION::ROTATE:
 			{
-				rotation_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(rotation_matrix);
+				rotation_matrix = moved_transformation * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(rotation_matrix);
 			}
 			break;
 			case ImGuizmo::OPERATION::SCALE:
@@ -374,8 +374,8 @@ void ModuleObjectManager::UpdateGuizmo()
 				float4x4 save_trans = moved_transformation;
 				moved_transformation = moved_transformation * last_moved_transformation.Inverted();
 
-				scale_matrix = moved_transformation * ((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
-				((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
+				scale_matrix = moved_transformation * ((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix();
+				((ComponentTransform*)i->GetComponent(ComponentType::TRANSFORM))->SetGlobalMatrix(scale_matrix);
 
 				last_moved_transformation = save_trans;
 			}
