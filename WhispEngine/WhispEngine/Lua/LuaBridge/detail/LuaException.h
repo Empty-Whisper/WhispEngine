@@ -86,7 +86,8 @@ public:
   template <class Exception>
   static void Throw (Exception e)
   {
-    throw e;
+    //throw e;
+	  LOG("Lua Exception: %s", e.what());
   }
 
   //----------------------------------------------------------------------------

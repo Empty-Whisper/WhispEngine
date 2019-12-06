@@ -26,13 +26,23 @@ ModuleScripting::~ModuleScripting()
 
 bool ModuleScripting::Start()
 {
-	ExecuteScript("Assets/Scripts/test.lua");
+	luaL_dofile(L, "Assets/Scripts/test.lua");
+	luabridge::LuaRef start = luabridge::getGlobal(L, "start");
+
+	start();
+
 	return true;
 }
 
 update_status ModuleScripting::Update()
 {
-	ExecuteScript("Assets/Scripts/test.lua");
+	//ExecuteScript("Assets/Scripts/test.lua");
+	
+	luaL_dofile(L, "Assets/Scripts/test.lua");
+	luabridge::LuaRef update = luabridge::getGlobal(L, "update");
+
+	update();
+
 	return update_status::UPDATE_CONTINUE;
 }
 

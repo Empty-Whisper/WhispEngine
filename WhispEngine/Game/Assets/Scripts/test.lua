@@ -1,10 +1,8 @@
---function whisp.start()
---	Debug('start')
---end
---
---function whisp.update()
---	
---end
+a = 5
+function start()
+	whisp.Debug(a+3)
+end
 
---Debug('hey')
-whisp.Debug('update')
+function update()
+	whisp.Debug(a)
+end
