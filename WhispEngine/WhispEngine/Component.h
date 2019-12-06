@@ -14,7 +14,8 @@ enum ComponentType
 	MESH,
 	MATERIAL,
 	LIGHT,
-	CAMERA
+	CAMERA,
+	SCRIPT
 };
 
 class Component

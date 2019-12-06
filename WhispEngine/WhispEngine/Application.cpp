@@ -12,6 +12,7 @@
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
 #include "ModuleResources.h"
+#include "ModuleScripting.h"
 
 #include "Time.h"
 
@@ -31,6 +32,7 @@ Application::Application()
 	importer =			new ModuleImport();
 	object_manager =	new ModuleObjectManager();
 	resources =			new ModuleResources();
+	scripting =			new ModuleScripting();
 	//file_system_fs =		new ModuleFileSystem();		------------Unused for now, in opposite we use our own FileSystem--------------------
 
 	// The order of calls is very important!
@@ -46,6 +48,7 @@ Application::Application()
 	AddModule(shortcut);
 	AddModule(importer);
 	AddModule(object_manager);
+	AddModule(scripting);
 	
 	// Scenes
 	AddModule(scene_intro);

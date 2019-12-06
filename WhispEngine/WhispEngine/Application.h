@@ -22,6 +22,7 @@ class ModuleShortCut;
 class ModuleObjectManager;
 class ModuleImport;
 class ModuleResources;
+class ModuleScripting;
 
 class Application
 {
@@ -43,6 +44,7 @@ public:
 	ModuleObjectManager*	object_manager	= nullptr;
 	ModuleImport*			importer		= nullptr;
 	ModuleResources*		resources		= nullptr;
+	ModuleScripting*		scripting		= nullptr;
 	//ModuleFileSystem* file_system_fs = nullptr;
 
 public:

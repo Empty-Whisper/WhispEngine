@@ -70,6 +70,21 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{b94ab04b-3140-45a9-bb15-da994e9713d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Lua">
+      <UniqueIdentifier>{c93cd18b-d795-4f4a-a7c2-43a3fc289d12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Lua\Lua">
+      <UniqueIdentifier>{7cb5d310-1d4f-4822-a30f-21eca7c780ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Lua\LuaBridge">
+      <UniqueIdentifier>{5dc0bd79-6cb7-492f-99b2-06d0457a775e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Lua\LuaBridge\detail">
+      <UniqueIdentifier>{752c2bff-6e9f-402c-81f3-c299272baf34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\ImGuizmo">
+      <UniqueIdentifier>{ffa5951b-1167-4092-a1a8-f7d6a7d0e649}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -342,9 +357,21 @@
     <ClCompile Include="ResourceTexture.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="Imgui\ImGuizmo.cpp" />
-    <ClCompile Include="PanelGame.cpp" />
-    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Imgui\ImGuizmo.cpp">
+      <Filter>Tools\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleScripting.cpp">
+      <Filter>Main Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelGame.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentScript.cpp">
+      <Filter>GameObject\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -749,9 +776,105 @@
     <ClInclude Include="ResourceMesh.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Imgui\ImGuizmo.h" />
-    <ClInclude Include="PanelGame.h" />
-    <ClInclude Include="Time.h" />
+    <ClInclude Include="Lua\Lua\include\lua.h">
+      <Filter>Tools\Lua\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\Lua\include\lua.hpp">
+      <Filter>Tools\Lua\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\Lua\include\luaconf.h">
+      <Filter>Tools\Lua\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\Lua\include\lualib.h">
+      <Filter>Tools\Lua\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\Lua\include\lauxlib.h">
+      <Filter>Tools\Lua\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\Map.h">
+      <Filter>Tools\Lua\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\RefCountedObject.h">
+      <Filter>Tools\Lua\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\RefCountedPtr.h">
+      <Filter>Tools\Lua\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\UnorderedMap.h">
+      <Filter>Tools\Lua\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\Vector.h">
+      <Filter>Tools\Lua\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\List.h">
+      <Filter>Tools\Lua\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\LuaBridge.h">
+      <Filter>Tools\Lua\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\LuaException.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\LuaHelpers.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\LuaRef.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\Namespace.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\Security.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\Stack.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\TypeList.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\TypeTraits.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\Userdata.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\CFunctions.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\ClassInfo.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\Config.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\Constructor.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\dump.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\FuncTraits.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaBridge\detail\Iterator.h">
+      <Filter>Tools\Lua\LuaBridge\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImGuizmo.h">
+      <Filter>Tools\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleScripting.h">
+      <Filter>Main Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelGame.h">
+      <Filter>UI_Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentScript.h">
+      <Filter>GameObject\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
