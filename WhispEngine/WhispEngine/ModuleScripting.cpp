@@ -30,10 +30,26 @@ bool ModuleScripting::Start()
 
 update_status ModuleScripting::Update()
 {
-	luaL_dofile(L, "Assets/Scripts/test.lua");
-	luabridge::LuaRef update = luabridge::getGlobal(L, "Update");
-
-	update();
+	if (luaL_loadfile(L, "Assets/Scripts/test.lua") == 0) {
+		luabridge::LuaRef table = luabridge::getGlobal(L, "Model");
+		if (table.isTable()) {
+			if (table["Update"].isFunction()) {
+				luabridge::LuaRef func = table["Update"];
+				func();
+			}
+			else {
+				LOG("NO ES FUNCCION");
+			}
+		}
+		else {
+			LOG("NOOOOOOOOOOOOOOOOOOOO");
+		}
+	}
+	else {
+		LOG("%s", lua_tostring(L, -1));
+		
+	}
+	//update();
 
 	return update_status::UPDATE_CONTINUE;
 }
