@@ -317,6 +317,11 @@ bool FileSystem::SaveData(const void * data, const uint &size, const char * path
 	return true;
 }
 
+void FileSystem::Copy(const char * src, const char * dest)
+{
+	std::experimental::filesystem::copy_file(src, dest);
+}
+
 char * FileSystem::GetData(const char * path)
 {
 	std::ifstream file(path, std::ios::binary);

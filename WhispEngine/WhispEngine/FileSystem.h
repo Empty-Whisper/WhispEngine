@@ -49,6 +49,8 @@ public:
 
 	bool SaveData(const void* data, const uint &size, const char* path);
 
+	void Copy(const char* src, const char* dest);
+
 	/*
 	Give Data from a file. The result is a char array. WARNING: REMEMBER TO DELETE ARRAY AFTER USE IT
 	*/

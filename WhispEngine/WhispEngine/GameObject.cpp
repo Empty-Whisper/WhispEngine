@@ -3,6 +3,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentCamera.h"
+#include "ComponentScript.h"
 #include "Application.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "ModuleRenderer3D.h"
@@ -164,7 +165,12 @@ Component * GameObject::CreateComponent(const ComponentType & type)
 		components.push_back(comp);
 		return comp;
 	}
-				   break;
+		break;
+	case SCRIPT: {
+		ComponentScript* comp = new ComponentScript(this);
+		components.push_back(comp);
+		return comp;
+	}
 	default:
 		LOG("Not declared Component type with id: %d", type);
 		break;
