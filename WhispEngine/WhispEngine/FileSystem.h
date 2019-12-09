@@ -22,6 +22,9 @@ public:
 	nlohmann::json	OpenFile(const char* path);
 	void			SaveFile(const char* path, const nlohmann::json &to_save);
 
+	char* GetTextFile(const char* path);
+	void  SaveTextFile(const char* buffer, const char* path);
+
 	FileSystem::Format GetFormat(const char* file) const;
 	Resource::Type	   GetResourceType(const char* file) const;
 	std::string GetPathFormat(const char* path) const;

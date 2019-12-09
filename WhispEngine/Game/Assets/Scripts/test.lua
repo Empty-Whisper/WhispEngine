@@ -1,17 +1,27 @@
 
-function Start()
-	Log(a+3)	
+-- Model.lua
+
+local Model =
+{
+	Variables =
+	{
+		-- Public Variables [All must be initialized]
+		intTest = 4
+		floatTest = 2.578
+		stringTest = "jajajajaja"
+		boolTest = false
+		arrayTest = 
+		{
+			4,3,2,1,0
+		}
+		gameObjectTest = "JAJAJAJAJAJAJJAJA"
+	}
+}
+
+function Model:Start()
+	
 end
 
-function Update()
-local a = 10
-	if input.getKeyDown("a") then
-		Log('El valor es ' .. a .. ' capichi?')
-	end
-	for i=0, 5, 1 do
-		if input.getMouseDown(i) then
-			Log(i)
-		end
-	end
-	Log(input.getMouseX() .. ' ' .. input.getMouseY())
+function Model:Update()
+	
 end
