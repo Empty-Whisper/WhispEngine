@@ -58,4 +58,6 @@ public:
 		return true;
 	}
 
+	virtual void LuaRegister(){}
+
 };

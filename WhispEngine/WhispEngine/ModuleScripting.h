@@ -1,9 +1,13 @@
 #pragma once
 #include "Module.h"
 
-#include "Globals.h"
+extern "C" {
+#include "Lua/Lua/include/lua.h"
+#include "Lua/Lua/include/lua.hpp"
+#include "Lua/Lua/include/lauxlib.h"
+}
 
-struct lua_State;
+#include "Globals.h"
 
 class ModuleScripting :
 	public Module
@@ -17,14 +21,14 @@ public:
 
 	void ExecuteScript(const char* file);
 
-	void Register();
+	void LuaRegister() override;
 
 	lua_State* GetState() const { return L; }
 
 private:
 	lua_State* L = nullptr;
 
-	static void Debug(const char* s) {
+	static void Log(const char* s) {
 		LOG(s);
 	}
 };

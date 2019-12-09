@@ -109,6 +109,9 @@ public:
 	const char* GetOrganizationName() const;
 	const char* GetVersion() const;
 
+	// Register all lua functions
+	void LuaRegister();
+
 	void SetState(const GameState to_state);
 	GameState GetState() const;
 

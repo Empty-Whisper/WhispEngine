@@ -1,21 +1,15 @@
-extern "C"{
-#include "Lua/Lua/include/lua.h"
-#include "Lua/Lua/include/lua.hpp"
-#include "Lua/Lua/include/lauxlib.h"
-}
-
 #pragma comment(lib, "Lua/Lua/liblua53.a")
 
 #include "ModuleScripting.h"
 
 #include "Lua/LuaBridge/LuaBridge.h"
 
+#include "Application.h"
+
 ModuleScripting::ModuleScripting()
 {
 	L = luaL_newstate();
 	luaL_openlibs(L);
-
-	Register();
 }
 
 
@@ -27,7 +21,7 @@ ModuleScripting::~ModuleScripting()
 bool ModuleScripting::Start()
 {
 	luaL_dofile(L, "Assets/Scripts/test.lua");
-	luabridge::LuaRef start = luabridge::getGlobal(L, "start");
+	luabridge::LuaRef start = luabridge::getGlobal(L, "Start");
 
 	start();
 
@@ -36,10 +30,8 @@ bool ModuleScripting::Start()
 
 update_status ModuleScripting::Update()
 {
-	//ExecuteScript("Assets/Scripts/test.lua");
-	
 	luaL_dofile(L, "Assets/Scripts/test.lua");
-	luabridge::LuaRef update = luabridge::getGlobal(L, "update");
+	luabridge::LuaRef update = luabridge::getGlobal(L, "Update");
 
 	update();
 
@@ -57,15 +49,9 @@ void ModuleScripting::ExecuteScript(const char * file)
 		LOG("LUA ERROR: %s", lua_tostring(L, result));
 }
 
-void Debug(const char* s) {
-	LOG(s);
-}
-
-void ModuleScripting::Register()
+void ModuleScripting::LuaRegister()
 {
 	using namespace luabridge;
 	getGlobalNamespace(L)
-		.beginNamespace("whisp")
-			.addFunction("Debug", &ModuleScripting::Debug)
-		.endNamespace();
+		.addFunction("Log", &ModuleScripting::Log);
 }

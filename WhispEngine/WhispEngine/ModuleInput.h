@@ -4,6 +4,7 @@
 #include "imgui/imgui.h"
 
 #include <vector>
+#include <map>
 
 #define MAX_MOUSE_BUTTONS 5
 
@@ -28,72 +29,36 @@ public:
 	void UpdateInput();
 	void UpdateButtonStates();
 	void UpdateKeyStates();
+
+	void LuaRegister() override;
+
 	//Always use the left key
 	void AllowLeftAndRightKeys(const SDL_Scancode key);
 	bool CleanUp();
 
-	KEY_STATE GetKey(int id) const
-	{
-		return keyboard[id];
-	}
+	KEY_STATE GetKey(int id) const;
+	static bool LGetKey(const char* id);
 
-	bool GetKeyDown(int id) const
-	{
-		return keyboard[id] == KEY_DOWN;
-	}
+	bool GetKeyDown(int id) const;
+	static bool LGetKeyDown(const char* id);
+	bool GetKeyUp(int id) const;
+	static bool LGetKeyUp(const char* id);
 
-	bool GetKeyUp(int id) const
-	{
-		return keyboard[id] == KEY_UP;
-	}
+	KEY_STATE GetMouseButton(int id) const;
+	bool GetMouseButtonDown(int id) const;
+	bool GetMouseButtonUp(int id) const;
 
-	KEY_STATE GetMouseButton(int id) const
-	{
-		return mouse_buttons[id];
-	}
+	int GetMouseX() const;
+	int GetMouseY() const;
+	int GetMouseZ() const;
 
-	bool GetMouseButtonDown(int id) const
-	{
-		return mouse_buttons[id] == KEY_DOWN;
-	}
-
-	bool GetMouseButtonUp(int id) const
-	{
-		return mouse_buttons[id] == KEY_UP;
-	}
-
-	int GetMouseX() const
-	{
-		return mouse_x;
-	}
-
-	int GetMouseY() const
-	{
-		return mouse_y;
-	}
-
-	int GetMouseZ() const
-	{
-		return mouse_z;
-	}
-
-	int GetMouseXMotion() const
-	{
-		return mouse_x_motion;
-	}
-
-	int GetMouseYMotion() const
-	{
-		return mouse_y_motion;
-	}
+	int GetMouseXMotion() const;
+	int GetMouseYMotion() const;
 	
-	int GetMouseWheel() const
-	{
-		return mouse_z;
-	}
+	int GetMouseWheel() const;
 
 private:
-	KEY_STATE* keyboard;
+	static KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
 	int mouse_x;
 	int mouse_y;
@@ -106,4 +71,7 @@ public:
 	void GetTextBuffer(const std::string &key, const int &key_num, const std::string &key_state);
 	bool auto_scroll = false;
 
+	//lua
+private:
+	static std::map<std::string, SDL_Scancode> lua_map;
 };

@@ -10,8 +10,13 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleImport.h"
 
+#include "ModuleScripting.h"
+#include "Lua/LuaBridge/LuaBridge.h"
+
 #define MAX_KEYS 300
 
+std::map<std::string, SDL_Scancode> ModuleInput::lua_map;
+KEY_STATE* ModuleInput::keyboard;
 
 ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 {
@@ -20,6 +25,67 @@ ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
+
+	ModuleInput::lua_map =
+	{
+		{"unknown", SDL_SCANCODE_UNKNOWN},
+
+		{"a", SDL_SCANCODE_A},
+		{"b", SDL_SCANCODE_B},
+		{"c", SDL_SCANCODE_C},
+		{"d", SDL_SCANCODE_D},
+		{"e", SDL_SCANCODE_E},
+		{"f", SDL_SCANCODE_F},
+		{"g", SDL_SCANCODE_G},
+		{"h", SDL_SCANCODE_H},
+		{"i", SDL_SCANCODE_I},
+		{"j", SDL_SCANCODE_J},
+		{"k", SDL_SCANCODE_K},
+		{"l", SDL_SCANCODE_L},
+		{"m", SDL_SCANCODE_M},
+		{"n", SDL_SCANCODE_N},
+		{"o", SDL_SCANCODE_O},
+		{"p", SDL_SCANCODE_P},
+		{"q", SDL_SCANCODE_Q},
+		{"r", SDL_SCANCODE_R},
+		{"s", SDL_SCANCODE_S},
+		{"t", SDL_SCANCODE_T},
+		{"u", SDL_SCANCODE_U},
+		{"v", SDL_SCANCODE_V},
+		{"w", SDL_SCANCODE_W},
+		{"x", SDL_SCANCODE_X},
+		{"y", SDL_SCANCODE_Y},
+		{"z", SDL_SCANCODE_Z},
+
+		{"1", SDL_SCANCODE_1},
+		{"2", SDL_SCANCODE_2},
+		{"3", SDL_SCANCODE_3},
+		{"4", SDL_SCANCODE_4},
+		{"5", SDL_SCANCODE_5},
+		{"6", SDL_SCANCODE_6},
+		{"7", SDL_SCANCODE_7},
+		{"8", SDL_SCANCODE_8},
+		{"9", SDL_SCANCODE_9},
+		{"0", SDL_SCANCODE_0},
+
+		{"return", SDL_SCANCODE_RETURN},
+		{"escape", SDL_SCANCODE_ESCAPE},
+		{"backspace", SDL_SCANCODE_BACKSPACE},
+		{"tab", SDL_SCANCODE_TAB},
+		{"space", SDL_SCANCODE_SPACE},
+
+		{"right", SDL_SCANCODE_RIGHT},
+		{"left", SDL_SCANCODE_LEFT},
+		{"down", SDL_SCANCODE_DOWN},
+		{"up", SDL_SCANCODE_UP},
+
+		{"lctrl", SDL_SCANCODE_LCTRL},
+		{"lshift", SDL_SCANCODE_LSHIFT},
+		{"lalt", SDL_SCANCODE_LALT},
+		{"rctrl", SDL_SCANCODE_RCTRL},
+		{"rshift", SDL_SCANCODE_RSHIFT},
+		{"ralt", SDL_SCANCODE_RALT},
+	};
 }
 
 // Destructor
@@ -185,6 +251,17 @@ void ModuleInput::UpdateKeyStates()
 	AllowLeftAndRightKeys(SDL_SCANCODE_LCTRL);
 }
 
+void ModuleInput::LuaRegister()
+{
+	using namespace luabridge;
+	getGlobalNamespace(App->scripting->GetState())
+		.beginNamespace("input")
+			.addFunction("getKey", &ModuleInput::LGetKey)
+			.addFunction("getKeyDown", &ModuleInput::LGetKeyDown)
+			.addFunction("getKeyUp", &ModuleInput::LGetKeyUp)
+		.endNamespace();
+}
+
 void ModuleInput::AllowLeftAndRightKeys(const SDL_Scancode key)
 {
 	if (keyboard[key] != KEY_IDLE)
@@ -201,6 +278,36 @@ bool ModuleInput::CleanUp()
 	return true;
 }
 
+KEY_STATE ModuleInput::GetKey(int id) const
+{
+	return ModuleInput::keyboard[id];
+}
+
+bool ModuleInput::LGetKey(const char * id)
+{
+	return ModuleInput::keyboard[ModuleInput::lua_map[id]];
+}
+
+bool ModuleInput::GetKeyDown(int id) const
+{
+	return ModuleInput::keyboard[id] == KEY_DOWN;
+}
+
+bool ModuleInput::LGetKeyDown(const char* id)
+{
+	return ModuleInput::keyboard[lua_map[id]] == KEY_DOWN;
+}
+
+bool ModuleInput::GetKeyUp(int id) const
+{
+	return ModuleInput::keyboard[id] == KEY_UP;
+}
+
+bool ModuleInput::LGetKeyUp(const char * id)
+{
+	return ModuleInput::keyboard[ModuleInput::lua_map[id]] == KEY_UP;
+}
+
 void ModuleInput::GetTextBuffer(const std::string &key,const int &key_num, const std::string &key_state)
 {
 	std::string text = key + ": " + std::to_string(key_num) + " - " + key_state + "\n";
@@ -208,3 +315,47 @@ void ModuleInput::GetTextBuffer(const std::string &key,const int &key_num, const
 	auto_scroll = true;
 }
 
+KEY_STATE ModuleInput::GetMouseButton(int id) const
+{
+	return mouse_buttons[id];
+}
+
+bool ModuleInput::GetMouseButtonDown(int id) const
+{
+	return mouse_buttons[id] == KEY_DOWN;
+}
+
+bool ModuleInput::GetMouseButtonUp(int id) const
+{
+	return mouse_buttons[id] == KEY_UP;
+}
+
+int ModuleInput::GetMouseX() const
+{
+	return mouse_x;
+}
+
+int ModuleInput::GetMouseY() const
+{
+	return mouse_y;
+}
+
+int ModuleInput::GetMouseZ() const
+{
+	return mouse_z;
+}
+
+int ModuleInput::GetMouseXMotion() const
+{
+	return mouse_x_motion;
+}
+
+int ModuleInput::GetMouseYMotion() const
+{
+	return mouse_y_motion;
+}
+
+int ModuleInput::GetMouseWheel() const
+{
+	return mouse_z;
+}

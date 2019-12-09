@@ -98,6 +98,7 @@ bool Application::Init()
 		ret = (*item)->Start();
 	}
 	
+	App->LuaRegister();
 	
 	return ret;
 }
@@ -226,6 +227,14 @@ const char * Application::GetOrganizationName() const
 const char * Application::GetVersion() const
 {
 	return version.data();
+}
+
+void Application::LuaRegister()
+{
+	LOG("Registering all lua functions to enable scripting");
+	for (auto i = list_modules.begin(); i != list_modules.end(); i++) {
+		(*i)->LuaRegister();
+	}
 }
 
 void Application::SetState(const GameState to_state)

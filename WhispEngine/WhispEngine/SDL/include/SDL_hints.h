@@ -106,15 +106,15 @@ extern "C" {
 #define SDL_HINT_RENDER_DIRECT3D_THREADSAFE "SDL_RENDER_DIRECT3D_THREADSAFE"
 
 /**
- *  \brief  A variable controlling whether to enable Direct3D 11+'s Debug Layer.
+ *  \brief  A variable controlling whether to enable Direct3D 11+'s Log Layer.
  *
  *  This variable does not have any effect on the Direct3D 9 based renderer.
  *
  *  This variable can be set to the following values:
- *    "0"       - Disable Debug Layer use
- *    "1"       - Enable Debug Layer use
+ *    "0"       - Disable Log Layer use
+ *    "1"       - Enable Log Layer use
  *
- *  By default, SDL does not use Direct3D Debug Layer.
+ *  By default, SDL does not use Direct3D Log Layer.
  */
 #define SDL_HINT_RENDER_DIRECT3D11_DEBUG    "SDL_RENDER_DIRECT3D11_DEBUG"
 
