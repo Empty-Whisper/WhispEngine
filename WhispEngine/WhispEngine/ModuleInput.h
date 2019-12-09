@@ -47,10 +47,16 @@ public:
 	KEY_STATE GetMouseButton(int id) const;
 	bool GetMouseButtonDown(int id) const;
 	bool GetMouseButtonUp(int id) const;
+	static KEY_STATE LGetMouseButton(int id);
+	static bool		 LGetMouseButtonDown(int id);
+	static bool		 LGetMouseButtonUp(int id);
 
 	int GetMouseX() const;
 	int GetMouseY() const;
 	int GetMouseZ() const;
+	static int LGetMouseX();
+	static int LGetMouseY();
+	static int LGetMouseZ();
 
 	int GetMouseXMotion() const;
 	int GetMouseYMotion() const;
@@ -59,10 +65,10 @@ public:
 
 private:
 	static KEY_STATE* keyboard;
-	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
-	int mouse_x;
-	int mouse_y;
-	int mouse_z;
+	static KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
+	static int mouse_x;
+	static int mouse_y;
+	static int mouse_z;
 	int mouse_x_motion;
 	int mouse_y_motion;
 

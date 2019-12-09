@@ -17,6 +17,10 @@
 
 std::map<std::string, SDL_Scancode> ModuleInput::lua_map;
 KEY_STATE* ModuleInput::keyboard;
+KEY_STATE ModuleInput::mouse_buttons[];
+int ModuleInput::mouse_x;
+int ModuleInput::mouse_y;
+int ModuleInput::mouse_z;
 
 ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 {
@@ -259,6 +263,12 @@ void ModuleInput::LuaRegister()
 			.addFunction("getKey", &ModuleInput::LGetKey)
 			.addFunction("getKeyDown", &ModuleInput::LGetKeyDown)
 			.addFunction("getKeyUp", &ModuleInput::LGetKeyUp)
+			.addFunction("getMouseDown", &ModuleInput::LGetMouseButtonDown)
+			.addFunction("getMouse", &ModuleInput::LGetMouseButton)
+			.addFunction("getMouseUp", &ModuleInput::LGetMouseButtonUp)
+			.addFunction("getMouseX", &ModuleInput::LGetMouseX)
+			.addFunction("getMouseY", &ModuleInput::LGetMouseY)
+			.addFunction("getMouseZ", &ModuleInput::LGetMouseZ)
 		.endNamespace();
 }
 
@@ -330,6 +340,21 @@ bool ModuleInput::GetMouseButtonUp(int id) const
 	return mouse_buttons[id] == KEY_UP;
 }
 
+KEY_STATE ModuleInput::LGetMouseButton(int id)
+{
+	return mouse_buttons[id];
+}
+
+bool ModuleInput::LGetMouseButtonDown(int id)
+{
+	return mouse_buttons[id] == KEY_DOWN;
+}
+
+bool ModuleInput::LGetMouseButtonUp(int id)
+{
+	return mouse_buttons[id] = KEY_UP;
+}
+
 int ModuleInput::GetMouseX() const
 {
 	return mouse_x;
@@ -341,6 +366,21 @@ int ModuleInput::GetMouseY() const
 }
 
 int ModuleInput::GetMouseZ() const
+{
+	return mouse_z;
+}
+
+int ModuleInput::LGetMouseX()
+{
+	return mouse_x;
+}
+
+int ModuleInput::LGetMouseY()
+{
+	return mouse_y;
+}
+
+int ModuleInput::LGetMouseZ()
 {
 	return mouse_z;
 }
