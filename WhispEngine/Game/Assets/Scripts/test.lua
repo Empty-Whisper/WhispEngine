@@ -1,4 +1,4 @@
-
+require "Assets\\Internal\\GameObject"
 -- Model.lua
 
 Model = {}
@@ -14,11 +14,12 @@ Model.Variables = {
 }
 
 local var = Model.Variables
+transform = GameObject
 
 function Model:Start()
-	Log("Starteo el rempalador")
+
 end
 
 function Model:Update()
-	Log(var.intTest)
+	Log(transform.name)
 end

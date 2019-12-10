@@ -13,6 +13,9 @@
 #include "ModuleImport.h"
 #include "ModuleRenderer3D.h"
 
+#include "ModuleScripting.h"
+#include "Lua/LuaBridge/LuaBridge.h"
+
 ModuleObjectManager::ModuleObjectManager()
 {
 	name.assign("ObjectManager");
@@ -157,6 +160,13 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 			select->Select();
 		selected = select;
 	}
+}
+
+void ModuleObjectManager::LuaRegister()
+{
+	using namespace luabridge;
+	/*getGlobalNamespace(App->scripting->GetState())
+		.addProperty("transform")*/
 }
 
 void ModuleObjectManager::MousePicking()

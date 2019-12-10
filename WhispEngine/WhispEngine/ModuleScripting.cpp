@@ -20,37 +20,47 @@ ModuleScripting::~ModuleScripting()
 
 bool ModuleScripting::Start()
 {
-	luaL_dofile(L, "Assets/Scripts/test.lua");
-	luabridge::LuaRef start = luabridge::getGlobal(L, "Start");
-
-	start();
-
+	luaL_loadfile(L, "Assets/Internal/GameObject.lua");
 	return true;
+}
+
+update_status ModuleScripting::PreUpdate()
+{
+	// TODO: preupdate, update and postupdate all scripts
+
+	return update_status::UPDATE_CONTINUE;
 }
 
 update_status ModuleScripting::Update()
 {
-	if (luaL_loadfile(L, "Assets/Scripts/test.lua") == 0) {
-		luabridge::LuaRef table = luabridge::getGlobal(L, "Model");
+	ExecuteFunctionScript("Assets/Scripts/test.lua", "Model", "Update");
+	return update_status::UPDATE_CONTINUE;
+}
+
+void ModuleScripting::ExecuteFunctionScript(const char* path, const char* name, const char* function)
+{
+	if (luaL_dofile(L, path) == 0) {
+		luabridge::LuaRef table = luabridge::getGlobal(L, name);
 		if (table.isTable()) {
-			if (table["Update"].isFunction()) {
-				luabridge::LuaRef func = table["Update"];
+			if (table[function].isFunction()) {
+				luabridge::LuaRef func = table[function];
 				func();
 			}
 			else {
-				LOG("NO ES FUNCCION");
+				LOG("%s is not a function or was not found", function);
 			}
 		}
 		else {
-			LOG("NOOOOOOOOOOOOOOOOOOOO");
+			LOG("Cannot find table %s", name);
 		}
 	}
 	else {
-		LOG("%s", lua_tostring(L, -1));
-		
+		LOG("Lua Error: %s", lua_tostring(L, -1));
 	}
-	//update();
+}
 
+update_status ModuleScripting::PostUpdate()
+{
 	return update_status::UPDATE_CONTINUE;
 }
 

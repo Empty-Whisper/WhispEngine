@@ -85,6 +85,9 @@
     <Filter Include="Tools\ImGuizmo">
       <UniqueIdentifier>{ffa5951b-1167-4092-a1a8-f7d6a7d0e649}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Scripts">
+      <UniqueIdentifier>{bee2db44-a4e4-4da5-b54c-4e4e132dbf14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">

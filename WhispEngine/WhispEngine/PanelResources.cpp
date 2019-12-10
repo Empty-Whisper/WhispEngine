@@ -21,7 +21,7 @@ void PanelResources::Update()
 {
 	if (ImGui::Begin("Resources", &active))
 	{
-		if (ImGui::TreeNodeEx(ASSETS_FOLDER)) {
+		if (ImGui::TreeNodeEx(ASSETS_FOLDER, ImGuiTreeNodeFlags_DefaultOpen)) {
 			DrawNode(ASSETS_FOLDER);
 
 			ImGui::TreePop();

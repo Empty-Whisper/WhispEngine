@@ -61,6 +61,8 @@ public:
 	GameObject*	GetSelected() const;
 	void SetSelected(GameObject* select);
 
+	void LuaRegister() override;
+
 	void MousePicking(); 
 
 	bool SaveGameObjects(nlohmann::json &file);

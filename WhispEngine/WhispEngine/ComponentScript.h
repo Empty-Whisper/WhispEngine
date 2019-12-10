@@ -7,7 +7,7 @@ public:
 	ComponentScript(GameObject* parent);
 	~ComponentScript();
 
-	void Update() override {};
+	void Update() override;
 
 	void OnInspector();
 

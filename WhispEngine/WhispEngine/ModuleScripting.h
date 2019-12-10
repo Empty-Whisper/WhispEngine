@@ -17,8 +17,11 @@ public:
 	~ModuleScripting();
 
 	bool Start() override;
+	update_status PreUpdate() override;
 	update_status Update() override;
+	update_status PostUpdate() override;
 
+	void ExecuteFunctionScript(const char* path, const char* name, const char* function);
 	void ExecuteScript(const char* file);
 
 	void LuaRegister() override;

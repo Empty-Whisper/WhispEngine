@@ -2,6 +2,8 @@
 #include "Imgui/imgui.h"
 #include "Application.h"
 #include "FileSystem.h"
+#include "ModuleScripting.h"
+#include "Lua/LuaBridge/LuaBridge.h"
 
 ComponentScript::ComponentScript(GameObject* parent) : Component(parent,ComponentType::SCRIPT)
 {
@@ -12,16 +14,17 @@ ComponentScript::~ComponentScript()
 {
 }
 
+void ComponentScript::Update()
+{
+	if (is_assigned)
+		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), "Update");
+}
+
 void ComponentScript::OnInspector()
 {
 	if (ImGui::CollapsingHeader(title.data(), ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (is_assigned) {
 			ImGui::Text("Script\t%s", name.data());
-			char* file = App->file_system->GetTextFile(script_path.data());
-			if (file != nullptr) {
-				LOG("%s", file);
-				delete[] file;
-			}
 		}
 		else {
 			static char buffer[50];
