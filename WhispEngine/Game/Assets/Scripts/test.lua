@@ -21,10 +21,5 @@ function Model:Start()
 end
 
 function Model:Update()
-	vec = Vector3(0,0,0)
-	Log(vec:toString())
-	vec.x = 9
-	vec.y = 1
-	vec.z = 1
-	Log(vec:toString())
+	Log(Time.deltaTime)
 end

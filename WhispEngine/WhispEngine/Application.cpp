@@ -14,6 +14,8 @@
 #include "ModuleResources.h"
 #include "ModuleScripting.h"
 
+#include "Lua/LuaBridge/LuaBridge.h"
+
 #include "Time.h"
 
 GameTime* Time = nullptr;
@@ -235,6 +237,10 @@ void Application::LuaRegister()
 	for (auto i = list_modules.begin(); i != list_modules.end(); i++) {
 		(*i)->LuaRegister();
 	}
+	luabridge::getGlobalNamespace(scripting->GetState())
+		.beginNamespace("Time")
+			.addProperty("deltaTime", &Time->dt, false)
+		.endNamespace();
 }
 
 void Application::SetState(const GameState to_state)

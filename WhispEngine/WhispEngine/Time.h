@@ -4,6 +4,7 @@
 
 class GameTime
 {
+	friend class Application;
 public:
 	GameTime();
 	~GameTime();
