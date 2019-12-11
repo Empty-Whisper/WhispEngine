@@ -535,19 +535,18 @@ float* ModuleObjectManager::CalculateFaceNormals(const float* vertex, const uint
 	float* data = new float[n_face_normals];
 
 	for (int k = 0; k < n_index / 3; k += 3) {
-		vec3 p1(vertex[index[k] * 3],	  vertex[index[k] * 3 + 1],		vertex[index[k] * 3 + 2]);
-		vec3 p2(vertex[index[k + 1] * 3], vertex[index[k + 1] * 3 + 1], vertex[index[k + 1] * 3 + 2]);
-		vec3 p3(vertex[index[k + 2] * 3], vertex[index[k + 2] * 3 + 1], vertex[index[k + 2] * 3 + 2]);
+		float3 p1(vertex[index[k] * 3],	  vertex[index[k] * 3 + 1],		vertex[index[k] * 3 + 2]);
+		float3 p2(vertex[index[k + 1] * 3], vertex[index[k + 1] * 3 + 1], vertex[index[k + 1] * 3 + 2]);
+		float3 p3(vertex[index[k + 2] * 3], vertex[index[k + 2] * 3 + 1], vertex[index[k + 2] * 3 + 2]);
 
 		data[k * 2] = (p1.x + p2.x + p3.x) / 3.f;
 		data[k * 2 + 1] = (p1.y + p2.y + p3.y) / 3.f;
 		data[k * 2 + 2] = (p1.z + p2.z + p3.z) / 3.f;
 
-		vec3 v1 = p2 - p1;
-		vec3 v2 = p3 - p1;
+		float3 v1 = p2 - p1;
+		float3 v2 = p3 - p1;
 
-		vec3 v_norm = cross(v1, v2);
-		v_norm = normalize(v_norm);
+		float3 v_norm = (math::Cross(v1, v2)).Normalized();
 
 		data[k * 2 + 3] = data[k * 2] + v_norm.x * magnitude;
 		data[k * 2 + 4] = data[k * 2 + 1] + v_norm.y * magnitude;

@@ -1,7 +1,6 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "glmath.h"
 #include "Light.h"
 #include "ComponentMaterial.h"
 #include "ModuleCamera3D.h"
@@ -66,8 +65,8 @@ public:
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	mat3x3 NormalMatrix;
-	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+	math::float3x3 NormalMatrix;
+	math::float4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 	GLenum vision_mode = GL_FILL;
 	float* background_color = nullptr;
 

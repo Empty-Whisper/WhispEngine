@@ -1,7 +1,6 @@
-
 #pragma once
 #include "Color.h"
-#include "glmath.h"
+#include "MathGeoLib/include/Math/float3.h"
 #include "glew-2.1.0/include/GL/glew.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -19,7 +18,7 @@ struct Light
 
 	Color ambient;
 	Color diffuse;
-	vec3 position;
+	math::float3 position;
 
 	int ref;
 	bool on;

@@ -111,9 +111,6 @@
     <ClCompile Include="Color.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="glmath.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
@@ -375,6 +372,7 @@
     <ClCompile Include="ComponentScript.cpp">
       <Filter>GameObject\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Mathf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -402,9 +400,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="glmath.h">
       <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
@@ -878,6 +873,7 @@
     <ClInclude Include="ComponentScript.h">
       <Filter>GameObject\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Mathf.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

@@ -29,7 +29,6 @@
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="glmath.cpp" />
     <ClCompile Include="GPUdetect\DeviceId.cpp" />
     <ClCompile Include="HardwareInfo.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
@@ -43,6 +42,7 @@
     <ClCompile Include="Importer.cpp" />
     <ClCompile Include="JsonHelper.cpp" />
     <ClCompile Include="MaterialImporter.cpp" />
+    <ClCompile Include="Mathf.cpp" />
     <ClCompile Include="MeshImporter.cpp" />
     <ClCompile Include="ModelImporter.cpp" />
     <ClCompile Include="mmgr\mmgr.cpp" />
@@ -133,7 +133,6 @@
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GPUdetect\DeviceId.h" />
     <ClInclude Include="GPUdetect\dxgi1_4.h" />
@@ -179,6 +178,7 @@
     <ClInclude Include="Lua\Lua\include\luaconf.h" />
     <ClInclude Include="Lua\Lua\include\lualib.h" />
     <ClInclude Include="MaterialImporter.h" />
+    <ClInclude Include="Mathf.h" />
     <ClInclude Include="MeshImporter.h" />
     <ClInclude Include="ModelImporter.h" />
     <ClInclude Include="mmgr\mmgr.h" />

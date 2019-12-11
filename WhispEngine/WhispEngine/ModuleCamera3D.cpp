@@ -428,7 +428,7 @@ void Camera::FocusObject(const AABB & aabb)
 		math::float3 new_pos = float3::zero;
 		math::float3 vector = new_pos - reference_position;
 
-		float object_length = length(normalize((vec3)(vector.x, vector.y, vector.z)) * aabb.Diagonal().Length());
+		float object_length = vector.Normalized().Length() * aabb.Diagonal().Length();
 
 		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
 		if (component_mesh == nullptr)

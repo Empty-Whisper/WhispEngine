@@ -21,11 +21,5 @@
     <None Include="Assets\Scripts\test.lua">
       <Filter>Scripts</Filter>
     </None>
-    <None Include="Assets\Internal\GameObject.lua">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="Assets\Scripts\aaa.lua">
-      <Filter>Scripts</Filter>
-    </None>
   </ItemGroup>
 </Project>

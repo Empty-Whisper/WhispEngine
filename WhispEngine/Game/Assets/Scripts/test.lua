@@ -22,4 +22,5 @@ end
 
 function Model:Update()
 	Log(object.name)
+
 end
