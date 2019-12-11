@@ -1,4 +1,4 @@
-require "Assets\\Internal\\GameObject"
+
 -- Model.lua
 
 Model = {}
@@ -21,5 +21,5 @@ function Model:Start()
 end
 
 function Model:Update()
-	Log(transform.name)
+	Log(object.name)
 end

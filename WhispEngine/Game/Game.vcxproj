@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Internal\GameObject.lua" />
+    <None Include="Assets\Scripts\aaa.lua" />
     <None Include="Assets\Scripts\test.lua" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

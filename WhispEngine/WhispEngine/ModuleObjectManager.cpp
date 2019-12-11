@@ -80,7 +80,7 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 		parent = root;
 
 	GameObject* ret = new GameObject(parent);
-
+	
 	return ret;
 }
 
@@ -165,8 +165,11 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 void ModuleObjectManager::LuaRegister()
 {
 	using namespace luabridge;
-	/*getGlobalNamespace(App->scripting->GetState())
-		.addProperty("transform")*/
+	getGlobalNamespace(App->scripting->GetState())
+		.beginClass<GameObject>("gameobject")
+			.addProperty("active", &GameObject::active)
+			.addProperty("name", &GameObject::name)
+		.endClass();
 }
 
 void ModuleObjectManager::MousePicking()
