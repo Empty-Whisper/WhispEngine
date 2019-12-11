@@ -166,6 +166,13 @@ void ModuleObjectManager::LuaRegister()
 {
 	using namespace luabridge;
 	getGlobalNamespace(App->scripting->GetState())
+		.beginClass<float3>("Vector3")
+			.addConstructor<void(*) (const float&, const float&, const float&)>()
+			.addData("x", &float3::x, true)
+			.addData("y", &float3::y, true)
+			.addData("z", &float3::z, true)
+			.addFunction("toString", &float3::ToString)
+		.endClass()
 		.beginClass<GameObject>("gameobject")
 			.addProperty("active", &GameObject::active)
 			.addProperty("name", &GameObject::name)
