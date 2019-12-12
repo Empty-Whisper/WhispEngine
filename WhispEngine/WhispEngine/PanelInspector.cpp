@@ -1,10 +1,14 @@
 #include "PanelInspector.h"
 #include "Application.h"
 #include "Imgui/imgui.h"
+#include "Imgui/imgui_internal.h"
 
 #include "ModuleSceneIntro.h"
 #include "ModuleGUI.h"
 #include "ModuleObjectManager.h"
+#include "PanelResources.h"
+
+#include "ComponentScript.h"
 
 PanelInspector::PanelInspector(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	:Panel("Inspector", start_active, shortcut1, shortcut2, shortcut3)
@@ -61,7 +65,22 @@ void PanelInspector::Update()
 				ImGui::EndPopup();
 			}
 		}
+		//rect[0] = ImGui::GetWindowContentRegionMin() + ImGui::GetWindowPos();
+		//rect[1] = ImGui::GetWindowContentRegionMax() + ImGui::GetWindowPos();
 
+		if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Inspector"))) { // GameObject inspector
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCRIPT")) {
+				GameObject* obj = App->object_manager->GetSelected();
+				//std::string* tmp = (std::string*)payload->Data;
+				
+				if (obj != nullptr) {
+					auto script = (ComponentScript*)obj->CreateComponent(ComponentType::SCRIPT);
+					script->SetScript(App->gui->resources->file_dragdrop.c_str());
+				}
+				App->gui->resources->file_dragdrop.clear();
+			}
+			ImGui::EndDragDropTarget();
+		}
 	}
 	ImGui::End();
 

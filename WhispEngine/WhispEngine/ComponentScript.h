@@ -12,6 +12,8 @@ public:
 
 	void OnInspector();
 
+	void SetScript(const char* path);
+
 	void Save(nlohmann::json &node);
 	void Load(const nlohmann::json &node);
 

@@ -26,6 +26,8 @@ class PanelScriptEditor;
 #define IMGUI_COLOR_ORANGE ImVec4(1.f, 0.5f,0.f,1.f)
 
 class ModuleGUI :public Module {
+	friend class PanelResources;
+	friend class PanelInspector;
 public:
 	ModuleGUI(bool enable_true = true);
 	~ModuleGUI();

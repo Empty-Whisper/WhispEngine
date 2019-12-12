@@ -56,6 +56,14 @@ void ComponentScript::OnInspector()
 	}
 }
 
+void ComponentScript::SetScript(const char * path)
+{
+	script_path = path;
+	is_assigned = true;
+	name = App->file_system->GetFileNameFromPath(script_path.c_str());
+	title = name + " (Script)";
+}
+
 void ComponentScript::Save(nlohmann::json & node)
 {
 	node["script"] = script_path.c_str();
@@ -63,8 +71,5 @@ void ComponentScript::Save(nlohmann::json & node)
 
 void ComponentScript::Load(const nlohmann::json & node)
 {
-	script_path = node.value("script", "NONE");
-	is_assigned = true;
-	name = App->file_system->GetFileNameFromPath(script_path.c_str());
-	title = name + " (Script)";
+	SetScript(node.value("script", "NONE").c_str());
 }

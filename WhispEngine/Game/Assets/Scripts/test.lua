@@ -1,9 +1,9 @@
 
--- Test.lua
+-- test.lua
 
-Test = {}
+test = {}
 
-Test.Variables = {
+test.Variables = {
 		-- Public Variables [All must be initialized]
 		intTest = 4,
 		floatTest = 2.578,
@@ -13,12 +13,12 @@ Test.Variables = {
 		gameObjectTest = nil,
 }
 
-local var = Test.Variables
+local var = test.Variables
 
-function Test:Start()
+function test:Start()
 
 end
 
-function Test:Update()
+function test:Update()
 	
 end

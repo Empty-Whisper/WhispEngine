@@ -11,7 +11,10 @@ public:
 
 	void Update() override;
 
+	void SetFile(const char* new_file);
+
 private:
 	TextEditor editor;
+	std::string file;
 };
 

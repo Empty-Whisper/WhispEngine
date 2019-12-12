@@ -10,6 +10,7 @@ public:
 
 	void Update();
 
+	std::string file_dragdrop;
 private:
 	void DrawNode(const char* path);
 };
