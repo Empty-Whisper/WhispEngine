@@ -237,6 +237,7 @@ void Application::LuaRegister()
 	for (auto i = list_modules.begin(); i != list_modules.end(); i++) {
 		(*i)->LuaRegister();
 	}
+
 	luabridge::getGlobalNamespace(scripting->GetState())
 		.beginNamespace("Time")
 			.addProperty("deltaTime", &Time->dt, false)

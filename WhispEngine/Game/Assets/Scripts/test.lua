@@ -1,25 +1,24 @@
 
--- Model.lua
+-- Test.lua
 
-Model = {}
+Test = {}
 
-Model.Variables = {
+Test.Variables = {
 		-- Public Variables [All must be initialized]
 		intTest = 4,
 		floatTest = 2.578,
 		stringTest = "jajajajaja",
 		boolTest = false,
-		arrayTest = {},
-		gameObjectTest = "JAJAJAJAJAJAJJAJA",
+		arrayTest = {1,2,3},
+		gameObjectTest = nil,
 }
 
-local var = Model.Variables
-transform = GameObject
+local var = Test.Variables
 
-function Model:Start()
+function Test:Start()
 
 end
 
-function Model:Update()
-	Log(Time.deltaTime)
+function Test:Update()
+	
 end

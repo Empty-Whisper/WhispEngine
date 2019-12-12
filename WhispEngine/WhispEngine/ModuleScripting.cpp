@@ -33,14 +33,14 @@ update_status ModuleScripting::PreUpdate()
 
 update_status ModuleScripting::Update()
 {
-	ExecuteFunctionScript("Assets/Scripts/test.lua", "Model", "Update");
+	//ExecuteFunctionScript("Assets/Scripts/test.lua", "Test", "Update");
 	return update_status::UPDATE_CONTINUE;
 }
 
-void ModuleScripting::ExecuteFunctionScript(const char* path, const char* name, const char* function)
+void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name, const char* function)
 {
 	if (luaL_dofile(L, path) == 0) {
-		luabridge::LuaRef table = luabridge::getGlobal(L, name);
+		luabridge::LuaRef table = luabridge::getGlobal(L, _name);
 		if (table.isTable()) {
 			if (table[function].isFunction()) {
 				luabridge::LuaRef func = table[function];
@@ -51,7 +51,7 @@ void ModuleScripting::ExecuteFunctionScript(const char* path, const char* name, 
 			}
 		}
 		else {
-			LOG("Cannot find table %s", name);
+			LOG("Cannot find table %s", _name);
 		}
 	}
 	else {

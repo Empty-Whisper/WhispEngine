@@ -1,4 +1,3 @@
-require "Assets\\Internal\\GameObject"
 
 -- Model.lua
 
@@ -9,7 +8,6 @@ Model.Variables = {
 }
 
 local var = Model.Variables
-transform = GameObject
 
 function Model:Start()
 	

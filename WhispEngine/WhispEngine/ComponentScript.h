@@ -11,6 +11,9 @@ public:
 
 	void OnInspector();
 
+	void Save(nlohmann::json &node);
+	void Load(const nlohmann::json &node);
+
 	std::string script_path = SCRIPT_A_FOLDER;
 	std::string name = "NONE";
 	std::string title = "NONE (Script)";

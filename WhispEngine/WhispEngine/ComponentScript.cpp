@@ -20,7 +20,7 @@ void ComponentScript::Update()
 	{
 		luabridge::setGlobal(App->scripting->GetState(), object, "object");
 		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), "Update");
-		lua_pop(App->scripting->GetState(), 1);
+		lua_pop(App->scripting->GetState(), -1);
 	}
 }
 
@@ -54,4 +54,17 @@ void ComponentScript::OnInspector()
 			}
 		}
 	}
+}
+
+void ComponentScript::Save(nlohmann::json & node)
+{
+	node["script"] = script_path.c_str();
+}
+
+void ComponentScript::Load(const nlohmann::json & node)
+{
+	script_path = node.value("script", "NONE");
+	is_assigned = true;
+	name = App->file_system->GetFileNameFromPath(script_path.c_str());
+	title = name + " (Script)";
 }
