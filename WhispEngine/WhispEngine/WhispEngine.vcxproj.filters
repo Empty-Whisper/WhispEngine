@@ -88,6 +88,9 @@
     <Filter Include="Tools\Scripts">
       <UniqueIdentifier>{bee2db44-a4e4-4da5-b54c-4e4e132dbf14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\TextEditor">
+      <UniqueIdentifier>{6660882e-9ca6-4ee0-a3ba-b792cf818dbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -373,6 +376,10 @@
       <Filter>GameObject\Components</Filter>
     </ClCompile>
     <ClCompile Include="Mathf.cpp" />
+    <ClCompile Include="ImGuiColorTextEdit\TextEditor.cpp">
+      <Filter>Tools\TextEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelScriptEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -874,6 +881,10 @@
       <Filter>GameObject\Components</Filter>
     </ClInclude>
     <ClInclude Include="Mathf.h" />
+    <ClInclude Include="ImGuiColorTextEdit\TextEditor.h">
+      <Filter>Tools\TextEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelScriptEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

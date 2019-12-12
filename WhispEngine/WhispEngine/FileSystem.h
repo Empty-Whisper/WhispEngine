@@ -11,6 +11,7 @@ public:
 		JSON, FBX, 
 		DDS, PNG, JPG, TGA,
 		MODEL, MESH, META, SCENE,
+		LUA,
 		MAX
 	};
 

@@ -49,6 +49,9 @@ void PanelResources::DrawNode(const char * path)
 					case FileSystem::Format::SCENE:
 						App->LoadScene(entry.path().u8string().c_str());
 						break;
+					case FileSystem::Format::LUA:
+
+						break;
 					default:
 						break;
 					}

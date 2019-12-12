@@ -93,6 +93,9 @@ FileSystem::Format FileSystem::GetFormat(const char * file) const
 	else if (buffer.compare("tga") == 0) {
 		return FileSystem::Format::TGA;
 	}
+	else if (buffer.compare("lua") == 0) {
+		return FileSystem::Format::LUA;
+	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());
 

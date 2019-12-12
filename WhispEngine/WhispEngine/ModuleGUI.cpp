@@ -21,6 +21,7 @@
 #include "PanelScene.h"
 #include "PanelGame.h"
 #include "PanelResources.h"
+#include "PanelScriptEditor.h"
 
 #include "ModuleSceneIntro.h"
 
@@ -71,6 +72,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(game = new PanelGame(node["panels"]["game"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_7));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
 	panels.push_back(resources = new PanelResources(node["panels"]["resources"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_8));
+	panels.push_back(editor = new PanelScriptEditor(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_9));
 
 	ImGuizmo::Enable(true);
 

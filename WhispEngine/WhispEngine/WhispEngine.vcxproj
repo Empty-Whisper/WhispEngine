@@ -31,6 +31,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GPUdetect\DeviceId.cpp" />
     <ClCompile Include="HardwareInfo.cpp" />
+    <ClCompile Include="ImGuiColorTextEdit\TextEditor.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\ImGuizmo.cpp" />
     <ClCompile Include="Imgui\imgui_demo.cpp" />
@@ -63,6 +64,7 @@
     <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PanelResources.cpp" />
     <ClCompile Include="PanelScene.cpp" />
+    <ClCompile Include="PanelScriptEditor.cpp" />
     <ClCompile Include="par_shapes.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -137,6 +139,7 @@
     <ClInclude Include="GPUdetect\DeviceId.h" />
     <ClInclude Include="GPUdetect\dxgi1_4.h" />
     <ClInclude Include="HardwareInfo.h" />
+    <ClInclude Include="ImGuiColorTextEdit\TextEditor.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
     <ClInclude Include="Imgui\ImGuizmo.h" />
@@ -200,6 +203,7 @@
     <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="PanelResources.h" />
     <ClInclude Include="PanelScene.h" />
+    <ClInclude Include="PanelScriptEditor.h" />
     <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PathNode.h" />
     <ClInclude Include="PerfTimer.h" />
