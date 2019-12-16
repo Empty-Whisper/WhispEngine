@@ -17,7 +17,7 @@ GameObject::GameObject(GameObject * parent) : parent(parent)
 	if (parent != nullptr)
 		parent->children.push_back(this);
 
-	CreateComponent(ComponentType::TRANSFORM);
+	transform = (ComponentTransform*)CreateComponent(ComponentType::TRANSFORM);
 	SetName("GameObject");
 	UID = App->random->RandomGUID();
 }

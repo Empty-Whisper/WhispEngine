@@ -229,3 +229,15 @@ void ComponentTransform::Load(const nlohmann::json & node)
 	scale    = App->json->GetFloat3("scale", node);
 	CalculeLocalMatrix();
 }
+
+void ComponentTransform::LSetPositionV(const float3 & vector)
+{
+	position = vector;
+	CalculeLocalMatrix();
+}
+
+void ComponentTransform::LSetPosition3f(const float & x, const float & y, const float & z)
+{
+	position.Set(x, y, z);
+	CalculeLocalMatrix();
+}

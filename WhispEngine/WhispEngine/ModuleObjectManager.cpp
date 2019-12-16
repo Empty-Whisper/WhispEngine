@@ -181,6 +181,13 @@ void ModuleObjectManager::LuaRegister()
 		.beginClass<GameObject>("GameObject")
 			.addProperty("active", &GameObject::active)
 			.addProperty("name", &GameObject::name)
+			.addProperty("transform", &GameObject::transform)
+		.endClass()
+		.beginClass<ComponentTransform>("transform")
+			.addProperty("gameobject", &ComponentTransform::object)
+			.addProperty("position", &ComponentTransform::GetPosition) //TODO: maybe it could be an own struct and set x, y and z as &position.x (READ ONLY)
+			.addFunction("SetPositionv", &ComponentTransform::LSetPositionV)
+			.addFunction("SetPosition3f", &ComponentTransform::LSetPosition3f)
 		.endClass();
 }
 

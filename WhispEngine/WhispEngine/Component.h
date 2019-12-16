@@ -20,6 +20,7 @@ enum ComponentType
 
 class Component
 {
+	friend class ModuleObjectManager;
 public:
 	Component(GameObject* parent, ComponentType type);
 	virtual ~Component();

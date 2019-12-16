@@ -20,5 +20,6 @@ function test:Start()
 end
 
 function test:Update()
-	
+	hola
 end
+

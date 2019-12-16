@@ -2,6 +2,7 @@
 #include "Imgui/imgui.h"
 #include "Application.h"
 #include "FileSystem.h"
+#include "GameObject.h"
 #include "ModuleScripting.h"
 #include "Lua/LuaBridge/LuaBridge.h"
 
@@ -19,7 +20,9 @@ void ComponentScript::Update()
 	if (is_assigned)
 	{
 		luabridge::setGlobal(App->scripting->GetState(), object, "object");
+		luabridge::setGlobal(App->scripting->GetState(), object->transform, "transform");
 		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), "Update");
+		lua_pop(App->scripting->GetState(), -1);
 		lua_pop(App->scripting->GetState(), -1);
 	}
 }
@@ -27,6 +30,12 @@ void ComponentScript::Update()
 void ComponentScript::OnInspector()
 {
 	if (ImGui::CollapsingHeader(title.data(), ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (ImGui::BeginPopupContextItem("Mesh")) {
+			if (ImGui::Button("Delete")) {
+				object->DeleteComponent(this);
+			}
+			ImGui::EndPopup();
+		}
 		if (is_assigned) {
 			ImGui::Text("Script\t%s", name.data());
 		}

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Component.h"
+#include "ComponentTransform.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MathGeoLib/include/Geometry/OBB.h"
 
@@ -63,6 +64,7 @@ public:
 	std::vector<GameObject*> children;
 	std::vector<Component*> components;
 
+	ComponentTransform* transform = nullptr;
 	GameObject* parent = nullptr;
 	bool is_inside_frustum = false;
 

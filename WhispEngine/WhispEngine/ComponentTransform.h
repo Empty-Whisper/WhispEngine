@@ -11,6 +11,7 @@
 #pragma once
 class ComponentTransform : public Component
 {
+	friend class ModuleObjectManager;
 public:
 	ComponentTransform(GameObject* parent);
 	~ComponentTransform();
@@ -53,5 +54,9 @@ private:
 
 	bool local_guizmo = false;
 
+	//Lua functions glue code
+private:
+	void LSetPositionV(const float3& vector);
+	void LSetPosition3f(const float& x, const float& y, const float& z);
 };
 #endif
