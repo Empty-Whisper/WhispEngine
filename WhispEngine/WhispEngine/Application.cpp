@@ -108,6 +108,7 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
+	BROFILER_CATEGORY("PrepareUpdate", Profiler::Color::Blue);
 	frame_count++;
 	last_sec_frame_count++;
 	dt = frame_time.ReadSec();
@@ -287,33 +288,50 @@ update_status Application::Update()
 {
 	BROFILER_CATEGORY("Application", Profiler::Color::Blue);
 	update_status ret = UPDATE_CONTINUE;
+
 	PrepareUpdate();
-	
-	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
-		ret = (*item)->PreUpdate();
-		if (ret != UPDATE_CONTINUE)
-			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
-	}
+	PreUpdate(ret);
+	DoUpdate(ret);
+	PostUpdate(ret);
+	FinishUpdate();
 
-	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
-		ret = (*item)->Update();
-		if (ret != UPDATE_CONTINUE)
-			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
-	}
+	return ret;
+}
 
+void Application::PostUpdate(update_status &ret)
+{
+	BROFILER_CATEGORY("PostUpdate", Profiler::Color::Blue);
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
 		ret = (*item)->PostUpdate();
 		if (ret != UPDATE_CONTINUE)
 			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
 	}
+}
 
-	FinishUpdate();
-	return ret;
+void Application::DoUpdate(update_status &ret)
+{
+	BROFILER_CATEGORY("Update", Profiler::Color::Blue);
+	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
+		ret = (*item)->Update();
+		if (ret != UPDATE_CONTINUE)
+			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
+	}
+}
+
+void Application::PreUpdate(update_status &ret)
+{
+	BROFILER_CATEGORY("PreUpdate", Profiler::Color::Blue);
+	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
+		ret = (*item)->PreUpdate();
+		if (ret != UPDATE_CONTINUE)
+			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
+	}
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	BROFILER_CATEGORY("FinishUpdate", Profiler::Color::Blue);
 	if (want_to_save) {
 		SaveConfNow();
 	}

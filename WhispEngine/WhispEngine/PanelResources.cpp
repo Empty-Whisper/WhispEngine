@@ -12,6 +12,7 @@
 #include "PanelScriptEditor.h"
 
 #include "ModuleImport.h"
+#include "Brofiler/Brofiler.h"
 
 PanelResources::PanelResources(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	: Panel("Inspector", start_active, shortcut1, shortcut2, shortcut3)
@@ -25,6 +26,7 @@ PanelResources::~PanelResources()
 
 void PanelResources::Update()
 {
+	BROFILER_CATEGORY("Resources", Profiler::Color::Purple);
 	if (ImGui::Begin("Resources", &active))
 	{
 		if (ImGui::TreeNodeEx(ASSETS_FOLDER, ImGuiTreeNodeFlags_DefaultOpen)) {

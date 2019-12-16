@@ -37,6 +37,9 @@ public:
 
 	update_status PreUpdate();
 	update_status Update();
+	void UpdatePanels();
+	void PlayPauseStop();
+	void ModalSaveScene();
 	update_status PostUpdate();
 
 	bool CleanUp();

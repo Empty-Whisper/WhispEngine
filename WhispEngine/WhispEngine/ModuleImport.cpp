@@ -68,6 +68,8 @@ bool ModuleImport::CleanUp()
 
 bool ModuleImport::Import(const char * path, uint64 &uid)
 {
+	BROFILER_CATEGORY("Import", Profiler::Color::Brown);
+
 	bool ret = true;
 	switch (App->file_system->GetFormat(path))
 	{

@@ -150,7 +150,7 @@ update_status ModuleCamera3D::Update()
 				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
 			}
 
-			//Move Camrea
+			//Move Camera
 			if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && !App->input->GetKey(SDL_SCANCODE_LALT))
 			{
 				if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)

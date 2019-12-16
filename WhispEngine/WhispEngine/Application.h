@@ -91,6 +91,9 @@ public:
 
 	bool Init();
 	update_status Update();
+	void PostUpdate(update_status &ret);
+	void DoUpdate(update_status &ret);
+	void PreUpdate(update_status &ret);
 	bool CleanUp();
 
 	float GetDeltaTime();

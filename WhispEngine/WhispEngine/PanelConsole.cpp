@@ -1,6 +1,6 @@
 #include "PanelConsole.h"
 #include "Application.h"
-
+#include "Brofiler/Brofiler.h"
 
 
 PanelConsole::PanelConsole(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
@@ -16,6 +16,7 @@ PanelConsole::~PanelConsole()
 
 void PanelConsole::Update()
 {
+	BROFILER_CATEGORY("Console", Profiler::Color::Purple);
 	ImGui::Begin(name.data(), &active, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::Button("Clear")) {

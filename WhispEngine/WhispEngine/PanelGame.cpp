@@ -4,6 +4,7 @@
 #include "PanelScene.h"
 #include "ModuleGUI.h"
 #include "ModuleRenderer3D.h"
+#include "Brofiler/Brofiler.h"
 
 PanelGame::PanelGame(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
 	: Panel("Game", start_active, shortcut1, shortcut2, shortcut3)
@@ -15,6 +16,8 @@ PanelGame::~PanelGame()
 
 void PanelGame::Update()
 {
+	BROFILER_CATEGORY("Game", Profiler::Color::Purple);
+
 	ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
 	if (ImGui::Begin("Game", &active))

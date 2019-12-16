@@ -1,5 +1,9 @@
 #include "PanelScriptEditor.h"
 #include <fstream>
+#include "Globals.h"
+#include "Application.h"
+#include "FileSystem.h"
+#include "Brofiler/Brofiler.h"
 
 PanelScriptEditor::PanelScriptEditor(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
 {
@@ -12,9 +16,17 @@ PanelScriptEditor::~PanelScriptEditor()
 
 void PanelScriptEditor::Update()
 {
+	BROFILER_CATEGORY("ScriptEditor", Profiler::Color::Purple);
 	if (ImGui::Begin("Script Editor", &active)) {
+		if (ImGui::IsRootWindowOrAnyChildFocused()) {
+			//App->input->block_keyboard_of = true;
+		}
+		if (ImGui::Button("Save")) {
+			App->file_system->SaveTextFile(editor.GetText().c_str(), file.c_str());
+		}
+
 		auto cpos = editor.GetCursorPosition();
-		
+
 		ImGui::Text("%6d/%-6d %6d lines  | %s | %s | %s | %s", cpos.mLine + 1, cpos.mColumn + 1, editor.GetTotalLines(),
 			editor.IsOverwrite() ? "Ovr" : "Ins",
 			editor.CanUndo() ? "*" : " ",

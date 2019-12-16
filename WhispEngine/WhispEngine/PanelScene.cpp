@@ -5,6 +5,7 @@
 #include "PanelInspector.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleObjectManager.h"
+#include "Brofiler/Brofiler.h"
 
 PanelScene::PanelScene(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3) 
 	: Panel("Scene", start_active, shortcut1, shortcut2, shortcut3)
@@ -17,6 +18,7 @@ PanelScene::~PanelScene()
 
 void PanelScene::Update()
 {
+	BROFILER_CATEGORY("Scene", Profiler::Color::Purple);
 	ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0,0) );
 
 	if (ImGui::Begin("Scene", &active)) 

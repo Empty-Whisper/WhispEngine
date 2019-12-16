@@ -9,6 +9,7 @@
 #include "PanelResources.h"
 
 #include "ComponentScript.h"
+#include "Brofiler/Brofiler.h"
 
 PanelInspector::PanelInspector(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	:Panel("Inspector", start_active, shortcut1, shortcut2, shortcut3)
@@ -22,6 +23,7 @@ PanelInspector::~PanelInspector()
 
 void PanelInspector::Update()
 {
+	BROFILER_CATEGORY("Inspector", Profiler::Color::Purple);
 	if (ImGui::Begin("Inspector", &active)) {
 		GameObject* sel = App->object_manager->GetSelected();
 		if (sel != nullptr) {
@@ -39,7 +41,6 @@ void PanelInspector::Update()
 
 			ImGui::SameLine();
 			StaticLogic(sel);
-			//ImGui::SameLine(); App->gui->HelpMarker("(?)", "Right Click on component header to Delete (only in component not obligatory)");
 
 			for (auto i = sel->components.begin(); i != sel->components.end(); i++) {
 				ImGui::PushID(*i);
@@ -58,20 +59,16 @@ void PanelInspector::Update()
 				if(ImGui::Selectable("Camera"))
 					if (!sel->HasComponent(ComponentType::CAMERA))
 						sel->CreateComponent(ComponentType::CAMERA);
-				char buffer[50];
 				if (ImGui::Selectable("Script"))
 					sel->CreateComponent(ComponentType::SCRIPT);
 
 				ImGui::EndPopup();
 			}
 		}
-		//rect[0] = ImGui::GetWindowContentRegionMin() + ImGui::GetWindowPos();
-		//rect[1] = ImGui::GetWindowContentRegionMax() + ImGui::GetWindowPos();
 
 		if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Inspector"))) { // GameObject inspector
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCRIPT")) {
 				GameObject* obj = App->object_manager->GetSelected();
-				//std::string* tmp = (std::string*)payload->Data;
 				
 				if (obj != nullptr) {
 					auto script = (ComponentScript*)obj->CreateComponent(ComponentType::SCRIPT);

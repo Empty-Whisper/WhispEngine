@@ -375,11 +375,15 @@
     <ClCompile Include="ComponentScript.cpp">
       <Filter>GameObject\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Mathf.cpp" />
     <ClCompile Include="ImGuiColorTextEdit\TextEditor.cpp">
       <Filter>Tools\TextEditor</Filter>
     </ClCompile>
-    <ClCompile Include="PanelScriptEditor.cpp" />
+    <ClCompile Include="PanelScriptEditor.cpp">
+      <Filter>UI_Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Mathf.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -880,11 +884,15 @@
     <ClInclude Include="ComponentScript.h">
       <Filter>GameObject\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Mathf.h" />
     <ClInclude Include="ImGuiColorTextEdit\TextEditor.h">
       <Filter>Tools\TextEditor</Filter>
     </ClInclude>
-    <ClInclude Include="PanelScriptEditor.h" />
+    <ClInclude Include="PanelScriptEditor.h">
+      <Filter>UI_Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Mathf.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
