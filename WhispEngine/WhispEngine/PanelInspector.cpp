@@ -35,7 +35,7 @@ void PanelInspector::Update()
 
 			char name[100];
 			sprintf_s(name, 100, sel->GetName());
-			if (ImGui::InputText("##Name", name, 100)) {
+			if (ImGui::InputText("##Name", name, 100, ImGuiInputTextFlags_EnterReturnsTrue)) {
 				sel->SetName(name);
 			}
 
