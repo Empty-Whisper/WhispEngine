@@ -17,17 +17,18 @@ PanelConsole::~PanelConsole()
 void PanelConsole::Update()
 {
 	BROFILER_CATEGORY("Console", Profiler::Color::Purple);
-	ImGui::Begin(name.data(), &active, ImGuiWindowFlags_MenuBar);
-	if (ImGui::BeginMenuBar()) {
-		if (ImGui::Button("Clear")) {
-			buffer.clear();
+	if (ImGui::Begin(name.data(), &active, ImGuiWindowFlags_MenuBar)) {
+		if (ImGui::BeginMenuBar()) {
+			if (ImGui::Button("Clear")) {
+				buffer.clear();
+			}
+			ImGui::EndMenuBar();
 		}
-		ImGui::EndMenuBar();
+		ImGui::TextUnformatted(buffer.begin());
+		if (log_new_line)
+			ImGui::SetScrollHereY(1.0f);
+		log_new_line = false;
 	}
-	ImGui::TextUnformatted(buffer.begin());
-	if (log_new_line)
-		ImGui::SetScrollHereY(1.0f);
-	log_new_line = false;
 	ImGui::End();
 }
 

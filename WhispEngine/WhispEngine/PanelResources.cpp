@@ -50,8 +50,16 @@ PanelResources::~PanelResources()
 void PanelResources::Update()
 {
 	BROFILER_CATEGORY("Resources", Profiler::Color::Purple);
-	if (ImGui::Begin("Resources", &active))
+	if (ImGui::Begin("Resources", &active, ImGuiWindowFlags_MenuBar))
 	{
+		if (ImGui::BeginMenuBar()) {
+			if (ImGui::Button("Refresh")) {
+				delete files;
+				GeneratePanelResources(files = new File(true, ASSETS_FOLDER, nullptr, FileSystem::Format::NONE, this));
+			}
+			ImGui::EndMenuBar();
+		}
+
 		if (ImGui::TreeNodeEx(ASSETS_FOLDER, ImGuiTreeNodeFlags_DefaultOpen)) {
 			files->Draw();
 
