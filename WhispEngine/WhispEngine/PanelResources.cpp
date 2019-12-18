@@ -14,14 +14,37 @@
 #include "ModuleImport.h"
 #include "Brofiler/Brofiler.h"
 
+#include <string>
+
 PanelResources::PanelResources(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	: Panel("Inspector", start_active, shortcut1, shortcut2, shortcut3)
 {
+	GeneratePanelResources(files = new File(true, ASSETS_FOLDER, nullptr, FileSystem::Format::NONE, this));
+}
+
+void PanelResources::GeneratePanelResources(File* const parent)
+{
+	for (const auto & entry : std::experimental::filesystem::directory_iterator(parent->path)) {
+		if (entry.path().extension().u8string().compare(".meta") != 0 && entry.path().u8string().find("Internal") == std::string::npos) {
+			File* file = new File(
+				std::experimental::filesystem::is_directory(entry.path()), 
+				entry.path().u8string().c_str(), 
+				files, 
+				App->file_system->GetFormat(entry.path().u8string().c_str()), 
+				this
+			);
+			if (file->is_folder) {
+				GeneratePanelResources(file);
+			}
+			parent->children.push_back(file);
+		}
+	}
 }
 
 
 PanelResources::~PanelResources()
 {
+	delete files;
 }
 
 void PanelResources::Update()
@@ -30,7 +53,7 @@ void PanelResources::Update()
 	if (ImGui::Begin("Resources", &active))
 	{
 		if (ImGui::TreeNodeEx(ASSETS_FOLDER, ImGuiTreeNodeFlags_DefaultOpen)) {
-			DrawNode(ASSETS_FOLDER);
+			files->Draw();
 
 			ImGui::TreePop();
 		}
@@ -38,44 +61,48 @@ void PanelResources::Update()
 	ImGui::End();
 }
 
-void PanelResources::DrawNode(const char * path)
+PanelResources::File::File(bool is_folder, const char * path, const File * parent, FileSystem::Format format, PanelResources * panel)
+	: is_folder(is_folder), path(path), parent(parent), format(format), panel(panel)
 {
-	for (const auto & entry : std::experimental::filesystem::directory_iterator(path)) { // TODO: optimize this, save a struct of files and when a file is added or somethins update the struct
-		if (entry.path().extension().u8string().compare(".meta") != 0)
-			if (entry.path().has_extension() ? ImGui::TreeNodeEx(entry.path().filename().u8string().data(), ImGuiTreeNodeFlags_Leaf) : ImGui::TreeNodeEx(entry.path().filename().u8string().data())) {
-				if (!entry.path().has_extension())
-					DrawNode(entry.path().u8string().data());
-				else if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
-					FileSystem::Format format = App->file_system->GetFormat(entry.path().extension().u8string().c_str());
-					switch (format)
-					{
-					case FileSystem::Format::FBX:
-						if (App->file_system->Exists((entry.path().u8string() + ".meta").c_str())) {
-							App->resources->Get(App->file_system->GetUIDFromMeta((entry.path().u8string() + ".meta").c_str()))->LoadToMemory();
-						}
-						break;
-					case FileSystem::Format::SCENE:
-						App->LoadScene(entry.path().u8string().c_str());
-						break;
-					case FileSystem::Format::LUA:
-						App->gui->editor->SetFile(entry.path().u8string().c_str());
-						break;
-					default:
-						break;
+	name.assign(App->file_system->GetFileFromPath(path));
+}
+
+void PanelResources::File::Draw()
+{
+	for (auto file = children.cbegin(); file != children.cend(); file++) {
+		if (!(*file)->is_folder ? ImGui::TreeNodeEx((*file)->name.c_str(), ImGuiTreeNodeFlags_Leaf) : ImGui::TreeNodeEx((*file)->name.c_str())) {
+			if ((*file)->is_folder)
+				(*file)->Draw();
+			else if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
+				switch ((*file)->format)
+				{
+				case FileSystem::Format::FBX:
+					if (App->file_system->Exists(((*file)->path + ".meta").c_str())) {
+						App->resources->Get(App->file_system->GetUIDFromMeta(((*file)->path + ".meta").c_str()))->LoadToMemory();
 					}
+					break;
+				case FileSystem::Format::SCENE:
+					App->LoadScene((*file)->path.c_str());
+					break;
+				case FileSystem::Format::LUA:
+					App->gui->editor->SetFile((*file)->path.c_str());
+					break;
+				default:
+					break;
 				}
-				if (ImGui::BeginDragDropSource()) {
-					file_dragdrop = entry.path().u8string();
-					std::string type;
-					switch (App->file_system->GetFormat(entry.path().extension().u8string().c_str())) {
-					case FileSystem::Format::LUA:
-						ImGui::SetDragDropPayload("SCRIPT", &file_dragdrop, sizeof(int));
-						break;
-					}
-					ImGui::EndDragDropSource();
-				}
-				
-				ImGui::TreePop();
 			}
+			if (ImGui::BeginDragDropSource()) {
+				(*file)->panel->file_dragdrop = (*file)->path;
+				std::string type;
+				switch ((*file)->format) {
+				case FileSystem::Format::LUA:
+					ImGui::SetDragDropPayload("SCRIPT", &(*file)->panel->file_dragdrop, sizeof(int));
+					break;
+				}
+				ImGui::EndDragDropSource();
+			}
+
+			ImGui::TreePop();
+		}
 	}
 }
