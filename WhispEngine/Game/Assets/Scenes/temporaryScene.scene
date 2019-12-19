@@ -1,0 +1,1837 @@
+{
+    "Camera": {
+        "position": [
+            -17.644866943359375,
+            30.820831298828125,
+            26.2323055267334
+        ]
+    },
+    "GameObjects": [
+        {
+            "Children": [
+                {
+                    "Children": [
+                        {
+                            "Children": null,
+                            "Components": null,
+                            "UID": 8476098364913605632,
+                            "active": true,
+                            "name": "Sky001",
+                            "position": [
+                                18.153732299804688,
+                                0.0,
+                                58.96091079711914
+                            ],
+                            "rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "static": false
+                        },
+                        {
+                            "Children": [
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 6329137884315130880,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 1395212847849828864,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 15455470966889273344,
+                                    "active": true,
+                                    "name": "City_building_004",
+                                    "position": [
+                                        -41.47589111328125,
+                                        21.01409912109375,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 14466127834426431488,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 17107882234178832384,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 7278143384335539200,
+                                    "active": true,
+                                    "name": "City_building_001",
+                                    "position": [
+                                        17.707164764404297,
+                                        20.05327606201172,
+                                        2.121072952832037e-07
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 9759846123736215552,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 196182894668547296,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 17736625082087460864,
+                                    "active": true,
+                                    "name": "City_building_007",
+                                    "position": [
+                                        16.0104923248291,
+                                        37.4932861328125,
+                                        -1.5106878663573298e-06
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 16340750381721522176,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 1085944081517261824,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 7319637524796430336,
+                                    "active": true,
+                                    "name": "City_building_008",
+                                    "position": [
+                                        40.97999572753906,
+                                        18.270824432373047,
+                                        -2.0522466002148576e-06
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 0,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 5210274830461650944,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 10856947103002349568,
+                                    "active": true,
+                                    "name": "Line002",
+                                    "position": [
+                                        -1.7599999904632568,
+                                        1.8538382053375244,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        -0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 0,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 4591328787592508928,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 17121742931856627712,
+                                    "active": true,
+                                    "name": "Plane001",
+                                    "position": [
+                                        -0.02860260009765625,
+                                        0.026032090187072754,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        0.973893404006958,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": [
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 1467374131705414144,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 2616051538675178496,
+                                            "active": true,
+                                            "name": "City_building_010_0",
+                                            "position": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "rotation": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "scale": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "static": false
+                                        },
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 5509214634810583040,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 11391679843799087104,
+                                            "active": true,
+                                            "name": "City_building_010_1",
+                                            "position": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "rotation": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "scale": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "static": false
+                                        }
+                                    ],
+                                    "Components": null,
+                                    "UID": 16904755262643800064,
+                                    "active": true,
+                                    "name": "City_building_010",
+                                    "position": [
+                                        25.154010772705078,
+                                        -39.15372085571289,
+                                        8.553864176974457e-07
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 9759846123736215552,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 196182894668547296,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 16393611417762465792,
+                                    "active": true,
+                                    "name": "City_building_011",
+                                    "position": [
+                                        30.134540557861328,
+                                        37.4932861328125,
+                                        -1.5106878663573298e-06
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 4242938550173967872,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 447187038002098176,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 15288231603706826752,
+                                    "active": true,
+                                    "name": "City_building_013",
+                                    "position": [
+                                        -42.288055419921875,
+                                        33.201576232910156,
+                                        5.014607040720875e-07
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 6329137884315130880,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 11442062230209546240,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 9212689197463624704,
+                                    "active": true,
+                                    "name": "City_building_014",
+                                    "position": [
+                                        -19.439706802368164,
+                                        32.061729431152344,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        -4.371138828673793e-08,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": [
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 1467374131705414144,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 876332097589076352,
+                                            "active": true,
+                                            "name": "City_building_016_0",
+                                            "position": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "rotation": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "scale": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "static": false
+                                        },
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 5509214634810583040,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 2778366052897887232,
+                                            "active": true,
+                                            "name": "City_building_016_1",
+                                            "position": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "rotation": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "scale": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "static": false
+                                        }
+                                    ],
+                                    "Components": null,
+                                    "UID": 5060149467122885632,
+                                    "active": true,
+                                    "name": "City_building_016",
+                                    "position": [
+                                        34.270423889160156,
+                                        -41.972747802734375,
+                                        8.553864176974457e-07
+                                    ],
+                                    "rotation": [
+                                        -4.371138828673793e-08,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": [
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 1467374131705414144,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 616974781783399424,
+                                            "active": true,
+                                            "name": "City_building_017_0",
+                                            "position": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "rotation": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "scale": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "static": false
+                                        },
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 5509214634810583040,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 2916551847311633408,
+                                            "active": true,
+                                            "name": "City_building_017_1",
+                                            "position": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "rotation": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "scale": [
+                                                -107374176.0,
+                                                -107374176.0,
+                                                -107374176.0
+                                            ],
+                                            "static": false
+                                        }
+                                    ],
+                                    "Components": null,
+                                    "UID": 5912963203826922496,
+                                    "active": true,
+                                    "name": "City_building_017",
+                                    "position": [
+                                        44.26008224487305,
+                                        -39.15372085571289,
+                                        8.553864176974457e-07
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 1363044477386783488,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 13743616662710964224,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 1999120704593587456,
+                                    "active": true,
+                                    "name": "City_building_022",
+                                    "position": [
+                                        -20.831323623657227,
+                                        -27.426490783691406,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.9470718370939721e-07,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 9759846123736215552,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 196182894668547296,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 7414500640248873984,
+                                    "active": true,
+                                    "name": "City_building_023",
+                                    "position": [
+                                        42.13064193725586,
+                                        37.4932861328125,
+                                        -1.5106878663573298e-06
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 16340750381721522176,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 1085944081517261824,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 8552484076159167488,
+                                    "active": true,
+                                    "name": "City_building_024",
+                                    "position": [
+                                        -20.572771072387695,
+                                        43.060829162597656,
+                                        -0.06919445842504501
+                                    ],
+                                    "rotation": [
+                                        4.371138828673793e-08,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 1363044477386783488,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 4021070749400931328,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 4670316255488651264,
+                                    "active": true,
+                                    "name": "City_building_026",
+                                    "position": [
+                                        31.51188850402832,
+                                        -16.446016311645508,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        4.371138828673793e-08,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 5823449995148981248,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 13658657926937589760,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 17416516360602849280,
+                                    "active": true,
+                                    "name": "City_building_028",
+                                    "position": [
+                                        13.38798999786377,
+                                        -33.75503921508789,
+                                        -9.383451811117993e-07
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 0,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 5539565982417341440,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 299646508080021120,
+                                    "active": true,
+                                    "name": "Object010",
+                                    "position": [
+                                        -2.5033531188964844,
+                                        15.800846099853516,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 5823449995148981248,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 13658657926937589760,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 8573038344947194880,
+                                    "active": true,
+                                    "name": "City_building_030",
+                                    "position": [
+                                        -42.8072395324707,
+                                        -41.83556365966797,
+                                        -9.383451811117993e-07
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        -0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 5823449995148981248,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 13658657926937589760,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 6667123814587436032,
+                                    "active": true,
+                                    "name": "City_building_031",
+                                    "position": [
+                                        -34.679481506347656,
+                                        -41.83556365966797,
+                                        -9.383451811117993e-07
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        -0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 6329137884315130880,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 1395212847849828864,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 2906759725444466176,
+                                    "active": true,
+                                    "name": "City_building_032",
+                                    "position": [
+                                        -29.478403091430664,
+                                        21.01409912109375,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 4242938550173967872,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 12237127515646681088,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 2099781361779392512,
+                                    "active": true,
+                                    "name": "City_building_033",
+                                    "position": [
+                                        -32.36149597167969,
+                                        42.37042236328125,
+                                        5.014607040720875e-07
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 1363044477386783488,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 13886641654416271360,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 12714181667581810688,
+                                    "active": true,
+                                    "name": "City_building_034",
+                                    "position": [
+                                        16.049516677856445,
+                                        -16.696884155273438,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        0.7071067094802856,
+                                        0.0,
+                                        0.0,
+                                        -0.7071068286895752
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 5823449995148981248,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 13658657926937589760,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 10846692658586507264,
+                                    "active": true,
+                                    "name": "City_building_035",
+                                    "position": [
+                                        13.38798999786377,
+                                        -40.80251693725586,
+                                        -9.383451811117993e-07
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 4242938550173967872,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 447187038002098176,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 9342234544684386304,
+                                    "active": true,
+                                    "name": "City_building_036",
+                                    "position": [
+                                        -31.216331481933594,
+                                        33.201576232910156,
+                                        5.014607040720875e-07
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        -0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 1363044477386783488,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 14016571755714531328,
+                                            "active": true,
+                                            "type": 1
+                                        },
+                                        {
+                                            "active": true,
+                                            "script": "Assets/Scripts/MoveTank.lua",
+                                            "type": 5
+                                        }
+                                    ],
+                                    "UID": 17718638638902333440,
+                                    "active": true,
+                                    "name": "City_building_037",
+                                    "position": [
+                                        -5.8000030517578125,
+                                        10.100082397460938,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.9470718370939721e-07,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 1363044477386783488,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 6634991414681325568,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 4871098647846317056,
+                                    "active": true,
+                                    "name": "City_building_038",
+                                    "position": [
+                                        -41.64900207519531,
+                                        -16.495393753051758,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        0.7071067094802856,
+                                        0.0,
+                                        0.0,
+                                        -0.7071068286895752
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 5823449995148981248,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 13658657926937589760,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 9117637597006753792,
+                                    "active": true,
+                                    "name": "City_building_039",
+                                    "position": [
+                                        -42.8072395324707,
+                                        -30.643888473510742,
+                                        -9.383451811117993e-07
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        -0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 5823449995148981248,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 13658657926937589760,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 4548239275273555968,
+                                    "active": true,
+                                    "name": "City_building_040",
+                                    "position": [
+                                        -34.679481506347656,
+                                        -30.643888473510742,
+                                        -9.383451811117993e-07
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        -0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 14466127834426431488,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 17107882234178832384,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 8455235188808268800,
+                                    "active": true,
+                                    "name": "City_building_041",
+                                    "position": [
+                                        30.69527816772461,
+                                        21.612646102905273,
+                                        2.121072952832037e-07
+                                    ],
+                                    "rotation": [
+                                        0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                }
+                            ],
+                            "Components": null,
+                            "UID": 17640625750541471744,
+                            "active": true,
+                            "name": "Dummy001",
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "rotation": [
+                                0.7071067690849304,
+                                -0.7071067690849304,
+                                0.0,
+                                0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "static": false
+                        },
+                        {
+                            "Children": null,
+                            "Components": null,
+                            "UID": 5795960605319963648,
+                            "active": true,
+                            "name": "Camera001",
+                            "position": [
+                                -78.31243133544922,
+                                45.251216888427734,
+                                -97.03111267089844
+                            ],
+                            "rotation": [
+                                -0.3301403522491455,
+                                0.04933977872133255,
+                                0.9322873950004578,
+                                0.13933119177818298
+                            ],
+                            "scale": [
+                                1.0,
+                                0.9999999403953552,
+                                0.9999999403953552
+                            ],
+                            "static": false
+                        },
+                        {
+                            "Children": null,
+                            "Components": null,
+                            "UID": 14677847166049599488,
+                            "active": true,
+                            "name": "Camera001.Target",
+                            "position": [
+                                -28.13262176513672,
+                                20.873329162597656,
+                                -35.064212799072266
+                            ],
+                            "rotation": [
+                                -0.33014044165611267,
+                                0.04933978617191315,
+                                0.932287335395813,
+                                0.13933119177818298
+                            ],
+                            "scale": [
+                                1.0,
+                                0.9999999403953552,
+                                1.0
+                            ],
+                            "static": false
+                        },
+                        {
+                            "Children": null,
+                            "Components": null,
+                            "UID": 8429532988559992832,
+                            "active": true,
+                            "name": "Spot001",
+                            "position": [
+                                -66.72126770019531,
+                                141.9341278076172,
+                                6.204137662280118e-06
+                            ],
+                            "rotation": [
+                                0.6900351643562317,
+                                0.15443938970565796,
+                                -0.6900351047515869,
+                                0.15443938970565796
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "static": false
+                        },
+                        {
+                            "Children": null,
+                            "Components": null,
+                            "UID": 15783277402407845888,
+                            "active": true,
+                            "name": "Spot001.Target",
+                            "position": [
+                                28.890945434570313,
+                                -60.96388244628906,
+                                -2.6648158382158726e-06
+                            ],
+                            "rotation": [
+                                1.0,
+                                5.960464477539063e-08,
+                                0.0,
+                                0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "static": false
+                        }
+                    ],
+                    "Components": null,
+                    "UID": 1418862504992961792,
+                    "active": true,
+                    "name": "Street_environment_V01",
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "static": false
+                }
+            ],
+            "Components": null,
+            "UID": 608794535364958848,
+            "active": true,
+            "name": "Root",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "static": false
+        }
+    ]
+}
