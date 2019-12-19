@@ -99,16 +99,17 @@ void PanelResources::File::Draw()
 					break;
 				}
 			}
-			if (ImGui::BeginDragDropSource()) {
-				(*file)->panel->file_dragdrop = (*file)->path;
-				std::string type;
-				switch ((*file)->format) {
-				case FileSystem::Format::LUA:
-					ImGui::SetDragDropPayload("SCRIPT", &(*file)->panel->file_dragdrop, sizeof(int));
-					break;
+			if (!(*file)->is_folder)
+				if (ImGui::BeginDragDropSource()) {
+					(*file)->panel->file_dragdrop = (*file)->path;
+					std::string type;
+					switch ((*file)->format) {
+					case FileSystem::Format::LUA:
+						ImGui::SetDragDropPayload("SCRIPT", &(*file)->panel->file_dragdrop, sizeof(int));
+						break;
+					}
+					ImGui::EndDragDropSource();
 				}
-				ImGui::EndDragDropSource();
-			}
 
 			ImGui::TreePop();
 		}

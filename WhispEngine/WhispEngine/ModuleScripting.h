@@ -32,6 +32,10 @@ private:
 	lua_State* L = nullptr;
 
 	static void Log(const char* s) {
-		LOG(s);
+		if (s != nullptr) {
+			LOG(s);
+		}
+		else
+			LOG("LUA FAILED: Message is nullptr");
 	}
 };

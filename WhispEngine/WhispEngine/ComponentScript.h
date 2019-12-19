@@ -4,6 +4,10 @@
 class ComponentScript :
 	public Component
 {
+	struct PublicVar {
+		float value = 0.f;
+		std::string type; //TODO To enum
+	};
 public:
 	ComponentScript(GameObject* parent);
 	~ComponentScript();
@@ -22,5 +26,7 @@ public:
 	std::string title = "NONE (Script)";
 	bool is_assigned = false;
 	bool valid = false;
+
+	std::map<std::string, PublicVar> public_vars;
 };
 

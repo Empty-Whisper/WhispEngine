@@ -23,6 +23,9 @@ public:
 	nlohmann::json	OpenFile(const char* path);
 	void			SaveFile(const char* path, const nlohmann::json &to_save);
 
+	/*
+	Give Data from a file. The result is a char array. WARNING: REMEMBER TO DELETE ARRAY AFTER USE IT
+	*/
 	char* GetTextFile(const char* path);
 	void  SaveTextFile(const char* buffer, const char* path);
 
