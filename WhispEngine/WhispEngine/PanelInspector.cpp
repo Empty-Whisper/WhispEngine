@@ -59,8 +59,9 @@ void PanelInspector::Update()
 				if(ImGui::Selectable("Camera"))
 					if (!sel->HasComponent(ComponentType::CAMERA))
 						sel->CreateComponent(ComponentType::CAMERA);
-				if (ImGui::Selectable("Script"))
+				if (ImGui::Selectable("Script")) {
 					sel->CreateComponent(ComponentType::SCRIPT);
+				}
 
 				ImGui::EndPopup();
 			}
