@@ -20,6 +20,7 @@ public:
 	std::string script_path = SCRIPT_A_FOLDER;
 	std::string name = "NONE";
 	std::string title = "NONE (Script)";
-	bool is_assigned = false;	
+	bool is_assigned = false;
+	bool valid = false;
 };
 
