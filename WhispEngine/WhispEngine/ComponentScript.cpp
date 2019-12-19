@@ -16,6 +16,9 @@ ComponentScript::ComponentScript(GameObject* parent) : Component(parent,Componen
 
 ComponentScript::~ComponentScript()
 {
+	for (auto i = public_vars.begin(); i != public_vars.end(); i++) {
+		delete (*i).second;
+	}
 }
 
 void ComponentScript::Update()
@@ -24,34 +27,51 @@ void ComponentScript::Update()
 	{
 		luabridge::setGlobal(App->scripting->GetState(), object, "object");
 		luabridge::setGlobal(App->scripting->GetState(), object->transform, "transform");
-		//luabridge::LuaRef ref = luabridge::getGlobal(App->scripting->GetState(), name.data());
-		luabridge::LuaRef t = luabridge::newTable(App->scripting->GetState());
-		if (public_vars.empty())
-			t["a"] = 5;
-		else
-			t["a"] = public_vars["a"].value;
-		luabridge::setGlobal(App->scripting->GetState(), t, "var");
-		/*if (ref.isTable()) {
-			if (ref["Variables"].isTable()) {
-				ref["Variables"]["a"] = 2;
-				luabridge::setGlobal(App->scripting->GetState(), ref, name.c_str());
-			}
-		}*/
-		/*if (ref.isTable()) {
-			ref = ref["Variables"];
-			if (ref.isTable()) {
-				for (auto var = public_vars.begin(); var != public_vars.end(); var++) {
-					auto r = ref[(*var).first.c_str()];
-					r = (*var).second.value;
-				}
-				luabridge::setGlobal(App->scripting->GetState(), ref, (name + ".Variables").c_str());
-			}
-		}*/
+		if (!public_vars.empty()) {
+			SetInspectorVars();
+		}
+		
 		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), "Update");
+		
 		lua_pop(App->scripting->GetState(), -1);
 		lua_pop(App->scripting->GetState(), -1);
-		lua_pop(App->scripting->GetState(), -1);
+		if (!public_vars.empty())
+			lua_pop(App->scripting->GetState(), -1);
 	}
+}
+
+void ComponentScript::SetInspectorVars()
+{
+	luabridge::LuaRef t = luabridge::newTable(App->scripting->GetState());
+	for (auto var = public_vars.begin(); var != public_vars.end(); var++) {
+		switch ((*var).second->type)
+		{
+		case ComponentScript::TypeData::BOOL:
+			t[(*var).first.c_str()] = static_cast<Property<bool>*>((*var).second)->data;
+			break;
+		case ComponentScript::TypeData::INT:
+			t[(*var).first.c_str()] = static_cast<Property<int>*>((*var).second)->data;
+			break;
+		case ComponentScript::TypeData::FLOAT:
+			t[(*var).first.c_str()] = static_cast<Property<float>*>((*var).second)->data;
+			break;
+		case ComponentScript::TypeData::NIL:
+			t[(*var).first.c_str()] = static_cast<Property<int>*>((*var).second)->data;
+			break;
+		case ComponentScript::TypeData::TABLE:
+			t[(*var).first.c_str()] = static_cast<Property<int>*>((*var).second)->data;
+			break;
+		case ComponentScript::TypeData::STRING:
+			t[(*var).first.c_str()] = static_cast<Property<std::string>*>((*var).second)->data;
+			break;
+		case ComponentScript::TypeData::USERDATA:
+			t[(*var).first.c_str()] = static_cast<Property<int>*>((*var).second)->data;
+			break;
+		default:
+			break;
+		}
+	}
+	luabridge::setGlobal(App->scripting->GetState(), t, "var");
 }
 
 void ComponentScript::OnInspector()
@@ -71,161 +91,209 @@ void ComponentScript::OnInspector()
 				ImGui::Text("Script\t"); ImGui::SameLine(); ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "%s", name.data());
 			}
 			ImGui::SameLine();
+			if (ImGui::Button("Refresh")) {
+				UpdateInspectorVars();
+			}
+			ImGui::SameLine();
 			if (ImGui::Button("Change")) {
-				char filename[MAX_PATH];
-
-				char current_dir[MAX_PATH];
-				GetCurrentDirectoryA(MAX_PATH, current_dir);
-
-				std::string dir = std::string(current_dir) + "\\" + "Assets\\Scripts";
-
-				OPENFILENAME ofn;
-				ZeroMemory(&filename, sizeof(filename));
-				ZeroMemory(&ofn, sizeof(ofn));
-				ofn.lStructSize = sizeof(ofn);
-				ofn.hwndOwner = NULL;  // If you have a window to center over, put its HANDLE here
-				ofn.lpstrFilter = "Whisp Script\0*.lua\0";
-				ofn.lpstrFile = filename;
-				ofn.lpstrInitialDir = dir.c_str();
-				ofn.nMaxFile = MAX_PATH;
-				ofn.lpstrTitle = "Load Script";
-				ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_OVERWRITEPROMPT;
-
-				if (GetOpenFileNameA(&ofn))
-				{
-					SetCurrentDirectoryA(current_dir);
-
-					if (App->file_system->GetFormat(filename) != FileSystem::Format::LUA) {
-						LOG("File is not a script file, cannot open");
-					}
-					else {
-						if (!App->file_system->IsInDirectory(SCENE_A_FOLDER, filename))
-							if (!App->file_system->IsInSubDirectory(ASSETS_FOLDER, filename))
-								LOG("Script file not in Assets folder, we recommend you to work in Assets folder");
-
-						SetScript(filename);
-					}
-				}
-				else
-					SetCurrentDirectoryA(current_dir);
+				OpenModalWindowsToLoadScript();
 			}
 
 			if (valid) {
 				ImGui::Separator();
 
-				for (auto var = public_vars.begin(); var != public_vars.end(); var++) {
-					ImGui::SliderFloat((*var).first.c_str(), &(*var).second.value, 0.f, 10.f);
-				}
+				DrawInspectorVars();
 			}
 		}
 		else {
-			static char buffer[50];
-			if (ImGui::InputText("", buffer, 50, ImGuiInputTextFlags_EnterReturnsTrue)) {
-				name.assign(buffer);
-				title = name + " (Script)";
-				script_path.append(name + ".lua");
-				App->file_system->Copy("Assets/Internal/model.lua", script_path.data());
-				valid = true;
-
-				char* file = App->file_system->GetTextFile(script_path.data());
-				std::string sfile(file);
-				delete[] file;
-
-				while (sfile.find("Model") != std::string::npos) {
-					sfile.replace(sfile.find("Model"), 5, name.c_str());
-				}
-				while (sfile.find('\r') != std::string::npos) {
-					sfile.replace(sfile.find('\r'), 1, "");
-				}
-
-				App->file_system->SaveTextFile(sfile.data(), script_path.c_str());
-				is_assigned = true;
-			}
+			SetScriptName();
 		}
 	}
-	if (App->input->GetKeyDown(SDL_SCANCODE_A)) {
-		luabridge::LuaRef ref = luabridge::getGlobal(App->scripting->GetState(), name.data());
+}
+
+void ComponentScript::SetScriptName()
+{
+	static char buffer[50];
+	if (ImGui::InputText("", buffer, 50, ImGuiInputTextFlags_EnterReturnsTrue)) {
+		name.assign(buffer);
+		title = name + " (Script)";
+		script_path.append(name + ".lua");
+		App->file_system->Copy("Assets/Internal/model.lua", script_path.data());
+		valid = true;
+
+		char* file = App->file_system->GetTextFile(script_path.data());
+		std::string sfile(file);
+		delete[] file;
+
+		while (sfile.find("Model") != std::string::npos) {
+			sfile.replace(sfile.find("Model"), 5, name.c_str());
+		}
+		while (sfile.find('\r') != std::string::npos) {
+			sfile.replace(sfile.find('\r'), 1, "");
+		}
+
+		App->file_system->SaveTextFile(sfile.data(), script_path.c_str());
+		is_assigned = true;
+	}
+}
+
+void ComponentScript::DrawInspectorVars()
+{
+	for (auto var = public_vars.begin(); var != public_vars.end(); var++) {
+		switch ((*var).second->type)
+		{
+		case ComponentScript::TypeData::BOOL:
+			ImGui::Checkbox((*var).first.c_str(), &static_cast<Property<bool>*>((*var).second)->data);
+			break;
+		case ComponentScript::TypeData::INT:
+			ImGui::SliderInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data, 0, 10);
+			break;
+		case ComponentScript::TypeData::FLOAT:
+			ImGui::SliderFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data, 0.f, 10.f);
+			break;
+		case ComponentScript::TypeData::NIL:
+			break;
+		case ComponentScript::TypeData::TABLE:
+			break;
+		case ComponentScript::TypeData::STRING:
+			static char buff[50];
+			strcpy(buff, static_cast<Property<std::string>*>((*var).second)->data.c_str());
+			if (ImGui::InputText((*var).first.c_str(), buff, 50, ImGuiInputTextFlags_EnterReturnsTrue)) {
+				static_cast<Property<std::string>*>((*var).second)->data.assign(buff);
+			}
+			break;
+		case ComponentScript::TypeData::USERDATA:
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+void ComponentScript::OpenModalWindowsToLoadScript()
+{
+	char filename[MAX_PATH];
+
+	char current_dir[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, current_dir);
+
+	std::string dir = std::string(current_dir) + "\\" + "Assets\\Scripts";
+
+	OPENFILENAME ofn;
+	ZeroMemory(&filename, sizeof(filename));
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = NULL;  // If you have a window to center over, put its HANDLE here
+	ofn.lpstrFilter = "Whisp Script\0*.lua\0";
+	ofn.lpstrFile = filename;
+	ofn.lpstrInitialDir = dir.c_str();
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrTitle = "Load Script";
+	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_OVERWRITEPROMPT;
+
+	if (GetOpenFileNameA(&ofn))
+	{
+		SetCurrentDirectoryA(current_dir);
+
+		if (App->file_system->GetFormat(filename) != FileSystem::Format::LUA) {
+			LOG("File is not a script file, cannot open");
+		}
+		else {
+			if (!App->file_system->IsInDirectory(SCENE_A_FOLDER, filename))
+				if (!App->file_system->IsInSubDirectory(ASSETS_FOLDER, filename))
+					LOG("Script file not in Assets folder, we recommend you to work in Assets folder");
+
+			SetScript(filename);
+		}
+	}
+	else
+		SetCurrentDirectoryA(current_dir);
+}
+
+void ComponentScript::UpdateInspectorVars()
+{
+	luabridge::LuaRef ref = luabridge::getGlobal(App->scripting->GetState(), name.data());
+	if (ref.isTable()) {
+		ref = ref["Variables"];
 		if (ref.isTable()) {
-			ref = ref["Variables"];
-			if (ref.isTable()) {
-				std::ifstream is(script_path.c_str());
-				std::string str;
-				std::list<std::string> keys;
-				bool in_table = false;
-				int name_of_keys = 0;
-				while (std::getline(is, str))
-				{
-					if (in_table) {
-						if (str.find("=") != std::string::npos) { // All public variables must be initialized
-							for (auto i = str.begin(); i != str.end(); i++) {
-								if (std::isalpha(*i)) {
-									auto j = i;
-									std::string word;
-									while (*j != ' ') {
-										word += *j;
-										j++;
-									}
-									keys.push_back(word);
-									break;
+			std::ifstream is(script_path.c_str());
+			std::string str;
+			std::list<std::string> keys;
+			bool in_table = false;
+			while (std::getline(is, str))
+			{
+				if (in_table) {
+					if (str.find("=") != std::string::npos) { // All public variables must be initialized
+						for (auto i = str.begin(); i != str.end(); i++) {
+							if (std::isalpha(*i)) {
+								auto j = i;
+								std::string word;
+								while (*j != ' ') {
+									word += *j;
+									j++;
 								}
-								if ((*i) == '-' && (*(i + 1)) == '-')
-									break; // lua comment
+								keys.push_back(word);
+								break;
 							}
-						}
-						if (str.find("}") != std::string::npos)
-							break;
-					}
-					else {
-						if (str.find("Variables") != std::string::npos) {
-							in_table = true;
+							if ((*i) == '-' && (*(i + 1)) == '-')
+								break; // lua comment
 						}
 					}
+					if (str.find("}") != std::string::npos)
+						break;
 				}
-				auto v = public_vars.begin();
-				while(v != public_vars.end()) {
-					if (std::find(keys.begin(), keys.end(), (*v).first) == keys.end())
-						v = public_vars.erase(v);
-					else
-						v++;
+				else {
+					if (str.find("Variables") != std::string::npos) {
+						in_table = true;
+					}
 				}
-				for (auto k = keys.begin(); k != keys.end(); k++) {
-					LOG("variable name: %s", (*k).c_str());
+			}
+			auto v = public_vars.begin();
+			while (v != public_vars.end()) {
+				if (std::find(keys.begin(), keys.end(), (*v).first) == keys.end()) {
+					auto var = *v;
+					v = public_vars.erase(v);
+					delete var.second;
+				}
+				else
+					v++;
+			}
+			for (auto k = keys.begin(); k != keys.end(); k++) {
+				if (public_vars.find((*k).c_str()) == public_vars.end()) {
 					auto r = ref[(*k).c_str()];
 
-					PublicVar var;
-
 					if (r.isBool()) {
-						LOG("is bool");
-						var.type = "bool";
-					}
-					if (r.isFunction()) {
-						LOG("is function");
-						var.type = "function";
+						Property<bool>* var = new Property<bool>(TypeData::BOOL, r.cast<bool>());
+						public_vars[(*k).c_str()] = var;
 					}
 					if (r.isNil()) {
-						LOG("is nil");
-						var.type = "nil";
+						Property<int>* var = new Property<int>(TypeData::NIL, 0);
+						public_vars[(*k).c_str()] = var;
 					}
 					if (r.isNumber()) {
-						LOG("is number");
-						var.type = "number";
-						var.value = r.cast<float>();
+						float f = r.cast<float>();
+						if (ceilf(f) == f) { //integer
+							Property<int>* var = new Property<int>(TypeData::INT, r.cast<int>());
+							public_vars[(*k).c_str()] = var;
+						}
+						else {
+							Property<float>* var = new Property<float>(TypeData::FLOAT, r.cast<float>());
+							public_vars[(*k).c_str()] = var;
+						}
 					}
 					if (r.isString()) {
-						LOG("is string");
-						var.type = "string";
+						Property<std::string>* var = new Property<std::string>(TypeData::STRING, r.cast<std::string>());
+						public_vars[(*k).c_str()] = var;
 					}
 					if (r.isTable()) {
-						LOG("is table");
-						var.type = "table";
+						Property<int>* var = new Property<int>(TypeData::TABLE, 0);
+						public_vars[(*k).c_str()] = var;
 					}
 					if (r.isUserdata()) {
-						LOG("is userdata");
-						var.type = "userdata";
+						Property<int>* var = new Property<int>(TypeData::USERDATA, 0);
+						public_vars[(*k).c_str()] = var;
 					}
-					public_vars[(*k).c_str()] = var;
 				}
-
 			}
 		}
 	}
@@ -238,14 +306,8 @@ void ComponentScript::SetScript(const char * path)
 		script_path = path;
 		name = App->file_system->GetFileNameFromPath(script_path.c_str());
 		valid = true;
-		luabridge::LuaRef ref = luabridge::getGlobal(App->scripting->GetState(), name.data());
-		if (ref.isTable()) {
-			ref = ref["Variables"];
-			if (ref.isTable()) {
-				LOG("string: %s", ref.tostring().c_str());
-				LOG("length: %i", ref.length());
-			}
-		}
+		luaL_dofile(App->scripting->GetState(), path);
+		UpdateInspectorVars();
 	}
 	else {
 		script_path = "NONE";
@@ -258,9 +320,72 @@ void ComponentScript::SetScript(const char * path)
 void ComponentScript::Save(nlohmann::json & node)
 {
 	node["script"] = script_path.c_str();
+	for (auto v = public_vars.begin(); v != public_vars.end(); v++) {
+		nlohmann::json var;
+		var["key"] = (*v).first;
+		var["type"] = (*v).second->type;
+		switch ((*v).second->type)
+		{
+		case ComponentScript::TypeData::BOOL:
+			var["data"] = static_cast<Property<bool>*>((*v).second)->data;
+			break;
+		case ComponentScript::TypeData::INT:
+			var["data"] = static_cast<Property<int>*>((*v).second)->data;
+			break;
+		case ComponentScript::TypeData::FLOAT:
+			var["data"] = static_cast<Property<float>*>((*v).second)->data;
+			break;
+		case ComponentScript::TypeData::NIL:
+			var["data"] = static_cast<Property<int>*>((*v).second)->data;
+			break;
+		case ComponentScript::TypeData::TABLE:
+			var["data"] = static_cast<Property<int>*>((*v).second)->data;
+			break;
+		case ComponentScript::TypeData::STRING:
+			var["data"] = static_cast<Property<std::string>*>((*v).second)->data.c_str();
+			break;
+		case ComponentScript::TypeData::USERDATA:
+			var["data"] = static_cast<Property<int>*>((*v).second)->data;
+			break;
+		default:
+			break;
+		}
+		node["InspectorVars"].push_back(var);
+	}
 }
 
 void ComponentScript::Load(const nlohmann::json & node)
 {
 	SetScript(node.value("script", "NONE").c_str());
+	auto vars = node["InspectorVars"];
+	for (auto v = vars.begin(); v != vars.end(); ++v) {
+		if (public_vars.find((*v)["key"]) != public_vars.end()) {
+			switch ((TypeData)(*v)["type"])
+			{
+			case ComponentScript::TypeData::BOOL:
+				static_cast<Property<bool>*>(public_vars[(*v)["key"]])->data = (*v).value("data", false);
+				break;
+			case ComponentScript::TypeData::INT:
+				static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
+				break;
+			case ComponentScript::TypeData::FLOAT:
+				static_cast<Property<float>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0.f);
+				break;
+			case ComponentScript::TypeData::NIL:
+				static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
+				break;
+			case ComponentScript::TypeData::TABLE:
+				static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
+				break;
+			case ComponentScript::TypeData::STRING:
+				static_cast<Property<std::string>*>(public_vars[(*v)["key"]])->data.assign((*v).value("data", "none"));
+				break;
+			case ComponentScript::TypeData::USERDATA:
+				static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
+				break;
+			default:
+				break;
+			}
+		}
+	}
 }

@@ -5,11 +5,13 @@ testinspector = {}
 
 testinspector.Variables = {
 		-- Public Variables [All must be initialized]
-		a = 5,
-	--	b = 3,
---jonnnnnnnnn = 2,
---jajajaj = 'stringgggggg',
---nope = 09
+		integer = 6,
+		float = 3.315,
+		boolean = true,
+		name = 'Tina',
+		gameObject = nil,
+		vector = Vector3(1,0,0)
+		-- _table = {
 }
 
 --local var = testinspector.Variables
@@ -20,10 +22,18 @@ end
 
 function testinspector:Update()
 
---	if input.getKeyDown('s') then
-		Log(var.a)
---	end
+	if input.getKeyDown('s') then
+		Log(var.integer)
+		Log(tostring(var.boolean))
+	end
 end
+
+
+
+
+
+
+
 
 
 

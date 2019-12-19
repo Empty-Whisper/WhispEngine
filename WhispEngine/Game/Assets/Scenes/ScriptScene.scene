@@ -1,9 +1,9 @@
 {
     "Camera": {
         "position": [
-            -7.942925930023193,
-            7.297729969024658,
-            -12.993473052978516
+            0.0,
+            1.0,
+            -1.0
         ]
     },
     "GameObjects": [
@@ -13,12 +13,42 @@
                     "Children": null,
                     "Components": [
                         {
+                            "InspectorVars": [
+                                {
+                                    "data": true,
+                                    "key": "boolean",
+                                    "type": 0
+                                },
+                                {
+                                    "data": 0.0,
+                                    "key": "float",
+                                    "type": 2
+                                },
+                                {
+                                    "key": "gameObject",
+                                    "type": 3
+                                },
+                                {
+                                    "data": 10,
+                                    "key": "integer",
+                                    "type": 1
+                                },
+                                {
+                                    "data": "Tinae",
+                                    "key": "name",
+                                    "type": 5
+                                },
+                                {
+                                    "key": "vector",
+                                    "type": 6
+                                }
+                            ],
                             "active": true,
-                            "script": "Assets/Scripts/test3.lua",
+                            "script": "Assets\\Scripts\\testinspector.lua",
                             "type": 5
                         }
                     ],
-                    "UID": 11963295656500891648,
+                    "UID": 9968119269798821888,
                     "active": true,
                     "name": "GameObject",
                     "position": [
@@ -41,9 +71,9 @@
                 }
             ],
             "Components": null,
-            "UID": 4099355189196360704,
+            "UID": 2172197723288888832,
             "active": true,
-            "name": "Root",
+            "name": "GameObject",
             "position": [
                 0.0,
                 0.0,
