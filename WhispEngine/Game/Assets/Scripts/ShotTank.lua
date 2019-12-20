@@ -26,7 +26,7 @@ end
 
 function ShotTank:Update()
 
-	if input.getKeyDown('q') then
+	if input.getKeyDown('r') then
 		--SetActive(true)
 		pos = transform.position
 		transform:SetPosition3f(pos.x,pos.y,pos.z)--Set pos = canon position, same for rotation?
@@ -45,6 +45,7 @@ function ShotTank:Update()
 		prepare_timer = 0
 	end
 end
+
 
 
 
