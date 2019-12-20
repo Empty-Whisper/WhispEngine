@@ -21,7 +21,6 @@ ComponentTransform::~ComponentTransform()
 
 void ComponentTransform::PreUpdate()
 {
-
 }
 
 void ComponentTransform::OnInspector()
@@ -215,6 +214,11 @@ math::float3 ComponentTransform::GetPosition() const
 	return position;
 }
 
+math::Quat ComponentTransform::GetRotation() const
+{
+	return rotation;
+}
+
 void ComponentTransform::Save(nlohmann::json & node)
 {
 	App->json->AddFloat3("position", position, node);
@@ -239,5 +243,12 @@ void ComponentTransform::LSetPositionV(const float3 & vector)
 void ComponentTransform::LSetPosition3f(const float & x, const float & y, const float & z)
 {
 	position.Set(x, y, z);
+	CalculeLocalMatrix();
+}
+
+void ComponentTransform::LSetRotationQ(const Quat & quat)
+{
+	rotation = quat;
+	euler_rot = rotation.ToEulerXYZ();
 	CalculeLocalMatrix();
 }

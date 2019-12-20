@@ -31,12 +31,15 @@ void ComponentScript::Update()
 			SetInspectorVars();
 		}
 		
-		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), "Update");
+		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), "Update", first_time);
 		
 		lua_pop(App->scripting->GetState(), -1);
 		lua_pop(App->scripting->GetState(), -1);
 		if (!public_vars.empty())
 			lua_pop(App->scripting->GetState(), -1);
+
+		if (first_time)
+			first_time = false;
 	}
 }
 
@@ -93,6 +96,7 @@ void ComponentScript::OnInspector()
 			ImGui::SameLine();
 			if (ImGui::Button("Refresh")) {
 				UpdateInspectorVars();
+				first_time = true;
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Change")) {
@@ -357,34 +361,36 @@ void ComponentScript::Save(nlohmann::json & node)
 void ComponentScript::Load(const nlohmann::json & node)
 {
 	SetScript(node.value("script", "NONE").c_str());
-	auto vars = node["InspectorVars"];
-	for (auto v = vars.begin(); v != vars.end(); ++v) {
-		if (public_vars.find((*v)["key"]) != public_vars.end()) {
-			switch ((TypeData)(*v)["type"])
-			{
-			case ComponentScript::TypeData::BOOL:
-				static_cast<Property<bool>*>(public_vars[(*v)["key"]])->data = (*v).value("data", false);
-				break;
-			case ComponentScript::TypeData::INT:
-				static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
-				break;
-			case ComponentScript::TypeData::FLOAT:
-				static_cast<Property<float>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0.f);
-				break;
-			case ComponentScript::TypeData::NIL:
-				static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
-				break;
-			case ComponentScript::TypeData::TABLE:
-				static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
-				break;
-			case ComponentScript::TypeData::STRING:
-				static_cast<Property<std::string>*>(public_vars[(*v)["key"]])->data.assign((*v).value("data", "none"));
-				break;
-			case ComponentScript::TypeData::USERDATA:
-				static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
-				break;
-			default:
-				break;
+	if (node.find("InspectorVars") != node.end()) {
+		auto vars = node["InspectorVars"];
+		for (auto v = vars.begin(); v != vars.end(); ++v) {
+			if (public_vars.find((*v)["key"]) != public_vars.end()) {
+				switch ((TypeData)(*v)["type"])
+				{
+				case ComponentScript::TypeData::BOOL:
+					static_cast<Property<bool>*>(public_vars[(*v)["key"]])->data = (*v).value("data", false);
+					break;
+				case ComponentScript::TypeData::INT:
+					static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
+					break;
+				case ComponentScript::TypeData::FLOAT:
+					static_cast<Property<float>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0.f);
+					break;
+				case ComponentScript::TypeData::NIL:
+					static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
+					break;
+				case ComponentScript::TypeData::TABLE:
+					static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
+					break;
+				case ComponentScript::TypeData::STRING:
+					static_cast<Property<std::string>*>(public_vars[(*v)["key"]])->data.assign((*v).value("data", "none"));
+					break;
+				case ComponentScript::TypeData::USERDATA:
+					static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}

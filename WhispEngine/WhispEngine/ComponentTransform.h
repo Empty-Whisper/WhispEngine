@@ -39,6 +39,7 @@ public:
 	math::float4x4 GetGlobalMatrix() const;
 
 	math::float3 GetPosition() const;
+	math::Quat	 GetRotation() const;
 
 	void Save(nlohmann::json& node) override;
 	void Load(const nlohmann::json& node) override;
@@ -58,5 +59,6 @@ private:
 private:
 	void LSetPositionV(const float3& vector);
 	void LSetPosition3f(const float& x, const float& y, const float& z);
+	void LSetRotationQ(const Quat& quat);
 };
 #endif

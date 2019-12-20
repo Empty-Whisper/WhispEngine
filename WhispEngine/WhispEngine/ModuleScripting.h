@@ -21,7 +21,7 @@ public:
 	update_status Update() override;
 	update_status PostUpdate() override;
 
-	void ExecuteFunctionScript(const char* path, const char* name, const char* function);
+	void ExecuteFunctionScript(const char* path, const char* name, const char* function, bool first_time);
 	void ExecuteScript(const char* file);
 
 	void LuaRegister() override;
