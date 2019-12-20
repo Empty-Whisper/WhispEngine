@@ -49,6 +49,12 @@ ResourceModel::HierarchyInfo ResourceModel::CalculateHierarchy(const aiNode * no
 			HierarchyInfo child_mesh;
 			child_mesh.mesh = meshes[node->mMeshes[j]];
 			child_mesh.name.assign(info.name + '_' + std::to_string(j));
+			child_mesh.position.Set(pos.x, pos.y, pos.z);
+			child_mesh.rotation.Set(rot.w, rot.x, rot.y, rot.z);
+			float div_scale = std::max(scale.x, scale.y);
+			div_scale = std::max(div_scale, scale.z);
+			scale /= div_scale;
+			child_mesh.scale.Set(scale.x, scale.y, scale.z);
 			info.children.push_back(child_mesh);
 		}
 	}

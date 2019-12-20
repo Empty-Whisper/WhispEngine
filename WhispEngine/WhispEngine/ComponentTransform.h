@@ -40,6 +40,7 @@ public:
 
 	math::float3 GetPosition() const;
 	math::Quat	 GetRotation() const;
+	math::float3 GetScale() const;
 
 	void Save(nlohmann::json& node) override;
 	void Load(const nlohmann::json& node) override;
@@ -60,5 +61,6 @@ private:
 	void LSetPositionV(const float3& vector);
 	void LSetPosition3f(const float& x, const float& y, const float& z);
 	void LSetRotationQ(const Quat& quat);
+	void LSetScale3f(const float& x, const float& y, const float& z);
 };
 #endif

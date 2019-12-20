@@ -76,6 +76,7 @@ public:
 	ImGuiTextBuffer text_buffer;
 	void GetTextBuffer(const std::string &key, const int &key_num, const std::string &key_state);
 	bool auto_scroll = false;
+	bool block_keyboard = false; //TODO: Change this by an enum and set what input can be done by enum types (Shortcuts)
 
 	//lua
 private:

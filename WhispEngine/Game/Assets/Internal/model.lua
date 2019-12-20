@@ -12,12 +12,13 @@ Model.Variables = {
 		]]
 }
 
--- local var = Model.Variables
-
+-- Start is called before the first frame update
 function Model:Start()
 	
 end
 
+
+-- Update is called once per frame
 function Model:Update()
 	
 end

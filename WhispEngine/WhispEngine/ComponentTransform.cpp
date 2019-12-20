@@ -219,6 +219,11 @@ math::Quat ComponentTransform::GetRotation() const
 	return rotation;
 }
 
+math::float3 ComponentTransform::GetScale() const
+{
+	return scale;
+}
+
 void ComponentTransform::Save(nlohmann::json & node)
 {
 	App->json->AddFloat3("position", position, node);
@@ -250,5 +255,11 @@ void ComponentTransform::LSetRotationQ(const Quat & quat)
 {
 	rotation = quat;
 	euler_rot = rotation.ToEulerXYZ();
+	CalculeLocalMatrix();
+}
+
+void ComponentTransform::LSetScale3f(const float & x, const float & y, const float & z)
+{
+	scale.Set(x, y, z);
 	CalculeLocalMatrix();
 }
