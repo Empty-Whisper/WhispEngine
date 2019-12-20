@@ -26,18 +26,19 @@ function RotateTurret:Update()
 	if input.getKey('q') then
 		angle = angle + speed
 		--transform:SetRotation(Quaternion.RotateZ(math.rad(angle)))
-		transform:SetRotation(Quaternion.FromEuler(math.rad(-90), 0, math.rad(angle)))
+		transform:SetRotation(Quaternion.FromEuler(math.rad(0),math.rad(angle), 0))
 
 	end
 
 	if input.getKey('e') then
 		angle = angle - speed
 		--transform:SetRotation(Quaternion.RotateZ(math.rad(angle)))
-		transform:SetRotation(Quaternion.FromEuler(math.rad(-90), 0, math.rad(angle)))
+		transform:SetRotation(Quaternion.FromEuler(math.rad(0),math.rad(angle), 0))
 	end
 	
 	
 end
+
 
 
 
