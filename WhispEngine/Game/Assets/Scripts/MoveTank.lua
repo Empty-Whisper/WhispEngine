@@ -8,7 +8,7 @@ MoveTank.Variables = {
 }
 
 local var = MoveTank.Variables
-local speed = 8
+local speed = 15
 
 function MoveTank:Start()
 	
@@ -39,6 +39,7 @@ function MoveTank:Update()
 	
 	
 end
+
 
 
 
