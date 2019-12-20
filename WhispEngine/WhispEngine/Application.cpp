@@ -242,6 +242,10 @@ void Application::LuaRegister()
 	luabridge::getGlobalNamespace(scripting->GetState())
 		.beginNamespace("Time")
 			.addProperty("deltaTime", &Time->dt, false)
+		.endNamespace()
+		.beginNamespace("Random")
+			.addFunction("Rangef", &Random::Randomf)
+			.addFunction("Rangei", &Random::Randomi)
 		.endNamespace();
 }
 

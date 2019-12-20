@@ -22,7 +22,11 @@ local angle = 0.0
 local up = Vector3(0,1,0)
 
 function Rotate:Update()
-	transform:SetRotation(Quaternion.FromEuler(0, math.rad(angle), 0))
+	--[[transform:SetRotation(Quaternion.FromEuler(0, math.rad(angle), 0))
 	angle = angle + 10 * Time.deltaTime
+	]]
+	Log(Random.Rangef(0,1))
+	Log(Random.Rangei(0,10))
 end
+
 
