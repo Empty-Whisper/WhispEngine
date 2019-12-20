@@ -18,7 +18,7 @@ function MoveTank:Update()
 --Log(Time.deltaTime)
 	if input.getKey('w') then
 		pos = transform.position
-		transform:SetPosition3f(pos.x,pos.y+(speed*Time.deltaTime),pos.z)
+		transform:SetPosition3f(pos.x,pos.y,pos.z-(speed*Time.deltaTime))
 	end
 
 	if input.getKey('a') then
@@ -28,7 +28,7 @@ function MoveTank:Update()
 
 	if input.getKey('s') then
 		pos = transform.position
-		transform:SetPosition3f(pos.x,pos.y-(speed*Time.deltaTime),pos.z)
+		transform:SetPosition3f(pos.x,pos.y,pos.z+(speed*Time.deltaTime))
 	end
 
 	if input.getKey('d') then
@@ -39,6 +39,8 @@ function MoveTank:Update()
 	
 	
 end
+
+
 
 
 
