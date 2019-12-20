@@ -86,7 +86,7 @@ function MoveTank:Update()
 	end
 
 --Return WASD normal position if was changed
-	if not (W==true and A==true) or (W==true and D==true) or (S==true and A==true) or (A==true and D==true) then
+	if not ((W==true and A==true) or (W==true and D==true) or (S==true and A==true) or (A==true and D==true)) then --Put and gameObject.transform.eulerAngles == new Vector3(0, 135, 0)   
 		if input.getKey('w') then
 			transform:SetRotation(Quaternion.FromEuler(0,math.rad(0),0))
 		end
