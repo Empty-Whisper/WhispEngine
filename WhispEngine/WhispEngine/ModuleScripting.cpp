@@ -37,17 +37,41 @@ update_status ModuleScripting::Update()
 	return update_status::UPDATE_CONTINUE;
 }
 
-void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name, const char* function, bool first)
+void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name, Functions function)
 {
-	if ((first) ? luaL_dofile(L, path) == 0 : luaL_loadfile(L, path) == 0) {
+	int result = -1;
+	std::string func_name;
+	switch (function)
+	{
+	case ModuleScripting::START:
+		result = luaL_dofile(L, path);
+		func_name.assign("Start");
+		break;
+	case ModuleScripting::PREUPDATE:
+		func_name.assign("PreUpdate");
+		result = luaL_loadfile(L, path);
+		break;
+	case ModuleScripting::UPDATE:
+		func_name.assign("Update");
+		result = luaL_loadfile(L, path);
+		break;
+	case ModuleScripting::POSTUPDATE:
+		func_name.assign("PostUpdate");
+		result = luaL_loadfile(L, path);
+		break;
+	default:
+		LOG("Function not found")
+		break;
+	}
+	if (result == 0) {
 		luabridge::LuaRef table = luabridge::getGlobal(L, _name);
 		if (table.isTable()) {
-			if (table[function].isFunction()) {
-				luabridge::LuaRef func = table[function];
+			if (table[func_name.c_str()].isFunction()) {
+				luabridge::LuaRef func = table[func_name.c_str()];
 				func();
 			}
 			else {
-				LOG("%s is not a function or was not found", function);
+				LOG("%s is not a function or was not found", func_name.c_str());
 			}
 		}
 		else {

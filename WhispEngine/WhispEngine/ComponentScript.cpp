@@ -23,7 +23,7 @@ ComponentScript::~ComponentScript()
 
 void ComponentScript::Update()
 {
-	if (is_assigned && valid)
+	if (is_assigned && valid && App->IsGameRunning())
 	{
 		luabridge::setGlobal(App->scripting->GetState(), object, "object");
 		luabridge::setGlobal(App->scripting->GetState(), object->transform, "transform");
@@ -31,15 +31,12 @@ void ComponentScript::Update()
 			SetInspectorVars();
 		}
 		
-		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), "Update", first_time);
+		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), (App->scripting->first_frame) ? ModuleScripting::Functions::START : ModuleScripting::Functions::UPDATE);
 		
 		lua_pop(App->scripting->GetState(), -1);
 		lua_pop(App->scripting->GetState(), -1);
 		if (!public_vars.empty())
 			lua_pop(App->scripting->GetState(), -1);
-
-		if (first_time)
-			first_time = false;
 	}
 }
 
@@ -96,7 +93,6 @@ void ComponentScript::OnInspector()
 			ImGui::SameLine();
 			if (ImGui::Button("Refresh")) {
 				UpdateInspectorVars();
-				first_time = true;
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Change")) {

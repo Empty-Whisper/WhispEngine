@@ -13,6 +13,12 @@ class ModuleScripting :
 	public Module
 {
 public:
+	enum Functions {
+		NONE = -1,
+		START, PREUPDATE, UPDATE, POSTUPDATE,
+		MAX
+	};
+public:
 	ModuleScripting();
 	~ModuleScripting();
 
@@ -21,12 +27,14 @@ public:
 	update_status Update() override;
 	update_status PostUpdate() override;
 
-	void ExecuteFunctionScript(const char* path, const char* name, const char* function, bool first_time);
+	void ExecuteFunctionScript(const char* path, const char* name, Functions function);
 	void ExecuteScript(const char* file);
 
 	void LuaRegister() override;
 
 	lua_State* GetState() const { return L; }
+
+	bool first_frame = true;
 
 private:
 	lua_State* L = nullptr;

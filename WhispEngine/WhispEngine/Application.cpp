@@ -287,6 +287,11 @@ Application::GameState Application::GetState() const
 	return state;
 }
 
+bool Application::IsGameRunning() const
+{
+	return state == GameState::PLAY || state == GameState::PLAYING || state == GameState::PAUSE || state == GameState::ONE_FRAME || state == GameState::REANUDE;
+}
+
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {

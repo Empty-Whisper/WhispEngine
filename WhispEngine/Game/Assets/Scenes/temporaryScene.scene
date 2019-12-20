@@ -1,0 +1,66 @@
+{
+    "Camera": {
+        "position": [
+            0.0,
+            1.0,
+            -1.0
+        ]
+    },
+    "GameObjects": [
+        {
+            "Children": [
+                {
+                    "Children": null,
+                    "Components": [
+                        {
+                            "active": true,
+                            "script": "Assets\\Scripts\\Rotate.lua",
+                            "type": 5
+                        }
+                    ],
+                    "UID": 3026974794395133952,
+                    "active": true,
+                    "name": "GameObject",
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "static": false
+                }
+            ],
+            "Components": null,
+            "UID": 1334805796800654848,
+            "active": true,
+            "name": "Root",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "static": false
+        }
+    ]
+}

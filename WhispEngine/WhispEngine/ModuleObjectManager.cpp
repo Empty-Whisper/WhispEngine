@@ -65,6 +65,7 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 			}
 		}
 	}
+	App->scripting->first_frame = false;
 }
 
 bool ModuleObjectManager::CleanUp()

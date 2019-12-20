@@ -24,6 +24,7 @@
 #include "PanelScriptEditor.h"
 
 #include "ModuleSceneIntro.h"
+#include "ModuleScripting.h"
 
 #include "Time.h"
 
@@ -148,6 +149,7 @@ void ModuleGUI::PlayPauseStop()
 			if (state == Application::GameState::NONE) {
 				App->SetState(Application::GameState::PLAY);
 				App->scene_intro->SaveTemporaryScene();
+				App->scripting->first_frame = true;
 			}
 			else {
 				App->SetState(Application::GameState::STOP);

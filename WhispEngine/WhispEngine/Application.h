@@ -117,6 +117,7 @@ public:
 
 	void SetState(const GameState to_state);
 	GameState GetState() const;
+	bool IsGameRunning() const;
 
 	// Helpers
 	HardwareInfo *hardware = nullptr;
