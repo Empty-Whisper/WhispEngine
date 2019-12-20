@@ -80,13 +80,15 @@ update_status ModuleCamera3D::Update()
 		//Camera Functionalities
 		if ((ImGui::IsMouseHoveringRect(scene_position, scene_size, false) || is_moving_camera) && App->gui->scene->active)
 		{
-			if (App->input->GetMouseWheel() >= 1)
-			{
-				scene_camera->Movement(CameraMovementType::FRONT, whe_speed);
-			}
-			else if (App->input->GetMouseWheel() <= -1)
-			{
-				scene_camera->Movement(CameraMovementType::BACK, whe_speed);
+			if (!App->input->block_keyboard) {
+				if (App->input->GetMouseWheel() >= 1)
+				{
+					scene_camera->Movement(CameraMovementType::FRONT, whe_speed);
+				}
+				else if (App->input->GetMouseWheel() <= -1)
+				{
+					scene_camera->Movement(CameraMovementType::BACK, whe_speed);
+				}
 			}
 
 			// Mouse Zoom in/out
@@ -171,11 +173,13 @@ update_status ModuleCamera3D::Update()
 			}
 
 		}
-		if (!ImGui::IsAnyItemActive() && App->object_manager->GetSelected() != nullptr) {
-			if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
-				scene_camera->is_focusing = true;
+		if (!App->input->block_keyboard) {
+			if (!ImGui::IsAnyItemActive() && App->object_manager->GetSelected() != nullptr) {
+				if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
+					scene_camera->is_focusing = true;
 
-			scene_camera->FocusObject(App->object_manager->GetSelected()->GetAABB());
+				scene_camera->FocusObject(App->object_manager->GetSelected()->GetAABB());
+			}
 		}
 	}
 

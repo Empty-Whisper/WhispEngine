@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "FileSystem.h"
 #include "Brofiler/Brofiler.h"
+#include "ModuleInput.h"
 
 PanelScriptEditor::PanelScriptEditor(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
 {
@@ -16,10 +17,11 @@ PanelScriptEditor::~PanelScriptEditor()
 
 void PanelScriptEditor::Update()
 {
+	App->input->block_keyboard = false;
 	BROFILER_CATEGORY("ScriptEditor", Profiler::Color::Purple);
 	if (ImGui::Begin("Script Editor", &active)) {
 		if (ImGui::IsRootWindowOrAnyChildFocused()) {
-			//App->input->block_keyboard_of = true;
+			App->input->block_keyboard = true;
 		}
 		if (ImGui::Button("Save")) {
 			App->file_system->SaveTextFile(editor.GetText().c_str(), file.c_str());
