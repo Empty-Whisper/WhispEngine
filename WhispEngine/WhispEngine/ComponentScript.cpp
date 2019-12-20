@@ -146,10 +146,10 @@ void ComponentScript::DrawInspectorVars()
 			ImGui::Checkbox((*var).first.c_str(), &static_cast<Property<bool>*>((*var).second)->data);
 			break;
 		case ComponentScript::TypeData::INT:
-			ImGui::SliderInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data, 0, 10);
+			ImGui::SliderInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data, 0, 100);
 			break;
 		case ComponentScript::TypeData::FLOAT:
-			ImGui::SliderFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data, 0.f, 10.f);
+			ImGui::SliderFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data, 0.f, 100.f);
 			break;
 		case ComponentScript::TypeData::NIL:
 			break;
@@ -212,6 +212,7 @@ void ComponentScript::OpenModalWindowsToLoadScript()
 
 void ComponentScript::UpdateInspectorVars()
 {
+	luaL_dofile(App->scripting->GetState(), script_path.c_str());
 	luabridge::LuaRef ref = luabridge::getGlobal(App->scripting->GetState(), name.data());
 	if (ref.isTable()) {
 		ref = ref["Variables"];
@@ -306,7 +307,6 @@ void ComponentScript::SetScript(const char * path)
 		script_path = path;
 		name = App->file_system->GetFileNameFromPath(script_path.c_str());
 		valid = true;
-		luaL_dofile(App->scripting->GetState(), path);
 		UpdateInspectorVars();
 	}
 	else {
