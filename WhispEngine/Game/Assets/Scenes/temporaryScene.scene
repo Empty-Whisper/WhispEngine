@@ -1,0 +1,113 @@
+{
+    "Camera": {
+        "position": [
+            7.79809045791626,
+            6.6404709815979,
+            -12.925935745239258
+        ]
+    },
+    "GameObjects": [
+        {
+            "Children": [
+                {
+                    "Children": [
+                        {
+                            "Children": null,
+                            "Components": [
+                                {
+                                    "Resource": 0,
+                                    "active": true,
+                                    "face color": [
+                                        1.0,
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "type": 2,
+                                    "wire color": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ]
+                                },
+                                {
+                                    "MeshId": 15054831129172549632,
+                                    "active": true,
+                                    "type": 1
+                                },
+                                {
+                                    "active": true,
+                                    "script": "Assets\\Scripts\\Rotate.lua",
+                                    "type": 5
+                                }
+                            ],
+                            "UID": 13539234008421836800,
+                            "active": true,
+                            "name": "Cube",
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "rotation": [
+                                1.0,
+                                -0.0,
+                                0.0,
+                                -0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "static": false
+                        }
+                    ],
+                    "Components": null,
+                    "UID": 15875205741443672064,
+                    "active": true,
+                    "name": "primitive_cube",
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        1.0,
+                        -0.0,
+                        0.0,
+                        -0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "static": false
+                }
+            ],
+            "Components": null,
+            "UID": 8629147033220209664,
+            "active": true,
+            "name": "GameObject",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "static": false
+        }
+    ]
+}

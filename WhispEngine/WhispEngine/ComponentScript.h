@@ -51,4 +51,6 @@ private:
 
 private:
 	std::map<std::string, PublicVar*> public_vars;
+
+	bool first_time = true;
 };

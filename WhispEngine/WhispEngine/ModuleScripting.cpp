@@ -37,9 +37,9 @@ update_status ModuleScripting::Update()
 	return update_status::UPDATE_CONTINUE;
 }
 
-void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name, const char* function)
+void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name, const char* function, bool first)
 {
-	if (luaL_dofile(L, path) == 0) {
+	if ((first) ? luaL_dofile(L, path) == 0 : luaL_loadfile(L, path) == 0) {
 		luabridge::LuaRef table = luabridge::getGlobal(L, _name);
 		if (table.isTable()) {
 			if (table[function].isFunction()) {
