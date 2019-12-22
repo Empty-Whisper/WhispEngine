@@ -39,6 +39,8 @@ public:
 private:
 	lua_State* L = nullptr;
 
+	bool to_change = false;
+
 	static void Log(const char* s) {
 		if (s != nullptr) {
 			LOG(s);

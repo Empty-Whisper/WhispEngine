@@ -121,6 +121,7 @@ void Application::PrepareUpdate()
 	case Application::PLAY:
 		Time->Start();
 		Time->SetDeltaTime(dt);
+		scripting->first_frame = true;
 		state = GameState::PLAYING;
 		break;
 	case Application::PLAYING:

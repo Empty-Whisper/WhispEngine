@@ -26,14 +26,13 @@ bool ModuleScripting::Start()
 
 update_status ModuleScripting::PreUpdate()
 {
-	// TODO: preupdate, update and postupdate all scripts
-
 	return update_status::UPDATE_CONTINUE;
 }
 
 update_status ModuleScripting::Update()
 {
-	//ExecuteFunctionScript("Assets/Scripts/test.lua", "Test", "Update");
+	if (first_frame)
+		to_change = true;
 	return update_status::UPDATE_CONTINUE;
 }
 
@@ -85,6 +84,10 @@ void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name,
 
 update_status ModuleScripting::PostUpdate()
 {
+	if (to_change) {
+		first_frame = false;
+		to_change = false;
+	}
 	return update_status::UPDATE_CONTINUE;
 }
 
