@@ -124,6 +124,7 @@ public:
 	/** This function is identical to the member function Add().
 		@return float3(x + v.x, y + v.y, z + v.z); */
 	float3 operator +(const float3 &v) const;
+	float3 LSum(const float3 &v) const;
 	/// Performs an unary negation of this vector. [similarOverload: operator+] [hideIndex]
 	/** This function is identical to the member function Neg().
 		@return float3(-x, -y, -z). */
@@ -132,6 +133,7 @@ public:
 	/** This function is identical to the member function Sub().
 		@return float3(x - v.x, y - v.y, z - v.z); */
 	float3 operator -(const float3 &v) const;
+	float3 LSub(const float3 &v) const;
 	/// Multiplies this vector by a scalar. [similarOverload: operator+] [hideIndex]
 	/** This function is identical to the member function Mul().
 		@return float3(x * scalar, y * scalar, z * scalar); */

@@ -1,9 +1,9 @@
 {
     "Camera": {
         "position": [
-            2.223090648651123,
-            13.690786361694336,
-            -12.269278526306152
+            9.147320747375488,
+            6.658621311187744,
+            11.046777725219727
         ]
     },
     "GameObjects": [
@@ -7458,6 +7458,18 @@
                             "near_plane": 1.0,
                             "type": 4,
                             "vertical_fov": 68.5999984741211
+                        },
+                        {
+                            "InspectorVars": [
+                                {
+                                    "data": 17797003798229770240,
+                                    "key": "tank",
+                                    "type": 7
+                                }
+                            ],
+                            "active": true,
+                            "script": "Assets\\Scripts\\Camera.lua",
+                            "type": 5
                         }
                     ],
                     "UID": 18328112529222926336,
@@ -8021,7 +8033,7 @@
                         },
                         {
                             "active": true,
-                            "script": "Assets\\Scripts\\ShotTank.lua",
+                            "script": "Assets\\Scripts\\MoveTank.lua",
                             "type": 5
                         }
                     ],

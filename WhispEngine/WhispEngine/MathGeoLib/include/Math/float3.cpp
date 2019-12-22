@@ -729,7 +729,17 @@ float3 float3::operator +(const float3 &rhs) const
 	return float3(x + rhs.x, y + rhs.y, z + rhs.z);
 }
 
+float3 float3::LSum(const float3 & rhs) const
+{
+	return float3(x + rhs.x, y + rhs.y, z + rhs.z);
+}
+
 float3 float3::operator -(const float3 &rhs) const
+{
+	return float3(x - rhs.x, y - rhs.y, z - rhs.z);
+}
+
+float3 float3::LSub(const float3 & rhs) const
 {
 	return float3(x - rhs.x, y - rhs.y, z - rhs.z);
 }

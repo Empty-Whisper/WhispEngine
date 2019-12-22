@@ -65,7 +65,6 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 			}
 		}
 	}
-	App->scripting->first_frame = false;
 }
 
 bool ModuleObjectManager::CleanUp()
@@ -180,6 +179,10 @@ void ModuleObjectManager::LuaRegister()
 			.addFunction("Magnitude", &float3::Length)
 			.addFunction("sqrMagnitude", &float3::LengthSq)
 			.addFunction("toString", &float3::ToString)
+			.addFunction("__add", &float3::LSum)
+			.addFunction("__sub", &float3::LSub)
+			.addFunction("__mul", &float3::operator*)
+			.addFunction("__div", &float3::operator/)
 		.endClass()
 		.beginNamespace("Vector3")
 			//.addProperty("forward", &float3::unitX)
