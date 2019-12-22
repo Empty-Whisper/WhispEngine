@@ -81,6 +81,8 @@ void ComponentScript::SetInspectorVars()
 
 void ComponentScript::OnInspector()
 {
+	ActiveImGui();
+	ImGui::SameLine();
 	if (ImGui::CollapsingHeader(title.data(), ImGuiTreeNodeFlags_DefaultOpen)) {
 		if (ImGui::BeginPopupContextItem("Mesh")) {
 			if (ImGui::Button("Delete")) {

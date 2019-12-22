@@ -40,7 +40,7 @@ bool ModuleSceneIntro::Start()
 
 	GenerateGrid(10);
 
-	//LoadScene("Assets/Scenes/SampleScene.scene");
+	LoadScene("Assets/Scenes/TankLua.scene");
 
 	return ret;
 }

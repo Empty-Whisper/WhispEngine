@@ -1,9 +1,9 @@
 {
     "Camera": {
         "position": [
-            9.147320747375488,
-            6.658621311187744,
-            11.046777725219727
+            -0.3042048513889313,
+            4.944488048553467,
+            10.759438514709473
         ]
     },
     "GameObjects": [
@@ -7451,7 +7451,7 @@
                     "Components": [
                         {
                             "active": true,
-                            "aspect_ratio": 1.6521738767623901,
+                            "aspect_ratio": 1.9030418395996094,
                             "checkbox_main_camera": true,
                             "far_plane": 200.0,
                             "is_main_camera": true,
@@ -7594,8 +7594,15 @@
                             ],
                             "Components": [
                                 {
+                                    "InspectorVars": [
+                                        {
+                                            "data": 0.019999999552965164,
+                                            "key": "mult",
+                                            "type": 2
+                                        }
+                                    ],
                                     "active": true,
-                                    "script": "Assets\\Scripts\\RotateTurret.lua",
+                                    "script": "Assets\\Scripts\\RotateTurret2.lua",
                                     "type": 5
                                 }
                             ],
@@ -7623,34 +7630,106 @@
                         {
                             "Children": [
                                 {
-                                    "Children": null,
-                                    "Components": [
+                                    "Children": [
                                         {
-                                            "Resource": 0,
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 7992837191365552128,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 9062694254177015808,
                                             "active": true,
-                                            "face color": [
+                                            "name": "TankTracksLeft_0",
+                                            "position": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rotation": [
                                                 1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "scale": [
                                                 1.0,
                                                 1.0,
                                                 1.0
                                             ],
-                                            "type": 2,
-                                            "wire color": [
-                                                0.0,
+                                            "static": false
+                                        },
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 9069763968590192640,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 9619338656502601728,
+                                            "active": true,
+                                            "name": "TankTracksLeft_1",
+                                            "position": [
                                                 0.0,
                                                 0.0,
                                                 0.0
-                                            ]
-                                        },
-                                        {
-                                            "MeshId": 7992837191365552128,
-                                            "active": true,
-                                            "type": 1
+                                            ],
+                                            "rotation": [
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "static": false
                                         }
                                     ],
-                                    "UID": 9062694254177015808,
+                                    "Components": null,
+                                    "UID": 132639026204469200,
                                     "active": true,
-                                    "name": "TankTracksLeft_0",
+                                    "name": "TankTracksLeft",
                                     "position": [
                                         0.0,
                                         0.0,
@@ -7663,41 +7742,113 @@
                                         0.0
                                     ],
                                     "scale": [
-                                        1.0,
-                                        1.0,
-                                        1.0
+                                        0.009999999776482582,
+                                        0.009999999776482582,
+                                        0.009999999776482582
                                     ],
                                     "static": false
                                 },
                                 {
-                                    "Children": null,
-                                    "Components": [
+                                    "Children": [
                                         {
-                                            "Resource": 0,
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 14324027883718909952,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 17480656503191928832,
                                             "active": true,
-                                            "face color": [
+                                            "name": "TankTracksRight_0",
+                                            "position": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rotation": [
                                                 1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "scale": [
                                                 1.0,
                                                 1.0,
                                                 1.0
                                             ],
-                                            "type": 2,
-                                            "wire color": [
-                                                0.0,
+                                            "static": false
+                                        },
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 4164955595268831744,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 17336979419723808768,
+                                            "active": true,
+                                            "name": "TankTracksRight_1",
+                                            "position": [
                                                 0.0,
                                                 0.0,
                                                 0.0
-                                            ]
-                                        },
-                                        {
-                                            "MeshId": 9069763968590192640,
-                                            "active": true,
-                                            "type": 1
+                                            ],
+                                            "rotation": [
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "static": false
                                         }
                                     ],
-                                    "UID": 9619338656502601728,
+                                    "Components": null,
+                                    "UID": 10961683901875390464,
                                     "active": true,
-                                    "name": "TankTracksLeft_1",
+                                    "name": "TankTracksRight",
                                     "position": [
                                         0.0,
                                         0.0,
@@ -7710,17 +7861,189 @@
                                         0.0
                                     ],
                                     "scale": [
+                                        0.009999999776482582,
+                                        0.009999999776482582,
+                                        0.009999999776482582
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": [
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 7447302015005120512,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 5758468465515723776,
+                                            "active": true,
+                                            "name": "TankChassis_0",
+                                            "position": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rotation": [
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "static": false
+                                        },
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 8054182687277450240,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 2812402369793894912,
+                                            "active": true,
+                                            "name": "TankChassis_1",
+                                            "position": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rotation": [
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "static": false
+                                        },
+                                        {
+                                            "Children": null,
+                                            "Components": [
+                                                {
+                                                    "Resource": 0,
+                                                    "active": true,
+                                                    "face color": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "type": 2,
+                                                    "wire color": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ]
+                                                },
+                                                {
+                                                    "MeshId": 12280169012445722624,
+                                                    "active": true,
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "UID": 3195095547634616832,
+                                            "active": true,
+                                            "name": "TankChassis_2",
+                                            "position": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rotation": [
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "static": false
+                                        }
+                                    ],
+                                    "Components": null,
+                                    "UID": 11572344984494510080,
+                                    "active": true,
+                                    "name": "TankChassis",
+                                    "position": [
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "rotation": [
                                         1.0,
-                                        1.0,
-                                        1.0
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        0.009999999776482582,
+                                        0.009999999776482582,
+                                        0.009999999776482582
                                     ],
                                     "static": false
                                 }
                             ],
-                            "Components": null,
-                            "UID": 132639026204469200,
+                            "Components": [
+                                {
+                                    "active": true,
+                                    "script": "Assets/Scripts/RotateTank.lua",
+                                    "type": 5
+                                }
+                            ],
+                            "UID": 1723532109397344000,
                             "active": true,
-                            "name": "TankTracksLeft",
+                            "name": "Base",
                             "position": [
                                 0.0,
                                 0.0,
@@ -7733,305 +8056,22 @@
                                 0.0
                             ],
                             "scale": [
-                                0.009999999776482582,
-                                0.009999999776482582,
-                                0.009999999776482582
-                            ],
-                            "static": false
-                        },
-                        {
-                            "Children": [
-                                {
-                                    "Children": null,
-                                    "Components": [
-                                        {
-                                            "Resource": 0,
-                                            "active": true,
-                                            "face color": [
-                                                1.0,
-                                                1.0,
-                                                1.0,
-                                                1.0
-                                            ],
-                                            "type": 2,
-                                            "wire color": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0
-                                            ]
-                                        },
-                                        {
-                                            "MeshId": 14324027883718909952,
-                                            "active": true,
-                                            "type": 1
-                                        }
-                                    ],
-                                    "UID": 17480656503191928832,
-                                    "active": true,
-                                    "name": "TankTracksRight_0",
-                                    "position": [
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "rotation": [
-                                        1.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "scale": [
-                                        1.0,
-                                        1.0,
-                                        1.0
-                                    ],
-                                    "static": false
-                                },
-                                {
-                                    "Children": null,
-                                    "Components": [
-                                        {
-                                            "Resource": 0,
-                                            "active": true,
-                                            "face color": [
-                                                1.0,
-                                                1.0,
-                                                1.0,
-                                                1.0
-                                            ],
-                                            "type": 2,
-                                            "wire color": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0
-                                            ]
-                                        },
-                                        {
-                                            "MeshId": 4164955595268831744,
-                                            "active": true,
-                                            "type": 1
-                                        }
-                                    ],
-                                    "UID": 17336979419723808768,
-                                    "active": true,
-                                    "name": "TankTracksRight_1",
-                                    "position": [
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "rotation": [
-                                        1.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "scale": [
-                                        1.0,
-                                        1.0,
-                                        1.0
-                                    ],
-                                    "static": false
-                                }
-                            ],
-                            "Components": null,
-                            "UID": 10961683901875390464,
-                            "active": true,
-                            "name": "TankTracksRight",
-                            "position": [
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "rotation": [
                                 1.0,
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "scale": [
-                                0.009999999776482582,
-                                0.009999999776482582,
-                                0.009999999776482582
-                            ],
-                            "static": false
-                        },
-                        {
-                            "Children": [
-                                {
-                                    "Children": null,
-                                    "Components": [
-                                        {
-                                            "Resource": 0,
-                                            "active": true,
-                                            "face color": [
-                                                1.0,
-                                                1.0,
-                                                1.0,
-                                                1.0
-                                            ],
-                                            "type": 2,
-                                            "wire color": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0
-                                            ]
-                                        },
-                                        {
-                                            "MeshId": 7447302015005120512,
-                                            "active": true,
-                                            "type": 1
-                                        }
-                                    ],
-                                    "UID": 5758468465515723776,
-                                    "active": true,
-                                    "name": "TankChassis_0",
-                                    "position": [
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "rotation": [
-                                        1.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "scale": [
-                                        1.0,
-                                        1.0,
-                                        1.0
-                                    ],
-                                    "static": false
-                                },
-                                {
-                                    "Children": null,
-                                    "Components": [
-                                        {
-                                            "Resource": 0,
-                                            "active": true,
-                                            "face color": [
-                                                1.0,
-                                                1.0,
-                                                1.0,
-                                                1.0
-                                            ],
-                                            "type": 2,
-                                            "wire color": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0
-                                            ]
-                                        },
-                                        {
-                                            "MeshId": 8054182687277450240,
-                                            "active": true,
-                                            "type": 1
-                                        }
-                                    ],
-                                    "UID": 2812402369793894912,
-                                    "active": true,
-                                    "name": "TankChassis_1",
-                                    "position": [
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "rotation": [
-                                        1.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "scale": [
-                                        1.0,
-                                        1.0,
-                                        1.0
-                                    ],
-                                    "static": false
-                                },
-                                {
-                                    "Children": null,
-                                    "Components": [
-                                        {
-                                            "Resource": 0,
-                                            "active": true,
-                                            "face color": [
-                                                1.0,
-                                                1.0,
-                                                1.0,
-                                                1.0
-                                            ],
-                                            "type": 2,
-                                            "wire color": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0
-                                            ]
-                                        },
-                                        {
-                                            "MeshId": 12280169012445722624,
-                                            "active": true,
-                                            "type": 1
-                                        }
-                                    ],
-                                    "UID": 3195095547634616832,
-                                    "active": true,
-                                    "name": "TankChassis_2",
-                                    "position": [
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "rotation": [
-                                        1.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "scale": [
-                                        1.0,
-                                        1.0,
-                                        1.0
-                                    ],
-                                    "static": false
-                                }
-                            ],
-                            "Components": null,
-                            "UID": 11572344984494510080,
-                            "active": true,
-                            "name": "TankChassis",
-                            "position": [
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "rotation": [
                                 1.0,
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "scale": [
-                                0.009999999776482582,
-                                0.009999999776482582,
-                                0.009999999776482582
+                                1.0
                             ],
                             "static": false
                         }
                     ],
                     "Components": [
                         {
-                            "active": true,
-                            "script": "Assets\\Scripts\\MoveTank.lua",
-                            "type": 5
-                        },
-                        {
+                            "InspectorVars": [
+                                {
+                                    "data": 7,
+                                    "key": "speed",
+                                    "type": 1
+                                }
+                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\MoveTank.lua",
                             "type": 5
