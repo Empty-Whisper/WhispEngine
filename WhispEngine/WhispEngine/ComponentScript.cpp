@@ -164,6 +164,14 @@ void ComponentScript::DrawInspectorVars()
 			break;
 		case ComponentScript::TypeData::USERDATA:
 			break;
+		case ComponentScript::TypeData::GAMEOBJECT:
+			if (static_cast<Property<GameObject*>*>((*var).second)->data == nullptr)
+				ImGui::InputText((*var).first.c_str(), "None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
+			else {
+				char* name = (char*)static_cast<Property<GameObject*>*>((*var).second)->data->GetName();
+				ImGui::InputText((*var).first.c_str(), name, strlen(name), ImGuiInputTextFlags_ReadOnly);
+			}
+			break;
 		default:
 			break;
 		}
@@ -212,91 +220,116 @@ void ComponentScript::OpenModalWindowsToLoadScript()
 
 void ComponentScript::UpdateInspectorVars()
 {
-	luaL_dofile(App->scripting->GetState(), script_path.c_str());
-	luabridge::LuaRef ref = luabridge::getGlobal(App->scripting->GetState(), name.data());
-	if (ref.isTable()) {
-		ref = ref["Variables"];
+	if (luaL_dofile(App->scripting->GetState(), script_path.c_str()) == 0) {
+		luabridge::LuaRef ref = luabridge::getGlobal(App->scripting->GetState(), name.data());
 		if (ref.isTable()) {
-			std::ifstream is(script_path.c_str());
-			std::string str;
-			std::list<std::string> keys;
-			bool in_table = false;
-			while (std::getline(is, str))
-			{
-				if (in_table) {
-					if (str.find("=") != std::string::npos) { // All public variables must be initialized
-						for (auto i = str.begin(); i != str.end(); i++) {
-							if (std::isalpha(*i)) {
-								auto j = i;
-								std::string word;
-								while (*j != ' ') {
-									word += *j;
-									j++;
+			ref = ref["Variables"];
+			if (ref.isTable()) {
+				std::ifstream is(script_path.c_str());
+				std::string str;
+				std::list<std::string> keys;
+				std::map<std::string, std::string> macros;
+				bool in_table = false;
+				while (std::getline(is, str))
+				{
+					if (in_table) {
+						if (str.find("=") != std::string::npos) { // All public variables must be initialized
+							for (auto i = str.begin(); i != str.end(); i++) {
+								if (std::isalpha(*i)) {
+									auto j = i;
+									std::string word;
+									while (*j != ' ') {
+										word += *j;
+										j++;
+									}
+									if (str.find("--") != std::string::npos) { // Found comment in public var
+										if (str.find("[") != std::string::npos && str.find("]") != std::string::npos) { // Fond a macro
+											auto m = str.begin() + str.find("[");
+											std::string macro;
+											while (*m != ']') {
+												macro += *m;
+												m++;
+											}
+											macro += ']';
+											macros[word] = macro;
+										}
+									}
+									keys.push_back(word);
+									break;
 								}
-								keys.push_back(word);
-								break;
+								if ((*i) == '-' && (*(i + 1)) == '-')
+									break; // lua comment
 							}
-							if ((*i) == '-' && (*(i + 1)) == '-')
-								break; // lua comment
+						}
+						if (str.find("}") != std::string::npos)
+							break;
+					}
+					else {
+						if (str.find("Variables") != std::string::npos) {
+							in_table = true;
 						}
 					}
-					if (str.find("}") != std::string::npos)
-						break;
 				}
-				else {
-					if (str.find("Variables") != std::string::npos) {
-						in_table = true;
+				auto v = public_vars.begin();
+				while (v != public_vars.end()) {
+					if (std::find(keys.begin(), keys.end(), (*v).first) == keys.end()) {
+						auto var = *v;
+						v = public_vars.erase(v);
+						delete var.second;
 					}
+					else
+						v++;
 				}
-			}
-			auto v = public_vars.begin();
-			while (v != public_vars.end()) {
-				if (std::find(keys.begin(), keys.end(), (*v).first) == keys.end()) {
-					auto var = *v;
-					v = public_vars.erase(v);
-					delete var.second;
-				}
-				else
-					v++;
-			}
-			for (auto k = keys.begin(); k != keys.end(); k++) {
-				if (public_vars.find((*k).c_str()) == public_vars.end()) {
-					auto r = ref[(*k).c_str()];
+				for (auto k = keys.begin(); k != keys.end(); k++) {
+					if (public_vars.find((*k).c_str()) == public_vars.end()) {
+						auto r = ref[(*k).c_str()];
 
-					if (r.isBool()) {
-						Property<bool>* var = new Property<bool>(TypeData::BOOL, r.cast<bool>());
-						public_vars[(*k).c_str()] = var;
-					}
-					if (r.isNil()) {
-						Property<int>* var = new Property<int>(TypeData::NIL, 0);
-						public_vars[(*k).c_str()] = var;
-					}
-					if (r.isNumber()) {
-						float f = r.cast<float>();
-						if (ceilf(f) == f) { //integer
-							Property<int>* var = new Property<int>(TypeData::INT, r.cast<int>());
+						if (r.isBool()) {
+							Property<bool>* var = new Property<bool>(TypeData::BOOL, r.cast<bool>());
 							public_vars[(*k).c_str()] = var;
 						}
-						else {
-							Property<float>* var = new Property<float>(TypeData::FLOAT, r.cast<float>());
+						if (r.isNil()) {
+							if (macros.find((*k).c_str()) != macros.end()) {
+								if (macros[(*k).c_str()].compare("[GameObject]") == 0) {
+									Property<GameObject*>* var = new Property<GameObject*>(TypeData::GAMEOBJECT, nullptr);
+									public_vars[(*k).c_str()] = var;
+								}
+							}
+							else {
+								Property<int>* var = new Property<int>(TypeData::NIL, 0);
+								public_vars[(*k).c_str()] = var;
+							}
+						}
+						if (r.isNumber()) {
+							float f = r.cast<float>();
+							if (ceilf(f) == f) { //integer
+								Property<int>* var = new Property<int>(TypeData::INT, r.cast<int>());
+								public_vars[(*k).c_str()] = var;
+							}
+							else {
+								Property<float>* var = new Property<float>(TypeData::FLOAT, r.cast<float>());
+								public_vars[(*k).c_str()] = var;
+							}
+						}
+						if (r.isString()) {
+							Property<std::string>* var = new Property<std::string>(TypeData::STRING, r.cast<std::string>());
 							public_vars[(*k).c_str()] = var;
 						}
-					}
-					if (r.isString()) {
-						Property<std::string>* var = new Property<std::string>(TypeData::STRING, r.cast<std::string>());
-						public_vars[(*k).c_str()] = var;
-					}
-					if (r.isTable()) {
-						Property<int>* var = new Property<int>(TypeData::TABLE, 0);
-						public_vars[(*k).c_str()] = var;
-					}
-					if (r.isUserdata()) {
-						Property<int>* var = new Property<int>(TypeData::USERDATA, 0);
-						public_vars[(*k).c_str()] = var;
+						if (r.isTable()) {
+							Property<int>* var = new Property<int>(TypeData::TABLE, 0);
+							public_vars[(*k).c_str()] = var;
+						}
+						if (r.isUserdata()) {
+							Property<int>* var = new Property<int>(TypeData::USERDATA, 0);
+							public_vars[(*k).c_str()] = var;
+						}
 					}
 				}
 			}
 		}
+	}
+	else {
+		LOG("Cannot update inspector, Lua Error: %s", lua_tostring(App->scripting->GetState(), -1));
 	}
 }
 
