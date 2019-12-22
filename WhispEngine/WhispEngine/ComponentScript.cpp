@@ -6,6 +6,7 @@
 #include "ModuleScripting.h"
 #include "Lua/LuaBridge/LuaBridge.h"
 #include <fstream>
+#include "Imgui/imgui_internal.h"
 
 #include "ModuleInput.h"
 
@@ -66,6 +67,9 @@ void ComponentScript::SetInspectorVars()
 			break;
 		case ComponentScript::TypeData::USERDATA:
 			t[(*var).first.c_str()] = static_cast<Property<int>*>((*var).second)->data;
+			break;
+		case ComponentScript::TypeData::GAMEOBJECT:
+			t[(*var).first.c_str()] = static_cast<Property<GameObject*>*>((*var).second)->data;
 			break;
 		default:
 			break;
@@ -164,13 +168,21 @@ void ComponentScript::DrawInspectorVars()
 			break;
 		case ComponentScript::TypeData::USERDATA:
 			break;
-		case ComponentScript::TypeData::GAMEOBJECT:
+		case ComponentScript::TypeData::GAMEOBJECT: {
 			if (static_cast<Property<GameObject*>*>((*var).second)->data == nullptr)
 				ImGui::InputText((*var).first.c_str(), "None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
 			else {
 				char* name = (char*)static_cast<Property<GameObject*>*>((*var).second)->data->GetName();
 				ImGui::InputText((*var).first.c_str(), name, strlen(name), ImGuiInputTextFlags_ReadOnly);
 			}
+			ImRect rect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
+			if (ImGui::BeginDragDropTargetCustom(rect, ImGui::GetID("Hierarchy"))) { //Window
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) {
+					static_cast<Property<GameObject*>*>((*var).second)->data = *(GameObject**)payload->Data;
+				}
+				ImGui::EndDragDropTarget();
+			}
+		}
 			break;
 		default:
 			break;

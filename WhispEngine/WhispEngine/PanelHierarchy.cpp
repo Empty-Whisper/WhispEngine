@@ -124,7 +124,7 @@ void PanelHierarchy::DrawNode(GameObject* obj) {
 
 	bool is_open = ImGui::TreeNodeEx(obj, current_flag, obj->GetName());
 
-	if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) {
+	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(0) || ImGui::IsItemClicked(1)) {
 		App->object_manager->SetSelected(obj);
 	}
 

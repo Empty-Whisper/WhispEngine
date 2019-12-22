@@ -13,8 +13,14 @@
                     "Children": null,
                     "Components": [
                         {
+                            "InspectorVars": [
+                                {
+                                    "key": "gameObject",
+                                    "type": 7
+                                }
+                            ],
                             "active": true,
-                            "script": "Assets\\Scripts\\Rotate.lua",
+                            "script": "Assets\\Scripts\\testinspector.lua",
                             "type": 5
                         }
                     ],
@@ -38,12 +44,36 @@
                         1.0
                     ],
                     "static": false
+                },
+                {
+                    "Children": null,
+                    "Components": null,
+                    "UID": 845660731264336384,
+                    "active": true,
+                    "name": "XD",
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "static": false
                 }
             ],
             "Components": null,
             "UID": 1334805796800654848,
             "active": true,
-            "name": "Root",
+            "name": "GameObject",
             "position": [
                 0.0,
                 0.0,
