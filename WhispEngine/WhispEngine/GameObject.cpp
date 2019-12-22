@@ -38,6 +38,8 @@ GameObject::~GameObject()
 
 	if (this == App->object_manager->GetSelected())
 		App->object_manager->SetSelected(nullptr);
+
+	App->object_manager->objects.erase(UID);
 }
 
 void GameObject::Update()
@@ -290,6 +292,11 @@ const char * GameObject::GetName() const
 void GameObject::SetName(const char * name)
 {
 	this->name.assign(name);
+}
+
+uint64_t GameObject::GetUID() const
+{
+	return UID;
 }
 
 

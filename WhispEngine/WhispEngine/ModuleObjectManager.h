@@ -42,6 +42,7 @@ struct Object_data {
 class ModuleObjectManager :
 	public Module
 {
+	friend class GameObject;
 public:
 	ModuleObjectManager();
 	~ModuleObjectManager();
@@ -67,12 +68,19 @@ public:
 
 	bool SaveGameObjects(nlohmann::json &file);
 	bool LoadGameObjects(const nlohmann::json &file);
+	bool LoadScripts(const nlohmann::json &file);
 	bool LoadGameObject(const nlohmann::json &node, GameObject* parent);
+	bool LoadScript(const nlohmann::json &node);
+
+	void RefreshObjectsUIDMap();
+	void RefreshUIDMap(GameObject* obj);
 
 	void UpdateGuizmo();
 	void ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation);
 	void ChangeGuizmoMode(ImGuizmo::MODE &gizmoMode);
 	void FillMatrix(float4x4 &matrix,float o[]);
+
+	GameObject* Find(const uint64& uid) const;
 
 	float* CalculateFaceNormals(const float* vertex, const uint &n_face_normals, const uint &n_index, const uint* index, float magnitude = 0.5f);
 	// =========================================================== old
@@ -106,6 +114,7 @@ public:
 
 private:
 	//const char* PrimitivesToString(const Primitives prim);
+	std::map<uint64, GameObject*> objects;
 
 public:
 	GameObject* root = nullptr;

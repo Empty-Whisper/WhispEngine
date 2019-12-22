@@ -26,17 +26,31 @@ void PanelResources::GeneratePanelResources(File* const parent)
 {
 	for (const auto & entry : std::experimental::filesystem::directory_iterator(parent->path)) {
 		if (entry.path().extension().u8string().compare(".meta") != 0 && entry.path().u8string().find("Internal") == std::string::npos) {
-			File* file = new File(
-				std::experimental::filesystem::is_directory(entry.path()), 
-				entry.path().u8string().c_str(), 
-				files, 
-				App->file_system->GetFormat(entry.path().u8string().c_str()), 
-				this
-			);
-			if (file->is_folder) {
-				GeneratePanelResources(file);
+			File* file = nullptr;
+			if (std::experimental::filesystem::is_directory(entry.path())) {
+				file = new File(
+					true,
+					entry.path().u8string().c_str(),
+					files,
+					FileSystem::Format::NONE,
+					this
+				);
 			}
-			parent->children.push_back(file);
+			else {
+				file = new File(
+					false,
+					entry.path().u8string().c_str(),
+					files,
+					App->file_system->GetFormat(entry.path().u8string().c_str()),
+					this
+				);
+			}
+			if (file != nullptr) {
+				if (file->is_folder) {
+					GeneratePanelResources(file);
+				}
+				parent->children.push_back(file);
+			}
 		}
 	}
 }

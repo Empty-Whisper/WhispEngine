@@ -81,6 +81,7 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 		parent = root;
 
 	GameObject* ret = new GameObject(parent);
+	objects[ret->UID] = ret;
 	
 	return ret;
 }
@@ -95,6 +96,7 @@ void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 void ModuleObjectManager::ResetObjects()
 {
 	delete root;
+	objects.clear();
 	root = new GameObject(nullptr);
 	root->SetName("Root");
 }
@@ -321,7 +323,20 @@ bool ModuleObjectManager::LoadGameObjects(const nlohmann::json & it)
 		}
 	}
 
+	RefreshObjectsUIDMap();
+
 	return ret;
+}
+
+bool ModuleObjectManager::LoadScripts(const nlohmann::json & it)
+{
+	auto object = *it.begin();
+	if (it.size() == 1) {
+		for (auto i = object["Children"].cbegin(); i != object["Children"].cend(); i++) {
+			LoadScript(*i);
+		}
+	}
+	return true;
 }
 
 bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject * parent)
@@ -344,6 +359,46 @@ bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject
 	}
 
 	return ret;
+}
+
+bool ModuleObjectManager::LoadScript(const nlohmann::json & node)
+{
+	bool ret = true;
+
+	GameObject* obj = objects[node["UID"]];
+
+	if (obj != nullptr) {
+		for (auto i = node["Components"].begin(); i != node["Components"].end(); ++i) {
+			if ((*i).value("type", ComponentType::NONE) == ComponentType::SCRIPT) {
+				auto s = obj->GetComponent(ComponentType::SCRIPT); // Get All Scripts if there is more than one
+				if (s != nullptr)
+					s->Load(*i);
+			}
+		}
+	}
+
+	for (auto i = node["Children"].begin(); i != node["Children"].end(); ++i) {
+		LoadScript(*i);
+	}
+
+	return ret;
+}
+
+void ModuleObjectManager::RefreshObjectsUIDMap()
+{
+	objects.clear();
+	objects[root->UID] = root;
+	for (auto i = root->children.begin(); i != root->children.end(); i++) {
+		RefreshUIDMap(*i);
+	}
+}
+
+void ModuleObjectManager::RefreshUIDMap(GameObject * obj)
+{
+	objects[obj->UID] = obj;
+	for (auto i = obj->children.begin(); i != obj->children.end(); i++) {
+		RefreshUIDMap(*i);
+	}
 }
 
 //const char * ModuleObjectManager::PrimitivesToString(const Primitives prim)
@@ -496,6 +551,15 @@ void ModuleObjectManager::FillMatrix(float4x4 & matrix, float o[])
 		o[1], o[5], o[9], o[13],
 		o[2], o[6], o[10], o[14],
 		o[3], o[7], o[11], o[15]);
+}
+
+GameObject * ModuleObjectManager::Find(const uint64 & uid) const
+{
+	if (root->UID == uid)
+		return root;
+	if (objects.find(uid) != objects.end())
+		return objects.at(uid);
+	return nullptr;
 }
 
 void ModuleObjectManager::ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation)

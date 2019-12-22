@@ -7,6 +7,7 @@
 #include "Lua/LuaBridge/LuaBridge.h"
 #include <fstream>
 #include "Imgui/imgui_internal.h"
+#include "ModuleObjectManager.h"
 
 #include "ModuleInput.h"
 
@@ -392,6 +393,12 @@ void ComponentScript::Save(nlohmann::json & node)
 		case ComponentScript::TypeData::USERDATA:
 			var["data"] = static_cast<Property<int>*>((*v).second)->data;
 			break;
+		case ComponentScript::TypeData::GAMEOBJECT: {
+			GameObject* o = static_cast<Property<GameObject*>*>((*v).second)->data;
+			if (o != nullptr) var["data"] = o->GetUID();
+			else			  var["data"] = 0;
+		}
+			break;
 		default:
 			break;
 		}
@@ -428,6 +435,9 @@ void ComponentScript::Load(const nlohmann::json & node)
 					break;
 				case ComponentScript::TypeData::USERDATA:
 					static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
+					break;
+				case ComponentScript::TypeData::GAMEOBJECT:
+					static_cast<Property<GameObject*>*>(public_vars[(*v)["key"]])->data = App->object_manager->Find((uint64)(*v).value("data", (uint64)0));
 					break;
 				default:
 					break;

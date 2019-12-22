@@ -48,6 +48,8 @@ public:
 	const char* GetName() const;
 	void SetName(const char* name);
 
+	uint64_t GetUID() const;
+
 	ObjectSelected GetSelect() const;
 	void Select();
 	void Deselect();

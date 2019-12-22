@@ -182,6 +182,7 @@ bool ModuleSceneIntro::SaveTemporaryScene() const
 
 	ret = App->object_manager->SaveGameObjects(scene);
 
+	App->file_system->RemoveFile("Assets/Scenes/temporaryScene.scene");
 	App->file_system->SaveFile("Assets/Scenes/temporaryScene.scene", scene);
 
 	int attr = GetFileAttributes("Assets/Scenes/temporaryScene.scene");
@@ -199,6 +200,7 @@ bool ModuleSceneIntro::LoadTemporaryScene()
 	nlohmann::json scene_file = App->file_system->OpenFile("Assets/Scenes/temporaryScene.scene");
 
 	ret = App->object_manager->LoadGameObjects(scene_file["GameObjects"]);
+	App->object_manager->LoadScripts(scene_file["GameObjects"]);
 
 	App->file_system->RemoveFile("Assets/Scenes/temporaryScene.scene");
 
