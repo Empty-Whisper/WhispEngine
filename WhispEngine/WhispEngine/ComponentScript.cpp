@@ -153,10 +153,38 @@ void ComponentScript::DrawInspectorVars()
 			ImGui::Checkbox((*var).first.c_str(), &static_cast<Property<bool>*>((*var).second)->data);
 			break;
 		case ComponentScript::TypeData::INT:
-			ImGui::SliderInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data, 0, 100);
+			if (!(*var).second->macros.empty()) {
+				for (auto i = (*var).second->macros.begin(); i != (*var).second->macros.end(); ++i)
+					switch (*i)
+					{
+					case ComponentScript::Macros::DRAG:
+						ImGui::DragInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data, 1, (int)(*var).second->macros_info["n1"], (int)(*var).second->macros_info["n2"]);
+						break;
+					case ComponentScript::Macros::INPUT:
+						ImGui::InputInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data);
+						break;
+					case ComponentScript::Macros::SLIDER:
+						ImGui::SliderInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data, (int)(*var).second->macros_info["n1"], (int)(*var).second->macros_info["n2"]);
+						break;
+					}
+			}
 			break;
 		case ComponentScript::TypeData::FLOAT:
-			ImGui::SliderFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data, 0.f, 100.f);
+			if (!(*var).second->macros.empty()) {
+				for (auto i = (*var).second->macros.begin(); i != (*var).second->macros.end(); ++i)
+					switch (*i)
+					{
+					case ComponentScript::Macros::DRAG:
+						ImGui::DragFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data, (*var).second->macros_info["n1"], (*var).second->macros_info["n2"]);
+						break;
+					case ComponentScript::Macros::INPUT:
+						ImGui::InputFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data);
+						break;
+					case ComponentScript::Macros::SLIDER:
+						ImGui::SliderFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data, (*var).second->macros_info["n1"], (*var).second->macros_info["n2"]);
+						break;
+					}
+			}
 			break;
 		case ComponentScript::TypeData::NIL:
 			break;
@@ -319,10 +347,68 @@ void ComponentScript::UpdateInspectorVars()
 							float f = r.cast<float>();
 							if (ceilf(f) == f) { //integer
 								Property<int>* var = new Property<int>(TypeData::INT, r.cast<int>());
+								if (macros.find((*k)) != macros.end()) {
+									if (macros[(*k)].find("[Slider") != std::string::npos) {
+										var->macros.push_back(ComponentScript::Macros::SLIDER);
+									}
+									else if (macros[(*k).c_str()].find("[Drag") != std::string::npos) {
+										var->macros.push_back(ComponentScript::Macros::DRAG);
+									}
+									else if (macros[(*k).c_str()].find("[Input") != std::string::npos) {
+										var->macros.push_back(ComponentScript::Macros::INPUT);
+									}
+									auto par = macros[(*k).c_str()].find('(');
+									if (par != std::string::npos) {
+										auto it = macros[(*k).c_str()].begin() + par + 1;
+										std::string n1, n2;
+										while (*it != ',') {
+											n1 += *it;
+											it++;
+										}
+										while (*it == ' ' || *it == ',') {
+											it++;
+										}
+										while (*it != ' ' && *it != ')') {
+											n2 += *it;
+											it++;
+										}
+										var->macros_info["n1"] = std::stof(n1);
+										var->macros_info["n2"] = std::stof(n2);
+									}
+								}
 								public_vars[(*k).c_str()] = var;
 							}
 							else {
 								Property<float>* var = new Property<float>(TypeData::FLOAT, r.cast<float>());
+								if (macros.find((*k)) != macros.end()) {
+									if (macros[(*k)].find("[Slider") != std::string::npos) {
+										var->macros.push_back(ComponentScript::Macros::SLIDER);
+									}
+									else if (macros[(*k).c_str()].find("[Drag") != std::string::npos) {
+										var->macros.push_back(ComponentScript::Macros::DRAG);
+									}
+									else if (macros[(*k).c_str()].find("[Input") != std::string::npos) {
+										var->macros.push_back(ComponentScript::Macros::INPUT);
+									}
+									auto par = macros[(*k).c_str()].find('(');
+									if (par != std::string::npos) {
+										auto it = macros[(*k).c_str()].begin() + par + 1;
+										std::string n1, n2;
+										while (*it != ',') {
+											n1 += *it;
+											it++;
+										}
+										while (*it == ' ' || *it == ',') {
+											it++;
+										}
+										while (*it != ' ' && *it != ')') {
+											n2 += *it;
+											it++;
+										}
+										var->macros_info["n1"] = std::stof(n1);
+										var->macros_info["n2"] = std::stof(n2);
+									}
+								}
 								public_vars[(*k).c_str()] = var;
 							}
 						}

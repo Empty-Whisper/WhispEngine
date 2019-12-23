@@ -12,13 +12,16 @@ class ComponentScript :
 	};
 	enum class Macros {
 		NONE = -1,
-		ISGAMEOBJECT, 
+		ISGAMEOBJECT,
+		DRAG, INPUT, SLIDER,
 		MAX
 	};
 	class PublicVar {
 	public:
 		PublicVar(TypeData type) : type(type) {}
-		TypeData type = TypeData::NONE; //TODO To enum
+		TypeData type = TypeData::NONE;
+		std::list<Macros> macros;
+		std::map<std::string, float> macros_info;
 	};
 	template<typename T>
 	class Property : public PublicVar {

@@ -5,7 +5,7 @@ MoveTank = {}
 
 MoveTank.Variables = {
 		-- Public Variables [All must be initialized]
-		speed = 15
+		speed = 7.1 --[Slider(0, 10)]
 }
 
 local W = false
@@ -48,6 +48,10 @@ function MoveTank:Update()
 	D = false
 	end
 end
+
+
+
+
 
 
 
