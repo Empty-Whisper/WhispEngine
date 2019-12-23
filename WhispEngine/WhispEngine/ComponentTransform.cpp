@@ -4,10 +4,12 @@
 #include "Application.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
 #include "Imgui/ImGuizmo.h"
+#include "ComponentCamera.h"
 #include "ModuleGUI.h"
 #include "ModuleObjectManager.h"
 #include "Imgui/imgui_internal.h"
 #include "ModuleScripting.h"
+#include "ModuleCamera3D.h"
 #include "Lua/LuaBridge/LuaBridge.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
@@ -196,6 +198,13 @@ void ComponentTransform::CalculateGlobalMatrix()
 	if (mesh != nullptr)
 		mesh->CalulateAABB_OBB();
 
+	ComponentCamera* cam = nullptr;
+	if (object->TryGetComponent(ComponentType::CAMERA, (Component*&)cam)) {
+		cam->camera->SetTransformPosition(position);
+		cam->camera->SetVectorDirectionFront(rotation.WorldZ());
+		cam->camera->SetVectorDirectionUp(rotation.WorldY());
+	}
+
 	for (auto i = object->children.begin(); i != object->children.end(); i++) {
 		((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
 	}
@@ -309,14 +318,4 @@ void ComponentTransform::SetParent(const ComponentTransform* parent)
 {
 	if (object != parent->object)
 		App->object_manager->ChangeHierarchy(object, parent->object);
-	/*if (object->parent != nullptr) {
-		auto it = std::find(object->parent->children.begin(), object->parent->children.end(), object);
-		if (it != object->parent->children.end())
-			object->parent->children.erase(it);
-
-		if (parent == NULL)
-			parent = App->object_manager->root->transform;
-		parent->object->children.push_back(object);
-		object->parent = parent->object;
-	}*/
 }

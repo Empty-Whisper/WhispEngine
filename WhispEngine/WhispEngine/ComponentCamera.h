@@ -25,7 +25,7 @@ public:
 	void Save(nlohmann::json &node) override;
 	void Load(const nlohmann::json &node) override;
 
-private:
+public:
 	Camera* camera = nullptr;
 public:
 	bool	checkbox_main_camera = true;
