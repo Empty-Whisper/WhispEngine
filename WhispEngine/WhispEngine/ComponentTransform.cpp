@@ -7,6 +7,8 @@
 #include "ModuleGUI.h"
 #include "ModuleObjectManager.h"
 #include "Imgui/imgui_internal.h"
+#include "ModuleScripting.h"
+#include "Lua/LuaBridge/LuaBridge.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
 {
@@ -262,4 +264,59 @@ void ComponentTransform::LSetScale3f(const float & x, const float & y, const flo
 {
 	scale.Set(x, y, z);
 	CalculeLocalMatrix();
+}
+
+GameObject * ComponentTransform::LGetParent() const
+{
+	return object->parent;
+}
+
+GameObject * ComponentTransform::Find(const char * n) const
+{
+	for (auto i = object->children.begin(); i != object->children.end(); i++) {
+		if (strcmp((*i)->GetName(), n) == 0)
+			return *i;
+	}
+	LOG("GameObject: %s not found in %s childs", n, object->GetName());
+	return nullptr;
+}
+
+int ComponentTransform::ChildCount() const
+{
+	return object->children.size();
+}
+
+GameObject * ComponentTransform::GetChild(const int & index) const
+{
+	if (index >= object->children.size()) {
+		LOG("Failed to GetChild: index given is greater than children size");
+		return nullptr;
+	}
+
+	return object->children[index];
+}
+
+bool ComponentTransform::IsChildOf(const ComponentTransform* parent) const
+{
+	for (auto i = parent->object->children.begin(); i != parent->object->children.end(); i++) {
+		if (*i == object)
+			return true;
+	}
+	return false;
+}
+
+void ComponentTransform::SetParent(const ComponentTransform* parent)
+{
+	if (object != parent->object)
+		App->object_manager->ChangeHierarchy(object, parent->object);
+	/*if (object->parent != nullptr) {
+		auto it = std::find(object->parent->children.begin(), object->parent->children.end(), object);
+		if (it != object->parent->children.end())
+			object->parent->children.erase(it);
+
+		if (parent == NULL)
+			parent = App->object_manager->root->transform;
+		parent->object->children.push_back(object);
+		object->parent = parent->object;
+	}*/
 }

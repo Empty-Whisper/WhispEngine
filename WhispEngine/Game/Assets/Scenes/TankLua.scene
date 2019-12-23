@@ -1,9 +1,9 @@
 {
     "Camera": {
         "position": [
-            -0.3042048513889313,
-            4.944488048553467,
-            10.759438514709473
+            -0.33913224935531616,
+            5.512192249298096,
+            11.994791030883789
         ]
     },
     "GameObjects": [
@@ -8038,6 +8038,11 @@
                                 {
                                     "active": true,
                                     "script": "Assets/Scripts/RotateTank.lua",
+                                    "type": 5
+                                },
+                                {
+                                    "active": true,
+                                    "script": "Assets\\Scripts\\TestTransformChild.lua",
                                     "type": 5
                                 }
                             ],

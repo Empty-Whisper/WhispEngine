@@ -62,6 +62,8 @@ public:
 	GameObject*	GetSelected() const;
 	void SetSelected(GameObject* select);
 
+	void ChangeHierarchy(GameObject * dst, GameObject * src);
+
 	void LuaRegister() override;
 
 	void MousePicking(); 
@@ -118,6 +120,8 @@ private:
 
 public:
 	GameObject* root = nullptr;
+
+	std::map<GameObject*, GameObject*> to_change;
 private:
 	GameObject* selected = nullptr;
 

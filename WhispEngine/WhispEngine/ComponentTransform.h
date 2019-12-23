@@ -1,5 +1,4 @@
-#ifndef __COMPONENT_TRANSFORM_H__
-#define __COMPONENT_TRANSFORM_H__
+#pragma once
 
 #include "Component.h"
 #include "Globals.h"
@@ -8,7 +7,8 @@
 #include "MathGeoLib\include\Math\float3.h"
 #include "MathGeoLib\include\Math\float4x4.h"
 
-#pragma once
+class GameObject;
+
 class ComponentTransform : public Component
 {
 	friend class ModuleObjectManager;
@@ -62,5 +62,12 @@ private:
 	void LSetPosition3f(const float& x, const float& y, const float& z);
 	void LSetRotationQ(const Quat& quat);
 	void LSetScale3f(const float& x, const float& y, const float& z);
+
+	GameObject* LGetParent() const;
+
+	GameObject* Find(const char* n) const;
+	int			ChildCount() const;
+	GameObject* GetChild(const int& index) const;
+	bool		IsChildOf(const ComponentTransform* parent) const;
+	void		SetParent(const ComponentTransform* parent);
 };
-#endif

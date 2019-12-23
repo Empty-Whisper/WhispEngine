@@ -50,6 +50,16 @@ update_status ModuleObjectManager::Update()
 	//Camera
 	App->camera->GetGameCamera()->DrawInsideFrustum();
 
+	if (!to_change.empty()) {
+		for (auto chng = to_change.begin(); chng != to_change.end(); chng++) {
+			if (!(*chng).second->HasChild((*chng).first)) { // if the GameObject we want to change is parent of the other, we will leap that situation
+				(*chng).second->Detach();
+				(*chng).second->Attach((*chng).first);
+			}
+		}
+		to_change.clear();
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -164,59 +174,65 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 	}
 }
 
+void ModuleObjectManager::ChangeHierarchy(GameObject * dst, GameObject * src)
+{
+	to_change.emplace(std::pair<GameObject*, GameObject*>(dst, src));
+}
+
 void ModuleObjectManager::LuaRegister()
 {
 	using namespace luabridge;
 	getGlobalNamespace(App->scripting->GetState())
 		.beginClass<float3>("Vector3")
-			.addConstructor<void(*) (const float&, const float&, const float&)>()
-			.addConstructor<void(*) ()>()
-			.addData("x", &float3::x, true)
-			.addData("y", &float3::y, true)
-			.addData("z", &float3::z, true)
-			.addFunction("Normalize", &float3::Normalize)
-			.addFunction("Normalized", &float3::Normalized)
-			.addFunction("Magnitude", &float3::Length)
-			.addFunction("sqrMagnitude", &float3::LengthSq)
-			.addFunction("toString", &float3::ToString)
-			.addFunction("__add", &float3::LSum)
-			.addFunction("__sub", &float3::LSub)
-			.addFunction("__mul", &float3::operator*)
-			.addFunction("__div", &float3::operator/)
+		.addConstructor<void(*) (const float&, const float&, const float&)>()
+		.addConstructor<void(*) ()>()
+		.addData("x", &float3::x, true)
+		.addData("y", &float3::y, true)
+		.addData("z", &float3::z, true)
+		.addFunction("Normalize", &float3::Normalize)
+		.addFunction("Normalized", &float3::Normalized)
+		.addFunction("Magnitude", &float3::Length)
+		.addFunction("sqrMagnitude", &float3::LengthSq)
+		.addFunction("toString", &float3::ToString)
+		.addFunction("__add", &float3::LSum)
+		.addFunction("__sub", &float3::LSub)
+		.addFunction("__mul", &float3::operator*)
+		.addFunction("__div", &float3::operator/)
 		.endClass()
 		.beginNamespace("Vector3")
-			//.addProperty("forward", &float3::unitX)
-			//.addProperty("up", &float3::unitY)
-			//.addProperty("right", &float3::unitZ)
-			.addFunction("FromEuler", &Quat::FromEulerXYZ)
+		//.addProperty("forward", &float3::unitX)
+		//.addProperty("up", &float3::unitY)
+		//.addProperty("right", &float3::unitZ)
+		.addFunction("FromEuler", &Quat::FromEulerXYZ)
 		.endNamespace()
 		.beginClass<Quat>("Quaternion")
-			.addConstructor<void(*) (const float&, const float&, const float&, const float&)>()
-			.addData("w", &Quat::w)
-			.addData("x", &Quat::x)
-			.addData("y", &Quat::y)
-			.addData("z", &Quat::z)
-			.addFunction("Normalize", &Quat::Normalize)
-			.addFunction("Normalized", &Quat::Normalized)
-			.addFunction("ToEuler", &Quat::ToEulerXYZ)
-			.addFunction("ToString", &Quat::ToString)
-			.addFunction("SetFromAxisAngle", &Quat::SetFromAxisAngle)
+		.addConstructor<void(*) (const float&, const float&, const float&, const float&)>()
+		.addData("w", &Quat::w)
+		.addData("x", &Quat::x)
+		.addData("y", &Quat::y)
+		.addData("z", &Quat::z)
+		.addFunction("Normalize", &Quat::Normalize)
+		.addFunction("Normalized", &Quat::Normalized)
+		.addFunction("ToEuler", &Quat::ToEulerXYZ)
+		.addFunction("ToString", &Quat::ToString)
+		.addFunction("SetFromAxisAngle", &Quat::SetFromAxisAngle)
 		.endClass()
 		.beginNamespace("Quaternion")
-			.addFunction("FromEuler", &Quat::FromEulerXYZ)
-			.addFunction("RotateAxisAngle", &Quat::RotateAxisAngle)
-			.addFunction("RotateX", &Quat::RotateX)
-			.addFunction("RotateY", &Quat::RotateY)
-			.addFunction("RotateZ", &Quat::RotateZ)
+		.addFunction("FromEuler", &Quat::FromEulerXYZ)
+		.addFunction("RotateAxisAngle", &Quat::RotateAxisAngle)
+		.addFunction("RotateX", &Quat::RotateX)
+		.addFunction("RotateY", &Quat::RotateY)
+		.addFunction("RotateZ", &Quat::RotateZ)
 		.endNamespace()
 		.beginClass<GameObject>("GameObject")
-			.addProperty("active", &GameObject::active)
-			.addProperty("name", &GameObject::name)
-			.addProperty("transform", &GameObject::transform)
-			//.addFunction("addComponent", &GameObject::CreateComponent)
+		.addProperty("active", &GameObject::active)
+		.addProperty("name", &GameObject::name)
+		.addProperty("transform", &GameObject::transform)
+		//.addFunction("addComponent", &GameObject::CreateComponent)
 		.endClass()
 		.beginClass<ComponentTransform>("transform")
 			.addData("gameobject", &ComponentTransform::object, false)
+			.addProperty("parent", &ComponentTransform::LGetParent)
 			.addProperty("position", &ComponentTransform::GetPosition) //TODO: maybe it could be an own struct and set x, y and z as &position.x (READ ONLY)
 			.addProperty("rotation", &ComponentTransform::GetRotation)
 			.addProperty("scale", &ComponentTransform::GetScale)
@@ -224,6 +240,11 @@ void ModuleObjectManager::LuaRegister()
 			.addFunction("SetPosition3f", &ComponentTransform::LSetPosition3f)
 			.addFunction("SetRotation", &ComponentTransform::LSetRotationQ)
 			.addFunction("SetScale", &ComponentTransform::LSetScale3f)
+			.addFunction("Find", &ComponentTransform::Find)
+			.addProperty("ChildCount", &ComponentTransform::ChildCount)
+			.addFunction("GetChild", &ComponentTransform::GetChild)
+			.addFunction("IsChildOf", &ComponentTransform::IsChildOf)
+			.addFunction("SetParent", &ComponentTransform::SetParent)
 		.endClass();
 }
 

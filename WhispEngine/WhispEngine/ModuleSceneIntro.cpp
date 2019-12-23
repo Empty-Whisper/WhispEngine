@@ -218,6 +218,7 @@ bool ModuleSceneIntro::LoadScene(const char* scene)
 	scene_path.assign(scene);
 
 	ret = App->object_manager->LoadGameObjects(scene_file["GameObjects"]);
+	App->object_manager->LoadScripts(scene_file["GameObjects"]);
 
 	octree->Recalculate();
 
