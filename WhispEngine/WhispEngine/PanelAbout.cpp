@@ -86,6 +86,18 @@ void PanelAbout::Update()
 		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://github.com/MatthewKing/DeviceId", NULL, NULL, SW_SHOWNORMAL);
 		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("Lua 5.3.5");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://www.lua.org/", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("LuaBridge 2.4");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://github.com/vinniefalco/LuaBridge", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+
+		ImGui::BulletText(""); ImGui::SameLine(); ImGui::Selectable("ImGuiColorTextEdit");
+		if (ImGui::IsItemClicked()) ShellExecuteA(NULL, "open", "https://github.com/BalazsJako/ImGuiColorTextEdit", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+
 
 		ImGui::NewLine();
 		ImGui::Checkbox("Show MIT LICENSE", &checkbox_mit_license_window);

@@ -40,34 +40,17 @@ There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct bett
 * Scene:         	  Shift + 6
 * Game:             	  Shift + 7
 * Resources:        	  Shift + 8
+* Script Editor:       	  Shift + 9
 * About: 	                  Shift + Control + A
 
 ## Authors and Division Of Tasks
 ### **Christian Martínez** [christt105](https://github.com/christt105)
-* Hierarchy GameObjects
-* Components properties on inspector
-* Octree
-* Scene Serialization (Load and Save)
-* Part of Bounding Boxes
-* Own Format
-* **Resource manager** :D
-	* Library and Assets logic
-	* .meta file
-	* Reference Counting
-* Start/Pause/Stop and recover init state
 
 ### **Marc Galvez** [optus23](https://github.com/optus23)
-* Transform Camera editor to Fustum
-* Camera class logic 
-* Frustum culling
-* Component Camer
-* Camera Preview
-* Game panel
-* Viewport class logic
-* Mouse Picking
-* Substract all Modules from App.h
-* Add Guizmos
-* Guizmos logic to Game Objects
+
+## Innovations Assignment 3
+
+* ...
 
 ## Innovations Assignment 2
 
@@ -98,7 +81,7 @@ There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct bett
 * Change mouse icon when click middle mouse button
 * JPG files can be loadded
 
-## Program used
+## Programs and third party libraries used
 * [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/es/vs/)
 * [OpenGL3](https://opengl.org/)
 * [SDL v2.0](https://www.libsdl.org/license.php)
@@ -114,8 +97,12 @@ There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct bett
 * [Assimp v5.0](http://www.assimp.org/)
 * [DevIL v1.8](http://openil.sourceforge.net/)
 * [GPU detect v1.1](https://github.com/MatthewKing/DeviceId)
+* [Lua 5.3.5](https://www.lua.org/)
+* [LuaBridge 2.4](https://github.com/vinniefalco/LuaBridge)
+* [ImGuiColorTextEdit](https://github.com/BalazsJako/ImGuiColorTextEdit)
 
 Github [repository](https://github.com/Empty-Whisper/WhispEngine)
+[Web page]()
 
 Under supervision of lecturers [Ricard Pillosu](https://www.linkedin.com/in/ricardpillosu/) and [Marc Garrigó](https://www.linkedin.com/in/mgarrigo/)
 

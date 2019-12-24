@@ -73,7 +73,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(game = new PanelGame(node["panels"]["game"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_7));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
 	panels.push_back(resources = new PanelResources(node["panels"]["resources"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_8));
-	panels.push_back(editor = new PanelScriptEditor(true, SDL_SCANCODE_LSHIFT, SDL_SCANCODE_9));
+	panels.push_back(editor = new PanelScriptEditor(node["panels"]["editor"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_9));
 
 	ImGuizmo::Enable(true);
 
@@ -278,9 +278,9 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Scene", "Shift+6", &scene->active);
 			ImGui::MenuItem("Game", "Shift+7", &game->active);
 			ImGui::MenuItem("Resources", "Shift+8", &resources->active);
+			ImGui::MenuItem("Script Editor", "Shift+9", &editor->active);
 			ImGui::MenuItem("Style Editor", "", &show_style_window);
 			ImGui::EndMenu();
-
 		}
 
 		if (ImGui::BeginMenu("GameObject"))
@@ -319,11 +319,7 @@ update_status ModuleGUI::MainMenuBar()
 					App->object_manager->CreatePrimitive(Primitives::CYLINDER, Object_data());*/
 				ImGui::EndMenu();
 			}
-			
-
-
 			ImGui::EndMenu();
-
 		}
 
 		if (ImGui::BeginMenu("Debug Tools")) {

@@ -1,9 +1,9 @@
 {
     "Camera": {
         "position": [
-            -2.9732770919799805,
-            2.1395206451416016,
-            -0.6364488005638123
+            -1.0222773551940918,
+            2.5275208950042725,
+            -11.4864501953125
         ]
     },
     "GameObjects": [
@@ -8034,18 +8034,7 @@
                                     "static": false
                                 }
                             ],
-                            "Components": [
-                                {
-                                    "active": true,
-                                    "script": "Assets\\Scripts\\TestTransformChild.lua",
-                                    "type": 5
-                                },
-                                {
-                                    "active": true,
-                                    "script": "Assets\\Scripts\\TestTransformChild.lua",
-                                    "type": 5
-                                }
-                            ],
+                            "Components": null,
                             "UID": 1723532109397344000,
                             "active": true,
                             "name": "Base",

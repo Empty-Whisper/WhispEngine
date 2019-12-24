@@ -7,6 +7,7 @@
 #include "ModuleInput.h"
 
 PanelScriptEditor::PanelScriptEditor(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
+	: Panel("editor", start_active, shortcut1, shortcut2, shortcut3)
 {
 	editor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
 }
