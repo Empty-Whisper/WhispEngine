@@ -13,6 +13,7 @@ class PanelInspector;
 class PanelScene;
 class PanelGame;
 class PanelResources;
+class PanelScriptEditor;
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
@@ -25,6 +26,8 @@ class PanelResources;
 #define IMGUI_COLOR_ORANGE ImVec4(1.f, 0.5f,0.f,1.f)
 
 class ModuleGUI :public Module {
+	friend class PanelResources;
+	friend class PanelInspector;
 public:
 	ModuleGUI(bool enable_true = true);
 	~ModuleGUI();
@@ -34,6 +37,9 @@ public:
 
 	update_status PreUpdate();
 	update_status Update();
+	void UpdatePanels();
+	void PlayPauseStop();
+	void ModalSaveScene();
 	update_status PostUpdate();
 
 	bool CleanUp();
@@ -73,6 +79,7 @@ private:
 	PanelCreate* create = nullptr;
 	PanelInspector* inspector = nullptr;
 	PanelResources* resources = nullptr;
+	PanelScriptEditor* editor = nullptr;
 
 public:
 	PanelScene* scene = nullptr;

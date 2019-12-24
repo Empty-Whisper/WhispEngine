@@ -1,5 +1,6 @@
 #include "Random.h"
 
+pcg32 Random::rng;
 Random::Random()
 {
 	rng = pcg32(seed_source);

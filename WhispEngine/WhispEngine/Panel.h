@@ -19,5 +19,6 @@ public:
 	std::string name;
 	bool active = true;
 
+	//ImVec2 rect[2];
 	ShortCut *shortcut = nullptr;
 };

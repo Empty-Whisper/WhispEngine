@@ -80,13 +80,15 @@ update_status ModuleCamera3D::Update()
 		//Camera Functionalities
 		if ((ImGui::IsMouseHoveringRect(scene_position, scene_size, false) || is_moving_camera) && App->gui->scene->active)
 		{
-			if (App->input->GetMouseWheel() >= 1)
-			{
-				scene_camera->Movement(CameraMovementType::FRONT, whe_speed);
-			}
-			else if (App->input->GetMouseWheel() <= -1)
-			{
-				scene_camera->Movement(CameraMovementType::BACK, whe_speed);
+			if (!App->input->block_keyboard) {
+				if (App->input->GetMouseWheel() >= 1)
+				{
+					scene_camera->Movement(CameraMovementType::FRONT, whe_speed);
+				}
+				else if (App->input->GetMouseWheel() <= -1)
+				{
+					scene_camera->Movement(CameraMovementType::BACK, whe_speed);
+				}
 			}
 
 			// Mouse Zoom in/out
@@ -150,7 +152,7 @@ update_status ModuleCamera3D::Update()
 				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
 			}
 
-			//Move Camrea
+			//Move Camera
 			if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT && !App->input->GetKey(SDL_SCANCODE_LALT))
 			{
 				if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
@@ -171,11 +173,13 @@ update_status ModuleCamera3D::Update()
 			}
 
 		}
-		if (!ImGui::IsAnyItemActive() && App->object_manager->GetSelected() != nullptr) {
-			if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
-				scene_camera->is_focusing = true;
+		if (!App->input->block_keyboard) {
+			if (!ImGui::IsAnyItemActive() && App->object_manager->GetSelected() != nullptr) {
+				if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
+					scene_camera->is_focusing = true;
 
-			scene_camera->FocusObject(App->object_manager->GetSelected()->GetAABB());
+				scene_camera->FocusObject(App->object_manager->GetSelected()->GetAABB());
+			}
 		}
 	}
 
@@ -428,7 +432,7 @@ void Camera::FocusObject(const AABB & aabb)
 		math::float3 new_pos = float3::zero;
 		math::float3 vector = new_pos - reference_position;
 
-		float object_length = length(normalize((vec3)(vector.x, vector.y, vector.z)) * aabb.Diagonal().Length());
+		float object_length = vector.Normalized().Length() * aabb.Diagonal().Length();
 
 		ComponentMesh* component_mesh = (ComponentMesh*)App->object_manager->GetSelected()->GetComponent(ComponentType::MESH);
 		if (component_mesh == nullptr)

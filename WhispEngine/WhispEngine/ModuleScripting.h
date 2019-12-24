@@ -1,0 +1,51 @@
+#pragma once
+#include "Module.h"
+
+extern "C" {
+#include "Lua/Lua/include/lua.h"
+#include "Lua/Lua/include/lua.hpp"
+#include "Lua/Lua/include/lauxlib.h"
+}
+
+#include "Globals.h"
+
+class ModuleScripting :
+	public Module
+{
+public:
+	enum Functions {
+		NONE = -1,
+		START, PREUPDATE, UPDATE, POSTUPDATE,
+		MAX
+	};
+public:
+	ModuleScripting();
+	~ModuleScripting();
+
+	bool Start() override;
+	update_status PreUpdate() override;
+	update_status Update() override;
+	update_status PostUpdate() override;
+
+	void ExecuteFunctionScript(const char* path, const char* name, Functions function);
+	void ExecuteScript(const char* file);
+
+	void LuaRegister() override;
+
+	lua_State* GetState() const { return L; }
+
+	bool first_frame = true;
+
+private:
+	lua_State* L = nullptr;
+
+	bool to_change = false;
+
+	static void Log(const char* s) {
+		if (s != nullptr) {
+			LOG(s);
+		}
+		else
+			LOG("LUA FAILED: Message is nullptr");
+	}
+};

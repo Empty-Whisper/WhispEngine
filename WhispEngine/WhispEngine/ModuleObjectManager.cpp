@@ -13,6 +13,9 @@
 #include "ModuleImport.h"
 #include "ModuleRenderer3D.h"
 
+#include "ModuleScripting.h"
+#include "Lua/LuaBridge/LuaBridge.h"
+
 ModuleObjectManager::ModuleObjectManager()
 {
 	name.assign("ObjectManager");
@@ -47,6 +50,16 @@ update_status ModuleObjectManager::Update()
 	//Camera
 	App->camera->GetGameCamera()->DrawInsideFrustum();
 
+	if (!to_change.empty()) {
+		for (auto chng = to_change.begin(); chng != to_change.end(); chng++) {
+			if (!(*chng).second->HasChild((*chng).first)) { // if the GameObject we want to change is parent of the other, we will leap that situation
+				(*chng).second->Detach();
+				(*chng).second->Attach((*chng).first);
+			}
+		}
+		to_change.clear();
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -77,7 +90,8 @@ GameObject * ModuleObjectManager::CreateGameObject(GameObject * parent)
 		parent = root;
 
 	GameObject* ret = new GameObject(parent);
-
+	objects[ret->UID] = ret;
+	
 	return ret;
 }
 
@@ -91,6 +105,7 @@ void ModuleObjectManager::DestroyGameObject(GameObject * obj)
 void ModuleObjectManager::ResetObjects()
 {
 	delete root;
+	objects.clear();
 	root = new GameObject(nullptr);
 	root->SetName("Root");
 }
@@ -157,6 +172,80 @@ void ModuleObjectManager::SetSelected(GameObject * select)
 			select->Select();
 		selected = select;
 	}
+}
+
+void ModuleObjectManager::ChangeHierarchy(GameObject * dst, GameObject * src)
+{
+	to_change.emplace(std::pair<GameObject*, GameObject*>(dst, src));
+}
+
+void ModuleObjectManager::LuaRegister()
+{
+	using namespace luabridge;
+	getGlobalNamespace(App->scripting->GetState())
+		.beginClass<float3>("Vector3")
+			.addConstructor<void(*) (const float&, const float&, const float&)>()
+			.addConstructor<void(*) ()>()
+			.addData("x", &float3::x, true)
+			.addData("y", &float3::y, true)
+			.addData("z", &float3::z, true)
+			.addFunction("Normalize", &float3::Normalize)
+			.addFunction("Normalized", &float3::Normalized)
+			.addFunction("Magnitude", &float3::Length)
+			.addFunction("sqrMagnitude", &float3::LengthSq)
+			.addFunction("toString", &float3::ToString)
+			.addFunction("__add", &float3::LSum)
+			.addFunction("__sub", &float3::LSub)
+			.addFunction("__mul", &float3::operator*)
+			.addFunction("__div", &float3::operator/)
+		.endClass()
+		.beginNamespace("Vector3")
+			//.addProperty("forward", &float3::unitX)
+			//.addProperty("up", &float3::unitY)
+			//.addProperty("right", &float3::unitZ)
+			.addFunction("FromEuler", &Quat::FromEulerXYZ)
+		.endNamespace()
+		.beginClass<Quat>("Quaternion")
+			.addConstructor<void(*) (const float&, const float&, const float&, const float&)>()
+			.addData("w", &Quat::w)
+			.addData("x", &Quat::x)
+			.addData("y", &Quat::y)
+			.addData("z", &Quat::z)
+			.addFunction("Normalize", &Quat::Normalize)
+			.addFunction("Normalized", &Quat::Normalized)
+			.addFunction("ToEuler", &Quat::ToEulerXYZ)
+			.addFunction("ToString", &Quat::ToString)
+			.addFunction("SetFromAxisAngle", &Quat::SetFromAxisAngle)
+		.endClass()
+		.beginNamespace("Quaternion")
+			.addFunction("FromEuler", &Quat::FromEulerXYZ)
+			.addFunction("RotateAxisAngle", &Quat::RotateAxisAngle)
+			.addFunction("RotateX", &Quat::RotateX)
+			.addFunction("RotateY", &Quat::RotateY)
+			.addFunction("RotateZ", &Quat::RotateZ)
+		.endNamespace()
+		.beginClass<GameObject>("GameObject")
+			.addProperty("active", &GameObject::active)
+			.addProperty("name", &GameObject::name)
+			.addProperty("transform", &GameObject::transform)
+			//.addFunction("addComponent", &GameObject::CreateComponent)
+		.endClass()
+		.beginClass<ComponentTransform>("transform")
+			.addData("gameobject", &ComponentTransform::object, false)
+			.addProperty("parent", &ComponentTransform::LGetParent)
+			.addProperty("position", &ComponentTransform::GetPosition) //TODO: maybe it could be an own struct and set x, y and z as &position.x (READ ONLY)
+			.addProperty("rotation", &ComponentTransform::GetRotation)
+			.addProperty("scale", &ComponentTransform::GetScale)
+			.addFunction("SetPositionv", &ComponentTransform::LSetPositionV)
+			.addFunction("SetPosition3f", &ComponentTransform::LSetPosition3f)
+			.addFunction("SetRotation", &ComponentTransform::LSetRotationQ)
+			.addFunction("SetScale", &ComponentTransform::LSetScale3f)
+			.addFunction("Find", &ComponentTransform::Find)
+			.addProperty("ChildCount", &ComponentTransform::ChildCount)
+			.addFunction("GetChild", &ComponentTransform::GetChild)
+			.addFunction("IsChildOf", &ComponentTransform::IsChildOf)
+			.addFunction("SetParent", &ComponentTransform::SetParent)
+		.endClass();
 }
 
 void ModuleObjectManager::MousePicking()
@@ -258,7 +347,20 @@ bool ModuleObjectManager::LoadGameObjects(const nlohmann::json & it)
 		}
 	}
 
+	RefreshObjectsUIDMap();
+
 	return ret;
+}
+
+bool ModuleObjectManager::LoadScripts(const nlohmann::json & it)
+{
+	auto object = *it.begin();
+	if (it.size() == 1) {
+		for (auto i = object["Children"].cbegin(); i != object["Children"].cend(); i++) {
+			LoadScript(*i);
+		}
+	}
+	return true;
 }
 
 bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject * parent)
@@ -281,6 +383,46 @@ bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject
 	}
 
 	return ret;
+}
+
+bool ModuleObjectManager::LoadScript(const nlohmann::json & node)
+{
+	bool ret = true;
+
+	GameObject* obj = objects[node["UID"]];
+
+	if (obj != nullptr) {
+		for (auto i = node["Components"].begin(); i != node["Components"].end(); ++i) {
+			if ((*i).value("type", ComponentType::NONE) == ComponentType::SCRIPT) {
+				auto s = obj->GetComponent(ComponentType::SCRIPT); // Get All Scripts if there is more than one
+				if (s != nullptr)
+					s->Load(*i);
+			}
+		}
+	}
+
+	for (auto i = node["Children"].begin(); i != node["Children"].end(); ++i) {
+		LoadScript(*i);
+	}
+
+	return ret;
+}
+
+void ModuleObjectManager::RefreshObjectsUIDMap()
+{
+	objects.clear();
+	objects[root->UID] = root;
+	for (auto i = root->children.begin(); i != root->children.end(); i++) {
+		RefreshUIDMap(*i);
+	}
+}
+
+void ModuleObjectManager::RefreshUIDMap(GameObject * obj)
+{
+	objects[obj->UID] = obj;
+	for (auto i = obj->children.begin(); i != obj->children.end(); i++) {
+		RefreshUIDMap(*i);
+	}
 }
 
 //const char * ModuleObjectManager::PrimitivesToString(const Primitives prim)
@@ -435,6 +577,15 @@ void ModuleObjectManager::FillMatrix(float4x4 & matrix, float o[])
 		o[3], o[7], o[11], o[15]);
 }
 
+GameObject * ModuleObjectManager::Find(const uint64 & uid) const
+{
+	if (root->UID == uid)
+		return root;
+	if (objects.find(uid) != objects.end())
+		return objects.at(uid);
+	return nullptr;
+}
+
 void ModuleObjectManager::ChangeGuizmoOperation(ImGuizmo::OPERATION &gizmoOperation)
 {
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
@@ -522,19 +673,18 @@ float* ModuleObjectManager::CalculateFaceNormals(const float* vertex, const uint
 	float* data = new float[n_face_normals];
 
 	for (int k = 0; k < n_index / 3; k += 3) {
-		vec3 p1(vertex[index[k] * 3],	  vertex[index[k] * 3 + 1],		vertex[index[k] * 3 + 2]);
-		vec3 p2(vertex[index[k + 1] * 3], vertex[index[k + 1] * 3 + 1], vertex[index[k + 1] * 3 + 2]);
-		vec3 p3(vertex[index[k + 2] * 3], vertex[index[k + 2] * 3 + 1], vertex[index[k + 2] * 3 + 2]);
+		float3 p1(vertex[index[k] * 3],	  vertex[index[k] * 3 + 1],		vertex[index[k] * 3 + 2]);
+		float3 p2(vertex[index[k + 1] * 3], vertex[index[k + 1] * 3 + 1], vertex[index[k + 1] * 3 + 2]);
+		float3 p3(vertex[index[k + 2] * 3], vertex[index[k + 2] * 3 + 1], vertex[index[k + 2] * 3 + 2]);
 
 		data[k * 2] = (p1.x + p2.x + p3.x) / 3.f;
 		data[k * 2 + 1] = (p1.y + p2.y + p3.y) / 3.f;
 		data[k * 2 + 2] = (p1.z + p2.z + p3.z) / 3.f;
 
-		vec3 v1 = p2 - p1;
-		vec3 v2 = p3 - p1;
+		float3 v1 = p2 - p1;
+		float3 v2 = p3 - p1;
 
-		vec3 v_norm = cross(v1, v2);
-		v_norm = normalize(v_norm);
+		float3 v_norm = (math::Cross(v1, v2)).Normalized();
 
 		data[k * 2 + 3] = data[k * 2] + v_norm.x * magnitude;
 		data[k * 2 + 4] = data[k * 2 + 1] + v_norm.y * magnitude;

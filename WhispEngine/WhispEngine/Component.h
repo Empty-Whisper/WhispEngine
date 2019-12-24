@@ -14,11 +14,13 @@ enum ComponentType
 	MESH,
 	MATERIAL,
 	LIGHT,
-	CAMERA
+	CAMERA,
+	SCRIPT
 };
 
 class Component
 {
+	friend class ModuleObjectManager;
 public:
 	Component(GameObject* parent, ComponentType type);
 	virtual ~Component();

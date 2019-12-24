@@ -150,7 +150,7 @@ CODE
    For every application frame your UI code will be called only once. This is in contrast to e.g. Unity's own implementation of an IMGUI,
    where the UI code is called multiple times ("multiple passes") from a single entry point. There are pros and cons to both approaches.
  - Our origin are on the top-left. In axis aligned bounding boxes, Min = top-left, Max = bottom-right.
- - This codebase is also optimized to yield decent performances with typical "Debug" builds settings.
+ - This codebase is also optimized to yield decent performances with typical "Log" builds settings.
  - Please make sure you have asserts enabled (IM_ASSERT redirects to assert() by default, but can be redirected).
    If you get an assert, read the messages and comments around the assert.
  - C++: this is a very C-ish codebase: we don't rely on C++11, we don't include any C++ headers, and ImGui:: is a namespace.
@@ -965,7 +965,7 @@ CODE
 
  - tip: you can call Begin() multiple times with the same name during the same frame, it will keep appending to the same window.
         this is also useful to set yourself in the context of another window (to get/set other settings)
- - tip: you can create widgets without a Begin()/End() block, they will go in an implicit window called "Debug".
+ - tip: you can create widgets without a Begin()/End() block, they will go in an implicit window called "Log".
  - tip: the ImGuiOnceUponAFrame helper will allow run the block of code only once a frame. You can use it to quickly add custom UI in the middle
         of a deep nested inner loop in your code.
  - tip: you can call Render() multiple times (e.g for VR renders).
@@ -991,7 +991,7 @@ CODE
 #include <stdint.h>     // intptr_t
 #endif
 
-// Debug options
+// Log options
 #define IMGUI_DEBUG_NAV_SCORING     0   // Display navigation scoring preview when hovering items. Display last moving direction matches when holding CTRL
 #define IMGUI_DEBUG_NAV_RECTS       0   // Display the reference navigation rectangle for each window
 #define IMGUI_DEBUG_INI_SETTINGS    0   // Save additional comments in .ini file (particularly helps for Docking, but makes saving slower)
@@ -1574,7 +1574,7 @@ ImU32 ImHashData(const void* data_p, size_t data_size, ImU32 seed)
 // We support a syntax of "label###id" where only "###id" is included in the hash, and only "label" gets displayed.
 // Because this syntax is rarely used we are optimizing for the common case.
 // - If we reach ### in the string we discard the hash so far and reset to the seed.
-// - We don't do 'current += 2; continue;' after handling ### to keep the code smaller/faster (measured ~10% diff in Debug build)
+// - We don't do 'current += 2; continue;' after handling ### to keep the code smaller/faster (measured ~10% diff in Log build)
 // FIXME-OPT: Replace with e.g. FNV1a hash? CRC32 pretty much randomly access 1KB. Need to do proper measurements.
 ImU32 ImHashStr(const char* data_p, size_t data_size, ImU32 seed)
 {
@@ -4123,7 +4123,7 @@ void ImGui::NewFrame()
     UpdateDebugToolItemPicker();
 
     // Create implicit/fallback window - which we will only render it if the user has added something to it.
-    // We don't use "Debug" to avoid colliding with user trying to create a "Debug" window with custom flags.
+    // We don't use "Log" to avoid colliding with user trying to create a "Log" window with custom flags.
     // This fallback is particularly important as it avoid ImGui:: calls from crashing.
     g.FrameScopePushedFallbackWindow = true;
     SetNextWindowSize(ImVec2(400,400), ImGuiCond_FirstUseEver);
@@ -4506,7 +4506,7 @@ void ImGui::EndFrame()
         }
     }
 
-    // Hide implicit/fallback "Debug" window if it hasn't been used
+    // Hide implicit/fallback "Log" window if it hasn't been used
     g.FrameScopePushedFallbackWindow = false;
     if (g.CurrentWindow && !g.CurrentWindow->WriteAccessed)
         g.CurrentWindow->Active = false;
@@ -5457,7 +5457,7 @@ static bool ImGui::UpdateManualResize(ImGuiWindow* window, const ImVec2& size_au
 
     if ((flags & ImGuiWindowFlags_NoResize) || (flags & ImGuiWindowFlags_AlwaysAutoResize) || window->AutoFitFramesX > 0 || window->AutoFitFramesY > 0)
         return false;
-    if (window->WasActive == false) // Early out to avoid running this code for e.g. an hidden implicit/fallback Debug window.
+    if (window->WasActive == false) // Early out to avoid running this code for e.g. an hidden implicit/fallback Log window.
         return false;
 
     bool ret_auto_fit = false;
@@ -5846,7 +5846,7 @@ void ImGui::UpdateWindowParentAndRootLinks(ImGuiWindow* window, ImGuiWindowFlags
 }
 
 // Push a new Dear ImGui window to add widgets to.
-// - A default window called "Debug" is automatically stacked at the beginning of every frame so you can use widgets without explicitly calling a Begin/End pair.
+// - A default window called "Log" is automatically stacked at the beginning of every frame so you can use widgets without explicitly calling a Begin/End pair.
 // - Begin/End can be called multiple times during the frame with the same window name to append content.
 // - The window name is used as a unique identifier to preserve window information across frames (and save rudimentary information to the .ini file).
 //   You can use the "##" or "###" markers to use the same label with different id, or same id with different label. See documentation at the top of this file.
@@ -5881,7 +5881,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
     window->IsFallbackWindow = (g.CurrentWindowStack.Size == 0 && g.FrameScopePushedFallbackWindow);
 
     // Update the Appearing flag
-    bool window_just_activated_by_user = (window->LastFrameActive < current_frame - 1);   // Not using !WasActive because the implicit "Debug" window would always toggle off->on
+    bool window_just_activated_by_user = (window->LastFrameActive < current_frame - 1);   // Not using !WasActive because the implicit "Log" window would always toggle off->on
     const bool window_just_appearing_after_hidden_for_resize = (window->HiddenFramesCannotSkipItems > 0);
     if (flags & ImGuiWindowFlags_Popup)
     {
@@ -6608,7 +6608,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
     if (!(flags & ImGuiWindowFlags_DockNodeHost))
         PushClipRect(window->InnerClipRect.Min, window->InnerClipRect.Max, true);
 
-    // Clear 'accessed' flag last thing (After PushClipRect which will set the flag. We want the flag to stay false when the default "Debug" window is unused)
+    // Clear 'accessed' flag last thing (After PushClipRect which will set the flag. We want the flag to stay false when the default "Log" window is unused)
     if (first_begin_of_the_frame)
         window->WriteAccessed = false;
 
@@ -7105,7 +7105,7 @@ void ImGui::PopStyleVar(int count)
     ImGuiContext& g = *GImGui;
     while (count > 0)
     {
-        // We avoid a generic memcpy(data, &backup.Backup.., GDataTypeSize[info->Type] * info->Count), the overhead in Debug is not worth it.
+        // We avoid a generic memcpy(data, &backup.Backup.., GDataTypeSize[info->Type] * info->Count), the overhead in Log is not worth it.
         ImGuiStyleMod& backup = g.StyleModifiers.back();
         const ImGuiStyleVarInfo* info = GetStyleVarInfo(backup.VarIdx);
         void* data = info->GetVarPtr(&g.Style);
@@ -7885,7 +7885,7 @@ void ImGui::EndGroup()
         window->DC.LastItemStatusFlags |= ImGuiItemStatusFlags_Deactivated;
 
     window->DC.GroupStack.pop_back();
-    //window->DrawList->AddRect(group_bb.Min, group_bb.Max, IM_COL32(255,0,255,255));   // [Debug]
+    //window->DrawList->AddRect(group_bb.Min, group_bb.Max, IM_COL32(255,0,255,255));   // [Log]
 }
 
 // Gets back to previous line and continue with horizontal layout
@@ -10977,7 +10977,7 @@ void ImGui::UpdatePlatformWindows()
         ImGuiViewportP* viewport = g.Viewports[i];
 
         // Destroy platform window if the viewport hasn't been submitted or if it is hosting a hidden window
-        // (the implicit/fallback Debug##Default window will be registering its viewport then be disabled, causing a dummy DestroyPlatformWindow to be made each frame)
+        // (the implicit/fallback Log##Default window will be registering its viewport then be disabled, causing a dummy DestroyPlatformWindow to be made each frame)
         bool destroy_platform_window = false;
         destroy_platform_window |= (viewport->LastFrameActive < g.FrameCount - 1);
         destroy_platform_window |= (viewport->Window && !IsWindowActiveAndVisible(viewport->Window));

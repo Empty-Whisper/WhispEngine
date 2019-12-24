@@ -22,6 +22,7 @@ class ModuleShortCut;
 class ModuleObjectManager;
 class ModuleImport;
 class ModuleResources;
+class ModuleScripting;
 
 class Application
 {
@@ -43,6 +44,7 @@ public:
 	ModuleObjectManager*	object_manager	= nullptr;
 	ModuleImport*			importer		= nullptr;
 	ModuleResources*		resources		= nullptr;
+	ModuleScripting*		scripting		= nullptr;
 	//ModuleFileSystem* file_system_fs = nullptr;
 
 public:
@@ -89,6 +91,9 @@ public:
 
 	bool Init();
 	update_status Update();
+	void PostUpdate(update_status &ret);
+	void DoUpdate(update_status &ret);
+	void PreUpdate(update_status &ret);
 	bool CleanUp();
 
 	float GetDeltaTime();
@@ -107,8 +112,12 @@ public:
 	const char* GetOrganizationName() const;
 	const char* GetVersion() const;
 
+	// Register all lua functions
+	void LuaRegister();
+
 	void SetState(const GameState to_state);
 	GameState GetState() const;
+	bool IsGameRunning() const;
 
 	// Helpers
 	HardwareInfo *hardware = nullptr;

@@ -21,8 +21,10 @@
 #include "PanelScene.h"
 #include "PanelGame.h"
 #include "PanelResources.h"
+#include "PanelScriptEditor.h"
 
 #include "ModuleSceneIntro.h"
+#include "ModuleScripting.h"
 
 #include "Time.h"
 
@@ -71,6 +73,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(game = new PanelGame(node["panels"]["game"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_7));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
 	panels.push_back(resources = new PanelResources(node["panels"]["resources"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_8));
+	panels.push_back(editor = new PanelScriptEditor(node["panels"]["editor"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_9));
 
 	ImGuizmo::Enable(true);
 
@@ -94,32 +97,44 @@ update_status ModuleGUI::Update()
 
 	update_status ret = MainMenuBar();
 
-	if (open_modal_new_scene)
-		ImGui::OpenPopup("Modal Save Scene");
-	if (ImGui::BeginPopupModal("Modal Save Scene", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-		ImGui::Text("Actual Scene might not be saved since last change. Do you want to save?");
-
-		if (ImGui::Button("Yes, Save and create a new one")) {
-			App->SaveScene();
-			OpenSaveWindow(true);
-			open_modal_new_scene = false;
-			ImGui::CloseCurrentPopup();
-		}
-		if (ImGui::Button("Create without save")) {
-			OpenSaveWindow(true);
-			open_modal_new_scene = false;
-			ImGui::CloseCurrentPopup();
-		}
-		if (ImGui::Button("Cancel")) {
-			open_modal_new_scene = false;
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
+	ModalSaveScene();
 
 	Dockspace();
 
+	PlayPauseStop();
+
+	UpdatePanels();
+
+	if (show_demo_window)
+	{
+		ImGui::ShowDemoWindow(&show_demo_window);
+	}
+
+	if (show_style_window)
+	{
+		if (ImGui::Begin("Style editor", &show_style_window))
+		{
+			ImGui::ShowStyleEditor();
+			ImGui::End();
+		}
+	}
+
+	return ret;
+}
+
+void ModuleGUI::UpdatePanels()
+{
+	BROFILER_CATEGORY("Panels", Profiler::Color::Purple);
+	for (auto i = panels.begin(); i != panels.end(); ++i) {
+		if ((*i)->IsActive()) {
+			(*i)->Update();
+		}
+	}
+}
+
+void ModuleGUI::PlayPauseStop()
+{
+	BROFILER_CATEGORY("PlayPauseStop", Profiler::Color::Purple);
 	if (ImGui::Begin("##playandpause", NULL, ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoCollapse |
 		ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration |
 		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize)) {
@@ -150,7 +165,7 @@ update_status ModuleGUI::Update()
 
 		if (ImGui::Button("||")) {
 			if (state == Application::GameState::PLAYING)
-				App->SetState(Application::GameState::PAUSE);			
+				App->SetState(Application::GameState::PAUSE);
 			else if (state == Application::GameState::PAUSED)
 				App->SetState(Application::GameState::REANUDE);
 		}
@@ -185,32 +200,39 @@ update_status ModuleGUI::Update()
 
 		ImGui::End();
 	}
+}
 
-	for (auto i = panels.begin(); i != panels.end(); ++i) {
-		if ((*i)->IsActive()) {
-			(*i)->Update();
+void ModuleGUI::ModalSaveScene()
+{
+	BROFILER_CATEGORY("ModalSaveScene", Profiler::Color::Blue);
+	if (open_modal_new_scene)
+		ImGui::OpenPopup("Modal Save Scene");
+	if (ImGui::BeginPopupModal("Modal Save Scene", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		ImGui::Text("Actual Scene might not be saved since last change. Do you want to save?");
+
+		if (ImGui::Button("Yes, Save and create a new one")) {
+			App->SaveScene();
+			OpenSaveWindow(true);
+			open_modal_new_scene = false;
+			ImGui::CloseCurrentPopup();
 		}
-	}
-
-	if (show_demo_window)
-	{
-		ImGui::ShowDemoWindow(&show_demo_window);
-	}
-
-	if (show_style_window)
-	{
-		if (ImGui::Begin("Style editor", &show_style_window))
-		{
-			ImGui::ShowStyleEditor();
-			ImGui::End();
+		if (ImGui::Button("Create without save")) {
+			OpenSaveWindow(true);
+			open_modal_new_scene = false;
+			ImGui::CloseCurrentPopup();
 		}
-	}
+		if (ImGui::Button("Cancel")) {
+			open_modal_new_scene = false;
+			ImGui::CloseCurrentPopup();
+		}
 
-	return ret;
+		ImGui::EndPopup();
+	}
 }
 
 update_status ModuleGUI::MainMenuBar()
 {
+	BROFILER_CATEGORY("MainMenuBar", Profiler::Color::Blue);
 	update_status ret = UPDATE_CONTINUE;
 
 	if (ImGui::BeginMainMenuBar())
@@ -256,9 +278,9 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Scene", "Shift+6", &scene->active);
 			ImGui::MenuItem("Game", "Shift+7", &game->active);
 			ImGui::MenuItem("Resources", "Shift+8", &resources->active);
+			ImGui::MenuItem("Script Editor", "Shift+9", &editor->active);
 			ImGui::MenuItem("Style Editor", "", &show_style_window);
 			ImGui::EndMenu();
-
 		}
 
 		if (ImGui::BeginMenu("GameObject"))
@@ -297,11 +319,7 @@ update_status ModuleGUI::MainMenuBar()
 					App->object_manager->CreatePrimitive(Primitives::CYLINDER, Object_data());*/
 				ImGui::EndMenu();
 			}
-			
-
-
 			ImGui::EndMenu();
-
 		}
 
 		if (ImGui::BeginMenu("Debug Tools")) {
@@ -488,6 +506,7 @@ void ModuleGUI::Log(const char * str)
 
 void ModuleGUI::Dockspace()
 {
+	BROFILER_CATEGORY("DockSpace", Profiler::Color::Blue);
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;

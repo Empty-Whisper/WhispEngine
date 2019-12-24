@@ -35,6 +35,33 @@ void FileSystem::SaveFile(const char * path, const nlohmann::json & to_save)
 	o.close();
 }
 
+char* FileSystem::GetTextFile(const char * path)
+{
+	std::ifstream file(path, std::ios::binary);
+	char* buffer = nullptr;
+	if (file.is_open()) {
+		file.seekg(0, std::ios::end);
+		size_t len = file.tellg();
+		buffer = new char[len + 1];
+		file.seekg(0, std::ios::beg);
+		file.read(buffer, len);
+		buffer[len] = '\0'; // opening file in binary does not put final char and opening in not binary causes some errors in length with tabs
+		file.close();
+	}
+
+	return buffer;
+}
+
+void FileSystem::SaveTextFile(const char * buffer, const char * path)
+{
+	std::ofstream file(path);
+	if (file.is_open()) {
+		file.clear();
+		file << buffer;
+		file.close();
+	}
+}
+
 FileSystem::Format FileSystem::GetFormat(const char * file) const
 {
 	std::string buffer = GetPathFormat(file);
@@ -65,6 +92,9 @@ FileSystem::Format FileSystem::GetFormat(const char * file) const
 	}
 	else if (buffer.compare("tga") == 0) {
 		return FileSystem::Format::TGA;
+	}
+	else if (buffer.compare("lua") == 0) {
+		return FileSystem::Format::LUA;
 	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());
@@ -315,6 +345,11 @@ bool FileSystem::SaveData(const void * data, const uint &size, const char * path
 	to_save.close();
 
 	return true;
+}
+
+void FileSystem::Copy(const char * src, const char * dest)
+{
+	std::experimental::filesystem::copy_file(src, dest);
 }
 
 char * FileSystem::GetData(const char * path)

@@ -1,5 +1,4 @@
-#ifndef __COMPONENT_TRANSFORM_H__
-#define __COMPONENT_TRANSFORM_H__
+#pragma once
 
 #include "Component.h"
 #include "Globals.h"
@@ -8,9 +7,11 @@
 #include "MathGeoLib\include\Math\float3.h"
 #include "MathGeoLib\include\Math\float4x4.h"
 
-#pragma once
+class GameObject;
+
 class ComponentTransform : public Component
 {
+	friend class ModuleObjectManager;
 public:
 	ComponentTransform(GameObject* parent);
 	~ComponentTransform();
@@ -38,6 +39,8 @@ public:
 	math::float4x4 GetGlobalMatrix() const;
 
 	math::float3 GetPosition() const;
+	math::Quat	 GetRotation() const;
+	math::float3 GetScale() const;
 
 	void Save(nlohmann::json& node) override;
 	void Load(const nlohmann::json& node) override;
@@ -53,5 +56,18 @@ private:
 
 	bool local_guizmo = false;
 
+	//Lua functions glue code
+private:
+	void LSetPositionV(const float3& vector);
+	void LSetPosition3f(const float& x, const float& y, const float& z);
+	void LSetRotationQ(const Quat& quat);
+	void LSetScale3f(const float& x, const float& y, const float& z);
+
+	GameObject* LGetParent() const;
+
+	GameObject* Find(const char* n) const;
+	int			ChildCount() const;
+	GameObject* GetChild(const int& index) const;
+	bool		IsChildOf(const ComponentTransform* parent) const;
+	void		SetParent(const ComponentTransform* parent);
 };
-#endif

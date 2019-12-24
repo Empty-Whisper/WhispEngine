@@ -12,6 +12,9 @@
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
 #include "ModuleResources.h"
+#include "ModuleScripting.h"
+
+#include "Lua/LuaBridge/LuaBridge.h"
 
 #include "Time.h"
 
@@ -31,6 +34,7 @@ Application::Application()
 	importer =			new ModuleImport();
 	object_manager =	new ModuleObjectManager();
 	resources =			new ModuleResources();
+	scripting =			new ModuleScripting();
 	//file_system_fs =		new ModuleFileSystem();		------------Unused for now, in opposite we use our own FileSystem--------------------
 
 	// The order of calls is very important!
@@ -46,6 +50,7 @@ Application::Application()
 	AddModule(shortcut);
 	AddModule(importer);
 	AddModule(object_manager);
+	AddModule(scripting);
 	
 	// Scenes
 	AddModule(scene_intro);
@@ -95,6 +100,7 @@ bool Application::Init()
 		ret = (*item)->Start();
 	}
 	
+	App->LuaRegister();
 	
 	return ret;
 }
@@ -102,6 +108,7 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
+	BROFILER_CATEGORY("PrepareUpdate", Profiler::Color::Blue);
 	frame_count++;
 	last_sec_frame_count++;
 	dt = frame_time.ReadSec();
@@ -114,6 +121,7 @@ void Application::PrepareUpdate()
 	case Application::PLAY:
 		Time->Start();
 		Time->SetDeltaTime(dt);
+		scripting->first_frame = true;
 		state = GameState::PLAYING;
 		break;
 	case Application::PLAYING:
@@ -225,6 +233,23 @@ const char * Application::GetVersion() const
 	return version.data();
 }
 
+void Application::LuaRegister()
+{
+	LOG("Registering all lua functions to enable scripting");
+	for (auto i = list_modules.begin(); i != list_modules.end(); i++) {
+		(*i)->LuaRegister();
+	}
+
+	luabridge::getGlobalNamespace(scripting->GetState())
+		.beginNamespace("Time")
+			.addProperty("deltaTime", &Time->dt, false)
+		.endNamespace()
+		.beginNamespace("Random")
+			.addFunction("Rangef", &Random::Randomf)
+			.addFunction("Rangei", &Random::Randomi)
+		.endNamespace();
+}
+
 void Application::SetState(const GameState to_state)
 {
 #ifdef _DEBUG //We only want to get that message error while developing
@@ -263,38 +288,60 @@ Application::GameState Application::GetState() const
 	return state;
 }
 
+bool Application::IsGameRunning() const
+{
+	return state == GameState::PLAY || state == GameState::PLAYING || state == GameState::PAUSE || state == GameState::ONE_FRAME || state == GameState::REANUDE;
+}
+
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
 	BROFILER_CATEGORY("Application", Profiler::Color::Blue);
 	update_status ret = UPDATE_CONTINUE;
+
 	PrepareUpdate();
-	
-	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
-		ret = (*item)->PreUpdate();
-		if (ret != UPDATE_CONTINUE)
-			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
-	}
+	PreUpdate(ret);
+	DoUpdate(ret);
+	PostUpdate(ret);
+	FinishUpdate();
 
-	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
-		ret = (*item)->Update();
-		if (ret != UPDATE_CONTINUE)
-			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
-	}
+	return ret;
+}
 
+void Application::PostUpdate(update_status &ret)
+{
+	BROFILER_CATEGORY("PostUpdate", Profiler::Color::Blue);
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
 		ret = (*item)->PostUpdate();
 		if (ret != UPDATE_CONTINUE)
 			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
 	}
+}
 
-	FinishUpdate();
-	return ret;
+void Application::DoUpdate(update_status &ret)
+{
+	BROFILER_CATEGORY("Update", Profiler::Color::Blue);
+	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
+		ret = (*item)->Update();
+		if (ret != UPDATE_CONTINUE)
+			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
+	}
+}
+
+void Application::PreUpdate(update_status &ret)
+{
+	BROFILER_CATEGORY("PreUpdate", Profiler::Color::Blue);
+	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
+		ret = (*item)->PreUpdate();
+		if (ret != UPDATE_CONTINUE)
+			LOG("%s returned UPDATE %i", (*item)->name.data(), ret);
+	}
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	BROFILER_CATEGORY("FinishUpdate", Profiler::Color::Blue);
 	if (want_to_save) {
 		SaveConfNow();
 	}

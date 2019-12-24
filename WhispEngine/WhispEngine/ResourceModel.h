@@ -19,9 +19,9 @@ public:
 		uint64 material = 0u;
 		HierarchyInfo* parent = nullptr;
 		std::vector<HierarchyInfo> children;
-		float3 position;
-		Quat rotation;
-		float3 scale;
+		float3 position = float3::zero;
+		Quat rotation = Quat::identity;
+		float3 scale = float3::one;
 	};
 
 public:

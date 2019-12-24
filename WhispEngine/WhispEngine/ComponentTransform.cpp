@@ -4,9 +4,13 @@
 #include "Application.h"
 #include "MathGeoLib/include/Math/MathFunc.h"
 #include "Imgui/ImGuizmo.h"
+#include "ComponentCamera.h"
 #include "ModuleGUI.h"
 #include "ModuleObjectManager.h"
 #include "Imgui/imgui_internal.h"
+#include "ModuleScripting.h"
+#include "ModuleCamera3D.h"
+#include "Lua/LuaBridge/LuaBridge.h"
 
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
 {
@@ -21,7 +25,6 @@ ComponentTransform::~ComponentTransform()
 
 void ComponentTransform::PreUpdate()
 {
-
 }
 
 void ComponentTransform::OnInspector()
@@ -195,6 +198,13 @@ void ComponentTransform::CalculateGlobalMatrix()
 	if (mesh != nullptr)
 		mesh->CalulateAABB_OBB();
 
+	ComponentCamera* cam = nullptr;
+	if (object->TryGetComponent(ComponentType::CAMERA, (Component*&)cam)) {
+		cam->camera->SetTransformPosition(position);
+		cam->camera->SetVectorDirectionFront(rotation.WorldZ());
+		cam->camera->SetVectorDirectionUp(rotation.WorldY());
+	}
+
 	for (auto i = object->children.begin(); i != object->children.end(); i++) {
 		((ComponentTransform*)(*i)->GetComponent(ComponentType::TRANSFORM))->CalculateGlobalMatrix();
 	}
@@ -215,6 +225,16 @@ math::float3 ComponentTransform::GetPosition() const
 	return position;
 }
 
+math::Quat ComponentTransform::GetRotation() const
+{
+	return rotation;
+}
+
+math::float3 ComponentTransform::GetScale() const
+{
+	return scale;
+}
+
 void ComponentTransform::Save(nlohmann::json & node)
 {
 	App->json->AddFloat3("position", position, node);
@@ -228,4 +248,74 @@ void ComponentTransform::Load(const nlohmann::json & node)
 	rotation = App->json->GetQuaternion("rotation", node);
 	scale    = App->json->GetFloat3("scale", node);
 	CalculeLocalMatrix();
+}
+
+void ComponentTransform::LSetPositionV(const float3 & vector)
+{
+	position = vector;
+	CalculeLocalMatrix();
+}
+
+void ComponentTransform::LSetPosition3f(const float & x, const float & y, const float & z)
+{
+	position.Set(x, y, z);
+	CalculeLocalMatrix();
+}
+
+void ComponentTransform::LSetRotationQ(const Quat & quat)
+{
+	rotation = quat;
+	euler_rot = rotation.ToEulerXYZ();
+	CalculeLocalMatrix();
+}
+
+void ComponentTransform::LSetScale3f(const float & x, const float & y, const float & z)
+{
+	scale.Set(x, y, z);
+	CalculeLocalMatrix();
+}
+
+GameObject * ComponentTransform::LGetParent() const
+{
+	return object->parent;
+}
+
+GameObject * ComponentTransform::Find(const char * n) const
+{
+	for (auto i = object->children.begin(); i != object->children.end(); i++) {
+		if (strcmp((*i)->GetName(), n) == 0)
+			return *i;
+	}
+	LOG("GameObject: %s not found in %s childs", n, object->GetName());
+	return nullptr;
+}
+
+int ComponentTransform::ChildCount() const
+{
+	return object->children.size();
+}
+
+GameObject * ComponentTransform::GetChild(const int & index) const
+{
+	if (index >= object->children.size()) {
+		LOG("Failed to GetChild: index given is greater than children size");
+		return nullptr;
+	}
+
+	return object->children[index];
+}
+
+bool ComponentTransform::IsChildOf(const ComponentTransform* parent) const
+{
+	for (auto i = parent->object->children.begin(); i != parent->object->children.end(); i++) {
+		if (*i == object)
+			return true;
+	}
+	return false;
+}
+
+void ComponentTransform::SetParent(const ComponentTransform* parent)
+{
+	if (object != parent->object)
+		App->object_manager->ChangeHierarchy(object, parent->object);
 }

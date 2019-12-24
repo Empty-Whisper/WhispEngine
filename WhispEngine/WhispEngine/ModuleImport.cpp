@@ -36,7 +36,7 @@ ModuleImport::~ModuleImport()
 
 bool ModuleImport::Start()
 {
-	// Stream log messages to Debug window
+	// Stream log messages to Log window
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
@@ -68,6 +68,8 @@ bool ModuleImport::CleanUp()
 
 bool ModuleImport::Import(const char * path, uint64 &uid)
 {
+	BROFILER_CATEGORY("Import", Profiler::Color::Brown);
+
 	bool ret = true;
 	switch (App->file_system->GetFormat(path))
 	{

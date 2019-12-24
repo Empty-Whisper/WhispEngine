@@ -33,7 +33,7 @@ uint64 ModelImporter::Import(const char * path)
 	bool ret = true;
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
-	LOG("Importing fbx with path: %s", path);
+	//LOG("Importing fbx with path: %s", path);
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
@@ -58,7 +58,7 @@ uint64 ModelImporter::Import(const char * path)
 		uint64_t meta = 0u;
 		if (App->file_system->IsInSubDirectory(ASSETS_FOLDER, (App->file_system->GetFileFromPath(path) + ".meta").data())) {
 			if (App->file_system->IsMetaVaild((std::string(path) + ".meta").data())) {
-				LOG("File %s already imported", App->file_system->GetFileFromPath(path).data());
+				//LOG("File %s already imported", App->file_system->GetFileFromPath(path).data());
 				meta = App->file_system->GetUIDFromMeta((std::string(path) + ".meta").data());
 				Resource* res = App->resources->CreateResource(Resource::Type::MODEL, meta);
 				res->SetFile(path);

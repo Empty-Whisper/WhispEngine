@@ -11,6 +11,7 @@ public:
 		JSON, FBX, 
 		DDS, PNG, JPG, TGA,
 		MODEL, MESH, META, SCENE,
+		LUA,
 		MAX
 	};
 
@@ -21,6 +22,12 @@ public:
 public:
 	nlohmann::json	OpenFile(const char* path);
 	void			SaveFile(const char* path, const nlohmann::json &to_save);
+
+	/*
+	Give Data from a file. The result is a char array. WARNING: REMEMBER TO DELETE ARRAY AFTER USE IT
+	*/
+	char* GetTextFile(const char* path);
+	void  SaveTextFile(const char* buffer, const char* path);
 
 	FileSystem::Format GetFormat(const char* file) const;
 	Resource::Type	   GetResourceType(const char* file) const;
@@ -48,6 +55,8 @@ public:
 	uint64_t GetUIDFromMeta(const char* mata_path) const;
 
 	bool SaveData(const void* data, const uint &size, const char* path);
+
+	void Copy(const char* src, const char* dest);
 
 	/*
 	Give Data from a file. The result is a char array. WARNING: REMEMBER TO DELETE ARRAY AFTER USE IT

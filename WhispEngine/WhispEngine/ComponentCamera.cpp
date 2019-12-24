@@ -29,7 +29,7 @@ void ComponentCamera::Update()
 	camera->SetVectorDirectionFront(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().WorldZ());
 	camera->SetVectorDirectionUp(((ComponentTransform*)object->GetComponent(ComponentType::TRANSFORM))->GetGlobalMatrix().WorldY());
 	
-	//Debug Drawing
+	//Log Drawing
 	DrawFrustum();
 
 }

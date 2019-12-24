@@ -1,5 +1,8 @@
 #pragma once
 #include "Panel.h"
+
+class GameObject;
+
 class PanelInspector :
 	public Panel
 {
@@ -10,5 +13,6 @@ public:
 
 public:
 	void Update();
+	void StaticLogic(GameObject * &sel);
 };
 

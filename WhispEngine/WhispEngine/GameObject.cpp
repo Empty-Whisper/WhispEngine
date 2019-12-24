@@ -3,6 +3,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentCamera.h"
+#include "ComponentScript.h"
 #include "Application.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "ModuleRenderer3D.h"
@@ -16,7 +17,7 @@ GameObject::GameObject(GameObject * parent) : parent(parent)
 	if (parent != nullptr)
 		parent->children.push_back(this);
 
-	CreateComponent(ComponentType::TRANSFORM);
+	transform = (ComponentTransform*)CreateComponent(ComponentType::TRANSFORM);
 	SetName("GameObject");
 	UID = App->random->RandomGUID();
 }
@@ -37,6 +38,8 @@ GameObject::~GameObject()
 
 	if (this == App->object_manager->GetSelected())
 		App->object_manager->SetSelected(nullptr);
+
+	App->object_manager->objects.erase(UID);
 }
 
 void GameObject::Update()
@@ -164,7 +167,12 @@ Component * GameObject::CreateComponent(const ComponentType & type)
 		components.push_back(comp);
 		return comp;
 	}
-				   break;
+		break;
+	case SCRIPT: {
+		ComponentScript* comp = new ComponentScript(this);
+		components.push_back(comp);
+		return comp;
+	}
 	default:
 		LOG("Not declared Component type with id: %d", type);
 		break;
@@ -284,6 +292,11 @@ const char * GameObject::GetName() const
 void GameObject::SetName(const char * name)
 {
 	this->name.assign(name);
+}
+
+uint64_t GameObject::GetUID() const
+{
+	return UID;
 }
 
 

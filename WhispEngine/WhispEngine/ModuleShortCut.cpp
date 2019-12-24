@@ -1,5 +1,6 @@
 #include "ModuleShortCut.h"
-
+#include "Application.h"
+#include "ModuleInput.h"
 
 
 ModuleShortCut::ModuleShortCut()
@@ -14,10 +15,11 @@ ModuleShortCut::~ModuleShortCut()
 
 update_status ModuleShortCut::PreUpdate()
 {
-
-	for (auto i = shortcuts.begin(); i != shortcuts.end(); ++i) {
-		if ((*i)->IsShortCutPressed()) {
-			(*i)->DoFunc();
+	if (!App->input->block_keyboard) {
+		for (auto i = shortcuts.begin(); i != shortcuts.end(); ++i) {
+			if ((*i)->IsShortCutPressed()) {
+				(*i)->DoFunc();
+			}
 		}
 	}
 

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Component.h"
+#include "ComponentTransform.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MathGeoLib/include/Geometry/OBB.h"
 
@@ -47,6 +48,8 @@ public:
 	const char* GetName() const;
 	void SetName(const char* name);
 
+	uint64_t GetUID() const;
+
 	ObjectSelected GetSelect() const;
 	void Select();
 	void Deselect();
@@ -63,6 +66,7 @@ public:
 	std::vector<GameObject*> children;
 	std::vector<Component*> components;
 
+	ComponentTransform* transform = nullptr;
 	GameObject* parent = nullptr;
 	bool is_inside_frustum = false;
 

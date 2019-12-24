@@ -6,7 +6,6 @@
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include "MathGeoLib/include/Geometry/OBB.h"
 
-#include "glmath.h"
 #include <array>
 
 

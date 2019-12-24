@@ -76,7 +76,7 @@
 //typedef void (*MyImDrawCallback)(const ImDrawList* draw_list, const ImDrawCmd* cmd, void* my_renderer_user_data);
 //#define ImDrawCallback MyImDrawCallback
 
-//---- Debug Tools
+//---- Log Tools
 // Use 'Metrics->Tools->Item Picker' to pick widgets with the mouse and break into them for easy debugging.
 //#define IM_DEBUG_BREAK  IM_ASSERT(0)
 //#define IM_DEBUG_BREAK  __debugbreak()

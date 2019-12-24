@@ -110,6 +110,7 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 		lights[0].diffuse.Set(0.75f, 0.75f, 0.75f, 1.0f);
 		lights[0].SetPos(0.0f, 0.0f, 2.5f);
 		lights[0].Init();
+		glEnable(GL_NORMALIZE);
 		
 		GLfloat MaterialAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, MaterialAmbient);
@@ -163,58 +164,7 @@ update_status ModuleRenderer3D::PreUpdate()
 
 update_status ModuleRenderer3D::Update()
 {
-	/*GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
-	GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);*/
-	
-	//if (!is_rendering_scene)
-	//{
-
-	//	// SCENE ============================================================================================ =
-	//	GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
-	//	GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
-
-	//	// DockSpace
-	//	if (scene_viewport->can_resize)
-	//	{
-	//		ResizeDockspace(App->gui->scene->GetPanelSize(), scene_viewport, App->camera->GetSceneCamera());
-	//		scene_viewport->can_resize = false;
-	//	}
-
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	//	glLoadIdentity();
-
-	//	glMatrixMode(GL_MODELVIEW);
-	//	glLoadMatrixf(App->camera->GetSceneCamera()->GetViewMatrix().ptr());
-
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	//	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
-
-	//	is_rendering_scene = true;
-	//}
-	//else
-	//{
-	//	// Game =============================================================================================
-	//	GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
-	//	GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);
-
-	//	//Dockspace
-	//	if (game_viewport->can_resize)
-	//	{
-	//		ResizeDockspace(App->gui->game->GetPanelSize(), game_viewport, App->camera->GetGameCamera());
-	//		game_viewport->can_resize = false;
-	//	}
-
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	//	glLoadIdentity();
-
-	//	glMatrixMode(GL_MODELVIEW);
-	//	glLoadMatrixf(App->camera->GetGameCamera()->GetViewMatrix().ptr());
-
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	//	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
-	//	
-	//	is_rendering_scene = false;
-	//}
+	BROFILER_CATEGORY("Render", Profiler::Color::FireBrick);
 
 	if (!is_rendering_scene) // TODO: Threads ;)
 	{
@@ -274,7 +224,7 @@ update_status ModuleRenderer3D::Update()
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate()
 {
-	BROFILER_CATEGORY("RenderTexture", Profiler::Color::FireBrick);
+	BROFILER_CATEGORY("Render", Profiler::Color::FireBrick);
 
 	SDL_GL_SwapWindow(App->window->window);
 

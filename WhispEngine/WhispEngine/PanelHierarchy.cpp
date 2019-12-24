@@ -5,6 +5,7 @@
 #include "ModuleInput.h"
 #include "ModuleObjectManager.h"
 #include "ModuleSceneIntro.h"
+#include "Brofiler/Brofiler.h"
 
 PanelHierarchy::PanelHierarchy(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	:Panel("Hierarchy", start_active, shortcut1, shortcut2, shortcut3)
@@ -21,6 +22,8 @@ PanelHierarchy::~PanelHierarchy()
 
 void PanelHierarchy::Update()
 {
+	BROFILER_CATEGORY("Hierarchy", Profiler::Color::Purple);
+
 	if (ImGui::Begin("Hierarchy", &active)) {
 		ImGui::TextColored(ImVec4(1.f, 0.5f, 0.f, 1.f), "Scene: %s", App->scene_intro->GetSceneName().c_str());
 		GameObject* root = App->object_manager->GetRoot();
@@ -121,7 +124,7 @@ void PanelHierarchy::DrawNode(GameObject* obj) {
 
 	bool is_open = ImGui::TreeNodeEx(obj, current_flag, obj->GetName());
 
-	if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) {
+	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(0) || ImGui::IsItemClicked(1)) {
 		App->object_manager->SetSelected(obj);
 	}
 
