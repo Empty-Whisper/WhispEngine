@@ -14,6 +14,7 @@ class PanelScene;
 class PanelGame;
 class PanelResources;
 class PanelScriptEditor;
+class PanelShortcut;
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
@@ -80,6 +81,7 @@ private:
 	PanelInspector* inspector = nullptr;
 	PanelResources* resources = nullptr;
 	PanelScriptEditor* editor = nullptr;
+	PanelShortcut* shortcut = nullptr;
 
 public:
 	PanelScene* scene = nullptr;

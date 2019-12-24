@@ -384,6 +384,7 @@
     <ClCompile Include="Mathf.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="PanelShortcut.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -893,6 +894,7 @@
     <ClInclude Include="Mathf.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="PanelShortcut.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">

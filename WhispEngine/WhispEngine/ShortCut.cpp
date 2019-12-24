@@ -8,8 +8,8 @@ ShortCut::ShortCut()
 	App->shortcut->AddShortCut(this);
 }
 
-ShortCut::ShortCut(const std::function<void()> &func, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
-	: shortcut{ shortcut1, shortcut2, shortcut3 }, function(func)
+ShortCut::ShortCut(const std::function<void()>& func, const char * name, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
+	: shortcut{shortcut1,shortcut2,shortcut3}, name(name), function(func)
 {
 	App->shortcut->AddShortCut(this);
 }
