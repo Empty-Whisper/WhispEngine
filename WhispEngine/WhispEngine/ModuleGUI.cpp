@@ -281,6 +281,7 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Game", "Shift+7", &game->active);
 			ImGui::MenuItem("Resources", "Shift+8", &resources->active);
 			ImGui::MenuItem("Script Editor", "Shift+9", &editor->active);
+			ImGui::MenuItem("ShortCut Editor", "Shift+0", &shortcut->active);
 			ImGui::MenuItem("Style Editor", "", &show_style_window);
 			ImGui::EndMenu();
 		}

@@ -1,5 +1,6 @@
 #pragma once
 #include "Panel.h"
+#include <vector>
 class PanelShortcut :
 	public Panel
 {
@@ -8,5 +9,10 @@ public:
 	~PanelShortcut();
 
 	void Update() override;
+
+private:
+	bool to_change = false;
+	int  scancode_to_change = -1;
+	std::vector<ShortCut*>::iterator it;
 };
 

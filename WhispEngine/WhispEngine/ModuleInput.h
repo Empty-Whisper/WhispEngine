@@ -44,6 +44,8 @@ public:
 	bool GetKeyUp(int id) const;
 	static bool LGetKeyUp(const char* id);
 
+	SDL_Scancode GetFirstKey() const;
+
 	KEY_STATE GetMouseButton(int id) const;
 	bool GetMouseButtonDown(int id) const;
 	bool GetMouseButtonUp(int id) const;
@@ -62,6 +64,8 @@ public:
 	int GetMouseYMotion() const;
 	
 	int GetMouseWheel() const;
+
+	static std::string ScancodeToString();
 
 private:
 	static KEY_STATE* keyboard;
