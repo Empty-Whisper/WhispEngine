@@ -294,7 +294,12 @@ void Camera::GetAllCorners(float3 * corners)
 	frustum.GetCornerPoints(corners);
 }
 
-const float3 Camera::GetPosition()
+const Quat Camera::GetRotation() const
+{
+	return Quat(frustum.WorldMatrix());
+}
+
+const float3 Camera::GetPosition() const
 {
 	return frustum.pos;
 }

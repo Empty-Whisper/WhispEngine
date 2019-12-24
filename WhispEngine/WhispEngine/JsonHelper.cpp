@@ -32,7 +32,9 @@ void JsonHelper::AddQuaternion(const char * name, const Quat & quat, nlohmann::j
 
 Quat JsonHelper::GetQuaternion(const char * name, const nlohmann::json & node)
 {
-	return Quat(node[name][1], node[name][2], node[name][3], node[name][0]);
+	if (node.find(name) != node.end())
+		return Quat(node[name][1], node[name][2], node[name][3], node[name][0]);
+	return Quat::identity;
 }
 
 void JsonHelper::AddColor4(const char * name, const float * vector, nlohmann::json & node)
