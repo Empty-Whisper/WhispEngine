@@ -200,9 +200,16 @@ void ComponentTransform::CalculateGlobalMatrix()
 
 	ComponentCamera* cam = nullptr;
 	if (object->TryGetComponent(ComponentType::CAMERA, (Component*&)cam)) {
-		cam->camera->SetTransformPosition(position);
+		float3 pos, scale;
+		Quat rot;
+		global_matrix.Decompose(pos, rot, scale);
+		
+		cam->camera->SetTransformPosition(pos); //TODO fix camera does not rotate around parent
 		cam->camera->SetVectorDirectionFront(rotation.WorldZ());
 		cam->camera->SetVectorDirectionUp(rotation.WorldY());
+		/*cam->camera->SetTransformPosition(position);
+		cam->camera->SetVectorDirectionFront(rotation.WorldZ());
+		cam->camera->SetVectorDirectionUp(rotation.WorldY());*/
 	}
 
 	for (auto i = object->children.begin(); i != object->children.end(); i++) {
@@ -273,6 +280,13 @@ void ComponentTransform::LSetScale3f(const float & x, const float & y, const flo
 {
 	scale.Set(x, y, z);
 	CalculeLocalMatrix();
+}
+
+void ComponentTransform::LLookAt(const float3 & pos)
+{
+	rotation = Quat::LookAt(-rotation.WorldZ(), pos, rotation.WorldY(), float3::unitY);
+	euler_rot = rotation.ToEulerXYZ();
+	CalculateGlobalMatrix();
 }
 
 GameObject * ComponentTransform::LGetParent() const

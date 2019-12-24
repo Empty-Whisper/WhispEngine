@@ -6,7 +6,7 @@
             -6.070949554443359
         ],
         "rotation": [
-            -0.3248603045940399,
+            -0.32486027479171753,
             0.09396783262491226,
             0.9040225744247437,
             0.2614940106868744
@@ -7549,53 +7549,6 @@
                                         0.9999993443489075
                                     ],
                                     "static": false
-                                },
-                                {
-                                    "Children": null,
-                                    "Components": [
-                                        {
-                                            "active": true,
-                                            "aspect_ratio": 1.9030418395996094,
-                                            "checkbox_main_camera": true,
-                                            "far_plane": 200.0,
-                                            "is_main_camera": true,
-                                            "near_plane": 1.0,
-                                            "type": 4,
-                                            "vertical_fov": 68.5999984741211
-                                        },
-                                        {
-                                            "InspectorVars": [
-                                                {
-                                                    "data": 17797003798229770240,
-                                                    "key": "tank",
-                                                    "type": 7
-                                                }
-                                            ],
-                                            "active": true,
-                                            "script": "Assets\\Scripts\\Camera.lua",
-                                            "type": 5
-                                        }
-                                    ],
-                                    "UID": 18328112529222926336,
-                                    "active": true,
-                                    "name": "MainCamera",
-                                    "position": [
-                                        -5.199999809265137,
-                                        3.200000047683716,
-                                        0.0
-                                    ],
-                                    "rotation": [
-                                        0.9953961968421936,
-                                        0.09584575146436691,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "scale": [
-                                        0.9999991059303284,
-                                        1.0,
-                                        0.9999991059303284
-                                    ],
-                                    "static": false
                                 }
                             ],
                             "Components": [
@@ -8095,6 +8048,53 @@
                         1.0,
                         1.0,
                         1.0
+                    ],
+                    "static": false
+                },
+                {
+                    "Children": null,
+                    "Components": [
+                        {
+                            "active": true,
+                            "aspect_ratio": 1.9030418395996094,
+                            "checkbox_main_camera": true,
+                            "far_plane": 200.0,
+                            "is_main_camera": false,
+                            "near_plane": 1.0,
+                            "type": 4,
+                            "vertical_fov": 68.5999984741211
+                        },
+                        {
+                            "InspectorVars": [
+                                {
+                                    "data": 17797003798229770240,
+                                    "key": "tank",
+                                    "type": 7
+                                }
+                            ],
+                            "active": true,
+                            "script": "Assets\\Scripts\\Camera.lua",
+                            "type": 5
+                        }
+                    ],
+                    "UID": 18328112529222926336,
+                    "active": true,
+                    "name": "MainCamera",
+                    "position": [
+                        -5.199999809265137,
+                        3.200000047683716,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.9953961968421936,
+                        0.09584575146436691,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.9999991059303284,
+                        1.0,
+                        0.9999991059303284
                     ],
                     "static": false
                 }

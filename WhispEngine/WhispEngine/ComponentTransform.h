@@ -25,7 +25,6 @@ public:
 	void SetRotation(const float& w, const float& x, const float& y, const float& z);
 	void SetRotation(const Quat & rot);
 	void SetScale(const float& x, const float& y, const float& z);
-
 	void SetScale(const float3 & _scale);
 
 	void SetLocalMatrix(const math::float4x4 &matrix);
@@ -62,6 +61,8 @@ private:
 	void LSetPosition3f(const float& x, const float& y, const float& z);
 	void LSetRotationQ(const Quat& quat);
 	void LSetScale3f(const float& x, const float& y, const float& z);
+
+	void LLookAt(const float3& pos);
 
 	GameObject* LGetParent() const;
 
