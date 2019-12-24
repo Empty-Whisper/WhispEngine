@@ -102,7 +102,7 @@ There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct bett
 * [ImGuiColorTextEdit](https://github.com/BalazsJako/ImGuiColorTextEdit)
 
 Github [repository](https://github.com/Empty-Whisper/WhispEngine)
-[Web page]()
+[Web page](https://empty-whisper.github.io/WhispEngine/)
 
 Under supervision of lecturers [Ricard Pillosu](https://www.linkedin.com/in/ricardpillosu/) and [Marc Garrigó](https://www.linkedin.com/in/mgarrigo/)
 
