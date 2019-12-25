@@ -53,7 +53,7 @@ public:
 	bool CleanUp();
 
 	GameObject* CreateGameObject(GameObject* parent);
-	void DestroyGameObject(GameObject* obj);
+	static void DestroyGameObject(GameObject* obj);
 	void ResetObjects();
 
 	GameObject* GetRoot() const;
@@ -67,6 +67,7 @@ public:
 	void LuaRegister() override;
 
 	static GameObject* InstantiatePrefab(const char* path);
+	static void DeleteObject(GameObject* obj);
 
 	void MousePicking(); 
 
@@ -125,6 +126,8 @@ public:
 
 	std::map<GameObject*, GameObject*> to_change;
 	std::list<std::string> prefab_to_create;
+	static std::vector<GameObject*> to_delete;
+
 private:
 	GameObject* selected = nullptr;
 
@@ -132,4 +135,3 @@ private:
 	ImGuizmo::MODE        guizmoMode = ImGuizmo::MODE::WORLD;
 	math::float4x4		  transform_changed = float4x4::identity;
 };
-

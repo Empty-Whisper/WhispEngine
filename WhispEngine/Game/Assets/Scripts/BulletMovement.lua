@@ -27,10 +27,12 @@ function BulletMovement:Update()
 
 
 	if prepare_timer >= time_disappear then
-		--GameObject.active = false
+		GameObject.Destroy(object)
 	end
 
 end
+
+
 
 
 

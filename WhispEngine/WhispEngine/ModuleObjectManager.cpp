@@ -16,6 +16,8 @@
 #include "ModuleScripting.h"
 #include "Lua/LuaBridge/LuaBridge.h"
 
+std::vector<GameObject*> ModuleObjectManager::to_delete;
+
 ModuleObjectManager::ModuleObjectManager()
 {
 	name.assign("ObjectManager");
@@ -60,6 +62,16 @@ update_status ModuleObjectManager::Update()
 		to_change.clear();
 	}
 
+	if (!to_delete.empty()) {
+		for (auto del = to_delete.begin(); del != to_delete.end(); del++) {
+			DestroyGameObject(*del);
+		}
+		to_delete.clear();
+	}
+	/*for each (GameObject* it in to_delete)
+	{
+		DestroyGameObject(it);
+	}*/
 
 	return UPDATE_CONTINUE;
 }
@@ -234,6 +246,7 @@ void ModuleObjectManager::LuaRegister()
 		.endClass()
 		.beginNamespace("GameObject")
 			.addFunction("Instantiate", &ModuleObjectManager::InstantiatePrefab)
+			.addFunction("Destroy", &ModuleObjectManager::DeleteObject)
 		.endNamespace()
 		.beginClass<ComponentTransform>("transform")
 			.addData("gameobject", &ComponentTransform::object, false)
@@ -262,6 +275,14 @@ GameObject * ModuleObjectManager::InstantiatePrefab(const char * path)
 	if (path != nullptr)
 		return App->scene_intro->LoadPrefab(path);
 }
+
+void ModuleObjectManager::DeleteObject(GameObject * obj)
+{
+	if(obj != nullptr)
+		to_delete.push_back(obj);
+}
+
+
 
 void ModuleObjectManager::MousePicking()
 {
