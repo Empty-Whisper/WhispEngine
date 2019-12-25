@@ -4,9 +4,10 @@
 
 class ShortCut
 {
+	friend class PanelShortcut;
 public:
 	ShortCut();
-	ShortCut(const std::function<void()> &func, const SDL_Scancode &shortcut1 = SDL_SCANCODE_UNKNOWN, const SDL_Scancode &shortcut2 = SDL_SCANCODE_UNKNOWN, const SDL_Scancode &shortcut3 = SDL_SCANCODE_UNKNOWN);
+	ShortCut(const std::function<void()> &func, const char* name, const SDL_Scancode &shortcut1 = SDL_SCANCODE_UNKNOWN, const SDL_Scancode &shortcut2 = SDL_SCANCODE_UNKNOWN, const SDL_Scancode &shortcut3 = SDL_SCANCODE_UNKNOWN);
 	~ShortCut();
 
 	//Each shortcut can have a combination of three keys, the first use Ctrl, Alt or Shift to a correct performance
@@ -17,6 +18,6 @@ public:
 
 private:
 	SDL_Scancode shortcut[3] = { SDL_SCANCODE_UNKNOWN };
-
+	std::string name;
 	std::function<void()> function = nullptr;
 };

@@ -6,6 +6,7 @@
 class ModuleShortCut :
 	public Module
 {
+	friend class PanelShortcut;
 public:
 	ModuleShortCut();
 	~ModuleShortCut();

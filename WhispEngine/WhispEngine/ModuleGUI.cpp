@@ -22,6 +22,7 @@
 #include "PanelGame.h"
 #include "PanelResources.h"
 #include "PanelScriptEditor.h"
+#include "PanelShortcut.h"
 
 #include "ModuleSceneIntro.h"
 #include "ModuleScripting.h"
@@ -74,6 +75,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
 	panels.push_back(resources = new PanelResources(node["panels"]["resources"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_8));
 	panels.push_back(editor = new PanelScriptEditor(node["panels"]["editor"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_9));
+	panels.push_back(shortcut = new PanelShortcut(node["panels"]["shortcut"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_0));
 
 	ImGuizmo::Enable(true);
 
@@ -279,6 +281,7 @@ update_status ModuleGUI::MainMenuBar()
 			ImGui::MenuItem("Game", "Shift+7", &game->active);
 			ImGui::MenuItem("Resources", "Shift+8", &resources->active);
 			ImGui::MenuItem("Script Editor", "Shift+9", &editor->active);
+			ImGui::MenuItem("ShortCut Editor", "Shift+0", &shortcut->active);
 			ImGui::MenuItem("Style Editor", "", &show_style_window);
 			ImGui::EndMenu();
 		}
