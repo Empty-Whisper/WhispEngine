@@ -16,7 +16,10 @@ local time_disappear = 2
 
 
 function BulletMovement:Start()
-	GameObject.SetParent(var.cannon)
+	--GameObject.SetParent(var.cannon)
+	transform.position = cannon.transform.position
+	transform.rotation = cannon.transform.rotation
+	
 end
 
 function BulletMovement:Update()
@@ -31,6 +34,7 @@ function BulletMovement:Update()
 	end
 
 end
+
 
 
 

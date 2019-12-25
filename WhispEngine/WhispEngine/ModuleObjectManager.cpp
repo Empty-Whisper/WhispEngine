@@ -68,10 +68,6 @@ update_status ModuleObjectManager::Update()
 		}
 		to_delete.clear();
 	}
-	/*for each (GameObject* it in to_delete)
-	{
-		DestroyGameObject(it);
-	}*/
 
 	return UPDATE_CONTINUE;
 }

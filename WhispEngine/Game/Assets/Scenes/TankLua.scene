@@ -9,7 +9,7 @@
             0.81586754322052,
             -0.38850516080856323,
             0.38667789101600647,
-            0.1841307133436203
+            0.1841307431459427
         ]
     },
     "GameObjects": [
@@ -670,13 +670,6 @@
                             "vertical_fov": 68.5999984741211
                         },
                         {
-                            "InspectorVars": [
-                                {
-                                    "data": 17797003798229770240,
-                                    "key": "tank",
-                                    "type": 7
-                                }
-                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\Camera.lua",
                             "type": 5
@@ -700,70 +693,6 @@
                         0.9999991059303284,
                         0.9999999403953552,
                         0.9999990463256836
-                    ],
-                    "static": false
-                },
-                {
-                    "Children": null,
-                    "Components": [
-                        {
-                            "Resource": 0,
-                            "active": true,
-                            "face color": [
-                                0.9852941036224365,
-                                0.8909695148468018,
-                                0.18353518843650818,
-                                1.0
-                            ],
-                            "type": 2,
-                            "wire color": [
-                                0.0,
-                                0.0,
-                                0.0,
-                                0.0
-                            ]
-                        },
-                        {
-                            "MeshId": 2312707494225575424,
-                            "active": true,
-                            "type": 1
-                        },
-                        {
-                            "InspectorVars": [
-                                {
-                                    "data": 0,
-                                    "key": "cannon",
-                                    "type": 7
-                                },
-                                {
-                                    "data": 70,
-                                    "key": "speed",
-                                    "type": 1
-                                }
-                            ],
-                            "active": true,
-                            "script": "Assets\\Scripts\\BulletMovement.lua",
-                            "type": 5
-                        }
-                    ],
-                    "UID": 6818056452947289088,
-                    "active": true,
-                    "name": "Bullet",
-                    "position": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "rotation": [
-                        -0.5,
-                        -0.5,
-                        0.5,
-                        0.5
-                    ],
-                    "scale": [
-                        0.10000000149011612,
-                        0.10000000149011612,
-                        0.10000000149011612
                     ],
                     "static": false
                 },
