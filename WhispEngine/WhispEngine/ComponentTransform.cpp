@@ -287,6 +287,16 @@ float3 ComponentTransform::LGetForward() const
 	return rotation.WorldZ();
 }
 
+float3 ComponentTransform::LGetUp() const
+{
+	return rotation.WorldY();
+}
+
+float3 ComponentTransform::LGetRight() const
+{
+	return rotation.WorldX();
+}
+
 
 
 void ComponentTransform::LLookAt(const float3 & pos)
