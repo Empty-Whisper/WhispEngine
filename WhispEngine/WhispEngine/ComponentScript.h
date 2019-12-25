@@ -7,7 +7,7 @@ class ComponentScript :
 	enum class TypeData {
 		NONE = -1,
 		BOOL, INT, FLOAT, NIL, TABLE, STRING, USERDATA,
-		GAMEOBJECT,
+		GAMEOBJECT, PREFAB,
 		MAX
 	};
 	enum class Macros {

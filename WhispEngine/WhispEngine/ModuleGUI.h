@@ -29,6 +29,7 @@ class PanelShortcut;
 class ModuleGUI :public Module {
 	friend class PanelResources;
 	friend class PanelInspector;
+	friend class ComponentScript;
 public:
 	ModuleGUI(bool enable_true = true);
 	~ModuleGUI();

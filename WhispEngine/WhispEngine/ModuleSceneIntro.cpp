@@ -231,6 +231,17 @@ bool ModuleSceneIntro::LoadScene(const char* scene)
 	return ret;
 }
 
+GameObject* ModuleSceneIntro::LoadPrefab(const char * prefab)
+{
+	nlohmann::json object = App->file_system->OpenFile(prefab);
+
+	GameObject* ret = App->object_manager->LoadGameObject(*(object["GameObjects"]).begin(), App->object_manager->root);
+	App->object_manager->RefreshObjectsUIDMap();
+	App->object_manager->LoadScripts(object["GameObjects"]);
+
+	return ret;
+}
+
 bool ModuleSceneIntro::CreateEmptyScene(const char * path)
 {
 	App->object_manager->ResetObjects();

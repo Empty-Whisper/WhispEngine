@@ -33,7 +33,11 @@ public:
 
 	void Update();
 
+	void RefreshFiles();
+
 	std::string file_dragdrop;
+
+	bool to_refresh = false;
 private:
 	void GeneratePanelResources(File* const parent);
 	File* files = nullptr;

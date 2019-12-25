@@ -6,10 +6,10 @@
             -0.1225212812423706
         ],
         "rotation": [
-            0.7356352210044861,
-            -0.08225797861814499,
-            0.6682004332542419,
-            0.0747172012925148
+            -0.32486024498939514,
+            0.09396784007549286,
+            0.9040225744247437,
+            0.2614940106868744
         ]
     },
     "GameObjects": [
@@ -8089,6 +8089,7 @@
                             "vertical_fov": 68.5999984741211
                         },
                         {
+
                             "InspectorVars": [
                                 {
                                     "data": 0,
@@ -8119,6 +8120,43 @@
                         0.9999991059303284,
                         1.0,
                         0.9999991059303284
+                    ],
+                    "static": false
+                },
+                {
+                    "Children": null,
+                    "Components": [
+                        {
+                            "InspectorVars": [
+                                {
+                                    "data": "Assets\\Prefabs\\Player.prefab",
+                                    "key": "bullet",
+                                    "type": 8
+                                }
+                            ],
+                            "active": true,
+                            "script": "Assets\\Scripts\\ShotTank.lua",
+                            "type": 5
+                        }
+                    ],
+                    "UID": 17094531187132110848,
+                    "active": true,
+                    "name": "GameObject",
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
                     ],
                     "static": false
                 }
