@@ -231,13 +231,11 @@ bool ModuleSceneIntro::LoadScene(const char* scene)
 	return ret;
 }
 
-bool ModuleSceneIntro::LoadPrefab(const char * prefab)
+GameObject* ModuleSceneIntro::LoadPrefab(const char * prefab)
 {
-	bool ret = true;
-
 	nlohmann::json object = App->file_system->OpenFile(prefab);
 
-	App->object_manager->LoadGameObject(*(object["GameObjects"]).begin(), App->object_manager->root);
+	GameObject* ret = App->object_manager->LoadGameObject(*(object["GameObjects"]).begin(), App->object_manager->root);
 	App->object_manager->RefreshObjectsUIDMap();
 	App->object_manager->LoadScripts(object["GameObjects"]);
 

@@ -29,7 +29,7 @@ public:
 	bool LoadTemporaryScene();
 	bool LoadScene(const char* scene);
 
-	bool LoadPrefab(const char* prefab);
+	GameObject* LoadPrefab(const char* prefab);
 
 	bool CreateEmptyScene(const char* name);
 

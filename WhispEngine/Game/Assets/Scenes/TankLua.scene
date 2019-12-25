@@ -6,8 +6,8 @@
             -6.070949554443359
         ],
         "rotation": [
-            -0.32486027479171753,
-            0.09396783262491226,
+            -0.32486024498939514,
+            0.09396784007549286,
             0.9040225744247437,
             0.2614940106868744
         ]
@@ -8059,19 +8059,12 @@
                             "aspect_ratio": 1.9030418395996094,
                             "checkbox_main_camera": true,
                             "far_plane": 200.0,
-                            "is_main_camera": false,
+                            "is_main_camera": true,
                             "near_plane": 1.0,
                             "type": 4,
                             "vertical_fov": 68.5999984741211
                         },
                         {
-                            "InspectorVars": [
-                                {
-                                    "data": 17797003798229770240,
-                                    "key": "tank",
-                                    "type": 7
-                                }
-                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\Camera.lua",
                             "type": 5
@@ -8095,6 +8088,43 @@
                         0.9999991059303284,
                         1.0,
                         0.9999991059303284
+                    ],
+                    "static": false
+                },
+                {
+                    "Children": null,
+                    "Components": [
+                        {
+                            "InspectorVars": [
+                                {
+                                    "data": "Assets\\Prefabs\\Player.prefab",
+                                    "key": "bullet",
+                                    "type": 8
+                                }
+                            ],
+                            "active": true,
+                            "script": "Assets\\Scripts\\ShotTank.lua",
+                            "type": 5
+                        }
+                    ],
+                    "UID": 17094531187132110848,
+                    "active": true,
+                    "name": "GameObject",
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
                     ],
                     "static": false
                 }

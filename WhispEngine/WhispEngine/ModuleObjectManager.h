@@ -66,12 +66,14 @@ public:
 
 	void LuaRegister() override;
 
+	static GameObject* InstantiatePrefab(const char* path);
+
 	void MousePicking(); 
 
 	bool SaveGameObjects(nlohmann::json &file, GameObject* root = nullptr);
 	bool LoadGameObjects(const nlohmann::json &file);
 	bool LoadScripts(const nlohmann::json &file);
-	bool LoadGameObject(const nlohmann::json &node, GameObject* parent);
+	GameObject* LoadGameObject(const nlohmann::json &node, GameObject* parent);
 	bool LoadScript(const nlohmann::json &node);
 
 	void RefreshObjectsUIDMap();
@@ -122,6 +124,7 @@ public:
 	GameObject* root = nullptr;
 
 	std::map<GameObject*, GameObject*> to_change;
+	std::list<std::string> prefab_to_create;
 private:
 	GameObject* selected = nullptr;
 

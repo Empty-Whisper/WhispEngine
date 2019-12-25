@@ -67,6 +67,7 @@ void ComponentScript::SetInspectorVars()
 			t[(*var).first.c_str()] = static_cast<Property<int>*>((*var).second)->data;
 			break;
 		case ComponentScript::TypeData::STRING:
+		case ComponentScript::TypeData::PREFAB:
 			t[(*var).first.c_str()] = static_cast<Property<std::string>*>((*var).second)->data;
 			break;
 		case ComponentScript::TypeData::USERDATA:
@@ -74,9 +75,6 @@ void ComponentScript::SetInspectorVars()
 			break;
 		case ComponentScript::TypeData::GAMEOBJECT:
 			t[(*var).first.c_str()] = static_cast<Property<GameObject*>*>((*var).second)->data;
-			break;
-		case ComponentScript::TypeData::PREFAB:
-			t[(*var).first.c_str()] = static_cast<Property<std::string>*>((*var).second)->data;
 			break;
 		default:
 			break;
