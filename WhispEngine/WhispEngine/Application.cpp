@@ -108,7 +108,7 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	BROFILER_CATEGORY("PrepareUpdate", Profiler::Color::Blue);
+	BROFILER_CATEGORY("PrepareUpdate", Profiler::Color::AliceBlue);
 	frame_count++;
 	last_sec_frame_count++;
 	dt = frame_time.ReadSec();
@@ -296,7 +296,7 @@ bool Application::IsGameRunning() const
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
-	BROFILER_CATEGORY("Application", Profiler::Color::Blue);
+	BROFILER_CATEGORY("Application", Profiler::Color::BlueViolet);
 	update_status ret = UPDATE_CONTINUE;
 
 	PrepareUpdate();
@@ -310,7 +310,7 @@ update_status Application::Update()
 
 void Application::PostUpdate(update_status &ret)
 {
-	BROFILER_CATEGORY("PostUpdate", Profiler::Color::Blue);
+	BROFILER_CATEGORY("PostUpdate", Profiler::Color::CadetBlue);
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
 		ret = (*item)->PostUpdate();
 		if (ret != UPDATE_CONTINUE)
@@ -320,7 +320,7 @@ void Application::PostUpdate(update_status &ret)
 
 void Application::DoUpdate(update_status &ret)
 {
-	BROFILER_CATEGORY("Update", Profiler::Color::Blue);
+	BROFILER_CATEGORY("Update", Profiler::Color::CornflowerBlue);
 	for (auto item = list_modules.begin(); item != list_modules.end() && ret == UPDATE_CONTINUE; item++) {
 		ret = (*item)->Update();
 		if (ret != UPDATE_CONTINUE)
@@ -341,7 +341,7 @@ void Application::PreUpdate(update_status &ret)
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	BROFILER_CATEGORY("FinishUpdate", Profiler::Color::Blue);
+	BROFILER_CATEGORY("FinishUpdate", Profiler::Color::DeepSkyBlue);
 	if (want_to_save) {
 		SaveConfNow();
 	}

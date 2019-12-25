@@ -23,7 +23,7 @@ PanelInspector::~PanelInspector()
 
 void PanelInspector::Update()
 {
-	BROFILER_CATEGORY("Inspector", Profiler::Color::Purple);
+	BROFILER_CATEGORY("Inspector", Profiler::Color::LightGreen);
 	if (ImGui::Begin("Inspector", &active)) {
 		GameObject* sel = App->object_manager->GetSelected();
 		if (sel != nullptr) {

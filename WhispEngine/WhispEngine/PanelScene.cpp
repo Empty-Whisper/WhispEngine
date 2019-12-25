@@ -18,7 +18,7 @@ PanelScene::~PanelScene()
 
 void PanelScene::Update()
 {
-	BROFILER_CATEGORY("Scene", Profiler::Color::Purple);
+	BROFILER_CATEGORY("Scene", Profiler::Color::DarkOliveGreen);
 	ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0,0) );
 
 	if (ImGui::Begin("Scene", &active)) 

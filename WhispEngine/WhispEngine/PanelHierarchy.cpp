@@ -22,7 +22,7 @@ PanelHierarchy::~PanelHierarchy()
 
 void PanelHierarchy::Update()
 {
-	BROFILER_CATEGORY("Hierarchy", Profiler::Color::Purple);
+	BROFILER_CATEGORY("Hierarchy", Profiler::Color::Green);
 
 	if (ImGui::Begin("Hierarchy", &active)) {
 		ImGui::TextColored(ImVec4(1.f, 0.5f, 0.f, 1.f), "Scene: %s", App->scene_intro->GetSceneName().c_str());

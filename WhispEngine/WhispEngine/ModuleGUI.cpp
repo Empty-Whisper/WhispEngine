@@ -126,7 +126,7 @@ update_status ModuleGUI::Update()
 
 void ModuleGUI::UpdatePanels()
 {
-	BROFILER_CATEGORY("Panels", Profiler::Color::Purple);
+	BROFILER_CATEGORY("Panels", Profiler::Color::MediumPurple);
 	for (auto i = panels.begin(); i != panels.end(); ++i) {
 		if ((*i)->IsActive()) {
 			(*i)->Update();
@@ -136,7 +136,7 @@ void ModuleGUI::UpdatePanels()
 
 void ModuleGUI::PlayPauseStop()
 {
-	BROFILER_CATEGORY("PlayPauseStop", Profiler::Color::Purple);
+	BROFILER_CATEGORY("PlayPauseStop", Profiler::Color::DeepPink);
 	if (ImGui::Begin("##playandpause", NULL, ImGuiWindowFlags_AlwaysUseWindowPadding | ImGuiWindowFlags_NoCollapse |
 		ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration |
 		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize)) {
@@ -206,7 +206,7 @@ void ModuleGUI::PlayPauseStop()
 
 void ModuleGUI::ModalSaveScene()
 {
-	BROFILER_CATEGORY("ModalSaveScene", Profiler::Color::Blue);
+	BROFILER_CATEGORY("ModalSaveScene", Profiler::Color::Pink);
 	if (open_modal_new_scene)
 		ImGui::OpenPopup("Modal Save Scene");
 	if (ImGui::BeginPopupModal("Modal Save Scene", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
@@ -234,7 +234,7 @@ void ModuleGUI::ModalSaveScene()
 
 update_status ModuleGUI::MainMenuBar()
 {
-	BROFILER_CATEGORY("MainMenuBar", Profiler::Color::Blue);
+	BROFILER_CATEGORY("MainMenuBar", Profiler::Color::PeachPuff);
 	update_status ret = UPDATE_CONTINUE;
 
 	if (ImGui::BeginMainMenuBar())
@@ -509,7 +509,7 @@ void ModuleGUI::Log(const char * str)
 
 void ModuleGUI::Dockspace()
 {
-	BROFILER_CATEGORY("DockSpace", Profiler::Color::Blue);
+	BROFILER_CATEGORY("DockSpace", Profiler::Color::BlanchedAlmond);
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;

@@ -63,7 +63,7 @@ PanelResources::~PanelResources()
 
 void PanelResources::Update()
 {
-	BROFILER_CATEGORY("Resources", Profiler::Color::Purple);
+	BROFILER_CATEGORY("Resources", Profiler::Color::SeaGreen);
 	if (ImGui::Begin("Resources", &active, ImGuiWindowFlags_MenuBar))
 	{
 		if (ImGui::BeginMenuBar()) {

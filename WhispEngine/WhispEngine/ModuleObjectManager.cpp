@@ -60,6 +60,7 @@ update_status ModuleObjectManager::Update()
 		to_change.clear();
 	}
 
+
 	return UPDATE_CONTINUE;
 }
 
