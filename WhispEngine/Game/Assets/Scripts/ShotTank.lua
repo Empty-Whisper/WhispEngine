@@ -21,9 +21,8 @@ function ShotTank:Start()
 end
 
 function ShotTank:Update()
---[[
-	if input.getKeyDown('r') then
-		--SetActive(true)
+	if input.getKeyDown('space') then
+		GameObject.Instantiate(var.bullet)
 		pos = transform.position
 		transform:SetPosition3f(pos.x,pos.y,pos.z)--Set pos = canon position, same for rotation?
 		--SetParent(spawnerBullets)
@@ -40,12 +39,9 @@ function ShotTank:Update()
 		shot = false
 		prepare_timer = 0
 	end
-]]
---Log(var.bullet)
-if input.getKeyDown('a') then
-GameObject.Instantiate(var.bullet)
+
 end
-end
+
 
 
 
