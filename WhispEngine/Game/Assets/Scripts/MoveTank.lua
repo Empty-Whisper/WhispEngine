@@ -21,7 +21,8 @@ function MoveTank:Update()
 --Movement
 	if input.getKey('w') then
 		pos = transform.position
-		transform:SetPosition3f(pos.x,pos.y,pos.z-(var.speed*Time.deltaTime))
+		--transform:SetPosition3f(pos.x,pos.y,pos.z-(var.speed*Time.deltaTime))
+		transform:SetPosition3f(transform.forward * (var.speed*Time.deltaTime))
 		W = true
 	else
 	W = false
@@ -48,6 +49,7 @@ function MoveTank:Update()
 	D = false
 	end
 end
+
 
 
 

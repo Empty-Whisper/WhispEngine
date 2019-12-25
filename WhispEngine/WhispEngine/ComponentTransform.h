@@ -61,6 +61,7 @@ private:
 	void LSetPosition3f(const float& x, const float& y, const float& z);
 	void LSetRotationQ(const Quat& quat);
 	void LSetScale3f(const float& x, const float& y, const float& z);
+	float3 LGetForward() const;
 
 	void LLookAt(const float3& pos);
 
