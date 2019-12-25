@@ -36,12 +36,16 @@ void ComponentScript::Update()
 			SetInspectorVars();
 		}
 		
-		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), (App->scripting->first_frame) ? ModuleScripting::Functions::START : ModuleScripting::Functions::UPDATE);
+		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), (!start_done) ? ModuleScripting::Functions::START : ModuleScripting::Functions::UPDATE);
 		
 		lua_pop(App->scripting->GetState(), -1);
 		lua_pop(App->scripting->GetState(), -1);
 		if (!public_vars.empty())
 			lua_pop(App->scripting->GetState(), -1);
+		start_done = true;
+	}
+	else {
+		start_done = false;
 	}
 }
 

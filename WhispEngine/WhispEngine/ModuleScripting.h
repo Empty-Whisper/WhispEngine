@@ -34,12 +34,8 @@ public:
 
 	lua_State* GetState() const { return L; }
 
-	bool first_frame = true;
-
 private:
 	lua_State* L = nullptr;
-
-	bool to_change = false;
 
 	static void Log(const char* s) {
 		if (s != nullptr) {
