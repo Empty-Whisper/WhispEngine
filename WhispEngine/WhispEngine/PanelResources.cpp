@@ -80,6 +80,10 @@ void PanelResources::Update()
 
 			ImGui::TreePop();
 		}
+		if (to_refresh) {
+			RefreshFiles();
+			to_refresh = false;
+		}
 
 		if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Resources"))) { // Prefabs
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) {
@@ -114,8 +118,22 @@ void PanelResources::File::Draw()
 {
 	for (auto file = children.cbegin(); file != children.cend(); file++) {
 		if (!(*file)->is_folder ? ImGui::TreeNodeEx((*file)->name.c_str(), ImGuiTreeNodeFlags_Leaf) : ImGui::TreeNodeEx((*file)->name.c_str())) {
-			if ((*file)->is_folder)
+			if ((*file)->is_folder) {
 				(*file)->Draw();
+				if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Resources"))) { // Prefabs
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) {
+						GameObject* root_prefab = *(GameObject**)payload->Data;
+						nlohmann::json prefab;
+
+						App->object_manager->SaveGameObjects(prefab, root_prefab);
+
+						App->file_system->SaveFile(((*file)->path + "/" + root_prefab->GetName() + ".prefab").c_str(), prefab);
+
+						panel->to_refresh = true;
+					}
+					ImGui::EndDragDropTarget();
+				}
+			}
 			else if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
 				switch ((*file)->format)
 				{
@@ -144,6 +162,10 @@ void PanelResources::File::Draw()
 					switch ((*file)->format) {
 					case FileSystem::Format::LUA:
 						ImGui::SetDragDropPayload("SCRIPT", &(*file)->panel->file_dragdrop, sizeof(int));
+						break;
+					case FileSystem::Format::PREFAB:
+						std::string tmp = (*file)->path;
+						ImGui::SetDragDropPayload("PREFAB", &(*file)->panel->file_dragdrop, sizeof(int));
 						break;
 					}
 					ImGui::EndDragDropSource();

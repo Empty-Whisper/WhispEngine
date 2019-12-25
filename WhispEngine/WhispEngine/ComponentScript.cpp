@@ -75,6 +75,9 @@ void ComponentScript::SetInspectorVars()
 		case ComponentScript::TypeData::GAMEOBJECT:
 			t[(*var).first.c_str()] = static_cast<Property<GameObject*>*>((*var).second)->data;
 			break;
+		case ComponentScript::TypeData::PREFAB:
+			t[(*var).first.c_str()] = static_cast<Property<std::string>*>((*var).second)->data;
+			break;
 		default:
 			break;
 		}
@@ -221,6 +224,22 @@ void ComponentScript::DrawInspectorVars()
 			}
 		}
 			break;
+		case ComponentScript::TypeData::PREFAB: {
+			if (static_cast<Property<std::string>*>((*var).second)->data.empty())
+				ImGui::InputText((*var).first.c_str(), "None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
+			else {
+				std::string name = App->file_system->GetFileNameFromPath((char*)static_cast<Property<std::string>*>((*var).second)->data.c_str());
+				ImGui::InputText((*var).first.c_str(), (char*)name.c_str(), name.length(), ImGuiInputTextFlags_ReadOnly);
+			}
+			ImRect rect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
+			if (ImGui::BeginDragDropTargetCustom(rect, ImGui::GetID("Hierarchy"))) { //Window
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PREFAB")) {
+					static_cast<Property<std::string>*>((*var).second)->data = App->gui->resources->file_dragdrop.c_str();
+				}
+				ImGui::EndDragDropTarget();
+			}
+		}
+			break;
 		default:
 			break;
 		}
@@ -341,6 +360,10 @@ void ComponentScript::UpdateInspectorVars()
 							if (macros.find((*k).c_str()) != macros.end()) {
 								if (macros[(*k).c_str()].compare("[GameObject]") == 0) {
 									Property<GameObject*>* var = new Property<GameObject*>(TypeData::GAMEOBJECT, nullptr);
+									public_vars[(*k).c_str()] = var;
+								}
+								else if (macros[(*k).c_str()].compare("[Prefab]") == 0) {
+									Property<std::string>* var = new Property<std::string>(TypeData::PREFAB, "");
 									public_vars[(*k).c_str()] = var;
 								}
 							}
@@ -493,6 +516,9 @@ void ComponentScript::Save(nlohmann::json & node)
 			else			  var["data"] = 0;
 		}
 			break;
+		case ComponentScript::TypeData::PREFAB:
+			var["data"] = static_cast<Property<std::string>*>((*v).second)->data;
+			break;
 		default:
 			break;
 		}
@@ -532,6 +558,9 @@ void ComponentScript::Load(const nlohmann::json & node)
 					break;
 				case ComponentScript::TypeData::GAMEOBJECT:
 					static_cast<Property<GameObject*>*>(public_vars[(*v)["key"]])->data = App->object_manager->Find((uint64)(*v).value("data", (uint64)0));
+					break;
+				case ComponentScript::TypeData::PREFAB:
+					static_cast<Property<std::string>*>(public_vars[(*v)["key"]])->data = (*v).value("data", "");
 					break;
 				default:
 					break;
