@@ -22,7 +22,7 @@ function MoveTank:Update()
 	if input.getKey('w') then
 		pos = transform.position
 		--transform:SetPosition3f(pos.x,pos.y,pos.z-(var.speed*Time.deltaTime))
-		transform:SetPosition3f(transform.forward * (var.speed*Time.deltaTime))
+		transform:SetPositionv(pos + (transform.forward * (var.speed*Time.deltaTime)))
 		W = true
 	else
 	W = false
@@ -30,21 +30,24 @@ function MoveTank:Update()
 
 	if input.getKey('a') then
 		pos = transform.position
-		transform:SetPosition3f(pos.x-(var.speed*Time.deltaTime),pos.y,pos.z)
+		--transform:SetPosition3f(pos.x-(var.speed*Time.deltaTime),pos.y,pos.z)
+		transform:SetPositionv(pos + (transform.right * (var.speed*Time.deltaTime)))
 	else
 	A = false
 	end
 
 	if input.getKey('s') then
 		pos = transform.position
-		transform:SetPosition3f(pos.x,pos.y,pos.z+(var.speed*Time.deltaTime))
+		--transform:SetPosition3f(pos.x,pos.y,pos.z+(var.speed*Time.deltaTime))
+		transform:SetPositionv(pos - (transform.forward * (var.speed*Time.deltaTime)))
 	else
 	S = false
 	end
 
 	if input.getKey('d') then
 		pos = transform.position
-		transform:SetPosition3f(pos.x+(var.speed*Time.deltaTime),pos.y,pos.z)
+		--transform:SetPosition3f(pos.x+(var.speed*Time.deltaTime),pos.y,pos.z)
+		transform:SetPositionv(pos - (transform.right * (var.speed*Time.deltaTime)))
 	else
 	D = false
 	end
