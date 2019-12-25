@@ -8,6 +8,9 @@
 #include <fstream>
 #include "Imgui/imgui_internal.h"
 #include "ModuleObjectManager.h"
+#include "ModuleGUI.h"
+#include "PanelResources.h"
+#include "PanelScriptEditor.h"
 
 #include "ModuleInput.h"
 
@@ -122,6 +125,7 @@ void ComponentScript::SetScriptName()
 {
 	static char buffer[50];
 	if (ImGui::InputText("", buffer, 50, ImGuiInputTextFlags_EnterReturnsTrue)) {
+		// TODO: if(script already exists open modal window)
 		name.assign(buffer);
 		title = name + " (Script)";
 		script_path.append(name + ".lua");
@@ -141,6 +145,8 @@ void ComponentScript::SetScriptName()
 
 		App->file_system->SaveTextFile(sfile.data(), script_path.c_str());
 		is_assigned = true;
+		App->gui->resources->RefreshFiles();
+		App->gui->editor->SetFile(script_path.data());
 	}
 }
 

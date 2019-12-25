@@ -68,7 +68,7 @@ public:
 
 	void MousePicking(); 
 
-	bool SaveGameObjects(nlohmann::json &file);
+	bool SaveGameObjects(nlohmann::json &file, GameObject* root = nullptr);
 	bool LoadGameObjects(const nlohmann::json &file);
 	bool LoadScripts(const nlohmann::json &file);
 	bool LoadGameObject(const nlohmann::json &node, GameObject* parent);

@@ -33,6 +33,8 @@ public:
 
 	void Update();
 
+	void RefreshFiles();
+
 	std::string file_dragdrop;
 private:
 	void GeneratePanelResources(File* const parent);

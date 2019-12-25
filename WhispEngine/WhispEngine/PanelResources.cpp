@@ -11,6 +11,8 @@
 #include "ModuleGUI.h"
 #include "PanelScriptEditor.h"
 
+#include "ModuleSceneIntro.h"
+
 #include "ModuleImport.h"
 #include "Brofiler/Brofiler.h"
 
@@ -68,8 +70,7 @@ void PanelResources::Update()
 	{
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::Button("Refresh")) {
-				delete files;
-				GeneratePanelResources(files = new File(true, ASSETS_FOLDER, nullptr, FileSystem::Format::NONE, this));
+				RefreshFiles();
 			}
 			ImGui::EndMenuBar();
 		}
@@ -79,8 +80,28 @@ void PanelResources::Update()
 
 			ImGui::TreePop();
 		}
+
+		if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Resources"))) { // Prefabs
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) {
+				GameObject* root_prefab = *(GameObject**)payload->Data;
+				nlohmann::json prefab;
+
+				App->object_manager->SaveGameObjects(prefab, root_prefab);
+
+				App->file_system->SaveFile((ASSETS_FOLDER + std::string(root_prefab->GetName()) + ".prefab").c_str(), prefab);
+
+				RefreshFiles();
+			}
+			ImGui::EndDragDropTarget();
+		}
 	}
 	ImGui::End();
+}
+
+void PanelResources::RefreshFiles()
+{
+	delete files;
+	GeneratePanelResources(files = new File(true, ASSETS_FOLDER, nullptr, FileSystem::Format::NONE, this));
 }
 
 PanelResources::File::File(bool is_folder, const char * path, const File * parent, FileSystem::Format format, PanelResources * panel)
@@ -108,6 +129,9 @@ void PanelResources::File::Draw()
 					break;
 				case FileSystem::Format::LUA:
 					App->gui->editor->SetFile((*file)->path.c_str());
+					break;
+				case FileSystem::Format::PREFAB:
+					App->scene_intro->LoadPrefab((*file)->path.c_str());
 					break;
 				default:
 					break;

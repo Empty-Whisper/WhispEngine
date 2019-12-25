@@ -324,10 +324,12 @@ void ModuleObjectManager::MousePicking()
 	}
 }
 
-bool ModuleObjectManager::SaveGameObjects(nlohmann::json & file)
+bool ModuleObjectManager::SaveGameObjects(nlohmann::json & file, GameObject* root)
 {
 	bool ret = true;
 
+	if (root == nullptr)
+		root = this->root;
 	ret = root->Save(file["GameObjects"]);
 
 	return ret;

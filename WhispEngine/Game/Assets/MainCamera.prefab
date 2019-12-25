@@ -1,0 +1,44 @@
+{
+    "GameObjects": [
+        {
+            "Children": null,
+            "Components": [
+                {
+                    "active": true,
+                    "aspect_ratio": 1.9030418395996094,
+                    "checkbox_main_camera": true,
+                    "far_plane": 200.0,
+                    "is_main_camera": true,
+                    "near_plane": 1.0,
+                    "type": 4,
+                    "vertical_fov": 68.5999984741211
+                },
+                {
+                    "active": true,
+                    "script": "Assets\\Scripts\\Camera.lua",
+                    "type": 5
+                }
+            ],
+            "UID": 18328112529222926336,
+            "active": true,
+            "name": "MainCamera",
+            "position": [
+                -5.199999809265137,
+                3.200000047683716,
+                0.0
+            ],
+            "rotation": [
+                0.9953961968421936,
+                0.09584575146436691,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                0.9999991059303284,
+                1.0,
+                0.9999991059303284
+            ],
+            "static": false
+        }
+    ]
+}
