@@ -281,6 +281,23 @@ void ComponentTransform::LSetScale3f(const float & x, const float & y, const flo
 	scale.Set(x, y, z);
 	CalculeLocalMatrix();
 }
+
+float3 ComponentTransform::LGetForward() const
+{
+	return rotation.WorldZ();
+}
+
+float3 ComponentTransform::LGetUp() const
+{
+	return rotation.WorldY();
+}
+
+float3 ComponentTransform::LGetRight() const
+{
+	return rotation.WorldX();
+}
+
+
 
 void ComponentTransform::LLookAt(const float3 & pos)
 {

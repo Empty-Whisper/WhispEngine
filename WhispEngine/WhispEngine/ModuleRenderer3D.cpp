@@ -224,7 +224,7 @@ update_status ModuleRenderer3D::Update()
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate()
 {
-	BROFILER_CATEGORY("Render", Profiler::Color::FireBrick);
+	BROFILER_CATEGORY("Render", Profiler::Color::Khaki);
 
 	SDL_GL_SwapWindow(App->window->window);
 

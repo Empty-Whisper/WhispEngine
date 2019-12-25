@@ -174,7 +174,7 @@ update_status ModuleInput::PollEvents()
 
 void ModuleInput::UpdateInput()
 {
-	BROFILER_CATEGORY("Input", Profiler::Color::DarkSlateBlue);
+	BROFILER_CATEGORY("Input", Profiler::Color::Ivory);
 	UpdateKeyStates();
 
 	UpdateButtonStates();

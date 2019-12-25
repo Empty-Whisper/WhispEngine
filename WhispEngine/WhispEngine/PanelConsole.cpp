@@ -16,7 +16,7 @@ PanelConsole::~PanelConsole()
 
 void PanelConsole::Update()
 {
-	BROFILER_CATEGORY("Console", Profiler::Color::Purple);
+	BROFILER_CATEGORY("Console", Profiler::Color::Magenta);
 	if (ImGui::Begin(name.data(), &active, ImGuiWindowFlags_MenuBar)) {
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::Button("Clear")) {

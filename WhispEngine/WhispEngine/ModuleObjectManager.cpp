@@ -60,6 +60,7 @@ update_status ModuleObjectManager::Update()
 		to_change.clear();
 	}
 
+
 	return UPDATE_CONTINUE;
 }
 
@@ -239,6 +240,9 @@ void ModuleObjectManager::LuaRegister()
 			.addProperty("parent", &ComponentTransform::LGetParent)
 			.addProperty("position", &ComponentTransform::GetPosition) //TODO: maybe it could be an own struct and set x, y and z as &position.x (READ ONLY)
 			.addProperty("rotation", &ComponentTransform::GetRotation)
+			.addProperty("forward", &ComponentTransform::LGetForward)
+			.addProperty("up", &ComponentTransform::LGetUp)
+			.addProperty("right", &ComponentTransform::LGetRight)
 			.addProperty("scale", &ComponentTransform::GetScale)
 			.addFunction("SetPositionv", &ComponentTransform::LSetPositionV)
 			.addFunction("SetPosition3f", &ComponentTransform::LSetPosition3f)

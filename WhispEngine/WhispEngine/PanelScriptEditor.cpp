@@ -19,7 +19,7 @@ PanelScriptEditor::~PanelScriptEditor()
 void PanelScriptEditor::Update()
 {
 	App->input->block_keyboard = false;
-	BROFILER_CATEGORY("ScriptEditor", Profiler::Color::Purple);
+	BROFILER_CATEGORY("ScriptEditor", Profiler::Color::YellowGreen);
 	if (ImGui::Begin("Script Editor", &active)) {
 		if (ImGui::IsRootWindowOrAnyChildFocused()) {
 			App->input->block_keyboard = true;

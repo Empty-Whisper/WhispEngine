@@ -26,7 +26,7 @@ PanelConfiguration::~PanelConfiguration()
 
 void PanelConfiguration::Update()
 {
-	BROFILER_CATEGORY("Configuration", Profiler::Color::Purple);
+	BROFILER_CATEGORY("Configuration", Profiler::Color::Maroon);
 	if (ImGui::Begin(name.data(), &active, ImGuiWindowFlags_MenuBar))
 	{
 		if (ImGui::BeginMenuBar())

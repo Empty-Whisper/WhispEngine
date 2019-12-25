@@ -1,9 +1,9 @@
 {
     "Camera": {
         "position": [
-            -5.08404541015625,
-            5.574368000030518,
-            -6.070949554443359
+            5.4123406410217285,
+            2.082141637802124,
+            -0.1225212812423706
         ],
         "rotation": [
             -0.32486024498939514,
@@ -7549,6 +7549,30 @@
                                         0.9999993443489075
                                     ],
                                     "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": null,
+                                    "UID": 3211201020940491264,
+                                    "active": true,
+                                    "name": "Cannon",
+                                    "position": [
+                                        -7.419626399496337e-06,
+                                        128.09786987304688,
+                                        62.2403450012207
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
                                 }
                             ],
                             "Components": [
@@ -8065,6 +8089,14 @@
                             "vertical_fov": 68.5999984741211
                         },
                         {
+
+                            "InspectorVars": [
+                                {
+                                    "data": 0,
+                                    "key": "tank",
+                                    "type": 7
+                                }
+                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\Camera.lua",
                             "type": 5
