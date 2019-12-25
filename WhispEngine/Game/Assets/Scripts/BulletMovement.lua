@@ -5,6 +5,7 @@ BulletMovement = {}
 
 BulletMovement.Variables = {
 		-- Public Variables that will appear in inspector [All must be initialized]
+		cannon = nil, -- [GameObject]
 		speed = 70
 }
 
@@ -15,7 +16,7 @@ local time_disappear = 2
 
 
 function BulletMovement:Start()
-	
+	GameObject.SetParent(var.cannon)
 end
 
 function BulletMovement:Update()
@@ -26,11 +27,12 @@ function BulletMovement:Update()
 
 
 	if prepare_timer >= time_disappear then
-		prepare_timer = 0
-		GameObject.active = false
+		--GameObject.active = false
 	end
 
 end
+
+
 
 
 
