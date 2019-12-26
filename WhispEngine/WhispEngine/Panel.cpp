@@ -8,7 +8,7 @@ Panel::Panel()
 Panel::Panel(const std::string &name, const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	: name(name), active(start_active)
 {
-	shortcut = new ShortCut(std::bind(&Panel::ChangeActive, this), shortcut1, shortcut2, shortcut3);
+	shortcut = new ShortCut(std::bind(&Panel::ChangeActive, this), name.c_str(), shortcut1, shortcut2, shortcut3);
 }
 
 

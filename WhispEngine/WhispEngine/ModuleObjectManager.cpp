@@ -16,6 +16,8 @@
 #include "ModuleScripting.h"
 #include "Lua/LuaBridge/LuaBridge.h"
 
+std::vector<GameObject*> ModuleObjectManager::to_delete;
+
 ModuleObjectManager::ModuleObjectManager()
 {
 	name.assign("ObjectManager");
@@ -60,6 +62,13 @@ update_status ModuleObjectManager::Update()
 		to_change.clear();
 	}
 
+	if (!to_delete.empty()) {
+		for (auto del = to_delete.begin(); del != to_delete.end(); del++) {
+			DestroyGameObject(*del);
+		}
+		to_delete.clear();
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -70,7 +79,8 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 		obj->Update();
 
 		if (!obj->children.empty()) {
-			for (auto i = obj->children.begin(); i != obj->children.end(); ++i) {
+			auto old_children = obj->children;
+			for (auto i = old_children.begin(); i != old_children.end(); ++i) {
 				UpdateGameObject(*i);
 			}
 		}
@@ -230,16 +240,26 @@ void ModuleObjectManager::LuaRegister()
 			.addProperty("transform", &GameObject::transform)
 			//.addFunction("addComponent", &GameObject::CreateComponent)
 		.endClass()
+		.beginNamespace("GameObject")
+			.addFunction("Instantiate", &ModuleObjectManager::InstantiatePrefab)
+			.addFunction("Destroy", &ModuleObjectManager::DeleteObject)
+		.endNamespace()
 		.beginClass<ComponentTransform>("transform")
 			.addData("gameobject", &ComponentTransform::object, false)
 			.addProperty("parent", &ComponentTransform::LGetParent)
 			.addProperty("position", &ComponentTransform::GetPosition) //TODO: maybe it could be an own struct and set x, y and z as &position.x (READ ONLY)
+			.addProperty("gposition", &ComponentTransform::GetGlobalPosition)
 			.addProperty("rotation", &ComponentTransform::GetRotation)
+			.addProperty("grotation", &ComponentTransform::GetGlobalRotation)
+			.addProperty("forward", &ComponentTransform::LGetForward)
+			.addProperty("up", &ComponentTransform::LGetUp)
+			.addProperty("right", &ComponentTransform::LGetRight)
 			.addProperty("scale", &ComponentTransform::GetScale)
 			.addFunction("SetPositionv", &ComponentTransform::LSetPositionV)
 			.addFunction("SetPosition3f", &ComponentTransform::LSetPosition3f)
 			.addFunction("SetRotation", &ComponentTransform::LSetRotationQ)
 			.addFunction("SetScale", &ComponentTransform::LSetScale3f)
+			.addFunction("LookAt", &ComponentTransform::LLookAt)
 			.addFunction("Find", &ComponentTransform::Find)
 			.addProperty("ChildCount", &ComponentTransform::ChildCount)
 			.addFunction("GetChild", &ComponentTransform::GetChild)
@@ -247,6 +267,20 @@ void ModuleObjectManager::LuaRegister()
 			.addFunction("SetParent", &ComponentTransform::SetParent)
 		.endClass();
 }
+
+GameObject * ModuleObjectManager::InstantiatePrefab(const char * path)
+{
+	if (path != nullptr)
+		return App->scene_intro->LoadPrefab(path);
+}
+
+void ModuleObjectManager::DeleteObject(GameObject * obj)
+{
+	if(obj != nullptr)
+		to_delete.push_back(obj);
+}
+
+
 
 void ModuleObjectManager::MousePicking()
 {
@@ -323,10 +357,12 @@ void ModuleObjectManager::MousePicking()
 	}
 }
 
-bool ModuleObjectManager::SaveGameObjects(nlohmann::json & file)
+bool ModuleObjectManager::SaveGameObjects(nlohmann::json & file, GameObject* root)
 {
 	bool ret = true;
 
+	if (root == nullptr)
+		root = this->root;
 	ret = root->Save(file["GameObjects"]);
 
 	return ret;
@@ -363,10 +399,8 @@ bool ModuleObjectManager::LoadScripts(const nlohmann::json & it)
 	return true;
 }
 
-bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject * parent)
+GameObject* ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject * parent)
 {
-	bool ret = true;
-
 	GameObject* obj = CreateGameObject(parent);
 	obj->SetName(node.value("name", "GameObject").c_str());
 	obj->UID = node["UID"];
@@ -382,7 +416,7 @@ bool ModuleObjectManager::LoadGameObject(const nlohmann::json & node, GameObject
 		LoadGameObject(*i, obj);
 	}
 
-	return ret;
+	return obj;
 }
 
 bool ModuleObjectManager::LoadScript(const nlohmann::json & node)

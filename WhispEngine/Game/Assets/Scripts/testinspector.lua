@@ -8,8 +8,8 @@ testinspector.Variables = {
 		--integer = 6,
 		--float = 3.315,
 		--boolean = true,
-		--name = 'Tina',
-		gameObject = nil, -- [GameObject]
+		name = 'Tina',
+		--gameObject = nil, -- [GameObject]
 		--vector = Vector3(1,0,0)
 		-- _table = {
 }

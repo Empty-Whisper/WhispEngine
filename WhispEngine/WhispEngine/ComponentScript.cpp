@@ -8,6 +8,9 @@
 #include <fstream>
 #include "Imgui/imgui_internal.h"
 #include "ModuleObjectManager.h"
+#include "ModuleGUI.h"
+#include "PanelResources.h"
+#include "PanelScriptEditor.h"
 
 #include "ModuleInput.h"
 
@@ -33,12 +36,16 @@ void ComponentScript::Update()
 			SetInspectorVars();
 		}
 		
-		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), (App->scripting->first_frame) ? ModuleScripting::Functions::START : ModuleScripting::Functions::UPDATE);
+		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), (!start_done) ? ModuleScripting::Functions::START : ModuleScripting::Functions::UPDATE);
 		
 		lua_pop(App->scripting->GetState(), -1);
 		lua_pop(App->scripting->GetState(), -1);
 		if (!public_vars.empty())
-			lua_pop(App->scripting->GetState(), -1);
+			luabridge::getGlobal(App->scripting->GetState(), "var");
+		start_done = true;
+	}
+	else {
+		start_done = false;
 	}
 }
 
@@ -64,6 +71,7 @@ void ComponentScript::SetInspectorVars()
 			t[(*var).first.c_str()] = static_cast<Property<int>*>((*var).second)->data;
 			break;
 		case ComponentScript::TypeData::STRING:
+		case ComponentScript::TypeData::PREFAB:
 			t[(*var).first.c_str()] = static_cast<Property<std::string>*>((*var).second)->data;
 			break;
 		case ComponentScript::TypeData::USERDATA:
@@ -77,6 +85,43 @@ void ComponentScript::SetInspectorVars()
 		}
 	}
 	luabridge::setGlobal(App->scripting->GetState(), t, "var");
+}
+
+void ComponentScript::GetInspectorVars()
+{
+	luabridge::LuaRef t = luabridge::getGlobal(App->scripting->GetState(), "var");
+	for (auto var = public_vars.begin(); var != public_vars.end(); var++) {
+		switch ((*var).second->type)
+		{
+		case ComponentScript::TypeData::BOOL:
+			static_cast<Property<bool>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::INT:
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::FLOAT:
+			static_cast<Property<float>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::NIL:
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::TABLE:
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::STRING:
+		case ComponentScript::TypeData::PREFAB:
+			static_cast<Property<std::string>*>((*var).second)->data = t[(*var).first.c_str()].cast<std::string>();
+			break;
+		case ComponentScript::TypeData::USERDATA:
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::GAMEOBJECT:
+			static_cast<Property<GameObject*>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void ComponentScript::OnInspector()
@@ -122,6 +167,7 @@ void ComponentScript::SetScriptName()
 {
 	static char buffer[50];
 	if (ImGui::InputText("", buffer, 50, ImGuiInputTextFlags_EnterReturnsTrue)) {
+		// TODO: if(script already exists open modal window)
 		name.assign(buffer);
 		title = name + " (Script)";
 		script_path.append(name + ".lua");
@@ -141,6 +187,8 @@ void ComponentScript::SetScriptName()
 
 		App->file_system->SaveTextFile(sfile.data(), script_path.c_str());
 		is_assigned = true;
+		App->gui->resources->RefreshFiles();
+		App->gui->editor->SetFile(script_path.data());
 	}
 }
 
@@ -201,7 +249,7 @@ void ComponentScript::DrawInspectorVars()
 			break;
 		case ComponentScript::TypeData::GAMEOBJECT: {
 			if (static_cast<Property<GameObject*>*>((*var).second)->data == nullptr)
-				ImGui::InputText((*var).first.c_str(), "None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
+				ImGui::InputText((*var).first.c_str(), (char*)"None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
 			else {
 				char* name = (char*)static_cast<Property<GameObject*>*>((*var).second)->data->GetName();
 				ImGui::InputText((*var).first.c_str(), name, strlen(name), ImGuiInputTextFlags_ReadOnly);
@@ -210,6 +258,22 @@ void ComponentScript::DrawInspectorVars()
 			if (ImGui::BeginDragDropTargetCustom(rect, ImGui::GetID("Hierarchy"))) { //Window
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CHILD_POINTER")) {
 					static_cast<Property<GameObject*>*>((*var).second)->data = *(GameObject**)payload->Data;
+				}
+				ImGui::EndDragDropTarget();
+			}
+		}
+			break;
+		case ComponentScript::TypeData::PREFAB: {
+			if (static_cast<Property<std::string>*>((*var).second)->data.empty())
+				ImGui::InputText((*var).first.c_str(), (char*)"None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
+			else {
+				std::string name = App->file_system->GetFileNameFromPath((char*)static_cast<Property<std::string>*>((*var).second)->data.c_str());
+				ImGui::InputText((*var).first.c_str(), (char*)name.c_str(), name.length(), ImGuiInputTextFlags_ReadOnly);
+			}
+			ImRect rect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
+			if (ImGui::BeginDragDropTargetCustom(rect, ImGui::GetID("Hierarchy"))) { //Window
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PREFAB")) {
+					static_cast<Property<std::string>*>((*var).second)->data = App->gui->resources->file_dragdrop.c_str();
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -335,6 +399,10 @@ void ComponentScript::UpdateInspectorVars()
 							if (macros.find((*k).c_str()) != macros.end()) {
 								if (macros[(*k).c_str()].compare("[GameObject]") == 0) {
 									Property<GameObject*>* var = new Property<GameObject*>(TypeData::GAMEOBJECT, nullptr);
+									public_vars[(*k).c_str()] = var;
+								}
+								else if (macros[(*k).c_str()].compare("[Prefab]") == 0) {
+									Property<std::string>* var = new Property<std::string>(TypeData::PREFAB, "");
 									public_vars[(*k).c_str()] = var;
 								}
 							}
@@ -487,6 +555,9 @@ void ComponentScript::Save(nlohmann::json & node)
 			else			  var["data"] = 0;
 		}
 			break;
+		case ComponentScript::TypeData::PREFAB:
+			var["data"] = static_cast<Property<std::string>*>((*v).second)->data;
+			break;
 		default:
 			break;
 		}
@@ -526,6 +597,9 @@ void ComponentScript::Load(const nlohmann::json & node)
 					break;
 				case ComponentScript::TypeData::GAMEOBJECT:
 					static_cast<Property<GameObject*>*>(public_vars[(*v)["key"]])->data = App->object_manager->Find((uint64)(*v).value("data", (uint64)0));
+					break;
+				case ComponentScript::TypeData::PREFAB:
+					static_cast<Property<std::string>*>(public_vars[(*v)["key"]])->data = (*v).value("data", "");
 					break;
 				default:
 					break;

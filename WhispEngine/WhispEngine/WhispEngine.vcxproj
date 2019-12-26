@@ -65,6 +65,7 @@
     <ClCompile Include="PanelResources.cpp" />
     <ClCompile Include="PanelScene.cpp" />
     <ClCompile Include="PanelScriptEditor.cpp" />
+    <ClCompile Include="PanelShortcut.cpp" />
     <ClCompile Include="par_shapes.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="PanelResources.h" />
     <ClInclude Include="PanelScene.h" />
     <ClInclude Include="PanelScriptEditor.h" />
+    <ClInclude Include="PanelShortcut.h" />
     <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PathNode.h" />
     <ClInclude Include="PerfTimer.h" />
@@ -357,7 +359,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>

@@ -10,7 +10,7 @@ public:
 		NONE = -1,
 		JSON, FBX, 
 		DDS, PNG, JPG, TGA,
-		MODEL, MESH, META, SCENE,
+		MODEL, MESH, META, SCENE, PREFAB,
 		LUA,
 		MAX
 	};

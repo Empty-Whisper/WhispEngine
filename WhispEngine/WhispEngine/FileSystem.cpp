@@ -96,6 +96,9 @@ FileSystem::Format FileSystem::GetFormat(const char * file) const
 	else if (buffer.compare("lua") == 0) {
 		return FileSystem::Format::LUA;
 	}
+	else if (buffer.compare("prefab") == 0) {
+		return FileSystem::Format::PREFAB;
+	}
 	
 	LOG("Cannot identify format, format is: %s", buffer.data());
 

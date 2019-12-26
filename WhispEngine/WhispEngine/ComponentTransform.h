@@ -25,7 +25,6 @@ public:
 	void SetRotation(const float& w, const float& x, const float& y, const float& z);
 	void SetRotation(const Quat & rot);
 	void SetScale(const float& x, const float& y, const float& z);
-
 	void SetScale(const float3 & _scale);
 
 	void SetLocalMatrix(const math::float4x4 &matrix);
@@ -39,7 +38,9 @@ public:
 	math::float4x4 GetGlobalMatrix() const;
 
 	math::float3 GetPosition() const;
+	math::float3 GetGlobalPosition() const;
 	math::Quat	 GetRotation() const;
+	math::Quat	 GetGlobalRotation() const;
 	math::float3 GetScale() const;
 
 	void Save(nlohmann::json& node) override;
@@ -62,6 +63,11 @@ private:
 	void LSetPosition3f(const float& x, const float& y, const float& z);
 	void LSetRotationQ(const Quat& quat);
 	void LSetScale3f(const float& x, const float& y, const float& z);
+	float3 LGetForward() const;
+	float3 LGetUp() const;
+	float3 LGetRight() const;
+
+	void LLookAt(const float3& pos);
 
 	GameObject* LGetParent() const;
 

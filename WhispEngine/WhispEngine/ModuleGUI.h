@@ -14,6 +14,7 @@ class PanelScene;
 class PanelGame;
 class PanelResources;
 class PanelScriptEditor;
+class PanelShortcut;
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
@@ -28,6 +29,7 @@ class PanelScriptEditor;
 class ModuleGUI :public Module {
 	friend class PanelResources;
 	friend class PanelInspector;
+	friend class ComponentScript;
 public:
 	ModuleGUI(bool enable_true = true);
 	~ModuleGUI();
@@ -80,6 +82,7 @@ private:
 	PanelInspector* inspector = nullptr;
 	PanelResources* resources = nullptr;
 	PanelScriptEditor* editor = nullptr;
+	PanelShortcut* shortcut = nullptr;
 
 public:
 	PanelScene* scene = nullptr;

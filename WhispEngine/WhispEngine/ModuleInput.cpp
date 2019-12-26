@@ -174,7 +174,7 @@ update_status ModuleInput::PollEvents()
 
 void ModuleInput::UpdateInput()
 {
-	BROFILER_CATEGORY("Input", Profiler::Color::DarkSlateBlue);
+	BROFILER_CATEGORY("Input", Profiler::Color::Ivory);
 	UpdateKeyStates();
 
 	UpdateButtonStates();
@@ -318,6 +318,15 @@ bool ModuleInput::LGetKeyUp(const char * id)
 	return ModuleInput::keyboard[ModuleInput::lua_map[id]] == KEY_UP;
 }
 
+SDL_Scancode ModuleInput::GetFirstKey() const
+{
+	for (int i = 0; i < MAX_KEYS; ++i) {
+		if (keyboard[i] == KEY_DOWN)
+			return (SDL_Scancode)i;
+	}
+	return SDL_SCANCODE_UNKNOWN;
+}
+
 void ModuleInput::GetTextBuffer(const std::string &key,const int &key_num, const std::string &key_state)
 {
 	std::string text = key + ": " + std::to_string(key_num) + " - " + key_state + "\n";
@@ -398,4 +407,14 @@ int ModuleInput::GetMouseYMotion() const
 int ModuleInput::GetMouseWheel() const
 {
 	return mouse_z;
+}
+
+std::string ModuleInput::ScancodeToString()
+{
+	/*switch (SDL_Scancode)
+	{
+	default:
+		break;
+	}*/
+	return std::string();
 }

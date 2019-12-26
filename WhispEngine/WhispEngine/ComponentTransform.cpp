@@ -189,6 +189,7 @@ void ComponentTransform::CalculeLocalMatrix()
 
 void ComponentTransform::CalculateGlobalMatrix()
 {
+	local_matrix = math::float4x4::FromTRS(position, rotation, scale);
 	global_matrix = local_matrix;
 	if (object->parent != nullptr) {
 		global_matrix = ((ComponentTransform*)object->parent->GetComponent(ComponentType::TRANSFORM))->global_matrix * local_matrix;
@@ -200,9 +201,16 @@ void ComponentTransform::CalculateGlobalMatrix()
 
 	ComponentCamera* cam = nullptr;
 	if (object->TryGetComponent(ComponentType::CAMERA, (Component*&)cam)) {
-		cam->camera->SetTransformPosition(position);
+		float3 pos, scale;
+		Quat rot;
+		global_matrix.Decompose(pos, rot, scale);
+		
+		cam->camera->SetTransformPosition(pos); //TODO fix camera does not rotate around parent
 		cam->camera->SetVectorDirectionFront(rotation.WorldZ());
 		cam->camera->SetVectorDirectionUp(rotation.WorldY());
+		/*cam->camera->SetTransformPosition(position);
+		cam->camera->SetVectorDirectionFront(rotation.WorldZ());
+		cam->camera->SetVectorDirectionUp(rotation.WorldY());*/
 	}
 
 	for (auto i = object->children.begin(); i != object->children.end(); i++) {
@@ -225,9 +233,25 @@ math::float3 ComponentTransform::GetPosition() const
 	return position;
 }
 
+math::float3 ComponentTransform::GetGlobalPosition() const
+{
+	float3 pos, scale;
+	Quat rot;
+	global_matrix.Decompose(pos, rot, scale);
+	return pos;
+}
+
 math::Quat ComponentTransform::GetRotation() const
 {
 	return rotation;
+}
+
+math::Quat ComponentTransform::GetGlobalRotation() const
+{
+	float3 pos, scale;
+	Quat rot;
+	global_matrix.Decompose(pos, rot, scale);
+	return rot;
 }
 
 math::float3 ComponentTransform::GetScale() const
@@ -273,6 +297,28 @@ void ComponentTransform::LSetScale3f(const float & x, const float & y, const flo
 {
 	scale.Set(x, y, z);
 	CalculeLocalMatrix();
+}
+
+float3 ComponentTransform::LGetForward() const
+{
+	return rotation.WorldZ();
+}
+
+float3 ComponentTransform::LGetUp() const
+{
+	return rotation.WorldY();
+}
+
+float3 ComponentTransform::LGetRight() const
+{
+	return rotation.WorldX();
+}
+
+void ComponentTransform::LLookAt(const float3 & pos)
+{
+	rotation = Quat::LookAt(-rotation.WorldZ(), pos, rotation.WorldY(), float3::unitY);
+	euler_rot = rotation.ToEulerXYZ();
+	CalculateGlobalMatrix();
 }
 
 GameObject * ComponentTransform::LGetParent() const

@@ -47,7 +47,6 @@ bool ModuleSceneIntro::Start()
 
 update_status ModuleSceneIntro::PreUpdate()
 {
-
 	if (App->renderer3D->is_rendering_scene)
 	{
 		//Start Buffer Frame ----------------------------------
@@ -154,11 +153,14 @@ bool ModuleSceneIntro::SaveCurrentScene()
 
 	nlohmann::json scene;
 
+	if (scene_path.empty()) {
+		scene_path.assign("Assets/Scenes/Sample.scene");
+	}
 	std::string name = App->file_system->GetFileNameFromPath(scene_path.c_str());
 	
 	Camera* cam = App->camera->GetSceneCamera();
 	App->json->AddFloat3("position", cam->GetPosition(), scene["Camera"]);
-	//App->json->AddQuaternion("rotation", cam->GetRotation(), scene["Camera"]); TODO: Create a function to get the quaternion that represent frustum rotation
+	App->json->AddQuaternion("rotation", cam->GetRotation(), scene["Camera"]);
 
 	ret = App->object_manager->SaveGameObjects(scene);
 
@@ -178,7 +180,7 @@ bool ModuleSceneIntro::SaveTemporaryScene() const
 
 	Camera* cam = App->camera->GetSceneCamera();
 	App->json->AddFloat3("position", cam->GetPosition(), scene["Camera"]);
-	//App->json->AddQuaternion("rotation", cam->GetRotation(), scene["Camera"]); TODO: Create a function to get the quaternion that represent frustum rotation
+	App->json->AddQuaternion("rotation", cam->GetRotation(), scene["Camera"]);
 
 	ret = App->object_manager->SaveGameObjects(scene);
 
@@ -215,12 +217,27 @@ bool ModuleSceneIntro::LoadScene(const char* scene)
 	
 	Camera* cam = App->camera->GetSceneCamera();
 	cam->SetTransformPosition(App->json->GetFloat3("position", scene_file["Camera"]));
+	Quat r = App->json->GetQuaternion("rotation", scene_file["Camera"]);
+	cam->SetVectorDirectionFront(-r.WorldZ());
+	cam->SetVectorDirectionUp(r.WorldY());
+
 	scene_path.assign(scene);
 
 	ret = App->object_manager->LoadGameObjects(scene_file["GameObjects"]);
 	App->object_manager->LoadScripts(scene_file["GameObjects"]);
 
 	octree->Recalculate();
+
+	return ret;
+}
+
+GameObject* ModuleSceneIntro::LoadPrefab(const char * prefab)
+{
+	nlohmann::json object = App->file_system->OpenFile(prefab);
+
+	GameObject* ret = App->object_manager->LoadGameObject(*(object["GameObjects"]).begin(), App->object_manager->root);
+	App->object_manager->RefreshObjectsUIDMap();
+	App->object_manager->LoadScripts(object["GameObjects"]);
 
 	return ret;
 }

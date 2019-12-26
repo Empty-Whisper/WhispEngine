@@ -14,14 +14,14 @@ public:
 	void Reanude();
 	void Stop();
 
-	float ReadSec();
+	static float ReadSec();
 
 	void SetDeltaTime(float delta);
-	float GetDeltaTime();
+	static float GetDeltaTime();
 
 private:
-	Timer game_time;
-	float dt = 0.f;
+	static Timer game_time;
+	static float dt;
 };
 
 extern GameTime* Time;

@@ -6,6 +6,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleObjectManager.h"
 #include "Brofiler/Brofiler.h"
+#include "Imgui/imgui_internal.h"
 
 PanelScene::PanelScene(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3) 
 	: Panel("Scene", start_active, shortcut1, shortcut2, shortcut3)
@@ -18,7 +19,7 @@ PanelScene::~PanelScene()
 
 void PanelScene::Update()
 {
-	BROFILER_CATEGORY("Scene", Profiler::Color::Purple);
+	BROFILER_CATEGORY("Scene", Profiler::Color::DarkOliveGreen);
 	ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0,0) );
 
 	if (ImGui::Begin("Scene", &active)) 
@@ -65,8 +66,18 @@ void PanelScene::Update()
 			ImGuizmo::Enable(false);
 			active_preview = false;
 		}
+
+		// TODO: Load Prefabs and Fbx droping to scene
+		//if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Scene"))) { // Prefabs
+		//	if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PREFAB")) {
+		//		std::string* prefab = *(std::string)payload->Data;
+		//		App->object_manager->LoadPrefab(root_prefab.c_str());
+		//	}
+		//	ImGui::EndDragDropTarget();
+		//}
 	}
 	ImGui::End();
+
 	ImGui::PopStyleVar();
 
 	if (active_preview && preview_checkbox)

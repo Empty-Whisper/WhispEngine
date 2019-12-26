@@ -28,6 +28,9 @@ public:
 	bool SaveTemporaryScene() const;
 	bool LoadTemporaryScene();
 	bool LoadScene(const char* scene);
+
+	GameObject* LoadPrefab(const char* prefab);
+
 	bool CreateEmptyScene(const char* name);
 
 	void DebugOctree();

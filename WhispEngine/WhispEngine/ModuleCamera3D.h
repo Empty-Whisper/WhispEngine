@@ -19,6 +19,7 @@ enum CameraMovementType
 class Camera
 {
 	friend class ModuleCamera3D;
+	friend class ComponentTransform;
 public: 
 	Camera();
 
@@ -32,7 +33,8 @@ public:
 	const float GetAspectRatio() const;
 	void GetAllCorners(float3* corners);
 
-	const float3 GetPosition();
+	const float3 GetPosition() const;
+	const Quat	 GetRotation() const;
 
 	//Setters
 	void SetNearZ(const float &zNear);

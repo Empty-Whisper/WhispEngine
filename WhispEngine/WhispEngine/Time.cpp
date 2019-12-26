@@ -1,6 +1,7 @@
 #include "Time.h"
 
-
+Timer GameTime::game_time;
+float GameTime::dt;
 
 GameTime::GameTime()
 {

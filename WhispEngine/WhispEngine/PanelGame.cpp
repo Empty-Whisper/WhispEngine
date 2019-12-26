@@ -16,7 +16,7 @@ PanelGame::~PanelGame()
 
 void PanelGame::Update()
 {
-	BROFILER_CATEGORY("Game", Profiler::Color::Purple);
+	BROFILER_CATEGORY("Game", Profiler::Color::Moccasin);
 
 	ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 

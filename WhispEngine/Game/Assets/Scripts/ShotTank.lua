@@ -5,15 +5,12 @@ ShotTank = {}
 
 ShotTank.Variables = {
 		-- Public Variables that will appear in inspector [All must be initialized]
-		--[[
-		to access this variables use var.variable, for example:
-	 -- name = 'John'
-		to access: var.name
-		]]
+		bullet = nil, --[Prefab]
+		--bulletParent = nil, --[Prefab]
+		speed = 70
 }
 
 -- local var = ShotTank.Variables
-local speed = 20
 local shot = true
 local prepare_timer = 0
 local time_disappear = 2
@@ -25,26 +22,44 @@ function ShotTank:Start()
 end
 
 function ShotTank:Update()
-
-	if input.getKeyDown('r') then
-		--SetActive(true)
-		pos = transform.position
-		transform:SetPosition3f(pos.x,pos.y,pos.z)--Set pos = canon position, same for rotation?
-		--SetParent(spawnerBullets)
-		shot = true
+	Log(transform.gposition:toString())
+	if input.getKeyDown('space') then
+		instance = GameObject.Instantiate(var.bullet)
+		pos = transform.gposition
+		instance.transform:SetPosition3f(pos.x,pos.y,pos.z)--Set pos = canon position, same for rotation?
+		instance.transform:SetRotation(transform.grotation)
+		--transform.SetParent(bulletParent)
+		--shot = true
 	end
 
 	if shot==true then
-		prepare_timer = prepare_timer + Time.deltaTime
-		--Translate forward
+		--prepare_timer = prepare_timer + Time.deltaTime
+		--pos = var.bullet.transform.position
+		--transform:SetPositionv(pos + (transform.forward * (var.speed*Time.deltaTime)))
 	end
 
 	if prepare_timer >= time_disappear then
-		--SetActive(false)
-		shot = false
-		prepare_timer = 0
+		--shot = false
+		--prepare_timer = 0
 	end
+
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

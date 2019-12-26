@@ -31,8 +31,6 @@ update_status ModuleScripting::PreUpdate()
 
 update_status ModuleScripting::Update()
 {
-	if (first_frame)
-		to_change = true;
 	return update_status::UPDATE_CONTINUE;
 }
 
@@ -43,8 +41,8 @@ void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name,
 	switch (function)
 	{
 	case ModuleScripting::START:
-		result = luaL_dofile(L, path);
 		func_name.assign("Start");
+		result = luaL_dofile(L, path);
 		break;
 	case ModuleScripting::PREUPDATE:
 		func_name.assign("PreUpdate");
@@ -84,10 +82,6 @@ void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name,
 
 update_status ModuleScripting::PostUpdate()
 {
-	if (to_change) {
-		first_frame = false;
-		to_change = false;
-	}
 	return update_status::UPDATE_CONTINUE;
 }
 

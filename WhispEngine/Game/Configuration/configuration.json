@@ -46,6 +46,9 @@
 			},
 			"editor": {
 			  "start_enabled": true
+			},
+			"shortcut": {
+			  "start_enabled": false
 			}
           }
         },

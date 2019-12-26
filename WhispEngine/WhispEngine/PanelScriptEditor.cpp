@@ -7,7 +7,7 @@
 #include "ModuleInput.h"
 
 PanelScriptEditor::PanelScriptEditor(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
-	: Panel("editor", start_active, shortcut1, shortcut2, shortcut3)
+	: Panel("Script Editor", start_active, shortcut1, shortcut2, shortcut3)
 {
 	editor.SetLanguageDefinition(TextEditor::LanguageDefinition::Lua());
 }
@@ -19,7 +19,7 @@ PanelScriptEditor::~PanelScriptEditor()
 void PanelScriptEditor::Update()
 {
 	App->input->block_keyboard = false;
-	BROFILER_CATEGORY("ScriptEditor", Profiler::Color::Purple);
+	BROFILER_CATEGORY("ScriptEditor", Profiler::Color::YellowGreen);
 	if (ImGui::Begin("Script Editor", &active)) {
 		if (ImGui::IsRootWindowOrAnyChildFocused()) {
 			App->input->block_keyboard = true;

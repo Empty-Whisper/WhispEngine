@@ -7,7 +7,7 @@ class ComponentScript :
 	enum class TypeData {
 		NONE = -1,
 		BOOL, INT, FLOAT, NIL, TABLE, STRING, USERDATA,
-		GAMEOBJECT,
+		GAMEOBJECT, PREFAB,
 		MAX
 	};
 	enum class Macros {
@@ -54,10 +54,13 @@ public:
 private:
 	void SetScriptName();
 	void SetInspectorVars();
+	void GetInspectorVars();
 	void DrawInspectorVars();
 	void OpenModalWindowsToLoadScript();
 	void UpdateInspectorVars();
 
 private:
 	std::map<std::string, PublicVar*> public_vars;
+
+	bool start_done = false;
 };
