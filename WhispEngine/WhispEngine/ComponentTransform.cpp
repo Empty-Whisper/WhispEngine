@@ -189,6 +189,7 @@ void ComponentTransform::CalculeLocalMatrix()
 
 void ComponentTransform::CalculateGlobalMatrix()
 {
+	local_matrix = math::float4x4::FromTRS(position, rotation, scale);
 	global_matrix = local_matrix;
 	if (object->parent != nullptr) {
 		global_matrix = ((ComponentTransform*)object->parent->GetComponent(ComponentType::TRANSFORM))->global_matrix * local_matrix;
@@ -232,9 +233,25 @@ math::float3 ComponentTransform::GetPosition() const
 	return position;
 }
 
+math::float3 ComponentTransform::GetGlobalPosition() const
+{
+	float3 pos, scale;
+	Quat rot;
+	global_matrix.Decompose(pos, rot, scale);
+	return pos;
+}
+
 math::Quat ComponentTransform::GetRotation() const
 {
 	return rotation;
+}
+
+math::Quat ComponentTransform::GetGlobalRotation() const
+{
+	float3 pos, scale;
+	Quat rot;
+	global_matrix.Decompose(pos, rot, scale);
+	return rot;
 }
 
 math::float3 ComponentTransform::GetScale() const
@@ -295,10 +312,7 @@ float3 ComponentTransform::LGetUp() const
 float3 ComponentTransform::LGetRight() const
 {
 	return rotation.WorldX();
-}
-
-
-
+}
 void ComponentTransform::LLookAt(const float3 & pos)
 {
 	rotation = Quat::LookAt(-rotation.WorldZ(), pos, rotation.WorldY(), float3::unitY);

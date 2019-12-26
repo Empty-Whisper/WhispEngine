@@ -670,13 +670,6 @@
                             "vertical_fov": 68.5999984741211
                         },
                         {
-                            "InspectorVars": [
-                                {
-                                    "data": 0,
-                                    "key": "tank",
-                                    "type": 7
-                                }
-                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\Camera.lua",
                             "type": 5

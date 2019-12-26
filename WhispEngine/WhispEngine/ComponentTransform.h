@@ -38,7 +38,9 @@ public:
 	math::float4x4 GetGlobalMatrix() const;
 
 	math::float3 GetPosition() const;
+	math::float3 GetGlobalPosition() const;
 	math::Quat	 GetRotation() const;
+	math::Quat	 GetGlobalRotation() const;
 	math::float3 GetScale() const;
 
 	void Save(nlohmann::json& node) override;

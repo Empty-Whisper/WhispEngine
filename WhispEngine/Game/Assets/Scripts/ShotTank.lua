@@ -22,10 +22,12 @@ function ShotTank:Start()
 end
 
 function ShotTank:Update()
+	Log(transform.gposition:toString())
 	if input.getKeyDown('space') then
-		GameObject.Instantiate(var.bullet)
-		--pos = transform.position
-		--transform:SetPosition3f(pos.x,pos.y,pos.z)--Set pos = canon position, same for rotation?
+		instance = GameObject.Instantiate(var.bullet)
+		pos = transform.gposition
+		instance.transform:SetPosition3f(pos.x,pos.y,pos.z)--Set pos = canon position, same for rotation?
+		instance.transform:SetRotation(transform.grotation)
 		--transform.SetParent(bulletParent)
 		--shot = true
 	end
@@ -42,6 +44,13 @@ function ShotTank:Update()
 	end
 
 end
+
+
+
+
+
+
+
 
 
 
