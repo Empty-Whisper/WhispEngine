@@ -6,7 +6,6 @@ ShotTank = {}
 ShotTank.Variables = {
 		-- Public Variables that will appear in inspector [All must be initialized]
 		bullet = nil, --[Prefab]
-		--bulletParent = nil, --[Prefab]
 		speed = 70
 }
 
@@ -23,7 +22,7 @@ end
 
 function ShotTank:Update()
 	Log(transform.gposition:toString())
-	if input.getKeyDown('space') then
+	if input.getMouseDown(1) then
 		instance = GameObject.Instantiate(var.bullet)
 		pos = transform.gposition
 		instance.transform:SetPosition3f(pos.x,pos.y,pos.z)--Set pos = canon position, same for rotation?
@@ -44,6 +43,10 @@ function ShotTank:Update()
 	end
 
 end
+
+
+
+
 
 
 
