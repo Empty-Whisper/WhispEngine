@@ -13,14 +13,20 @@ private:
 		std::string path;
 		std::string name;
 		std::vector<File*> children;
-		const File* parent = nullptr;
+		File* parent = nullptr;
 		FileSystem::Format format = FileSystem::Format::NONE;
 
-		File(bool is_folder, const char* path, const File* parent, FileSystem::Format format, PanelResources* panel);
+		File(bool is_folder, const char* path, File* parent, FileSystem::Format format, PanelResources* panel);
 
 		~File() {
-			for (auto child = children.begin(); child != children.end(); child++) {
-				delete *child;
+			if (parent != nullptr)
+				parent->children.erase(std::find(parent->children.begin(), parent->children.end(), this));
+
+			if (!children.empty()) {
+				auto cpy_children = children;
+				for (auto child = cpy_children.begin(); child != cpy_children.end(); child++) {
+					delete *child;
+				}
 			}
 		}
 
@@ -41,4 +47,5 @@ public:
 private:
 	void GeneratePanelResources(File* const parent);
 	File* files = nullptr;
+	File* to_delete = nullptr;
 };

@@ -6,10 +6,10 @@ BulletMovement = {}
 BulletMovement.Variables = {
 		-- Public Variables that will appear in inspector [All must be initialized]
 		prepare_timer = Time.time,
-		speed = 7,
+		speed = 70,
 }
 
-local time_disappear = 5
+local time_disappear = 2
 
 function BulletMovement:Start()
 	var.prepare_timer = Time.time
@@ -25,6 +25,7 @@ function BulletMovement:Update()
 	end
 
 end
+
 
 
 

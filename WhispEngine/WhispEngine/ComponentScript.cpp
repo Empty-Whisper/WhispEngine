@@ -249,7 +249,7 @@ void ComponentScript::DrawInspectorVars()
 			break;
 		case ComponentScript::TypeData::GAMEOBJECT: {
 			if (static_cast<Property<GameObject*>*>((*var).second)->data == nullptr)
-				ImGui::InputText((*var).first.c_str(), "None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
+				ImGui::InputText((*var).first.c_str(), (char*)"None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
 			else {
 				char* name = (char*)static_cast<Property<GameObject*>*>((*var).second)->data->GetName();
 				ImGui::InputText((*var).first.c_str(), name, strlen(name), ImGuiInputTextFlags_ReadOnly);
@@ -265,7 +265,7 @@ void ComponentScript::DrawInspectorVars()
 			break;
 		case ComponentScript::TypeData::PREFAB: {
 			if (static_cast<Property<std::string>*>((*var).second)->data.empty())
-				ImGui::InputText((*var).first.c_str(), "None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
+				ImGui::InputText((*var).first.c_str(), (char*)"None", strlen("None"), ImGuiInputTextFlags_ReadOnly);
 			else {
 				std::string name = App->file_system->GetFileNameFromPath((char*)static_cast<Property<std::string>*>((*var).second)->data.c_str());
 				ImGui::InputText((*var).first.c_str(), (char*)name.c_str(), name.length(), ImGuiInputTextFlags_ReadOnly);

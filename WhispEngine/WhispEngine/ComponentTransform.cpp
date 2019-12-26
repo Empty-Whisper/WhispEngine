@@ -312,7 +312,8 @@ float3 ComponentTransform::LGetUp() const
 float3 ComponentTransform::LGetRight() const
 {
 	return rotation.WorldX();
-}
+}
+
 void ComponentTransform::LLookAt(const float3 & pos)
 {
 	rotation = Quat::LookAt(-rotation.WorldZ(), pos, rotation.WorldY(), float3::unitY);

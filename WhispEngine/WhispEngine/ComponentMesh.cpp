@@ -277,10 +277,11 @@ void ComponentMesh::OnInspector()
 void ComponentMesh::SetAABB()
 {
 	ResourceMesh* m = (ResourceMesh*)App->resources->Get(uid);
-	
-	local_box.SetNegativeInfinity();
-	local_box.Enclose((float3*)m->vertex.data, m->vertex.size);
-	CalulateAABB_OBB();
+	if (m != nullptr) {
+		local_box.SetNegativeInfinity();
+		local_box.Enclose((float3*)m->vertex.data, m->vertex.size);
+		CalulateAABB_OBB();
+	}
 }
 
 AABB ComponentMesh::GetAABB() const

@@ -33,7 +33,7 @@ void PanelResources::GeneratePanelResources(File* const parent)
 				file = new File(
 					true,
 					entry.path().u8string().c_str(),
-					files,
+					parent,
 					FileSystem::Format::NONE,
 					this
 				);
@@ -42,7 +42,7 @@ void PanelResources::GeneratePanelResources(File* const parent)
 				file = new File(
 					false,
 					entry.path().u8string().c_str(),
-					files,
+					parent,
 					App->file_system->GetFormat(entry.path().u8string().c_str()),
 					this
 				);
@@ -80,6 +80,12 @@ void PanelResources::Update()
 
 			ImGui::TreePop();
 		}
+		if (to_delete != nullptr) {
+			App->file_system->RemoveFile(to_delete->path.c_str());
+			to_refresh = true;
+			to_delete = nullptr;
+		}
+
 		if (to_refresh) {
 			RefreshFiles();
 			to_refresh = false;
@@ -108,7 +114,7 @@ void PanelResources::RefreshFiles()
 	GeneratePanelResources(files = new File(true, ASSETS_FOLDER, nullptr, FileSystem::Format::NONE, this));
 }
 
-PanelResources::File::File(bool is_folder, const char * path, const File * parent, FileSystem::Format format, PanelResources * panel)
+PanelResources::File::File(bool is_folder, const char * path, File * parent, FileSystem::Format format, PanelResources * panel)
 	: is_folder(is_folder), path(path), parent(parent), format(format), panel(panel)
 {
 	name.assign(App->file_system->GetFileFromPath(path));
@@ -116,7 +122,7 @@ PanelResources::File::File(bool is_folder, const char * path, const File * paren
 
 void PanelResources::File::Draw()
 {
-	for (auto file = children.cbegin(); file != children.cend(); file++) {
+	for (auto file = children.begin(); file != children.end(); file++) {
 		if (!(*file)->is_folder ? ImGui::TreeNodeEx((*file)->name.c_str(), ImGuiTreeNodeFlags_Leaf) : ImGui::TreeNodeEx((*file)->name.c_str())) {
 			if ((*file)->is_folder) {
 				(*file)->Draw();
@@ -134,27 +140,37 @@ void PanelResources::File::Draw()
 					ImGui::EndDragDropTarget();
 				}
 			}
-			else if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
-				switch ((*file)->format)
-				{
-				case FileSystem::Format::FBX:
-					if (App->file_system->Exists(((*file)->path + ".meta").c_str())) {
-						App->resources->Get(App->file_system->GetUIDFromMeta(((*file)->path + ".meta").c_str()))->LoadToMemory();
+			else if (ImGui::IsItemHovered()) {
+				if (ImGui::IsMouseDoubleClicked(0)) {
+					switch ((*file)->format)
+					{
+					case FileSystem::Format::FBX:
+						if (App->file_system->Exists(((*file)->path + ".meta").c_str())) {
+							App->resources->Get(App->file_system->GetUIDFromMeta(((*file)->path + ".meta").c_str()))->LoadToMemory();
+						}
+						break;
+					case FileSystem::Format::SCENE:
+						App->LoadScene((*file)->path.c_str());
+						break;
+					case FileSystem::Format::LUA:
+						App->gui->editor->SetFile((*file)->path.c_str());
+						break;
+					case FileSystem::Format::PREFAB:
+						App->scene_intro->LoadPrefab((*file)->path.c_str());
+						break;
+					default:
+						break;
 					}
-					break;
-				case FileSystem::Format::SCENE:
-					App->LoadScene((*file)->path.c_str());
-					break;
-				case FileSystem::Format::LUA:
-					App->gui->editor->SetFile((*file)->path.c_str());
-					break;
-				case FileSystem::Format::PREFAB:
-					App->scene_intro->LoadPrefab((*file)->path.c_str());
-					break;
-				default:
-					break;
 				}
 			}
+				ImGui::PushID(*file);
+				if (ImGui::BeginPopupContextItem("delete_file")) {
+					if (ImGui::Button("Delete")) {
+						App->gui->resources->to_delete = *file;
+					}
+					ImGui::EndPopup();
+				}
+				ImGui::PopID();
 			if (!(*file)->is_folder)
 				if (ImGui::BeginDragDropSource()) {
 					(*file)->panel->file_dragdrop = (*file)->path;
