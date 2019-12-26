@@ -41,7 +41,7 @@ void ComponentScript::Update()
 		lua_pop(App->scripting->GetState(), -1);
 		lua_pop(App->scripting->GetState(), -1);
 		if (!public_vars.empty())
-			lua_pop(App->scripting->GetState(), -1);
+			luabridge::getGlobal(App->scripting->GetState(), "var");
 		start_done = true;
 	}
 	else {
@@ -85,6 +85,43 @@ void ComponentScript::SetInspectorVars()
 		}
 	}
 	luabridge::setGlobal(App->scripting->GetState(), t, "var");
+}
+
+void ComponentScript::GetInspectorVars()
+{
+	luabridge::LuaRef t = luabridge::getGlobal(App->scripting->GetState(), "var");
+	for (auto var = public_vars.begin(); var != public_vars.end(); var++) {
+		switch ((*var).second->type)
+		{
+		case ComponentScript::TypeData::BOOL:
+			static_cast<Property<bool>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::INT:
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::FLOAT:
+			static_cast<Property<float>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::NIL:
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::TABLE:
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::STRING:
+		case ComponentScript::TypeData::PREFAB:
+			static_cast<Property<std::string>*>((*var).second)->data = t[(*var).first.c_str()].cast<std::string>();
+			break;
+		case ComponentScript::TypeData::USERDATA:
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		case ComponentScript::TypeData::GAMEOBJECT:
+			static_cast<Property<GameObject*>*>((*var).second)->data = t[(*var).first.c_str()];
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void ComponentScript::OnInspector()

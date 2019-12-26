@@ -54,6 +54,7 @@ public:
 private:
 	void SetScriptName();
 	void SetInspectorVars();
+	void GetInspectorVars();
 	void DrawInspectorVars();
 	void OpenModalWindowsToLoadScript();
 	void UpdateInspectorVars();

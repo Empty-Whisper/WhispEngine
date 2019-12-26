@@ -9,7 +9,7 @@
             0.81586754322052,
             -0.38850516080856323,
             0.38667789101600647,
-            0.1841307431459427
+            0.18413075804710388
         ]
     },
     "GameObjects": [
@@ -670,6 +670,13 @@
                             "vertical_fov": 68.5999984741211
                         },
                         {
+                            "InspectorVars": [
+                                {
+                                    "data": 0,
+                                    "key": "tank",
+                                    "type": 7
+                                }
+                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\Camera.lua",
                             "type": 5
@@ -722,18 +729,6 @@
                             "type": 1
                         },
                         {
-                            "InspectorVars": [
-                                {
-                                    "data": 3211201020940491264,
-                                    "key": "cannon",
-                                    "type": 7
-                                },
-                                {
-                                    "data": 70,
-                                    "key": "speed",
-                                    "type": 1
-                                }
-                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\BulletMovement.lua",
                             "type": 5

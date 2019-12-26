@@ -41,8 +41,8 @@ void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name,
 	switch (function)
 	{
 	case ModuleScripting::START:
-		result = luaL_dofile(L, path);
 		func_name.assign("Start");
+		result = luaL_dofile(L, path);
 		break;
 	case ModuleScripting::PREUPDATE:
 		func_name.assign("PreUpdate");
