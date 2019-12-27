@@ -20,9 +20,11 @@ public:
 	update_status Update();
 	update_status PostUpdate();
 	void DrawGrid();
+	void DrawSkyboxSphere();
 	bool CleanUp();
 
 	void GenerateGrid(const int &width);
+	void GenerateSkyboxSphere(const int &radius);
 
 	bool SaveCurrentScene();
 	bool SaveTemporaryScene() const;
@@ -40,6 +42,8 @@ public:
 public:
 	uint grid_id = 0;
 	uint grid_vertex_size = 0;
+	uint skybox_sphere_id = 0;
+	uint skybox_sphere_vertex_size = 0;
 	bool show_grid = true;
 	bool show_octree = false;
 	bool show_mouse_raycast = false;
