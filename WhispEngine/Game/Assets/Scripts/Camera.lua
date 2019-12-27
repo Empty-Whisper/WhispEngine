@@ -1,3 +1,4 @@
+function Init()
 
 -- Camera.lua
 
@@ -19,10 +20,7 @@ function Camera:Update()
 	transform:SetPositionv(var.tank.transform.position + diff)
 end
 
+return Camera
 
-
-
-
-
-
+end
 

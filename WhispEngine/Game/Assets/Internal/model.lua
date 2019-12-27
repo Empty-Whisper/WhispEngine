@@ -11,8 +11,6 @@ local Model = {
 			to access: Log(var.name) --> John
 			]]
 	},
-	
-	speed = 5
 }
 
 -- Start is called before the first frame update
@@ -23,9 +21,9 @@ end
 
 -- Update is called once per frame
 function Model:Update()
-	Model.speed = Model.speed+1
-	Log(Model.speed)
+
 end
 
 return Model
+
 end

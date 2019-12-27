@@ -1,4 +1,4 @@
-
+function Init()
 -- ShotTank.lua
 
 ShotTank = {}
@@ -21,50 +21,15 @@ function ShotTank:Start()
 end
 
 function ShotTank:Update()
-	--Log(transform.gposition:toString())
 	if input.getMouseDown(1) then
 		instance = GameObject.Instantiate(var.bullet)
 		pos = transform.gposition
 		instance.transform:SetPosition3f(pos.x,pos.y,pos.z)--Set pos = canon position, same for rotation?
 		instance.transform:SetRotation(transform.grotation)
-		--transform.SetParent(bulletParent)
-		--shot = true
-	end
-
-	if shot==true then
-		--prepare_timer = prepare_timer + Time.deltaTime
-		--pos = var.bullet.transform.position
-		--transform:SetPositionv(pos + (transform.forward * (var.speed*Time.deltaTime)))
-	end
-
-	if prepare_timer >= time_disappear then
-		--shot = false
-		--prepare_timer = 0
 	end
 
 end
 
+return ShotTank
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+end

@@ -1,4 +1,4 @@
-
+function Init()
 -- RotateTurret2.lua
 
 RotateTurret2 = {}
@@ -23,6 +23,8 @@ function RotateTurret2:Update()
 	transform:SetRotation(Quaternion.RotateY((lmx-mx)*var.mult))
 end
 
+return RotateTurret2
 
+end
 
 

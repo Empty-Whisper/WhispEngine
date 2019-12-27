@@ -7,9 +7,9 @@
         ],
         "rotation": [
             -0.08642803132534027,
-            0.03768245875835419,
-            0.9125778675079346,
-            0.397884339094162
+            0.037682462483644485,
+            0.9125779271125793,
+            0.3978843688964844
         ]
     },
     "GameObjects": [
@@ -119,7 +119,7 @@
                                         {
                                             "InspectorVars": [
                                                 {
-                                                    "data": "Assets\\Prefabs\\skull_head.prefab",
+                                                    "data": "Assets\\Prefabs\\primitive_cube.prefab",
                                                     "key": "bullet",
                                                     "type": 8
                                                 },
@@ -160,7 +160,7 @@
                                 {
                                     "InspectorVars": [
                                         {
-                                            "data": 0.004999999888241291,
+                                            "data": 0.009999999776482582,
                                             "key": "mult",
                                             "type": 2
                                         }
@@ -625,7 +625,7 @@
                         {
                             "InspectorVars": [
                                 {
-                                    "data": 6.931000232696533,
+                                    "data": 7.099999904632568,
                                     "key": "speed",
                                     "type": 2
                                 }
@@ -661,7 +661,7 @@
                     "Components": [
                         {
                             "active": true,
-                            "aspect_ratio": 1.496147871017456,
+                            "aspect_ratio": 1.1223241090774536,
                             "checkbox_main_camera": false,
                             "far_plane": 200.0,
                             "is_main_camera": false,
@@ -672,19 +672,7 @@
                         {
                             "InspectorVars": [
                                 {
-                                    "data": 0.004999999888241291,
-                                    "key": "mult",
-                                    "type": 2
-                                }
-                            ],
-                            "active": true,
-                            "script": "Assets\\Scripts\\RotateTurret2.lua",
-                            "type": 5
-                        },
-                        {
-                            "InspectorVars": [
-                                {
-                                    "data": 0.004999999888241291,
+                                    "data": 0.009999999776482582,
                                     "key": "mult",
                                     "type": 2
                                 }
@@ -947,11 +935,6 @@
                     "Components": [
                         {
                             "InspectorVars": [
-                                {
-                                    "data": 31.91900062561035,
-                                    "key": "prepare_timer",
-                                    "type": 2
-                                },
                                 {
                                     "data": 10,
                                     "key": "speed",
