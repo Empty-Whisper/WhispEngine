@@ -34,6 +34,12 @@ void ComponentCamera::Update()
 	//Log Drawing
 	DrawFrustum();
 
+	//Check if there is a camera
+	if (checkbox_main_camera && is_main_camera)
+	{
+		App->camera->SetGameCamera(camera);
+		is_main_camera = false;
+	}
 }
 
 void ComponentCamera::OnInspector()
@@ -72,11 +78,7 @@ void ComponentCamera::OnInspector()
 
 		if (ImGui::Checkbox("Main Camera", &checkbox_main_camera))
 			is_main_camera = true;
-		if (checkbox_main_camera && is_main_camera)
-		{
-			App->camera->SetGameCamera(camera);
-			is_main_camera = false;
-		}
+		
 
 		if (only_one_camera) 
 		{
