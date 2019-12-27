@@ -7,9 +7,9 @@
         ],
         "rotation": [
             -0.08642803132534027,
-            0.03768245875835419,
-            0.9125778675079346,
-            0.397884339094162
+            0.037682462483644485,
+            0.9125779271125793,
+            0.3978843688964844
         ]
     },
     "GameObjects": [
@@ -156,20 +156,7 @@
                                     "static": false
                                 }
                             ],
-                            "Components": [
-                                {
-                                    "InspectorVars": [
-                                        {
-                                            "data": 0.004999999888241291,
-                                            "key": "mult",
-                                            "type": 2
-                                        }
-                                    ],
-                                    "active": true,
-                                    "script": "Assets\\Scripts\\RotateTurret2.lua",
-                                    "type": 5
-                                }
-                            ],
+                            "Components": null,
                             "UID": 9166001808016059392,
                             "active": true,
                             "name": "TankTurret",
@@ -625,7 +612,31 @@
                         {
                             "InspectorVars": [
                                 {
-                                    "data": 6.931000232696533,
+                                    "data": 7.099999904632568,
+                                    "key": "speed",
+                                    "type": 2
+                                }
+                            ],
+                            "active": true,
+                            "script": "Assets\\Scripts\\MoveTank.lua",
+                            "type": 5
+                        },
+                        {
+                            "InspectorVars": [
+                                {
+                                    "data": 0.004999999888241291,
+                                    "key": "mult",
+                                    "type": 2
+                                }
+                            ],
+                            "active": true,
+                            "script": "Assets\\Scripts\\RotateTurret2.lua",
+                            "type": 5
+                        },
+                        {
+                            "InspectorVars": [
+                                {
+                                    "data": 7.099999904632568,
                                     "key": "speed",
                                     "type": 2
                                 }
@@ -662,7 +673,7 @@
                         {
                             "active": true,
                             "aspect_ratio": 1.496147871017456,
-                            "checkbox_main_camera": false,
+                            "checkbox_main_camera": true,
                             "far_plane": 200.0,
                             "is_main_camera": false,
                             "near_plane": 1.0,
@@ -672,13 +683,18 @@
                         {
                             "InspectorVars": [
                                 {
-                                    "data": 0.004999999888241291,
-                                    "key": "mult",
-                                    "type": 2
+                                    "data": 0,
+                                    "key": "offset_thirdp",
+                                    "type": 1
+                                },
+                                {
+                                    "data": 17797003798229770240,
+                                    "key": "tank",
+                                    "type": 7
                                 }
                             ],
                             "active": true,
-                            "script": "Assets\\Scripts\\RotateTurret2.lua",
+                            "script": "Assets\\Scripts\\Camera.lua",
                             "type": 5
                         },
                         {
@@ -692,6 +708,23 @@
                             "active": true,
                             "script": "Assets\\Scripts\\RotateTurret2.lua",
                             "type": 5
+                        },
+                        {
+                            "InspectorVars": [
+                                {
+                                    "data": 0,
+                                    "key": "offset_thirdp",
+                                    "type": 1
+                                },
+                                {
+                                    "data": 17797003798229770240,
+                                    "key": "tank",
+                                    "type": 7
+                                }
+                            ],
+                            "active": true,
+                            "script": "Assets\\Scripts\\Camera.lua",
+                            "type": 5
                         }
                     ],
                     "UID": 18328112529222926336,
@@ -699,7 +732,7 @@
                     "name": "MainCamera",
                     "position": [
                         0.0,
-                        1.621058702468872,
+                        2.200000047683716,
                         0.0
                     ],
                     "rotation": [
@@ -948,7 +981,7 @@
                         {
                             "InspectorVars": [
                                 {
-                                    "data": 31.91900062561035,
+                                    "data": 10.621000289916992,
                                     "key": "prepare_timer",
                                     "type": 2
                                 },

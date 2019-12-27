@@ -18,8 +18,9 @@ end
 -- Update is called once per frame
 function Camera:Update()
 	--Log(diff.x::toString())
-	transform:SetPositionv(var.tank.transform.position + (diff * var.offset_thirdp))
+	transform:SetPositionv(var.tank.transform.position + diff)--(diff * var.offset_thirdp))
 end
+
 
 
 
