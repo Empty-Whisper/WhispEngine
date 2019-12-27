@@ -9,6 +9,7 @@
 #include "PanelScene.h"
 #include "ModuleObjectManager.h"
 #include "Imgui/imgui_internal.h"
+#include "Brofiler/Brofiler.h"
 
 
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)
@@ -21,6 +22,7 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::Update()
 {
+	BROFILER_CATEGORY("Component Camera", Profiler::Color::OldLace);
 	float3 corners[8];
 	camera->GetAllCorners(corners);
 

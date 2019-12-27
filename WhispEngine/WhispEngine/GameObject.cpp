@@ -11,6 +11,7 @@
 #include "MathGeoLib/include/Geometry/LineSegment.h"
 #include "ModuleResources.h"
 #include "ResourceMesh.h"
+#include "Brofiler/Brofiler.h"
 
 GameObject::GameObject(GameObject * parent) : parent(parent)
 {
@@ -44,6 +45,7 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
+	BROFILER_CATEGORY("Update Components", Profiler::Color::Orange);
 	for (auto i = components.begin(); i != components.end(); ++i) {
 		if ((*i)->IsActive())
 			(*i)->Update();
