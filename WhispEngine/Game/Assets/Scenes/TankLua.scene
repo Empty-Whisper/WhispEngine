@@ -6,8 +6,8 @@
             -25.085678100585938
         ],
         "rotation": [
-            -0.08642803132534027,
-            0.037682462483644485,
+            -0.08642801642417908,
+            0.03768247365951538,
             0.9125779271125793,
             0.3978843688964844
         ]
@@ -662,24 +662,12 @@
                         {
                             "active": true,
                             "aspect_ratio": 1.1223241090774536,
-                            "checkbox_main_camera": false,
+                            "checkbox_main_camera": true,
                             "far_plane": 200.0,
                             "is_main_camera": false,
                             "near_plane": 1.0,
                             "type": 4,
                             "vertical_fov": 68.5999984741211
-                        },
-                        {
-                            "InspectorVars": [
-                                {
-                                    "data": 0.009999999776482582,
-                                    "key": "mult",
-                                    "type": 2
-                                }
-                            ],
-                            "active": true,
-                            "script": "Assets\\Scripts\\RotateTurret2.lua",
-                            "type": 5
                         },
                         {
                             "InspectorVars": [
