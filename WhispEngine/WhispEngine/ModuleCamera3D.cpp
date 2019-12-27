@@ -245,6 +245,8 @@ void ModuleCamera3D::SetGameCamera(Camera * camera)
 		std::vector<GameObject*> gameobjects;
 		App->object_manager->GetChildsFrom(App->object_manager->root, gameobjects);
 
+		ComponentCamera* actual_camera_component = nullptr;
+
 		for (GameObject* go : gameobjects)
 		{
 			ComponentCamera* camera_component = (ComponentCamera*)go->GetComponent(ComponentType::CAMERA);
@@ -252,13 +254,22 @@ void ModuleCamera3D::SetGameCamera(Camera * camera)
 			if (camera_component != nullptr)
 			{
 				camera_component->checkbox_main_camera = false;
+				actual_camera_component = camera_component;
 			}
 		}
 		
-		ComponentCamera* actual_camera_component = (ComponentCamera*)App->object_manager->GetSelected()->GetComponent(ComponentType::CAMERA);
-		actual_camera_component->checkbox_main_camera = true;
-		game_camera = camera;
+		if (App->object_manager->GetSelected() != nullptr)
+		{
+			if ((ComponentCamera*)App->object_manager->GetSelected()->GetComponent(ComponentType::CAMERA) != nullptr)
+			{
+				ComponentCamera* clkicked_camera_component = (ComponentCamera*)App->object_manager->GetSelected()->GetComponent(ComponentType::CAMERA);
+				clkicked_camera_component->checkbox_main_camera = true;
+			}
+			
+		}
 		
+		game_camera = camera;
+
 	}
 }
 
