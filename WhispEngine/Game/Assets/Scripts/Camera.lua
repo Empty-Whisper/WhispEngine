@@ -6,6 +6,7 @@ Camera = {}
 Camera.Variables = {
 		-- Public Variables that will appear in inspector [All must be initialized]
 		tank = nil, --[GameObject]
+		offset_thirdp = 0 --[Slider(-10,10)]
 }
 
 local diff
@@ -16,8 +17,13 @@ end
 
 -- Update is called once per frame
 function Camera:Update()
-	transform:SetPositionv(var.tank.transform.position + diff)
+	--Log(diff.x::toString())
+	transform:SetPositionv(var.tank.transform.position + (diff * var.offset_thirdp))
 end
+
+
+
+
 
 
 
