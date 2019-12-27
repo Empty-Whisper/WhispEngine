@@ -84,6 +84,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 
 update_status ModuleGUI::PreUpdate()
 {
+	BROFILER_CATEGORY("GUI", Profiler::Color::Purple);
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	
@@ -468,6 +469,7 @@ void ModuleGUI::OpenSaveWindow(bool create_empty)
 
 update_status ModuleGUI::PostUpdate()
 {
+	BROFILER_CATEGORY("GUI", Profiler::Color::Purple);
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

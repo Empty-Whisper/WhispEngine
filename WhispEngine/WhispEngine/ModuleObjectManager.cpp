@@ -76,6 +76,7 @@ update_status ModuleObjectManager::Update()
 
 void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
+	BROFILER_CATEGORY("Update GameObject", Profiler::Color::LightBlue);
 	if (obj->IsActive()) {
 
 		obj->Update();
@@ -286,6 +287,7 @@ void ModuleObjectManager::DeleteObject(GameObject * obj)
 
 void ModuleObjectManager::MousePicking()
 {
+	BROFILER_CATEGORY("Mouse Picking", Profiler::Color::HotPink);
 	//Calculate Scene & Mouse vectors
 	int window_x, window_y;
 	SDL_GetWindowPosition(App->window->window, &window_x, &window_y);

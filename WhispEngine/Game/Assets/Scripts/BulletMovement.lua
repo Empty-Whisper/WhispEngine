@@ -19,16 +19,19 @@ function BulletMovement:Start()
 end
 
 function BulletMovement:Update()
-	pos = transform.position
+	Log(var.prepare_timer)
+	local pos = transform.position
 	transform:SetPositionv(pos + (transform.forward * (var.speed*Time.deltaTime)))
 
 	--Log(var.prepare_timer)
 	--Log(Time.time)
-	--if Time.time - var.prepare_timer >= time_disappear then
-		--GameObject.Destroy(object)
-	--end
+	if Time.time - var.prepare_timer >= time_disappear then
+		GameObject.Destroy(object)
+	end
 
 end
+
+
 
 
 

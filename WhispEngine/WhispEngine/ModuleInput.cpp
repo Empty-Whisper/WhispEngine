@@ -117,6 +117,7 @@ bool ModuleInput::Init(nlohmann::json &node)
 // Called every draw update
 update_status ModuleInput::PreUpdate()
 {
+	BROFILER_CATEGORY("Input", Profiler::Color::Ivory);
 	SDL_PumpEvents();
 
 	UpdateInput();
@@ -174,7 +175,6 @@ update_status ModuleInput::PollEvents()
 
 void ModuleInput::UpdateInput()
 {
-	BROFILER_CATEGORY("Input", Profiler::Color::Ivory);
 	UpdateKeyStates();
 
 	UpdateButtonStates();

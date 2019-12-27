@@ -510,6 +510,7 @@ const float Camera::GetAspectRatio() const
 
 void Camera::DrawInsideFrustum()
 {
+	BROFILER_CATEGORY("Draw Inside Frustum", Profiler::Color::OrangeRed);
 	//Keep all game objects of the scene
 	std::vector<GameObject*> game_objects;
 	App->object_manager->GetChildsFrom(App->object_manager->root, game_objects);
