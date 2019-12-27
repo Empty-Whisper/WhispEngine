@@ -1,33 +1,29 @@
 function Init()
--- BulletMovement.lua
+	-- BulletMovement.lua
 
-BulletMovement = {}
+	local BulletMovement = {}
 
-BulletMovement.Variables = {
+	BulletMovement.Variables = {
 		-- Public Variables that will appear in inspector [All must be initialized]
-		speed = 10,
-}
+		speed = 10
+	}
 
-local prepare_timer = Time.time
-local shot = true
-local time_disappear = 0.5
+	local prepare_timer = 0
+	local time_disappear = 0.5
 
-function BulletMovement:Start()
-	prepare_timer = Time.time
-	
-end
-
-function BulletMovement:Update()
-	local pos = transform.position
-	transform:SetPositionv(pos + (transform.forward * (var.speed*Time.deltaTime)))
-
-	if Time.time - prepare_timer >= time_disappear then
-		GameObject.Destroy(object)
+	function BulletMovement:Start()
+		prepare_timer = Time.time
 	end
 
-end
+	function BulletMovement:Update()
+		local pos = transform.position
+		transform:SetPositionv(pos + (transform.forward * (var.speed * Time.deltaTime)))
 
-return BulletMovement
+		if Time.time - prepare_timer >= time_disappear then
+			GameObject.Destroy(gameObject)
+		end
+	end
 
+	return BulletMovement
 end
 

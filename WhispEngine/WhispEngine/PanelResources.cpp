@@ -166,7 +166,8 @@ void PanelResources::File::Draw()
 				ImGui::PushID(*file);
 				if (ImGui::BeginPopupContextItem("delete_file")) {
 					if (ImGui::Button("Delete")) {
-						App->gui->resources->to_delete = *file;
+						if (!(*file)->is_folder) // TODO: Fix last item of tree cannot be deleted
+							App->gui->resources->to_delete = *file;
 					}
 					ImGui::EndPopup();
 				}

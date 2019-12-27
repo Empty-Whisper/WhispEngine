@@ -37,7 +37,6 @@ void ComponentScript::Update()
 	{
 		if (!start_done) {
 			if (luaL_dofile(App->scripting->GetState(), script_path.c_str()) == 0) {
-				script = luabridge::getGlobal(App->scripting->GetState(), "Init")();
 				UpdateInspectorVars();
 			}
 			else {
@@ -45,7 +44,7 @@ void ComponentScript::Update()
 			}
 		}
 
-		luabridge::setGlobal(App->scripting->GetState(), object, "object");
+		luabridge::setGlobal(App->scripting->GetState(), object, "gameObject");
 		luabridge::setGlobal(App->scripting->GetState(), object->transform, "transform");
 		if (!public_vars.empty()) {
 			SetInspectorVars();
