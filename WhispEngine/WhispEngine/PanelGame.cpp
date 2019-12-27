@@ -22,7 +22,8 @@ void PanelGame::Update()
 
 	if (ImGui::Begin("Game", &active))
 	{
-	
+		focused = ImGui::IsWindowFocused();
+
 		ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
 
 		//Check if window is Resized

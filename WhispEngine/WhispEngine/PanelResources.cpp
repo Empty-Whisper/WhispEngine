@@ -81,7 +81,7 @@ void PanelResources::Update()
 			ImGui::TreePop();
 		}
 		if (to_delete != nullptr) {
-			App->file_system->RemoveFile(to_delete->path.c_str());
+			App->file_system->RemoveFile(to_delete->path.c_str()); //TODO: if has meta delete .meta and resource
 			to_refresh = true;
 			to_delete = nullptr;
 		}

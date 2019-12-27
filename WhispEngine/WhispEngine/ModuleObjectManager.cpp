@@ -6,6 +6,8 @@
 #include "PanelScene.h"
 
 #include "PanelHierarchy.h"
+#include "PanelGame.h"
+
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleSceneIntro.h"
@@ -43,7 +45,7 @@ update_status ModuleObjectManager::Update()
 	glEnable(GL_LIGHTING);
 
 	//MousePicking
-	if (App->input->GetMouseButtonDown(1) && !App->input->GetKey(SDL_SCANCODE_LALT))
+	if (!App->gui->game->focused && App->input->GetMouseButtonDown(1) && !App->input->GetKey(SDL_SCANCODE_LALT))
 		MousePicking();
 
 	//Update GO

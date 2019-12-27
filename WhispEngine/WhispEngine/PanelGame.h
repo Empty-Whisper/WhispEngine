@@ -18,6 +18,8 @@ public:
 	const ImVec2 GetPanelSize();
 	const ImVec2 GetPanelPos();
 
+	bool focused = false;
+
 private:
 
 	ImVec2 panel_size = { 0.f, 0.f };
