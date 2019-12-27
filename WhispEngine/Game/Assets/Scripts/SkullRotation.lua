@@ -1,4 +1,4 @@
-
+function Init()
 -- SkullRotation.lua
 
 SkullRotation = {}
@@ -22,10 +22,6 @@ function SkullRotation:Update()
 	transform:SetRotation(Quaternion.RotateY(mult))
 end
 
+return SkullRotation
 
-
-
-
-
-
-
+end

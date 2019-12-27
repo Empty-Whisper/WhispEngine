@@ -1,4 +1,4 @@
-
+function Init()
 -- MoveTank.lua
 
 MoveTank = {}
@@ -32,6 +32,9 @@ function MoveTank:Update()
 	end
 end
 
+return MoveTank
+
+end
 
 
 

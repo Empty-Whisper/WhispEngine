@@ -119,7 +119,7 @@
                                         {
                                             "InspectorVars": [
                                                 {
-                                                    "data": "Assets\\Prefabs\\skull_head.prefab",
+                                                    "data": "Assets\\Prefabs\\primitive_cube.prefab",
                                                     "key": "bullet",
                                                     "type": 8
                                                 },
@@ -156,7 +156,20 @@
                                     "static": false
                                 }
                             ],
-                            "Components": null,
+                            "Components": [
+                                {
+                                    "InspectorVars": [
+                                        {
+                                            "data": 0.009999999776482582,
+                                            "key": "mult",
+                                            "type": 2
+                                        }
+                                    ],
+                                    "active": true,
+                                    "script": "Assets\\Scripts\\RotateTurret2.lua",
+                                    "type": 5
+                                }
+                            ],
                             "UID": 9166001808016059392,
                             "active": true,
                             "name": "TankTurret",
@@ -620,30 +633,6 @@
                             "active": true,
                             "script": "Assets\\Scripts\\MoveTank.lua",
                             "type": 5
-                        },
-                        {
-                            "InspectorVars": [
-                                {
-                                    "data": 0.004999999888241291,
-                                    "key": "mult",
-                                    "type": 2
-                                }
-                            ],
-                            "active": true,
-                            "script": "Assets\\Scripts\\RotateTurret2.lua",
-                            "type": 5
-                        },
-                        {
-                            "InspectorVars": [
-                                {
-                                    "data": 7.099999904632568,
-                                    "key": "speed",
-                                    "type": 2
-                                }
-                            ],
-                            "active": true,
-                            "script": "Assets\\Scripts\\MoveTank.lua",
-                            "type": 5
                         }
                     ],
                     "UID": 17797003798229770240,
@@ -672,8 +661,8 @@
                     "Components": [
                         {
                             "active": true,
-                            "aspect_ratio": 1.496147871017456,
-                            "checkbox_main_camera": true,
+                            "aspect_ratio": 1.1223241090774536,
+                            "checkbox_main_camera": false,
                             "far_plane": 200.0,
                             "is_main_camera": false,
                             "near_plane": 1.0,
@@ -683,24 +672,7 @@
                         {
                             "InspectorVars": [
                                 {
-                                    "data": 0,
-                                    "key": "offset_thirdp",
-                                    "type": 1
-                                },
-                                {
-                                    "data": 17797003798229770240,
-                                    "key": "tank",
-                                    "type": 7
-                                }
-                            ],
-                            "active": true,
-                            "script": "Assets\\Scripts\\Camera.lua",
-                            "type": 5
-                        },
-                        {
-                            "InspectorVars": [
-                                {
-                                    "data": 0.004999999888241291,
+                                    "data": 0.009999999776482582,
                                     "key": "mult",
                                     "type": 2
                                 }
@@ -980,11 +952,6 @@
                     "Components": [
                         {
                             "InspectorVars": [
-                                {
-                                    "data": 10.621000289916992,
-                                    "key": "prepare_timer",
-                                    "type": 2
-                                },
                                 {
                                     "data": 10,
                                     "key": "speed",
