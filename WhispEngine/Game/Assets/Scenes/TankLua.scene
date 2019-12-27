@@ -1,15 +1,15 @@
 {
     "Camera": {
         "position": [
-            -8.388465881347656,
-            7.747066974639893,
-            -6.668240547180176
+            5.823075294494629,
+            10.830676078796387,
+            -5.033623695373535
         ],
         "rotation": [
-            -0.2886406183242798,
-            0.012657184153795242,
-            0.9564347863197327,
-            0.04193983972072601
+            0.3453529477119446,
+            -0.1006217747926712,
+            0.8958145976066589,
+            0.26100364327430725
         ]
     },
     "GameObjects": [
@@ -635,7 +635,7 @@
                     "Components": [
                         {
                             "active": true,
-                            "aspect_ratio": 1.3314710855484009,
+                            "aspect_ratio": 2.1857411861419678,
                             "checkbox_main_camera": false,
                             "far_plane": 200.0,
                             "is_main_camera": false,
@@ -2743,59 +2743,34 @@
                     "static": false
                 },
                 {
-                    "Children": [
+                    "Children": null,
+                    "Components": [
                         {
-                            "Children": null,
-                            "Components": [
-                                {
-                                    "Resource": 12168412610401695744,
-                                    "active": true,
-                                    "face color": [
-                                        1.0,
-                                        1.0,
-                                        1.0,
-                                        1.0
-                                    ],
-                                    "type": 2,
-                                    "wire color": [
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ]
-                                },
-                                {
-                                    "MeshId": 18151380572951554048,
-                                    "active": true,
-                                    "type": 1
-                                }
-                            ],
-                            "UID": 4404804595183618048,
+                            "Resource": 1121053328114031232,
                             "active": true,
-                            "name": "Skybox",
-                            "position": [
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "rotation": [
+                            "face color": [
                                 1.0,
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "scale": [
                                 1.0,
                                 1.0,
                                 1.0
                             ],
-                            "static": false
+                            "type": 2,
+                            "wire color": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ]
+                        },
+                        {
+                            "MeshId": 15843117866308825088,
+                            "active": true,
+                            "type": 1
                         }
                     ],
-                    "Components": null,
-                    "UID": 13298774423349227520,
+                    "UID": 926199573481449600,
                     "active": true,
-                    "name": "skybox",
+                    "name": "Skybox",
                     "position": [
                         0.0,
                         0.0,
@@ -2808,9 +2783,9 @@
                         0.0
                     ],
                     "scale": [
-                        70.0,
-                        70.0,
-                        70.0
+                        100.0,
+                        100.0,
+                        100.0
                     ],
                     "static": false
                 }
