@@ -48,8 +48,11 @@ void PanelScene::Update()
 		ImGuizmo::SetRect(panel_pos.x, panel_pos.y, current_viewport_size.x, current_viewport_size.y);
 
 		// Render inside Window
-		ImGui::Image((ImTextureID)App->renderer3D->scene_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
-		
+		if (App->renderer3D->is_zbuffer_active)
+			ImGui::Image((ImTextureID)App->renderer3D->scene_viewport->z_buffer, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+		else
+			ImGui::Image((ImTextureID)App->renderer3D->scene_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+
 		//  Check if some obj is selected
 		if (App->object_manager->GetSelected() != nullptr)
 		{
@@ -95,7 +98,10 @@ void PanelScene::Update()
 			}
 			
 			ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
-			ImGui::Image((ImTextureID)App->renderer3D->game_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+			if (App->renderer3D->is_zbuffer_active)
+				ImGui::Image((ImTextureID)App->renderer3D->game_viewport->z_buffer, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+			else
+				ImGui::Image((ImTextureID)App->renderer3D->game_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
 
 		}
 		ImGui::End();

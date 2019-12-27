@@ -38,7 +38,10 @@ void PanelGame::Update()
 		panel_pos = ImGui::GetWindowPos();
 	
 		// Render inside Window
-		ImGui::Image((ImTextureID)App->renderer3D->game_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+		if(App->renderer3D->is_zbuffer_active)
+			ImGui::Image((ImTextureID)App->renderer3D->game_viewport->z_buffer, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+		else
+			ImGui::Image((ImTextureID)App->renderer3D->game_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
 		
 	}
 	ImGui::End();

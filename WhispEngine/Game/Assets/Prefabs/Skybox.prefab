@@ -1,0 +1,51 @@
+{
+    "GameObjects": [
+        {
+            "Children": null,
+            "Components": [
+                {
+                    "Resource": 1121053328114031232,
+                    "active": true,
+                    "face color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2,
+                    "wire color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "MeshId": 15843117866308825088,
+                    "active": true,
+                    "type": 1
+                }
+            ],
+            "UID": 926199573481449600,
+            "active": true,
+            "name": "Skybox",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                7000.0,
+                7000.0,
+                7000.0
+            ],
+            "static": false
+        }
+    ]
+}
