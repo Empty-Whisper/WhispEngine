@@ -21,7 +21,7 @@ function ShotTank:Start()
 end
 
 function ShotTank:Update()
-	Log(transform.gposition:toString())
+	--Log(transform.gposition:toString())
 	if input.getMouseDown(1) then
 		instance = GameObject.Instantiate(var.bullet)
 		pos = transform.gposition
@@ -43,6 +43,7 @@ function ShotTank:Update()
 	end
 
 end
+
 
 
 

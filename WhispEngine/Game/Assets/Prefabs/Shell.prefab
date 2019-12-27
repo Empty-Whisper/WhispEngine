@@ -28,7 +28,12 @@
                 {
                     "InspectorVars": [
                         {
-                            "data": 0.0,
+                            "data": 3211201020940491264,
+                            "key": "cannon",
+                            "type": 7
+                        },
+                        {
+                            "data": 3.568000078201294,
                             "key": "prepare_timer",
                             "type": 2
                         },
