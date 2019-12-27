@@ -65,10 +65,7 @@ void PanelConfiguration::Update()
 		{
 			Hardware();
 		}
-		if (ImGui::CollapsingHeader("Frustum Options"))
-		{
-			Frustum();
-		}
+		
 	}
 	ImGui::End();
 }
