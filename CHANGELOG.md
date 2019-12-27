@@ -1,5 +1,53 @@
 # Changelog
 
+## [Assignment3.0] - 26/12/2019
+### Added
+
+- Integrate Lua and LuaBridge
+- Scripting System
+- Scripting Functions
+	- Log
+	- Input
+		- Keyboard
+		- Mouse
+	- Gameobject
+		- active
+		- name
+		- transform
+		- Instantiate
+		- Destroy
+	- transform
+		- position
+		- rotation
+		- scale
+		- forward, up, right
+		- set position, rotation and scale
+		- Find, GetChild...
+		- SetParent
+	- Vector3
+	- Quaternion
+	- Time
+	- Random
+- Component Script with editable variables
+- Lua Macros for inspector
+- Play, Pause and One Frame system with scripts
+- Drag&Drop scripts in GameObjects inspector
+- More Brofiler Categories
+- Prefabs (Save and Load)
+- Beginning of web page
+- Script Editor in engine
+- Shortcut Panel Editor
+- Saves Camera rotation when save scene
+- Tank base scripts
+
+### Changed
+
+- Panel Resources Optimized :D (5 ms won)
+
+### Removed
+
+- glmath.h
+
 ## [Assignment2] - 24/11/2019
 ### Added
 

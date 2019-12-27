@@ -1,7 +1,7 @@
 ﻿# 3D Game Engine: WhispEngine
 
 ## Current Version
-v Assignment2.0
+v Assignment3.0
 
 ## Description
 This is a 3D Game Engine made by Students at CITM (UPC) from Spain. 
@@ -11,14 +11,6 @@ Go to our github release page and download the las version .zip :
 [EmptyWhispers](https://github.com/Empty-Whisper)
 
 Extract .zip files inside a folder and open the .exe file.
-
-## For Correction
-
-There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct better, more visual.
-
-* Octree: Main Menu Bar -> Octree -> Show scene
-* MousePicking: Main Menu Bar -> Mouse picking RayCast
-* AABB/OBB: In each ComponentMesh on inspector can change to visualize the two bounging boxes, aabb(green) obb(blue)
 
 #### Contols
 * View around:  	         	Right click
@@ -50,7 +42,16 @@ There is a Menu in Main Menu Bar called "Debug Tools" to be able to correct bett
 
 ## Innovations Assignment 3
 
-* ...
+* Panel Edit Shortcut
+* Save and Instance Prefabs
+* Lua component script in inspector editable in real time
+* Macros in lua
+	* Slider (int & float)
+	* Drag (int & float)
+	* Input (int & float)
+	* GameObject
+	* Prefab
+* Script Editor in Engine
 
 ## Innovations Assignment 2
 
