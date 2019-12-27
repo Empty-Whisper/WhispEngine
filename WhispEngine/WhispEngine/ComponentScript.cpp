@@ -4,7 +4,6 @@
 #include "FileSystem.h"
 #include "GameObject.h"
 #include "ModuleScripting.h"
-#include "Lua/LuaBridge/LuaBridge.h"
 #include <fstream>
 #include "Imgui/imgui_internal.h"
 #include "ModuleObjectManager.h"
@@ -16,7 +15,9 @@
 
 #include "Brofiler/Brofiler.h"
 
-ComponentScript::ComponentScript(GameObject* parent) : Component(parent,ComponentType::SCRIPT)
+ComponentScript::ComponentScript(GameObject* parent) 
+	: Component(parent,ComponentType::SCRIPT), 
+	  script(luabridge::LuaRef(App->scripting->GetState()))
 {
 }
 

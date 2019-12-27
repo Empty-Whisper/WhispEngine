@@ -1,5 +1,7 @@
 #pragma once
 #include "Component.h"
+#include "ModuleScripting.h"
+#include "Lua/LuaBridge/LuaBridge.h"
 
 class ComponentScript :
 	public Component
@@ -61,6 +63,8 @@ private:
 
 private:
 	std::map<std::string, PublicVar*> public_vars;
+
+	luabridge::LuaRef script;
 
 	bool start_done = false;
 };

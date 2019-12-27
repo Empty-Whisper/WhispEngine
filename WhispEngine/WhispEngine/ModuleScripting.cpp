@@ -20,17 +20,82 @@ ModuleScripting::~ModuleScripting()
 
 bool ModuleScripting::Start()
 {
-	luaL_loadfile(L, "Assets/Internal/GameObject.lua");
+	if (luaL_dofile(L, "Assets/Internal/Model.lua") == 0) {
+		luabridge::LuaRef i = luabridge::getGlobal(L, "Init");
+		luabridge::LuaRef table = i();
+		if (table.isTable()) {
+			LOG("%f", table["speed"].cast<float>());
+			table["Update"]();
+			table["Update"]();
+			table["Update"]();
+			LOG("%f", table["speed"].cast<float>());
+
+			luaL_dofile(L, "Assets/Internal/Model.lua");
+			luabridge::LuaRef j = luabridge::getGlobal(L, "Init");
+			luabridge::LuaRef table2 = j();
+			LOG("%f", table["speed"].cast<float>());
+			LOG("2: %f", table2["speed"].cast<float>());
+			/*if (table["speed"].isFunction()) {
+				luabridge::LuaRef func = table[func_name.c_str()];
+				func();
+			}
+			else {
+				LOG("%s is not a function or was not found", func_name.c_str());
+			}*/
+		}
+		/*else {
+			LOG("Cannot find table %s", _name);
+		}*/
+	}
+	else {
+		LOG("Lua Error: %s", lua_tostring(L, -1));
+	}
+	luabridge::LuaRef f = luabridge::newTable(L);
+	auto jaja = f["Update"]();
+
 	return true;
 }
 
 update_status ModuleScripting::PreUpdate()
 {
+	if (luaL_dofile(L, "Assets/Internal/Model.lua") == 0) {
+		luabridge::LuaRef i = luabridge::getGlobal(L, "Init");
+		luabridge::LuaRef table = i();
+		if (table.isTable()) {
+			LOG("%f", table["speed"].cast<float>());
+			table["Update"]();
+			table["Update"]();
+			table["Update"]();
+			LOG("%f", table["speed"].cast<float>());
+
+			luaL_dofile(L, "Assets/Internal/Model.lua");
+			luabridge::LuaRef j = luabridge::getGlobal(L, "Init");
+			luabridge::LuaRef table2 = j();
+			LOG("%f", table["speed"].cast<float>());
+			LOG("2: %f", table2["speed"].cast<float>());
+			/*if (table["speed"].isFunction()) {
+				luabridge::LuaRef func = table[func_name.c_str()];
+				func();
+			}
+			else {
+				LOG("%s is not a function or was not found", func_name.c_str());
+			}*/
+		}
+		/*else {
+			LOG("Cannot find table %s", _name);
+		}*/
+	}
+	else {
+		LOG("Lua Error: %s", lua_tostring(L, -1));
+	}
+	luabridge::LuaRef f = luabridge::newTable(L);
+	auto jaja = f["Update"]();
 	return update_status::UPDATE_CONTINUE;
 }
 
 update_status ModuleScripting::Update()
 {
+	ExecuteFunctionScript("Assets/Internal/Model.lua", "Model", Functions::UPDATE);
 	return update_status::UPDATE_CONTINUE;
 }
 
@@ -40,9 +105,11 @@ void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name,
 	std::string func_name;
 	switch (function)
 	{
-	case ModuleScripting::START:
+	case ModuleScripting::START: {
 		func_name.assign("Start");
 		result = luaL_dofile(L, path);
+		luabridge::LuaRef f = luabridge::newTable(L);
+	}
 		break;
 	case ModuleScripting::PREUPDATE:
 		func_name.assign("PreUpdate");
