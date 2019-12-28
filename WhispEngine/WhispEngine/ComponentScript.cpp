@@ -69,7 +69,8 @@ void ComponentScript::Update()
 		start_done = true;
 	}
 	else {
-		start_done = false;
+		if (App->GetState() != Application::PAUSED)
+			start_done = false;
 	}
 }
 
