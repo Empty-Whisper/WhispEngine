@@ -76,10 +76,14 @@ public:
 	bool fill = true;
 	bool vsync = true;
 
-	Viewport* game_viewport;
-	Viewport* zbuffer_viewport;
-	Viewport* scene_viewport;
+	Viewport* game_viewport = nullptr;
+	Viewport* zbuffer_viewport = nullptr;
+	Viewport* scene_viewport = nullptr;
 	bool is_rendering_scene = false;
+	bool is_rendering_game = false;
+	bool is_rendering_zbuffer = false;
+
+
 	bool is_zbuffer_active = false;
 	
 

@@ -202,24 +202,27 @@ update_status ModuleRenderer3D::Update()
 		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
 
 		is_rendering_scene = true;
+		is_rendering_game = false;
+
+		is_rendering_zbuffer = false;
+
+
 	}
-	else
+	else if(!is_rendering_game)
 	{
 		// Game =============================================================================================
 		GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
 		GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);
 		GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->z_buffer);
 
-		// zBuffer =============================================================================================
-		GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
-		GetGameViewport()->UpdateBind(App->renderer3D->zbuffer_viewport->render_texture);
-		GetGameViewport()->UpdateBind(App->renderer3D->zbuffer_viewport->z_buffer);
 
 		//Dockspace
 		if (game_viewport->can_resize)
 		{
 			ResizeDockspace(App->gui->game->GetPanelSize(), game_viewport, App->camera->GetGameCamera());
+			ResizeDockspace(App->gui->game->GetPanelSize(), zbuffer_viewport, App->camera->GetGameCamera());
 			game_viewport->can_resize = false;
+			zbuffer_viewport->can_resize = false;
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -231,6 +234,35 @@ update_status ModuleRenderer3D::Update()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
 
+		is_rendering_game = true;
+		is_rendering_zbuffer = false;
+
+	}
+	else if(!is_rendering_zbuffer)
+	{
+
+		// zBuffer =============================================================================================
+		GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
+		GetGameViewport()->UpdateBind(App->renderer3D->zbuffer_viewport->render_texture);
+		GetGameViewport()->UpdateBind(App->renderer3D->zbuffer_viewport->z_buffer);
+
+		//Dockspace
+		if (zbuffer_viewport->can_resize)
+		{
+			ResizeDockspace(App->gui->game->GetPanelSize(), zbuffer_viewport, App->camera->GetGameCamera());
+			zbuffer_viewport->can_resize = false;
+		}
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glLoadIdentity();
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(App->camera->GetGameCamera()->GetViewMatrix().ptr());
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
+
+		is_rendering_zbuffer = true;
 		is_rendering_scene = false;
 	}
 
@@ -402,11 +434,15 @@ void ModuleRenderer3D::UpdateTextureBuffers(int width, int height, Viewport* vie
 	//glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Depth and Texture to Frame buffer
-	/*if(!is_zbuffer_active && viewport != zbuffer_viewport)
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, viewport->depth_render_buffer);
+	if (viewport != zbuffer_viewport)
+	{
+		if (!is_zbuffer_active)
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, viewport->depth_render_buffer);
+		else
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);
+	}
 	else
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);*/
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, viewport->render_texture, 0);
 
