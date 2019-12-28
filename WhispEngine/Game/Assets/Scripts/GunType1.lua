@@ -18,7 +18,6 @@ local num = 0
 function GunType1:Start()
 	num = Random.Rangef(1, 4)
 	transform:SetScale(num, num, num)
-	Log(num)
 end
 
 
@@ -30,6 +29,8 @@ end
 return GunType1
 
 end
+
+
 
 
 

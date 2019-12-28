@@ -7,7 +7,7 @@
         ],
         "rotation": [
             -0.09195276349782944,
-            0.014761985279619694,
+            0.01476199273020029,
             0.9830664396286011,
             0.15782013535499573
         ]
@@ -672,7 +672,7 @@
                     "Components": [
                         {
                             "active": true,
-                            "aspect_ratio": 1.7924216985702515,
+                            "aspect_ratio": 1.7737704515457153,
                             "checkbox_main_camera": false,
                             "far_plane": 10000.0,
                             "is_main_camera": false,
@@ -939,13 +939,13 @@
                         {
                             "InspectorVars": [
                                 {
-                                    "data": 0.019999999552965164,
+                                    "data": 0.10000000149011612,
                                     "key": "speed",
                                     "type": 2
                                 }
                             ],
                             "active": true,
-                            "script": "Assets\\Scripts\\BulletRotation.lua",
+                            "script": "Assets\\Scripts\\SkullRotation.lua",
                             "type": 5
                         }
                     ],

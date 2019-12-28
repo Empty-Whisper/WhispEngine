@@ -1,5 +1,7 @@
 #include "ModuleObjectManager.h"
 #include "ComponentTransform.h"
+#include "ComponentMaterial.h"
+
 #include "Application.h"
 #include "Brofiler/Brofiler.h"
 #include "Imgui/ImGuizmo.h"
@@ -255,6 +257,7 @@ void ModuleObjectManager::LuaRegister()
 		.beginNamespace("GameObject")
 			.addFunction("Instantiate", &ModuleObjectManager::InstantiatePrefab)
 			.addFunction("Destroy", &ModuleObjectManager::DeleteObject)
+			.addFunction("SetColor", &ModuleObjectManager::ChangeColorRGB)
 		.endNamespace()
 		.beginClass<ComponentTransform>("transform")
 			.addData("gameObject", &ComponentTransform::object, false)
@@ -295,6 +298,12 @@ void ModuleObjectManager::DeleteObject(GameObject * obj)
 {
 	if(obj != nullptr)
 		to_delete.push_back(obj);
+}
+
+void ModuleObjectManager::ChangeColorRGB(GameObject * obj, const float &r, const float &g, const float &b, const float &a)
+{
+	if(obj != nullptr)
+		((ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL))->SetFaceColor(r, g, b, a);
 }
 
 

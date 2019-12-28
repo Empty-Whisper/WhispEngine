@@ -71,6 +71,7 @@ public:
 	static int LRandomRange(int min, int max);
 	static GameObject* InstantiatePrefab(const char* path);
 	static void DeleteObject(GameObject* obj);
+	static void ChangeColorRGB(GameObject * obj, const float &r, const float &g, const float &b, const float &a);
 
 	void MousePicking(); 
 
