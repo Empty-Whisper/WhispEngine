@@ -18,8 +18,10 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Camera3D");
 
+#ifndef GAME_BUILD
 	scene_camera = CreateCamera();
 	scene_camera->SetFarZ(450.f);
+#endif
 	game_camera = CreateCamera();
 }
 

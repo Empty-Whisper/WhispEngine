@@ -44,7 +44,13 @@ Extract .zip files inside a folder and open the .exe file.
 
 * Panel Edit Shortcut
 * Save and Instance Prefabs
-* Lua component script in inspector editable in real time
+* Lua component script in inspector editable in real time. Allowed types:
+	* Int
+	* Float
+	* String
+	* Bool
+	* GameObject
+	* Prefab
 * Macros in lua
 	* Slider (int & float)
 	* Drag (int & float)

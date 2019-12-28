@@ -26,7 +26,13 @@
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("SceneIntro");
+#ifndef GAME_BUILD
 	octree = new OctreeTree(float3(-100, -100, -100), float3(100, 100, 100), 1);
+#else
+	show_grid = false;
+	show_octree = false;
+	show_mouse_raycast = false;
+#endif
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -217,17 +223,20 @@ bool ModuleSceneIntro::LoadScene(const char* scene)
 	nlohmann::json scene_file = App->file_system->OpenFile(scene);
 	
 	Camera* cam = App->camera->GetSceneCamera();
-	cam->SetTransformPosition(App->json->GetFloat3("position", scene_file["Camera"]));
-	Quat r = App->json->GetQuaternion("rotation", scene_file["Camera"]);
-	cam->SetVectorDirectionFront(-r.WorldZ());
-	cam->SetVectorDirectionUp(r.WorldY());
+	if (cam != nullptr) {
+		cam->SetTransformPosition(App->json->GetFloat3("position", scene_file["Camera"]));
+		Quat r = App->json->GetQuaternion("rotation", scene_file["Camera"]);
+		cam->SetVectorDirectionFront(-r.WorldZ());
+		cam->SetVectorDirectionUp(r.WorldY());
+	}
 
 	scene_path.assign(scene);
 
 	ret = App->object_manager->LoadGameObjects(scene_file["GameObjects"]);
 	App->object_manager->LoadScripts(scene_file["GameObjects"]);
 
-	octree->Recalculate();
+	if (octree != nullptr)
+		octree->Recalculate();
 
 	return ret;
 }

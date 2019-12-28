@@ -58,11 +58,12 @@
                 "borderless": false,
                 "fullscreen": false,
                 "fullscreen_desktop": false,
-                "resizable": true
+                "resizable": true,
+				"maximized": true
             },
-            "height": 1024,
+            "height": 768,
             "size": 1,
-            "width": 1280
+            "width": 1024
         }
     }
 }
