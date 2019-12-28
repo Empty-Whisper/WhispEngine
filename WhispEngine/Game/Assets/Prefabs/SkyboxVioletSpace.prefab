@@ -1,0 +1,51 @@
+{
+    "GameObjects": [
+        {
+            "Children": null,
+            "Components": [
+                {
+                    "Resource": 11522088549591910400,
+                    "active": true,
+                    "face color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": 2,
+                    "wire color": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "MeshId": 5475609839322702848,
+                    "active": true,
+                    "type": 1
+                }
+            ],
+            "UID": 14620265250966218752,
+            "active": true,
+            "name": "SkyboxVioletSpace",
+            "position": [
+                0.0,
+                0.0,
+                -0.32417353987693787
+            ],
+            "rotation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                7000.0,
+                7000.0,
+                7000.0
+            ],
+            "static": false
+        }
+    ]
+}

@@ -1,16 +1,15 @@
 {
     "Camera": {
         "position": [
-
-            14.187661170959473,
-            8.0999174118042,
-            -2.5562326908111572
+            -9.744540214538574,
+            7.389194965362549,
+            -9.33456039428711
         ],
         "rotation": [
-            0.5670419335365295,
-            -0.127281054854393,
-            0.7940376400947571,
-            0.17823383212089539
+            -0.17573463916778564,
+            0.011625169776380062,
+            0.9822221994400024,
+            0.06497538834810257
         ]
     },
     "GameObjects": [
@@ -118,7 +117,6 @@
                                     "Children": null,
                                     "Components": [
                                         {
-
                                             "InspectorVars": [
                                                 {
                                                     "data": "Assets\\Prefabs\\Bullet.prefab",
@@ -161,7 +159,7 @@
                             "Components": [
                                 {
                                     "active": true,
-                                    "script": "D:\\Christian\\Github\\WhispEngine\\WhispEngine\\Game\\Assets\\Scripts\\RotateTurret.lua",
+                                    "script": "NONE",
                                     "type": 5
                                 }
                             ],
@@ -624,6 +622,13 @@
                     ],
                     "Components": [
                         {
+                            "InspectorVars": [
+                                {
+                                    "data": 7.099999904632568,
+                                    "key": "speed",
+                                    "type": 2
+                                }
+                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\MoveTank.lua",
                             "type": 5
@@ -655,8 +660,7 @@
                     "Components": [
                         {
                             "active": true,
-
-                            "aspect_ratio": 1.060185194015503,
+                            "aspect_ratio": 1.7449455261230469,
                             "checkbox_main_camera": false,
                             "far_plane": 10000.0,
                             "is_main_camera": false,
@@ -665,7 +669,6 @@
                             "vertical_fov": 70.0
                         },
                         {
-
                             "InspectorVars": [
                                 {
                                     "data": 0,
@@ -900,7 +903,7 @@
                             "Components": [
                                 {
                                     "active": true,
-                                    "script": "Assets\\Scripts\\SkullRotation.lua",
+                                    "script": "NONE",
                                     "type": 5
                                 }
                             ],
@@ -928,6 +931,13 @@
                     ],
                     "Components": [
                         {
+                            "InspectorVars": [
+                                {
+                                    "data": 10,
+                                    "key": "speed",
+                                    "type": 1
+                                }
+                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\BulletMovement.lua",
                             "type": 5
@@ -962,7 +972,6 @@
                                     "Children": null,
                                     "Components": [
                                         {
-
                                             "Resource": 6329137884315130880,
                                             "active": true,
                                             "face color": [
@@ -1959,7 +1968,7 @@
                                     "position": [
                                         13.38798999786377,
                                         -33.75503921508789,
-                                        -9.383451811117993e-07
+                                        -9.383452379552182e-07
                                     ],
                                     "rotation": [
                                         1.0,
@@ -2776,7 +2785,7 @@
                     "Children": null,
                     "Components": [
                         {
-                            "Resource": 1121053328114031232,
+                            "Resource": 14404646427434612736,
                             "active": true,
                             "face color": [
                                 1.0,
@@ -2793,18 +2802,112 @@
                             ]
                         },
                         {
-                            "MeshId": 15843117866308825088,
+                            "MeshId": 9697982218714583040,
                             "active": true,
                             "type": 1
                         }
                     ],
-                    "UID": 926199573481449600,
+                    "UID": 11658956070871107584,
                     "active": true,
                     "name": "Skybox",
                     "position": [
                         0.0,
                         0.0,
+                        -0.32417353987693787
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
                         0.0
+                    ],
+                    "scale": [
+                        7000.0,
+                        7000.0,
+                        7000.0
+                    ],
+                    "static": false
+                },
+                {
+                    "Children": null,
+                    "Components": [
+                        {
+                            "Resource": 16267701286569801728,
+                            "active": true,
+                            "face color": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "type": 2,
+                            "wire color": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ]
+                        },
+                        {
+                            "MeshId": 5384227402065825792,
+                            "active": true,
+                            "type": 1
+                        }
+                    ],
+                    "UID": 3042030294547671552,
+                    "active": false,
+                    "name": "SkyboxBlueSpace",
+                    "position": [
+                        0.0,
+                        0.0,
+                        -0.32417353987693787
+                    ],
+                    "rotation": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        7000.0,
+                        7000.0,
+                        7000.0
+                    ],
+                    "static": false
+                },
+                {
+                    "Children": null,
+                    "Components": [
+                        {
+                            "Resource": 11522088549591910400,
+                            "active": true,
+                            "face color": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "type": 2,
+                            "wire color": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ]
+                        },
+                        {
+                            "MeshId": 5475609839322702848,
+                            "active": true,
+                            "type": 1
+                        }
+                    ],
+                    "UID": 14620265250966218752,
+                    "active": false,
+                    "name": "SkyboxVioletSpace",
+                    "position": [
+                        0.0,
+                        0.0,
+                        -0.32417353987693787
                     ],
                     "rotation": [
                         1.0,

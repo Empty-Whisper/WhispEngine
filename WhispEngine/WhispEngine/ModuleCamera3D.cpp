@@ -21,6 +21,7 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 #ifndef GAME_BUILD
 	scene_camera = CreateCamera();
 	scene_camera->SetFarZ(10e4);
+#endif
 	game_camera = CreateCamera();
 }
 
