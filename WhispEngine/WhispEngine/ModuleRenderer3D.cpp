@@ -170,6 +170,7 @@ update_status ModuleRenderer3D::Update()
 	{
 		is_zbuffer_active = !is_zbuffer_active;
 		UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, scene_viewport);
+		UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, game_viewport);
 	}
 
 	if (!is_rendering_scene) // TODO: Threads ;)
