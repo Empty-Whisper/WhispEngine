@@ -387,7 +387,6 @@
     <ClCompile Include="PanelShortcut.cpp">
       <Filter>UI_Elements</Filter>
     </ClCompile>
-    <ClCompile Include="PanelZBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imgui.h">
@@ -900,7 +899,6 @@
     <ClInclude Include="PanelShortcut.h">
       <Filter>UI_Elements</Filter>
     </ClInclude>
-    <ClInclude Include="PanelZBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
