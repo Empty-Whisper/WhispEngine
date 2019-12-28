@@ -70,6 +70,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 #ifndef GAME_BUILD
 	panels.push_back(about = new PanelAbout(node["panels"]["about"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
 	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
+	panels.push_back(editor = new PanelScriptEditor(node["panels"]["editor"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_9));
 	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
 	panels.push_back(hierarchy = new PanelHierarchy(node["panels"]["hierarchy"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_3));
 	panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_4));
@@ -77,7 +78,6 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(game = new PanelGame(node["panels"]["game"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_7));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
 	panels.push_back(resources = new PanelResources(node["panels"]["resources"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_8));
-	panels.push_back(editor = new PanelScriptEditor(node["panels"]["editor"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_9));
 	panels.push_back(shortcut = new PanelShortcut(node["panels"]["shortcut"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_0));
 
 	ImGuizmo::Enable(true);
