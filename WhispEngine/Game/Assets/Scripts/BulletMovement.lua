@@ -5,11 +5,11 @@ function Init()
 
 	BulletMovement.Variables = {
 		-- Public Variables that will appear in inspector [All must be initialized]
-		speed = 10
+		speed = 10 --[Slider(10,50)]
 	}
 
 	local prepare_timer = 0
-	local time_disappear = 0.5
+	local time_disappear = 2
 
 	function BulletMovement:Start()
 		prepare_timer = Time.time
@@ -26,4 +26,6 @@ function Init()
 
 	return BulletMovement
 end
+
+
 

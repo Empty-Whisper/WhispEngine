@@ -19,19 +19,29 @@ function Init()
 			transform:SetPositionv(pos + (transform.forward * (var.speed * Time.deltaTime)))
 		end
 
+		pos = transform.position
+
 		if input.getKey("a") then
 			transform:SetPositionv(pos + (transform.right * (var.speed * Time.deltaTime)))
 		end
+
+		pos = transform.position
 
 		if input.getKey("s") then
 			transform:SetPositionv(pos - (transform.forward * (var.speed * Time.deltaTime)))
 		end
 
+		pos = transform.position
+
 		if input.getKey("d") then
 			transform:SetPositionv(pos - (transform.right * (var.speed * Time.deltaTime)))
 		end
+
 	end
 
 	return MoveTank
 end
+
+
+
 
