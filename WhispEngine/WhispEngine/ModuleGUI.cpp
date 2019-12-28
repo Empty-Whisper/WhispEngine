@@ -335,15 +335,7 @@ update_status ModuleGUI::MainMenuBar()
 		}
 
 		if (ImGui::BeginMenu("Debug Tools")) {
-			if (ImGui::BeginMenu("Octree")) {
-				if (ImGui::MenuItem("Scene")) {
-					App->scene_intro->DebugOctree();
-				}
-				ImGui::MenuItem("Show Octree", NULL, &App->scene_intro->show_octree);
-
-				ImGui::EndMenu();
-			}
-
+			ImGui::MenuItem("Show Octree", NULL, &App->scene_intro->show_octree);
 			ImGui::MenuItem("Show RayCast Mouse Picking", NULL, &App->scene_intro->show_mouse_raycast);
 
 			ImGui::EndMenu();
