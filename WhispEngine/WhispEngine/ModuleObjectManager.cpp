@@ -35,6 +35,7 @@ bool ModuleObjectManager::Start()
 	root = new GameObject(nullptr);
 	root->SetName("Root");
 	//App->importer->Import("Assets/Textures/Checker.dds", );
+	App->importer->Import("Assets/Models/Skyboxhd2.fbx");
 
 	return true;
 }

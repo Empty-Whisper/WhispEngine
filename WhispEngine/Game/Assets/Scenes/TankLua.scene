@@ -1,15 +1,15 @@
 {
     "Camera": {
         "position": [
-            4.96932315826416,
-            3.4925899505615234,
-            0.6065388917922974
+            3.4693245887756348,
+            5.177180767059326,
+            6.563976287841797
         ],
         "rotation": [
-            0.5670417547225952,
-            -0.127281054854393,
-            0.7940377593040466,
-            0.17823386192321777
+            0.935370683670044,
+            -0.19636739790439606,
+            0.28787022829055786,
+            0.06043417379260063
         ]
     },
     "GameObjects": [
@@ -158,8 +158,15 @@
                             ],
                             "Components": [
                                 {
+                                    "InspectorVars": [
+                                        {
+                                            "data": 0.009999999776482582,
+                                            "key": "mult",
+                                            "type": 2
+                                        }
+                                    ],
                                     "active": true,
-                                    "script": "NONE",
+                                    "script": "Assets\\Scripts\\RotateTurret.lua",
                                     "type": 5
                                 }
                             ],
@@ -660,7 +667,7 @@
                     "Components": [
                         {
                             "active": true,
-                            "aspect_ratio": 1.7449455261230469,
+                            "aspect_ratio": 1.8203883171081543,
                             "checkbox_main_camera": false,
                             "far_plane": 10000.0,
                             "is_main_camera": false,
@@ -2782,38 +2789,157 @@
                     "static": false
                 },
                 {
-                    "Children": null,
-                    "Components": [
+                    "Children": [
                         {
-                            "Resource": 14404646427434612736,
-                            "active": true,
-                            "face color": [
-                                1.0,
-                                1.0,
-                                1.0,
-                                1.0
+                            "Children": null,
+                            "Components": [
+                                {
+                                    "Resource": 11522088549591910400,
+                                    "active": true,
+                                    "face color": [
+                                        1.0,
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "type": 2,
+                                    "wire color": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ]
+                                },
+                                {
+                                    "MeshId": 5475609839322702848,
+                                    "active": true,
+                                    "type": 1
+                                }
                             ],
-                            "type": 2,
-                            "wire color": [
+                            "UID": 14620265250966218752,
+                            "active": false,
+                            "name": "6168626498451654854654498",
+                            "position": [
                                 0.0,
+                                0.0,
+                                -0.32417353987693787
+                            ],
+                            "rotation": [
+                                1.0,
                                 0.0,
                                 0.0,
                                 0.0
-                            ]
+                            ],
+                            "scale": [
+                                7000.0,
+                                7000.0,
+                                7000.0
+                            ],
+                            "static": false
                         },
                         {
-                            "MeshId": 9697982218714583040,
+                            "Children": null,
+                            "Components": [
+                                {
+                                    "Resource": 16267701286569801728,
+                                    "active": true,
+                                    "face color": [
+                                        1.0,
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "type": 2,
+                                    "wire color": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ]
+                                },
+                                {
+                                    "MeshId": 5384227402065825792,
+                                    "active": true,
+                                    "type": 1
+                                }
+                            ],
+                            "UID": 3042030294547671552,
                             "active": true,
-                            "type": 1
+                            "name": "1346513218416846464984654",
+                            "position": [
+                                0.0,
+                                0.0,
+                                -0.32417353987693787
+                            ],
+                            "rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "scale": [
+                                7000.0,
+                                7000.0,
+                                7000.0
+                            ],
+                            "static": false
+                        },
+                        {
+                            "Children": null,
+                            "Components": [
+                                {
+                                    "Resource": 14404646427434612736,
+                                    "active": true,
+                                    "face color": [
+                                        1.0,
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "type": 2,
+                                    "wire color": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ]
+                                },
+                                {
+                                    "MeshId": 9697982218714583040,
+                                    "active": true,
+                                    "type": 1
+                                }
+                            ],
+                            "UID": 11658956070871107584,
+                            "active": false,
+                            "name": "7656489754684654987454624",
+                            "position": [
+                                0.0,
+                                0.0,
+                                -0.32417353987693787
+                            ],
+                            "rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "scale": [
+                                7000.0,
+                                7000.0,
+                                7000.0
+                            ],
+                            "static": false
                         }
                     ],
-                    "UID": 11658956070871107584,
+                    "Components": null,
+                    "UID": 4078611555136566272,
                     "active": true,
-                    "name": "7656489754684654987454624",
+                    "name": "Skybox",
                     "position": [
                         0.0,
                         0.0,
-                        -0.32417353987693787
+                        0.0
                     ],
                     "rotation": [
                         1.0,
@@ -2822,103 +2948,9 @@
                         0.0
                     ],
                     "scale": [
-                        7000.0,
-                        7000.0,
-                        7000.0
-                    ],
-                    "static": false
-                },
-                {
-                    "Children": null,
-                    "Components": [
-                        {
-                            "Resource": 16267701286569801728,
-                            "active": true,
-                            "face color": [
-                                1.0,
-                                1.0,
-                                1.0,
-                                1.0
-                            ],
-                            "type": 2,
-                            "wire color": [
-                                0.0,
-                                0.0,
-                                0.0,
-                                0.0
-                            ]
-                        },
-                        {
-                            "MeshId": 5384227402065825792,
-                            "active": true,
-                            "type": 1
-                        }
-                    ],
-                    "UID": 3042030294547671552,
-                    "active": false,
-                    "name": "1346513218416846464984654",
-                    "position": [
-                        0.0,
-                        0.0,
-                        -0.32417353987693787
-                    ],
-                    "rotation": [
                         1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        7000.0,
-                        7000.0,
-                        7000.0
-                    ],
-                    "static": false
-                },
-                {
-                    "Children": null,
-                    "Components": [
-                        {
-                            "Resource": 11522088549591910400,
-                            "active": true,
-                            "face color": [
-                                1.0,
-                                1.0,
-                                1.0,
-                                1.0
-                            ],
-                            "type": 2,
-                            "wire color": [
-                                0.0,
-                                0.0,
-                                0.0,
-                                0.0
-                            ]
-                        },
-                        {
-                            "MeshId": 5475609839322702848,
-                            "active": true,
-                            "type": 1
-                        }
-                    ],
-                    "UID": 14620265250966218752,
-                    "active": false,
-                    "name": "6168626498451654854654498",
-                    "position": [
-                        0.0,
-                        0.0,
-                        -0.32417353987693787
-                    ],
-                    "rotation": [
                         1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        7000.0,
-                        7000.0,
-                        7000.0
+                        1.0
                     ],
                     "static": false
                 }
