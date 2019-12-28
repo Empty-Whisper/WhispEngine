@@ -167,7 +167,10 @@ update_status ModuleRenderer3D::Update()
 {
 	BROFILER_CATEGORY("Render", Profiler::Color::FireBrick);
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
 		is_zbuffer_active = !is_zbuffer_active;
+		UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, scene_viewport);
+	}
 
 	if (!is_rendering_scene) // TODO: Threads ;)
 	{
@@ -388,8 +391,12 @@ void ModuleRenderer3D::UpdateTextureBuffers(int width, int height, Viewport* vie
 	//glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Depth and Texture to Frame buffer
+	if(!is_zbuffer_active)
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, viewport->depth_render_buffer);
+	else
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, viewport->render_texture, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);
+
 
 	GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
 	glDrawBuffers(1, DrawBuffers);
