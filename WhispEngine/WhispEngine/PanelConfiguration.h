@@ -40,8 +40,8 @@ private:
 	std::vector<float> mem_reg;
 
 public:
-	bool checkbox_skybox = true;
-	bool checkbox_skybox_bluespace = false;
+	bool checkbox_skybox = false;
+	bool checkbox_skybox_bluespace = true;
 	bool checkbox_skybox_violetspace = false;
 
 	GameObject* SkyboxDefault = nullptr;

@@ -8,6 +8,8 @@
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "MathGeoLib/include/Geometry/AABB.h"
 
+class PanelGame;
+
 enum class Primitives {
 	NONE = -1,
 	CUBE, TETRAHEDRON, OCTAHEDRON, DODECAHEDRON, ICOSAHEDRON,
@@ -66,6 +68,7 @@ public:
 
 	void LuaRegister() override;
 
+	static int LRandomRange(int min, int max);
 	static GameObject* InstantiatePrefab(const char* path);
 	static void DeleteObject(GameObject* obj);
 
