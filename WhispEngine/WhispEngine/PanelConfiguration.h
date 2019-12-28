@@ -21,6 +21,7 @@ private:
 	void Application();
 	void Viewport();
 	void Frustum();
+	void zBuffer();
 
 private:
 	void PushBackVectorAsQueue(std::vector<float> &vector, const float &value);
@@ -30,6 +31,7 @@ private:
 	bool checkbox_borderless_window = false;
 	bool checkbox_fulldesktop_window = false;
 	bool checkbox_resizable_window = false;
+	bool checkbox_zbuffer = false;
 
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
