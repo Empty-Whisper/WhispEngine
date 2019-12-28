@@ -77,7 +77,6 @@ public:
 	bool vsync = true;
 
 	Viewport* game_viewport;
-	Viewport* zbuffer_viewport;
 	Viewport* scene_viewport;
 	bool is_rendering_scene = false;
 	bool is_zbuffer_active = false;

@@ -15,7 +15,6 @@ class PanelGame;
 class PanelResources;
 class PanelScriptEditor;
 class PanelShortcut;
-class PanelZBuffer;
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
@@ -88,6 +87,4 @@ private:
 public:
 	PanelScene* scene = nullptr;
 	PanelGame* game = nullptr;
-	PanelZBuffer* zBuffer = nullptr;
-
 };

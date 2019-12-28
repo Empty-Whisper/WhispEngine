@@ -41,18 +41,15 @@
             "game": {
               "start_enabled": true
             },
-            "zBuffer": {
-              "start_enabled": true
-            },
-            "resources": {
-              "start_enabled": true
-            },
-            "editor": {
-              "start_enabled": true
-            },
-            "shortcut": {
-              "start_enabled": true
-            }
+			"resources": {
+			  "start_enabled": true
+			},
+			"editor": {
+			  "start_enabled": true
+			},
+			"shortcut": {
+			  "start_enabled": true
+			}
           }
         },
         "Window": {

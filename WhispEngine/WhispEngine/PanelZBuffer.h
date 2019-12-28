@@ -26,4 +26,4 @@ private:
 	ImVec2 panel_pos = { 0.f, 0.f };
 };
 
-#endif // !_PANEL_ZBUFFER__
+#endif // !_PANEL_GAME__
