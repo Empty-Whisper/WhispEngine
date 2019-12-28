@@ -56,21 +56,13 @@ update_status ModuleSceneIntro::PreUpdate()
 		glClearColor(0.1, 0.1, 0.1, 1.f);
 		//-----------------------------------------------------
 	}
-	if(App->renderer3D->is_rendering_game)
+	else
 	{
 		//Start Buffer Frame ----------------------------------
 		glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->game_viewport->frame_buffer);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1, 0.1, 0.1, 1.f);
 		//-----------------------------------------------------
-	}
-	if(App->renderer3D->is_rendering_zbuffer)
-	{
-	//Start Buffer Frame zBuffer----------------------------------
-	glBindFramebuffer(GL_FRAMEBUFFER, App->renderer3D->zbuffer_viewport->frame_buffer);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.1, 0.1, 0.1, 1.f);
-	//-----------------------------------------------------
 	}
 
 	return UPDATE_CONTINUE;
