@@ -47,6 +47,7 @@ bool ModuleSceneIntro::Start()
 
 update_status ModuleSceneIntro::PreUpdate()
 {
+	BROFILER_CATEGORY("Scene", Profiler::Color::Orange);
 	if (App->renderer3D->is_rendering_scene)
 	{
 		//Start Buffer Frame ----------------------------------

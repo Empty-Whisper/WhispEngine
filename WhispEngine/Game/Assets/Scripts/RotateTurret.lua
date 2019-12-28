@@ -1,47 +1,25 @@
+function Init()
+	-- RotateTurret.lua
 
--- RotateTurret.lua
+	RotateTurret = {}
 
-RotateTurret = {}
-
-RotateTurret.Variables = {
+	RotateTurret.Variables = {
 		-- Public Variables that will appear in inspector [All must be initialized]
-		--[[
-		to access this variables use var.variable, for example:
-	 -- name = 'John'
-		to access: var.name
-		]]
-}
+		mult = 0.01 --[Slider(0, 0.02)]
+	}
 
--- local var = RotateTurret.Variables
-
-local angle = 0.0
-local speed = 5
-
-function RotateTurret:Start()
-	
-end
-
-function RotateTurret:Update()
-
-	if input.getKey('q') then
-		angle = angle + speed
-		--transform:SetRotation(Quaternion.RotateZ(math.rad(angle)))
-		transform:SetRotation(Quaternion.FromEuler(math.rad(0),math.rad(angle), 0))
-
+	-- Start is called before the first frame update
+	function RotateTurret:Start()
 	end
 
-	if input.getKey('e') then
-		angle = angle - speed
-		--transform:SetRotation(Quaternion.RotateZ(math.rad(angle)))
-		transform:SetRotation(Quaternion.FromEuler(math.rad(0),math.rad(angle), 0))
+	local mx = 0
+	local lmx = 0
+
+	-- Update is called once per frame
+	function RotateTurret:Update()
+		mx = input.getMouseX()
+		transform:SetRotation(Quaternion.RotateY((lmx - mx) * var.mult))
 	end
-	
-	
+
+	return RotateTurret
 end
-
-
-
-
-
-
-

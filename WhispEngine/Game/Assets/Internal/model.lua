@@ -1,15 +1,16 @@
-
+function Init()
 -- Model.lua
 
-Model = {}
+local Model = {
 
-Model.Variables = {
-		-- Public Variables that will appear in inspector [All must be initialized]
-		--[[
-		to access this variables use var.variable, for example:
-	 -- name = 'John'
-		to access: var.name
-		]]
+	Variables = {
+			-- Public Variables that will appear in inspector [All must be initialized]
+			--[[
+			to access this variables use var.variable, for example:
+		-- name = 'John'
+			to access: Log(var.name) --> John
+			]]
+	},
 }
 
 -- Start is called before the first frame update
@@ -20,5 +21,9 @@ end
 
 -- Update is called once per frame
 function Model:Update()
-	
+
+end
+
+return Model
+
 end

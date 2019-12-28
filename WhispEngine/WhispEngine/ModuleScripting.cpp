@@ -20,7 +20,6 @@ ModuleScripting::~ModuleScripting()
 
 bool ModuleScripting::Start()
 {
-	luaL_loadfile(L, "Assets/Internal/GameObject.lua");
 	return true;
 }
 
@@ -40,9 +39,11 @@ void ModuleScripting::ExecuteFunctionScript(const char* path, const char* _name,
 	std::string func_name;
 	switch (function)
 	{
-	case ModuleScripting::START:
+	case ModuleScripting::START: {
 		func_name.assign("Start");
 		result = luaL_dofile(L, path);
+		luabridge::LuaRef f = luabridge::newTable(L);
+	}
 		break;
 	case ModuleScripting::PREUPDATE:
 		func_name.assign("PreUpdate");

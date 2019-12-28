@@ -16,6 +16,8 @@
 #include "ResourceMesh.h"
 #include "ComponentTransform.h"
 
+#include "Brofiler/Brofiler.h"
+
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {
@@ -27,6 +29,7 @@ ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentTy
 
 void ComponentMesh::Update()
 {
+	BROFILER_CATEGORY("Component Mesh", Profiler::Color::Crimson);
 	if (uid == 0u)
 		return;
 	ResourceMesh* mesh = (ResourceMesh*)App->resources->Get(uid);

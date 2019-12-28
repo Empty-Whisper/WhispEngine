@@ -9,6 +9,7 @@
 #include "PanelScene.h"
 #include "ModuleObjectManager.h"
 #include "Imgui/imgui_internal.h"
+#include "Brofiler/Brofiler.h"
 
 
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)
@@ -21,6 +22,7 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::Update()
 {
+	BROFILER_CATEGORY("Component Camera", Profiler::Color::OldLace);
 	float3 corners[8];
 	camera->GetAllCorners(corners);
 
@@ -32,6 +34,12 @@ void ComponentCamera::Update()
 	//Log Drawing
 	DrawFrustum();
 
+	//Check if there is a camera
+	if (checkbox_main_camera && is_main_camera)
+	{
+		App->camera->SetGameCamera(camera);
+		is_main_camera = false;
+	}
 }
 
 void ComponentCamera::OnInspector()
@@ -70,11 +78,7 @@ void ComponentCamera::OnInspector()
 
 		if (ImGui::Checkbox("Main Camera", &checkbox_main_camera))
 			is_main_camera = true;
-		if (checkbox_main_camera && is_main_camera)
-		{
-			App->camera->SetGameCamera(camera);
-			is_main_camera = false;
-		}
+		
 
 		if (only_one_camera) 
 		{

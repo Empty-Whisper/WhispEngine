@@ -6,6 +6,8 @@
 #include "PanelScene.h"
 
 #include "PanelHierarchy.h"
+#include "PanelGame.h"
+
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleSceneIntro.h"
@@ -43,7 +45,7 @@ update_status ModuleObjectManager::Update()
 	glEnable(GL_LIGHTING);
 
 	//MousePicking
-	if (App->input->GetMouseButtonDown(1) && !App->input->GetKey(SDL_SCANCODE_LALT))
+	if (!App->gui->game->focused && App->input->GetMouseButtonDown(1) && !App->input->GetKey(SDL_SCANCODE_LALT))
 		MousePicking();
 
 	//Update GO
@@ -74,6 +76,7 @@ update_status ModuleObjectManager::Update()
 
 void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 {
+	BROFILER_CATEGORY("Update GameObject", Profiler::Color::LightBlue);
 	if (obj->IsActive()) {
 
 		obj->Update();
@@ -224,7 +227,7 @@ void ModuleObjectManager::LuaRegister()
 			.addFunction("Normalize", &Quat::Normalize)
 			.addFunction("Normalized", &Quat::Normalized)
 			.addFunction("ToEuler", &Quat::ToEulerXYZ)
-			.addFunction("ToString", &Quat::ToString)
+			.addFunction("toString", &Quat::ToString)
 			.addFunction("SetFromAxisAngle", &Quat::SetFromAxisAngle)
 		.endClass()
 		.beginNamespace("Quaternion")
@@ -245,7 +248,7 @@ void ModuleObjectManager::LuaRegister()
 			.addFunction("Destroy", &ModuleObjectManager::DeleteObject)
 		.endNamespace()
 		.beginClass<ComponentTransform>("transform")
-			.addData("gameobject", &ComponentTransform::object, false)
+			.addData("gameObject", &ComponentTransform::object, false)
 			.addProperty("parent", &ComponentTransform::LGetParent)
 			.addProperty("position", &ComponentTransform::GetPosition) //TODO: maybe it could be an own struct and set x, y and z as &position.x (READ ONLY)
 			.addProperty("gposition", &ComponentTransform::GetGlobalPosition)
@@ -284,6 +287,7 @@ void ModuleObjectManager::DeleteObject(GameObject * obj)
 
 void ModuleObjectManager::MousePicking()
 {
+	BROFILER_CATEGORY("Mouse Picking", Profiler::Color::HotPink);
 	//Calculate Scene & Mouse vectors
 	int window_x, window_y;
 	SDL_GetWindowPosition(App->window->window, &window_x, &window_y);

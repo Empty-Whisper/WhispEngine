@@ -1,0 +1,101 @@
+{
+    "GameObjects": [
+        {
+            "Children": [
+                {
+                    "Children": null,
+                    "Components": [
+                        {
+                            "Resource": 0,
+                            "active": true,
+                            "face color": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "type": 2,
+                            "wire color": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ]
+                        },
+                        {
+                            "MeshId": 17554730674479702016,
+                            "active": true,
+                            "type": 1
+                        },
+                        {
+                            "InspectorVars": [
+                                {
+                                    "data": 0.10000000149011612,
+                                    "key": "speed",
+                                    "type": 2
+                                }
+                            ],
+                            "active": true,
+                            "script": "Assets\\Scripts\\BulletRotation.lua",
+                            "type": 5
+                        }
+                    ],
+                    "UID": 9413078652428212224,
+                    "active": true,
+                    "name": "grp1_2",
+                    "position": [
+                        2.384185791015625e-07,
+                        2.3541204541288607e-07,
+                        -2.9802322387695313e-08
+                    ],
+                    "rotation": [
+                        2.5724398611259858e-08,
+                        -4.1159008645763606e-08,
+                        0.7071068286895752,
+                        0.7071068286895752
+                    ],
+                    "scale": [
+                        0.001000000280328095,
+                        0.0010000007459893823,
+                        0.0009999998146668077
+                    ],
+                    "static": false
+                }
+            ],
+            "Components": [
+                {
+                    "InspectorVars": [
+                        {
+                            "data": 10,
+                            "key": "speed",
+                            "type": 1
+                        }
+                    ],
+                    "active": true,
+                    "script": "Assets\\Scripts\\BulletMovement.lua",
+                    "type": 5
+                }
+            ],
+            "UID": 6701368607579569152,
+            "active": true,
+            "name": "Deer",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.7049270272254944,
+                0.055478960275650024,
+                0.05547896772623062,
+                -0.7049269676208496
+            ],
+            "scale": [
+                0.9999999403953552,
+                1.0,
+                1.0
+            ],
+            "static": false
+        }
+    ]
+}

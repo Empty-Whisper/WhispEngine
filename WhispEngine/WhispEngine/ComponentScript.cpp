@@ -4,7 +4,6 @@
 #include "FileSystem.h"
 #include "GameObject.h"
 #include "ModuleScripting.h"
-#include "Lua/LuaBridge/LuaBridge.h"
 #include <fstream>
 #include "Imgui/imgui_internal.h"
 #include "ModuleObjectManager.h"
@@ -14,7 +13,11 @@
 
 #include "ModuleInput.h"
 
-ComponentScript::ComponentScript(GameObject* parent) : Component(parent,ComponentType::SCRIPT)
+#include "Brofiler/Brofiler.h"
+
+ComponentScript::ComponentScript(GameObject* parent) 
+	: Component(parent,ComponentType::SCRIPT), 
+	  script(luabridge::LuaRef(App->scripting->GetState()))
 {
 }
 
@@ -28,20 +31,41 @@ ComponentScript::~ComponentScript()
 
 void ComponentScript::Update()
 {
+	BROFILER_CATEGORY("Component Script", Profiler::Color::PeachPuff);
+
 	if (is_assigned && valid && App->IsGameRunning())
 	{
-		luabridge::setGlobal(App->scripting->GetState(), object, "object");
+		if (!start_done) {
+			if (luaL_dofile(App->scripting->GetState(), script_path.c_str()) == 0) {
+				UpdateInspectorVars();
+			}
+			else {
+				LOG("Failed to Load File: %s", script_path.c_str());
+			}
+		}
+
+		luabridge::setGlobal(App->scripting->GetState(), object, "gameObject");
 		luabridge::setGlobal(App->scripting->GetState(), object->transform, "transform");
 		if (!public_vars.empty()) {
 			SetInspectorVars();
 		}
 		
-		App->scripting->ExecuteFunctionScript(script_path.c_str(), name.c_str(), (!start_done) ? ModuleScripting::Functions::START : ModuleScripting::Functions::UPDATE);
+		if (script.isTable()) {
+			if (!start_done) {
+				script["Start"]();
+			}
+			else {
+				script["Update"]();
+			}
+		}
+		else {
+			LOG("Script: %s is not a table", script_path.c_str());
+		}
 		
 		lua_pop(App->scripting->GetState(), -1);
 		lua_pop(App->scripting->GetState(), -1);
 		if (!public_vars.empty())
-			luabridge::getGlobal(App->scripting->GetState(), "var");
+			GetInspectorVars();
 		start_done = true;
 	}
 	else {
@@ -94,29 +118,29 @@ void ComponentScript::GetInspectorVars()
 		switch ((*var).second->type)
 		{
 		case ComponentScript::TypeData::BOOL:
-			static_cast<Property<bool>*>((*var).second)->data = t[(*var).first.c_str()];
+			static_cast<Property<bool>*>((*var).second)->data = t[(*var).first.c_str()].cast<bool>();
 			break;
 		case ComponentScript::TypeData::INT:
-			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()].cast<float>();
 			break;
 		case ComponentScript::TypeData::FLOAT:
-			static_cast<Property<float>*>((*var).second)->data = t[(*var).first.c_str()];
+			static_cast<Property<float>*>((*var).second)->data = t[(*var).first.c_str()].cast<float>();
 			break;
 		case ComponentScript::TypeData::NIL:
-			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()].cast<int>();
 			break;
 		case ComponentScript::TypeData::TABLE:
-			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()].cast<int>();
 			break;
 		case ComponentScript::TypeData::STRING:
 		case ComponentScript::TypeData::PREFAB:
 			static_cast<Property<std::string>*>((*var).second)->data = t[(*var).first.c_str()].cast<std::string>();
 			break;
 		case ComponentScript::TypeData::USERDATA:
-			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()];
+			static_cast<Property<int>*>((*var).second)->data = t[(*var).first.c_str()].cast<int>();
 			break;
 		case ComponentScript::TypeData::GAMEOBJECT:
-			static_cast<Property<GameObject*>*>((*var).second)->data = t[(*var).first.c_str()];
+			static_cast<Property<GameObject*>*>((*var).second)->data = t[(*var).first.c_str()].cast<GameObject*>();
 			break;
 		default:
 			break;
@@ -328,9 +352,9 @@ void ComponentScript::OpenModalWindowsToLoadScript()
 void ComponentScript::UpdateInspectorVars()
 {
 	if (luaL_dofile(App->scripting->GetState(), script_path.c_str()) == 0) {
-		luabridge::LuaRef ref = luabridge::getGlobal(App->scripting->GetState(), name.data());
-		if (ref.isTable()) {
-			ref = ref["Variables"];
+		script = luabridge::getGlobal(App->scripting->GetState(), "Init")();
+		if (script.isTable()) {
+			luabridge::LuaRef ref = script["Variables"];
 			if (ref.isTable()) {
 				std::ifstream is(script_path.c_str());
 				std::string str;
@@ -607,4 +631,5 @@ void ComponentScript::Load(const nlohmann::json & node)
 			}
 		}
 	}
+	UpdateInspectorVars();
 }

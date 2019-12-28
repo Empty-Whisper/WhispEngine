@@ -150,6 +150,7 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate()
 {
+	BROFILER_CATEGORY("Render", Profiler::Color::FireBrick);
 	/*GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
 	GetGameViewport()->SetMatrix(App->camera->GetGameCamera());*/
 
@@ -224,7 +225,7 @@ update_status ModuleRenderer3D::Update()
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate()
 {
-	BROFILER_CATEGORY("Render", Profiler::Color::Khaki);
+	BROFILER_CATEGORY("Render", Profiler::Color::FireBrick);
 
 	SDL_GL_SwapWindow(App->window->window);
 
