@@ -23,7 +23,7 @@ void PanelShortcut::Update()
 			for (int j = 0; j < 3; j++) {
 				ImGui::PushID(j);
 				ImGui::SameLine();
-				if (ImGui::Button(SDL_GetScancodeName((*i)->shortcut[j]))) {
+				if (ImGui::Button(SDL_GetScancodeName((*i)->shortcut[j]), ImVec2(100,30))) {
 					to_change = true;
 					it = i;
 					scancode_to_change = j;
