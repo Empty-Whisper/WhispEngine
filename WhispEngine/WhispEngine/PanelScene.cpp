@@ -22,9 +22,11 @@ void PanelScene::Update()
 	BROFILER_CATEGORY("Scene", Profiler::Color::DarkOliveGreen);
 	ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0,0) );
 
+	on_hover = false;
+
 	if (ImGui::Begin("Scene", &active)) 
 	{
-	
+		on_hover = ImGui::IsWindowHovered();
 		ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
 		
 		static bool first_time_resize = true;
@@ -86,7 +88,7 @@ void PanelScene::Update()
 	if (active_preview && preview_checkbox)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		if (ImGui::Begin("Camera Preview", &active, ImGuiWindowFlags_NoDocking))
+		if (ImGui::Begin("Camera Preview", &preview_checkbox, ImGuiWindowFlags_NoDocking))
 		{
 			static bool init_window = true;
 			if (init_window)
