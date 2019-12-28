@@ -65,10 +65,11 @@ void PanelConfiguration::Update()
 		{
 			Hardware();
 		}
-		if (ImGui::CollapsingHeader("Frustum Options"))
+		if (ImGui::CollapsingHeader("zBuffer"))
 		{
-			Frustum();
+			zBuffer();
 		}
+		
 	}
 	ImGui::End();
 }
@@ -280,6 +281,15 @@ void PanelConfiguration::Frustum()
 	//ImGui::SliderFloat("zNear", (float*)&App->camera->f_depth, 1, 50);
 	//ImGui::SliderFloat("zFar", (float*)&App->camera->f_initial_z, 1, 50);
 	
+}
+
+void PanelConfiguration::zBuffer()
+{
+	if (ImGui::Checkbox("active", &checkbox_zbuffer))
+	{
+		App->renderer3D->is_zbuffer_active = !App->renderer3D->is_zbuffer_active;
+		App->renderer3D->StartzBuffer();
+	}
 }
 
 void PanelConfiguration::PushBackVectorAsQueue(std::vector<float> &vector, const float &value)

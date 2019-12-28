@@ -20,8 +20,7 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 
 #ifndef GAME_BUILD
 	scene_camera = CreateCamera();
-	scene_camera->SetFarZ(450.f);
-#endif
+	scene_camera->SetFarZ(10e4);
 	game_camera = CreateCamera();
 }
 
@@ -293,7 +292,7 @@ Camera::Camera()
 	frustum.up = float3::unitY;
 	
 	SetNearZ(1.f);
-	SetFarZ(200.f);
+	SetFarZ(10e4);
 	SetAspectRatio(1.f);
 	SetFOV(70.f);
 

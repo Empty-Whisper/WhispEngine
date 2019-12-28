@@ -81,6 +81,8 @@ update_status ModuleSceneIntro::Update()
 	if (show_grid)
 		DrawGrid();
 
+	//DrawSkyboxSphere();
+
 	if (show_octree) {
 		glDisable(GL_LIGHTING);
 		octree->Render();
@@ -106,6 +108,21 @@ update_status ModuleSceneIntro::PostUpdate()
 }
 
 void ModuleSceneIntro::DrawGrid()
+{
+	glDisable(GL_LIGHTING);
+
+	glColor3f(1.f, 1.f, 1.f);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, grid_id);
+	glVertexPointer(3, GL_INT, 0, NULL);
+	glDrawArrays(GL_LINES, 0, grid_vertex_size);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glEnable(GL_LIGHTING);
+
+}
+
+void ModuleSceneIntro::DrawSkyboxSphere()
 {
 	glDisable(GL_LIGHTING);
 
@@ -152,6 +169,10 @@ void ModuleSceneIntro::GenerateGrid(const int & width)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(int) * grid_vertex_size, grid, GL_STATIC_DRAW);
 	
 	delete[] grid;
+}
+
+void ModuleSceneIntro::GenerateSkyboxSphere(const int & radius)
+{
 }
 
 bool ModuleSceneIntro::SaveCurrentScene()
