@@ -2,6 +2,7 @@
 #include <vector>
 #include "Panel.h"
 #include "Globals.h"
+#include "GameObject.h"
 class PanelConfiguration :
 	public Panel
 {
@@ -22,6 +23,7 @@ private:
 	void Viewport();
 	void Frustum();
 	void zBuffer();
+	void Skybox();
 
 private:
 	void PushBackVectorAsQueue(std::vector<float> &vector, const float &value);
@@ -36,5 +38,21 @@ private:
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
 	std::vector<float> mem_reg;
+
+public:
+	bool checkbox_skybox = true;
+	bool checkbox_skybox_bluespace = false;
+	bool checkbox_skybox_violetspace = false;
+
+	GameObject* SkyboxDefault = nullptr;
+	GameObject* SkyboxBlueSpace = nullptr;
+	GameObject* SkyboxVioletSpace = nullptr;
+
+	//ID skybox
+	std::string skybox_default_string = "7656489754684654987454624";
+	std::string skybox_bluespacet_string = "1346513218416846464984654";
+	std::string skybox_violetspace_string = "6168626498451654854654498";
+
+	
 };
 
