@@ -64,6 +64,9 @@ public:
 	const bool CanResize(Viewport* viewport);
 	void ResizeDockspace(ImVec2 size, Viewport* viewport, Camera* camera);
 
+	//zBuffer
+	void StartzBuffer();
+
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

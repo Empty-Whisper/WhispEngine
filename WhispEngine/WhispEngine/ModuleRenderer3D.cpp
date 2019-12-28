@@ -166,12 +166,6 @@ update_status ModuleRenderer3D::PreUpdate()
 update_status ModuleRenderer3D::Update()
 {
 	BROFILER_CATEGORY("Render", Profiler::Color::FireBrick);
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		is_zbuffer_active = !is_zbuffer_active;
-		UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, scene_viewport);
-		UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, game_viewport);
-	}
 
 	if (!is_rendering_scene) // TODO: Threads ;)
 	{
@@ -330,6 +324,12 @@ void ModuleRenderer3D::ResizeDockspace(ImVec2 size, Viewport* viewport, Camera* 
 	glLoadIdentity();
 
 	UpdateTextureBuffers(size.x, size.y, viewport);
+}
+
+void ModuleRenderer3D::StartzBuffer()
+{
+	UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, scene_viewport);
+	UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, game_viewport);
 }
 
 void ModuleRenderer3D::OnResize(int width, int height, Camera* camera)
