@@ -72,4 +72,4 @@ enum update_status
 	UPDATE_ERROR
 };
 
-//#define GAME_BUILD
+#define GAME_BUILD
