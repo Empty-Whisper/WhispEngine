@@ -26,6 +26,8 @@ public:
 	uint stencil_buffer = 0;
 	bool can_resize = false;
 
+	uint z_buffer = 0;
+
 };
 
 
@@ -62,6 +64,9 @@ public:
 	const bool CanResize(Viewport* viewport);
 	void ResizeDockspace(ImVec2 size, Viewport* viewport, Camera* camera);
 
+	//zBuffer
+	void StartzBuffer();
+
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
@@ -77,6 +82,7 @@ public:
 	Viewport* game_viewport;
 	Viewport* scene_viewport;
 	bool is_rendering_scene = false;
+	bool is_zbuffer_active = false;
 	
 
 

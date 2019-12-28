@@ -45,7 +45,7 @@ update_status ModuleObjectManager::Update()
 	glEnable(GL_LIGHTING);
 
 	//MousePicking
-	if (!App->gui->game->focused && App->input->GetMouseButtonDown(1) && !App->input->GetKey(SDL_SCANCODE_LALT))
+	if (!App->gui->game->focused && App->gui->scene->on_hover && App->input->GetMouseButtonDown(1) && !App->input->GetKey(SDL_SCANCODE_LALT))
 		MousePicking();
 
 	//Update GO

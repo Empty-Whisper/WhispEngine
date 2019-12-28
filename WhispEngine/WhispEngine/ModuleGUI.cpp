@@ -50,13 +50,15 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	LOG("Init ImGui v%s", ImGui::GetVersion());
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	
-	
+#ifndef GAME_BUILD
 	// Docking -----------------------------------------------------------
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;		// Enable keyboard controls
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform 
 	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-
+#else
+	io.IniFilename = NULL;
+#endif
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init();
 
@@ -65,8 +67,10 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	ImGui::StyleColorsDark();
 
 	LOG("Initi panels");
+#ifndef GAME_BUILD
 	panels.push_back(about = new PanelAbout(node["panels"]["about"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
 	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
+	panels.push_back(editor = new PanelScriptEditor(node["panels"]["editor"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_9));
 	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
 	panels.push_back(hierarchy = new PanelHierarchy(node["panels"]["hierarchy"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_3));
 	panels.push_back(create = new PanelCreate(node["panels"]["create"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_4));
@@ -74,10 +78,13 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(game = new PanelGame(node["panels"]["game"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_7));
 	panels.push_back(scene = new PanelScene(node["panels"]["scene"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_6));
 	panels.push_back(resources = new PanelResources(node["panels"]["resources"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_8));
-	panels.push_back(editor = new PanelScriptEditor(node["panels"]["editor"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_9));
 	panels.push_back(shortcut = new PanelShortcut(node["panels"]["shortcut"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_0));
 
 	ImGuizmo::Enable(true);
+#else
+	panels.push_back(game = new PanelGame());
+	App->SetState(Application::GameState::PLAY);
+#endif
 
 	return true;
 }
@@ -97,17 +104,18 @@ update_status ModuleGUI::PreUpdate()
 update_status ModuleGUI::Update()
 {
 	BROFILER_CATEGORY("GUI", Profiler::Color::Purple);
-
-	update_status ret = MainMenuBar();
+	update_status ret = update_status::UPDATE_CONTINUE;
+#ifndef GAME_BUILD
+	ret = MainMenuBar();
 
 	ModalSaveScene();
 
 	Dockspace();
 
 	PlayPauseStop();
-
+#endif
 	UpdatePanels();
-
+#ifndef GAME_BUILD
 	if (show_demo_window)
 	{
 		ImGui::ShowDemoWindow(&show_demo_window);
@@ -121,7 +129,7 @@ update_status ModuleGUI::Update()
 			ImGui::End();
 		}
 	}
-
+#endif
 	return ret;
 }
 
@@ -327,15 +335,7 @@ update_status ModuleGUI::MainMenuBar()
 		}
 
 		if (ImGui::BeginMenu("Debug Tools")) {
-			if (ImGui::BeginMenu("Octree")) {
-				if (ImGui::MenuItem("Scene")) {
-					App->scene_intro->DebugOctree();
-				}
-				ImGui::MenuItem("Show Octree", NULL, &App->scene_intro->show_octree);
-
-				ImGui::EndMenu();
-			}
-
+			ImGui::MenuItem("Show Octree", NULL, &App->scene_intro->show_octree);
 			ImGui::MenuItem("Show RayCast Mouse Picking", NULL, &App->scene_intro->show_mouse_raycast);
 
 			ImGui::EndMenu();

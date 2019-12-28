@@ -154,8 +154,14 @@ update_status ModuleRenderer3D::PreUpdate()
 	/*GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
 	GetGameViewport()->SetMatrix(App->camera->GetGameCamera());*/
 
-	//Light 0 on cam pos
-	lights[0].SetPos(App->camera->GetSceneCamera()->GetFrustum().pos.x, App->camera->GetSceneCamera()->GetFrustum().pos.y, App->camera->GetSceneCamera()->GetFrustum().pos.z);
+	Camera* cam = nullptr;
+#ifndef GAME_BUILD
+	cam = App->camera->GetSceneCamera();
+#else
+	cam = App->camera->GetGameCamera();
+#endif
+	if (cam != nullptr)
+		lights[0].SetPos(cam->GetFrustum().pos.x, cam->GetFrustum().pos.y, cam->GetFrustum().pos.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -167,12 +173,13 @@ update_status ModuleRenderer3D::Update()
 {
 	BROFILER_CATEGORY("Render", Profiler::Color::FireBrick);
 
+#ifndef GAME_BUILD
 	if (!is_rendering_scene) // TODO: Threads ;)
 	{
-
 		// SCENE ============================================================================================ =
 		GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
 		GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
+		GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->z_buffer);
 
 		// DockSpace
 		if (scene_viewport->can_resize)
@@ -194,9 +201,11 @@ update_status ModuleRenderer3D::Update()
 	}
 	else
 	{
+#endif
 		// Game =============================================================================================
 		GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
 		GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);
+		GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->z_buffer);
 
 		//Dockspace
 		if (game_viewport->can_resize)
@@ -213,11 +222,10 @@ update_status ModuleRenderer3D::Update()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
-
+#ifndef GAME_BUILD
 		is_rendering_scene = false;
 	}
-
-	
+#endif
 
 	return UPDATE_CONTINUE;
 }
@@ -229,36 +237,6 @@ update_status ModuleRenderer3D::PostUpdate()
 
 	SDL_GL_SwapWindow(App->window->window);
 
-	//// DockSpace
-	//if (scene_viewport->can_resize)
-	//{
-	//	ResizeDockspace(App->gui->scene->GetPanelSize(), scene_viewport);
-	//	scene_viewport->can_resize = false;
-	//}
-	//
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	//glLoadIdentity();
-
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadMatrixf(App->camera->GetSceneCamera()->GetViewMatrix().ptr());
-
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	//glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
-
-	/*if (game_viewport->can_resize)
-	{
-		ResizeDockspace(App->gui->game->GetPanelSize(), game_viewport);
-		game_viewport->can_resize = false;
-	}
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glLoadIdentity();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetGameCamera()->GetViewMatrix().ptr());
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearColor(background_color[0], background_color[1], background_color[2], 1.f);*/
 	return UPDATE_CONTINUE;
 }
 
@@ -296,17 +274,12 @@ bool ModuleRenderer3D::Load(nlohmann::json & node)
 
 Viewport * ModuleRenderer3D::CreateViewport()
 {
-	Viewport* viewport = nullptr;
-	viewport = new Viewport;
-
-	return viewport;
+	return new Viewport();
 }
 
 void ModuleRenderer3D::DeleteViewport(Viewport * viewport)
 {
 	RELEASE(viewport);
-	viewport = nullptr;
-	
 }
 
 
@@ -354,6 +327,12 @@ void ModuleRenderer3D::ResizeDockspace(ImVec2 size, Viewport* viewport, Camera* 
 	UpdateTextureBuffers(size.x, size.y, viewport);
 }
 
+void ModuleRenderer3D::StartzBuffer()
+{
+	UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, scene_viewport);
+	UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, game_viewport);
+}
+
 void ModuleRenderer3D::OnResize(int width, int height, Camera* camera)
 {
 	camera->SetAspectRatio((float)width / (float)height);
@@ -373,30 +352,56 @@ void ModuleRenderer3D::InitTextureBuffers(Viewport* viewport)
 	glGenRenderbuffers(1, &viewport->depth_render_buffer);
 	glGenTextures(1, &viewport->render_texture);
 	glGenFramebuffers(1, &viewport->frame_buffer);
+	glGenTextures(1, &viewport->z_buffer);
+
 
 }
 
 void ModuleRenderer3D::UpdateTextureBuffers(int width, int height, Viewport* viewport)
 {
 	// Depth
+	glGenRenderbuffers(1, &viewport->depth_render_buffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, viewport->depth_render_buffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	//glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, viewport->depth_render_buffer);
+
+	// Frame Buffer
+	glGenFramebuffers(1, &viewport->frame_buffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, viewport->frame_buffer);
 
 	// Texture
+	glGenTextures(1, &viewport->render_texture);
 	glBindTexture(GL_TEXTURE_2D, viewport->render_texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
+
+	// ZBuffer Textures 
+	glGenTextures(1, &viewport->z_buffer);
+	glBindTexture(GL_TEXTURE_2D, viewport->z_buffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Depth and Texture to Frame buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, viewport->frame_buffer);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, viewport->depth_render_buffer);
+	if(!is_zbuffer_active)
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, viewport->depth_render_buffer);
+	else
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, viewport->render_texture, 0);
+
+
+	GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+	glDrawBuffers(1, DrawBuffers);
 
 	// If program can generate the texture 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -404,7 +409,10 @@ void ModuleRenderer3D::UpdateTextureBuffers(int width, int height, Viewport* vie
 		LOG("[Error] creating screen buffer");
 	}
 
+	// Unbind everything
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 Viewport::Viewport()

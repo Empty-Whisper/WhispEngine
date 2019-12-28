@@ -26,7 +26,13 @@
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("SceneIntro");
+#ifndef GAME_BUILD
 	octree = new OctreeTree(float3(-100, -100, -100), float3(100, 100, 100), 1);
+#else
+	show_grid = false;
+	show_octree = false;
+	show_mouse_raycast = false;
+#endif
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -75,6 +81,8 @@ update_status ModuleSceneIntro::Update()
 	if (show_grid)
 		DrawGrid();
 
+	//DrawSkyboxSphere();
+
 	if (show_octree) {
 		glDisable(GL_LIGHTING);
 		octree->Render();
@@ -100,6 +108,21 @@ update_status ModuleSceneIntro::PostUpdate()
 }
 
 void ModuleSceneIntro::DrawGrid()
+{
+	glDisable(GL_LIGHTING);
+
+	glColor3f(1.f, 1.f, 1.f);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, grid_id);
+	glVertexPointer(3, GL_INT, 0, NULL);
+	glDrawArrays(GL_LINES, 0, grid_vertex_size);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glEnable(GL_LIGHTING);
+
+}
+
+void ModuleSceneIntro::DrawSkyboxSphere()
 {
 	glDisable(GL_LIGHTING);
 
@@ -146,6 +169,10 @@ void ModuleSceneIntro::GenerateGrid(const int & width)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(int) * grid_vertex_size, grid, GL_STATIC_DRAW);
 	
 	delete[] grid;
+}
+
+void ModuleSceneIntro::GenerateSkyboxSphere(const int & radius)
+{
 }
 
 bool ModuleSceneIntro::SaveCurrentScene()
@@ -217,17 +244,20 @@ bool ModuleSceneIntro::LoadScene(const char* scene)
 	nlohmann::json scene_file = App->file_system->OpenFile(scene);
 	
 	Camera* cam = App->camera->GetSceneCamera();
-	cam->SetTransformPosition(App->json->GetFloat3("position", scene_file["Camera"]));
-	Quat r = App->json->GetQuaternion("rotation", scene_file["Camera"]);
-	cam->SetVectorDirectionFront(-r.WorldZ());
-	cam->SetVectorDirectionUp(r.WorldY());
+	if (cam != nullptr) {
+		cam->SetTransformPosition(App->json->GetFloat3("position", scene_file["Camera"]));
+		Quat r = App->json->GetQuaternion("rotation", scene_file["Camera"]);
+		cam->SetVectorDirectionFront(-r.WorldZ());
+		cam->SetVectorDirectionUp(r.WorldY());
+	}
 
 	scene_path.assign(scene);
 
 	ret = App->object_manager->LoadGameObjects(scene_file["GameObjects"]);
 	App->object_manager->LoadScripts(scene_file["GameObjects"]);
 
-	octree->Recalculate();
+	if (octree != nullptr)
+		octree->Recalculate();
 
 	return ret;
 }
