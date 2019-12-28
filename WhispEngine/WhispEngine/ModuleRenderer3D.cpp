@@ -20,6 +20,7 @@ ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 
 	scene_viewport = CreateViewport();
 	game_viewport = CreateViewport();
+	zbuffer_viewport = CreateViewport();
 
 }
 
@@ -144,6 +145,8 @@ bool ModuleRenderer3D::Init(nlohmann::json &node)
 	// Projection matrix for
 	InitTextureBuffers(scene_viewport);
 	InitTextureBuffers(game_viewport);
+	InitTextureBuffers(zbuffer_viewport);
+
 	return ret;
 }
 
@@ -171,6 +174,7 @@ update_status ModuleRenderer3D::Update()
 		is_zbuffer_active = !is_zbuffer_active;
 		UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, scene_viewport);
 		UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, game_viewport);
+		UpdateTextureBuffers(App->gui->game->GetPanelSize().x, App->gui->game->GetPanelSize().y, zbuffer_viewport);
 	}
 
 	if (!is_rendering_scene) // TODO: Threads ;)
@@ -205,6 +209,11 @@ update_status ModuleRenderer3D::Update()
 		GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
 		GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);
 		GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->z_buffer);
+
+		// zBuffer =============================================================================================
+		GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
+		GetGameViewport()->UpdateBind(App->renderer3D->zbuffer_viewport->render_texture);
+		GetGameViewport()->UpdateBind(App->renderer3D->zbuffer_viewport->z_buffer);
 
 		//Dockspace
 		if (game_viewport->can_resize)
@@ -247,6 +256,7 @@ bool ModuleRenderer3D::CleanUp()
 
 	SDL_GL_DeleteContext(context);
 	DeleteViewport(game_viewport);
+	DeleteViewport(zbuffer_viewport);
 	DeleteViewport(scene_viewport);
 	delete[] background_color;
 
@@ -392,10 +402,12 @@ void ModuleRenderer3D::UpdateTextureBuffers(int width, int height, Viewport* vie
 	//glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Depth and Texture to Frame buffer
-	if(!is_zbuffer_active)
+	/*if(!is_zbuffer_active && viewport != zbuffer_viewport)
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, viewport->depth_render_buffer);
 	else
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);*/
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, viewport->z_buffer, 0);
+
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, viewport->render_texture, 0);
 
 
