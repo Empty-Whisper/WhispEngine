@@ -1,5 +1,16 @@
 # Changelog
 
+## [Assignment3.2] - 28/12/2019
+### Added
+
+- ZBuffer preview in real time
+- Skybox
+- Creation of Game Builds
+
+### Fixed
+
+- Mouse Picking while not hovering Scene Panel
+
 ## [Assignment3.1] - 28/12/2019
 ### Added
 
