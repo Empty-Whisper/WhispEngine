@@ -64,7 +64,15 @@ bool ModuleWindow::Init(nlohmann::json &node)
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
+		if (node["flags"]["maximized"])
+		{
+			flags |= SDL_WINDOW_MAXIMIZED;
+		}
+#ifndef GAME_BUILD
 		window = SDL_CreateWindow(App->GetAppName(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+#else
+		window = SDL_CreateWindow("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+#endif
 		if(window == NULL)
 		{
 			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -74,6 +82,9 @@ bool ModuleWindow::Init(nlohmann::json &node)
 		{
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
+			SDL_GetWindowSize(window, &width, &height);
+			screen_width = width;
+			screen_height = height;
 		}
 	}
 

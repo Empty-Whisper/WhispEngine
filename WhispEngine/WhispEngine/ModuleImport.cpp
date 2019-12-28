@@ -36,6 +36,7 @@ ModuleImport::~ModuleImport()
 
 bool ModuleImport::Start()
 {
+
 	// Stream log messages to Log window
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);

@@ -5,6 +5,7 @@
 #include "ModuleGUI.h"
 #include "ModuleRenderer3D.h"
 #include "Brofiler/Brofiler.h"
+#include "ModuleWindow.h"
 
 PanelGame::PanelGame(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
 	: Panel("Game", start_active, shortcut1, shortcut2, shortcut3)
@@ -17,13 +18,21 @@ PanelGame::~PanelGame()
 void PanelGame::Update()
 {
 	BROFILER_CATEGORY("Game", Profiler::Color::Moccasin);
-
 	ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+
+#ifndef GAME_BUILD
+	focused = false;
 
 	if (ImGui::Begin("Game", &active))
 	{
 		focused = ImGui::IsWindowFocused();
-
+#else
+	ImGui::SetNextWindowSize(ImVec2(App->window->screen_width, App->window->screen_height));
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	if (ImGui::Begin("Game", NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove))
+	{
+		focused = true;
+#endif
 		ImVec2 current_viewport_size = ImGui::GetContentRegionAvail();
 
 		//Check if window is Resized
@@ -42,12 +51,15 @@ void PanelGame::Update()
 			ImGui::Image((ImTextureID)App->renderer3D->game_viewport->z_buffer, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
 		else
 			ImGui::Image((ImTextureID)App->renderer3D->game_viewport->render_texture, ImVec2(current_viewport_size.x, current_viewport_size.y), ImVec2(0, 1), ImVec2(1, 0));
+
 		
 	}
 	ImGui::End();
 	ImGui::PopStyleVar();
 
+#ifndef GAME_BUILD
 	App->gui->scene->active_preview = false;
+#endif
 }
 
 const ImVec2 PanelGame::GetPanelSize()

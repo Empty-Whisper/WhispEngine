@@ -50,13 +50,15 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	LOG("Init ImGui v%s", ImGui::GetVersion());
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	
-	
+#ifndef GAME_BUILD
 	// Docking -----------------------------------------------------------
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;		// Enable keyboard controls
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform 
 	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-
+#else
+	io.IniFilename = NULL;
+#endif
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL3_Init();
 
@@ -65,6 +67,7 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	ImGui::StyleColorsDark();
 
 	LOG("Initi panels");
+#ifndef GAME_BUILD
 	panels.push_back(about = new PanelAbout(node["panels"]["about"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_LCTRL, SDL_SCANCODE_A));
 	panels.push_back(config = new PanelConfiguration(node["panels"]["configuration"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_1));
 	panels.push_back(console = new PanelConsole(node["panels"]["console"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_2));
@@ -78,6 +81,10 @@ bool ModuleGUI::Init(nlohmann::json &node)
 	panels.push_back(shortcut = new PanelShortcut(node["panels"]["shortcut"].value("start_enabled", true), SDL_SCANCODE_LSHIFT, SDL_SCANCODE_0));
 
 	ImGuizmo::Enable(true);
+#else
+	panels.push_back(game = new PanelGame());
+	App->SetState(Application::GameState::PLAY);
+#endif
 
 	return true;
 }
@@ -97,17 +104,18 @@ update_status ModuleGUI::PreUpdate()
 update_status ModuleGUI::Update()
 {
 	BROFILER_CATEGORY("GUI", Profiler::Color::Purple);
-
-	update_status ret = MainMenuBar();
+	update_status ret = update_status::UPDATE_CONTINUE;
+#ifndef GAME_BUILD
+	ret = MainMenuBar();
 
 	ModalSaveScene();
 
 	Dockspace();
 
 	PlayPauseStop();
-
+#endif
 	UpdatePanels();
-
+#ifndef GAME_BUILD
 	if (show_demo_window)
 	{
 		ImGui::ShowDemoWindow(&show_demo_window);
@@ -121,7 +129,7 @@ update_status ModuleGUI::Update()
 			ImGui::End();
 		}
 	}
-
+#endif
 	return ret;
 }
 

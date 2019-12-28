@@ -154,8 +154,14 @@ update_status ModuleRenderer3D::PreUpdate()
 	/*GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
 	GetGameViewport()->SetMatrix(App->camera->GetGameCamera());*/
 
-	//Light 0 on cam pos
-	lights[0].SetPos(App->camera->GetSceneCamera()->GetFrustum().pos.x, App->camera->GetSceneCamera()->GetFrustum().pos.y, App->camera->GetSceneCamera()->GetFrustum().pos.z);
+	Camera* cam = nullptr;
+#ifndef GAME_BUILD
+	cam = App->camera->GetSceneCamera();
+#else
+	cam = App->camera->GetGameCamera();
+#endif
+	if (cam != nullptr)
+		lights[0].SetPos(cam->GetFrustum().pos.x, cam->GetFrustum().pos.y, cam->GetFrustum().pos.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -167,9 +173,9 @@ update_status ModuleRenderer3D::Update()
 {
 	BROFILER_CATEGORY("Render", Profiler::Color::FireBrick);
 
+#ifndef GAME_BUILD
 	if (!is_rendering_scene) // TODO: Threads ;)
 	{
-
 		// SCENE ============================================================================================ =
 		GetSceneViewport()->SetMatrix(App->camera->GetSceneCamera());
 		GetSceneViewport()->UpdateBind(App->renderer3D->scene_viewport->render_texture);
@@ -195,6 +201,7 @@ update_status ModuleRenderer3D::Update()
 	}
 	else
 	{
+#endif
 		// Game =============================================================================================
 		GetGameViewport()->SetMatrix(App->camera->GetGameCamera());
 		GetGameViewport()->UpdateBind(App->renderer3D->game_viewport->render_texture);
@@ -215,11 +222,10 @@ update_status ModuleRenderer3D::Update()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClearColor(background_color[0], background_color[1], background_color[2], 1.f);
-
+#ifndef GAME_BUILD
 		is_rendering_scene = false;
 	}
-
-	
+#endif
 
 	return UPDATE_CONTINUE;
 }
@@ -268,17 +274,12 @@ bool ModuleRenderer3D::Load(nlohmann::json & node)
 
 Viewport * ModuleRenderer3D::CreateViewport()
 {
-	Viewport* viewport = nullptr;
-	viewport = new Viewport;
-
-	return viewport;
+	return new Viewport();
 }
 
 void ModuleRenderer3D::DeleteViewport(Viewport * viewport)
 {
 	RELEASE(viewport);
-	viewport = nullptr;
-	
 }
 
 
