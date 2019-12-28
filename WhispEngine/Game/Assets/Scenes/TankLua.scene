@@ -1,15 +1,15 @@
 {
     "Camera": {
         "position": [
-            0.15885703265666962,
-            5.44164514541626,
-            -3.8335459232330322
+            14.187661170959473,
+            8.0999174118042,
+            -2.5562326908111572
         ],
         "rotation": [
-            0.02152067981660366,
-            -0.008506682701408863,
-            0.9297338128089905,
-            0.36750462651252747
+            0.5670419335365295,
+            -0.127281054854393,
+            0.7940376400947571,
+            0.17823383212089539
         ]
     },
     "GameObjects": [
@@ -166,7 +166,7 @@
                                         }
                                     ],
                                     "active": true,
-                                    "script": "Assets\\Scripts\\RotateTurret2.lua",
+                                    "script": "D:\\Christian\\Github\\WhispEngine\\WhispEngine\\Game\\Assets\\Scripts\\RotateTurret.lua",
                                     "type": 5
                                 }
                             ],
@@ -667,7 +667,7 @@
                     "Components": [
                         {
                             "active": true,
-                            "aspect_ratio": 1.2793296575546265,
+                            "aspect_ratio": 1.060185194015503,
                             "checkbox_main_camera": false,
                             "far_plane": 200.0,
                             "is_main_camera": false,
