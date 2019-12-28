@@ -17,9 +17,4 @@
       <UniqueIdentifier>{f0b00b80-a44e-4688-957f-430fd3978905}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\Scripts\test.lua">
-      <Filter>Scripts</Filter>
-    </None>
-  </ItemGroup>
 </Project>

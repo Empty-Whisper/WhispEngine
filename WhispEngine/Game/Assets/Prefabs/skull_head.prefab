@@ -203,7 +203,7 @@
                                 }
                             ],
                             "active": true,
-                            "script": "Assets\\Scripts\\SkullRotation.lua",
+                            "script": "Assets\\Scripts\\BulletRotation.lua",
                             "type": 5
                         }
                     ],

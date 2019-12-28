@@ -1,15 +1,16 @@
 {
     "Camera": {
         "position": [
-            -4.411253929138184,
-            11.87106990814209,
-            -9.148223876953125
+
+            14.187661170959473,
+            8.0999174118042,
+            -2.5562326908111572
         ],
         "rotation": [
-            -0.17294950783252716,
-            -0.020391859114170074,
-            0.9779455065727234,
-            -0.11530578136444092
+            0.5670419335365295,
+            -0.127281054854393,
+            0.7940376400947571,
+            0.17823383212089539
         ]
     },
     "GameObjects": [
@@ -117,6 +118,19 @@
                                     "Children": null,
                                     "Components": [
                                         {
+
+                                            "InspectorVars": [
+                                                {
+                                                    "data": "Assets\\Prefabs\\Bullet.prefab",
+                                                    "key": "bullet",
+                                                    "type": 8
+                                                },
+                                                {
+                                                    "data": 70,
+                                                    "key": "speed",
+                                                    "type": 1
+                                                }
+                                            ],
                                             "active": true,
                                             "script": "Assets\\Scripts\\ShotTank.lua",
                                             "type": 5
@@ -127,8 +141,8 @@
                                     "name": "Cannon",
                                     "position": [
                                         -7.419626399496337e-06,
-                                        128.09786987304688,
-                                        109.35173034667969
+                                        147.39955139160156,
+                                        99.766357421875
                                     ],
                                     "rotation": [
                                         1.0,
@@ -147,7 +161,7 @@
                             "Components": [
                                 {
                                     "active": true,
-                                    "script": "Assets\\Scripts\\RotateTurret2.lua",
+                                    "script": "D:\\Christian\\Github\\WhispEngine\\WhispEngine\\Game\\Assets\\Scripts\\RotateTurret.lua",
                                     "type": 5
                                 }
                             ],
@@ -579,7 +593,13 @@
                                     "static": false
                                 }
                             ],
-                            "Components": null,
+                            "Components": [
+                                {
+                                    "active": true,
+                                    "script": "Assets/Scripts/RotateTank.lua",
+                                    "type": 5
+                                }
+                            ],
                             "UID": 1723532109397344000,
                             "active": true,
                             "name": "Base",
@@ -635,7 +655,8 @@
                     "Components": [
                         {
                             "active": true,
-                            "aspect_ratio": 1.3314710855484009,
+
+                            "aspect_ratio": 1.060185194015503,
                             "checkbox_main_camera": false,
                             "far_plane": 10000.0,
                             "is_main_camera": false,
@@ -644,11 +665,19 @@
                             "vertical_fov": 70.0
                         },
                         {
-                            "active": true,
-                            "script": "Assets\\Scripts\\Camera.lua",
-                            "type": 5
-                        },
-                        {
+
+                            "InspectorVars": [
+                                {
+                                    "data": 0,
+                                    "key": "offset_thirdp",
+                                    "type": 1
+                                },
+                                {
+                                    "data": 17797003798229770240,
+                                    "key": "tank",
+                                    "type": 7
+                                }
+                            ],
                             "active": true,
                             "script": "Assets\\Scripts\\Camera.lua",
                             "type": 5
@@ -659,8 +688,8 @@
                     "name": "MainCamera",
                     "position": [
                         0.0,
-                        2.200000047683716,
-                        0.0
+                        2.520291328430176,
+                        -4.499146938323975
                     ],
                     "rotation": [
                         1.0,
@@ -933,6 +962,7 @@
                                     "Children": null,
                                     "Components": [
                                         {
+
                                             "Resource": 6329137884315130880,
                                             "active": true,
                                             "face color": [
@@ -1550,13 +1580,13 @@
                                             "active": true,
                                             "name": "City_building_016_1",
                                             "position": [
-                                                34.270423889160156,
-                                                -41.972747802734375,
-                                                8.553864745408646e-07
+                                                0.0,
+                                                0.0,
+                                                0.0
                                             ],
                                             "rotation": [
                                                 -4.371138828673793e-08,
-                                                -2.117582368135751e-22,
+                                                -3.1763735522036263e-22,
                                                 0.0,
                                                 1.0
                                             ],

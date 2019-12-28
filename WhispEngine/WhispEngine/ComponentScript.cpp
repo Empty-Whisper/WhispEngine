@@ -37,14 +37,14 @@ void ComponentScript::Update()
 	{
 		if (!start_done) {
 			if (luaL_dofile(App->scripting->GetState(), script_path.c_str()) == 0) {
-				script = luabridge::getGlobal(App->scripting->GetState(), "Init")();
+				UpdateInspectorVars();
 			}
 			else {
 				LOG("Failed to Load File: %s", script_path.c_str());
 			}
 		}
 
-		luabridge::setGlobal(App->scripting->GetState(), object, "object");
+		luabridge::setGlobal(App->scripting->GetState(), object, "gameObject");
 		luabridge::setGlobal(App->scripting->GetState(), object->transform, "transform");
 		if (!public_vars.empty()) {
 			SetInspectorVars();
@@ -61,7 +61,7 @@ void ComponentScript::Update()
 		else {
 			LOG("Script: %s is not a table", script_path.c_str());
 		}
-				
+		
 		lua_pop(App->scripting->GetState(), -1);
 		lua_pop(App->scripting->GetState(), -1);
 		if (!public_vars.empty())
@@ -352,9 +352,9 @@ void ComponentScript::OpenModalWindowsToLoadScript()
 void ComponentScript::UpdateInspectorVars()
 {
 	if (luaL_dofile(App->scripting->GetState(), script_path.c_str()) == 0) {
-		luabridge::LuaRef ref = luabridge::getGlobal(App->scripting->GetState(), name.data());
-		if (ref.isTable()) {
-			ref = ref["Variables"];
+		script = luabridge::getGlobal(App->scripting->GetState(), "Init")();
+		if (script.isTable()) {
+			luabridge::LuaRef ref = script["Variables"];
 			if (ref.isTable()) {
 				std::ifstream is(script_path.c_str());
 				std::string str;
@@ -631,4 +631,5 @@ void ComponentScript::Load(const nlohmann::json & node)
 			}
 		}
 	}
+	UpdateInspectorVars();
 }
