@@ -21,6 +21,8 @@
 #include "ModuleScripting.h"
 #include "Lua/LuaBridge/LuaBridge.h"
 
+#include "mmgr/mmgr.h"
+
 std::vector<GameObject*> ModuleObjectManager::to_delete;
 
 ModuleObjectManager::ModuleObjectManager()
@@ -49,8 +51,10 @@ update_status ModuleObjectManager::Update()
 	glEnable(GL_LIGHTING);
 
 	//MousePicking
+#ifndef GAME_BUILD
 	if (!App->gui->game->focused && App->gui->scene->on_hover && App->input->GetMouseButtonDown(1) && !App->input->GetKey(SDL_SCANCODE_LALT))
 		MousePicking();
+#endif
 
 	//Update GO
 	UpdateGameObject(root);

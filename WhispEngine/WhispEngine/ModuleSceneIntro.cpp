@@ -24,6 +24,7 @@
 #endif
 //--------------------------------------------------------------------
 
+#include "mmgr/mmgr.h"
 
 ModuleSceneIntro::ModuleSceneIntro(bool start_enabled) : Module(start_enabled)
 {

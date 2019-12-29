@@ -6,7 +6,7 @@
 #include "ModuleObjectManager.h"
 #include "ModuleSceneIntro.h"
 #include "Brofiler/Brofiler.h"
-
+#include "mmgr/mmgr.h"
 PanelHierarchy::PanelHierarchy(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	:Panel("Hierarchy", start_active, shortcut1, shortcut2, shortcut3)
 {

@@ -9,6 +9,8 @@
 #include "DevIL/include/IL/ilu.h"
 #include "DevIL/include/IL/ilut.h"
 
+#include "mmgr/mmgr.h"
+
 ResourceTexture::ResourceTexture(const uint64& uid) : Resource(uid, Resource::Type::TEXTURE)
 {
 }

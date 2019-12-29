@@ -87,6 +87,7 @@
 #include <time.h>
 #include <stdarg.h>
 #include <new>
+#include "../Globals.h"
 
 #ifndef	_WIN32
 #include <unistd.h>
@@ -532,7 +533,7 @@ static	void	dumpAllocations(FILE *fp)
 static	void	dumpLeakReport()
 {
 	// Open the report file
-
+#ifndef GAME_BUILD
 	FILE	*fp = fopen(memoryLeakLogFile, "w+b");
 
 	// If you hit this assert, then the memory report generator is unable to log information to a file (can't open the file for
@@ -562,7 +563,7 @@ static	void	dumpLeakReport()
 		fprintf(fp, "Congratulations! No memory leaks found!\r\n");
 
 		// We can finally free up our own memory allocations
-
+#endif
 		if (reservoirBuffer)
 		{
 			for (unsigned int i = 0; i < reservoirBufferSize; i++)
@@ -574,6 +575,7 @@ static	void	dumpLeakReport()
 			reservoirBufferSize = 0;
 			reservoir = NULL;
 		}
+#ifndef GAME_BUILD
 	}
 	fprintf(fp, "\r\n");
 
@@ -583,6 +585,7 @@ static	void	dumpLeakReport()
 	}
 
 	fclose(fp);
+#endif
 	_CrtDumpMemoryLeaks();
 }
 
@@ -1682,7 +1685,7 @@ void	m_dumpAllocUnit(const sAllocUnit *allocUnit, const char *prefix)
 void	m_dumpMemoryReport(const char *filename, const bool overwrite)
 {
 	// Open the report file
-
+#ifndef GAME_BUILD
 	FILE	*fp = NULL;
 	
 	if (overwrite)	fp = fopen(filename, "w+b");
@@ -1742,6 +1745,7 @@ void	m_dumpMemoryReport(const char *filename, const bool overwrite)
 	dumpAllocations(fp);
 
 	fclose(fp);
+#endif
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------

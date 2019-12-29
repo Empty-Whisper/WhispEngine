@@ -18,6 +18,7 @@
 
 #include "Brofiler/Brofiler.h"
 
+#include "mmgr/mmgr.h"
 
 ComponentMesh::ComponentMesh(GameObject *parent) : Component(parent, ComponentType::MESH)
 {

@@ -13,6 +13,8 @@
 #include "ModuleScripting.h"
 #include "Lua/LuaBridge/LuaBridge.h"
 
+#include "mmgr/mmgr.h"
+
 #define MAX_KEYS 300
 
 std::map<std::string, SDL_Scancode> ModuleInput::lua_map;

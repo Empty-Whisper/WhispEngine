@@ -1,5 +1,6 @@
 #include "Panel.h"
 #include "Application.h"
+#include "mmgr/mmgr.h"
 
 Panel::Panel()
 {

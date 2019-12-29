@@ -6,6 +6,7 @@
 #include "ModuleRenderer3D.h"
 #include "Brofiler/Brofiler.h"
 #include "ModuleWindow.h"
+#include "mmgr/mmgr.h"
 
 ImVec2 PanelGame::panel_size;
 

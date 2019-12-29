@@ -10,7 +10,7 @@
 #include "ModuleObjectManager.h"
 #include "Brofiler/Brofiler.h"
 #include "ComponentMaterial.h"
-
+#include "mmgr/mmgr.h"
 
 PanelConfiguration::PanelConfiguration(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	: Panel("Configuration", start_active, shortcut1, shortcut2, shortcut3)

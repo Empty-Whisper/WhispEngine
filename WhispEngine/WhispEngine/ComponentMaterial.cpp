@@ -9,6 +9,7 @@
 #include "ModuleObjectManager.h"
 #include "ModuleResources.h"
 #include "Resource.h"
+#include "mmgr/mmgr.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* parent) : Component(parent, ComponentType::MATERIAL)
 {
@@ -74,11 +75,11 @@ void ComponentMaterial::OnInspector()
 				std::vector<ResourceTexture*> textures;
 				App->resources->GetTextures(textures);
 				for (auto i = textures.begin(); i != textures.end(); ++i) {
-					if ((*i)->IsLoadedInMemory()) {
-						ImGui::ImageButton((ImTextureID)(*i)->buffer_id, ImVec2(width, height));
-						ImGui::SameLine();
+					if (ImGui::Button(App->file_system->GetFileFromPath((*i)->GetFile()).c_str())) {
+						App->resources->LoadToMemory((*i)->uid);
+						uid = (*i)->uid;
+						select_tex = false;
 					}
-					ImGui::Text((*i)->GetFile());
 				}
 
 				ImGui::End();

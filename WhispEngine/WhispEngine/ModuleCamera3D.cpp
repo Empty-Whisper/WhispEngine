@@ -14,6 +14,10 @@
 #include "ModuleObjectManager.h"
 
 #include "MathGeoLib/include/Geometry/AABB.h"
+
+#include "mmgr/mmgr.h"
+
+
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	name.assign("Camera3D");

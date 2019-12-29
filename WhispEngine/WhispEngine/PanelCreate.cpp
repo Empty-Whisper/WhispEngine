@@ -3,7 +3,7 @@
 #include "Imgui/imgui_internal.h" // for ImGui::PushFlag
 #include "Application.h"
 #include "Globals.h"
-
+#include "mmgr/mmgr.h"
 PanelCreate::PanelCreate(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	:Panel("Create", start_active, shortcut1, shortcut2, shortcut3)
 {

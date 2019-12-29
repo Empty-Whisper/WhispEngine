@@ -23,6 +23,8 @@
 
 #pragma comment (lib, "Assimp/libx86/assimp-vc141-mtd.lib")
 
+#include "mmgr/mmgr.h"
+
 
 ModuleImport::ModuleImport()
 {

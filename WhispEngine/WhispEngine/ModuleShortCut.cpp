@@ -1,6 +1,7 @@
 #include "ModuleShortCut.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "mmgr/mmgr.h"
 
 
 ModuleShortCut::ModuleShortCut()

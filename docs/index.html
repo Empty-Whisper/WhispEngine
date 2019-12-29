@@ -27,7 +27,7 @@ Licence URI: https://www.os-templates.com/template-terms
       <header id="header" class="hoc clear">
         <!-- ################################################################################################ -->
         <div id="logo" class="fl_left">
-          <h1><a href="index.html">CITM - UPC</a></h1>
+          <h1><a href="https://www.citm.upc.edu/">CITM - UPC</a></h1>
         </div>
         <!-- ################################################################################################ -->
       </header>
@@ -39,11 +39,12 @@ Licence URI: https://www.os-templates.com/template-terms
       <article>
         <!-- ################################################################################################ -->
         <h3 class="heading">Whisp Engine</h3>
-        <p>Defend the astronauts and the ship from the enemy ships. Hire astronauts with different jobs to keep a
-          balanced ship</p>
+        <p></p>
         <p class="font-x1 uppercase bold">Empty Whisper</p>
-        <footer><a class="btn" href="https://github.com/optus23/AIUnityGame">Download Release</a></footer>
-        <footer><a class="btn" href="https://github.com/optus23/AIUnityGame">GitHub Repository</a></footer>
+        <footer><a class="btn" href="https://github.com/Empty-Whisper/WhispEngine/releases/latest">Download Latest
+            Release</a></footer>
+        <footer><a class="btn" href="https://github.com/Empty-Whisper/WhispEngine/tree/master">GitHub Repository</a>
+        </footer>
 
         <!-- ################################################################################################ -->
       </article>
@@ -59,12 +60,11 @@ Licence URI: https://www.os-templates.com/template-terms
         <h6 class="heading">Description</h6>
       </div>
       <div class="group">
-        <p><strong>Orci dignissim placerat quisque</strong></p>
-        <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex non
-          enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut condimentum
-          duis.</p>
-        <p class="btmspace-30">Luctus quam ut est aliquam et ultricies nisl vulputate donec in luctus arcu maecenas nec
-          metus ac magna posuere.</p>
+        <p><strong>Smile and wave boys</strong></p>
+        <p>Whisper Engine is a 3D video game engine. It has been developed in the subject of Game Engines in the third
+          year of the university degree of videogames of CITM-UPC. The subject was to make an engine from scratch using
+          OpenGL, and here is the result.</p>
+        <p class="btmspace-30">We hope you like it!</p>
       </div>
       <!-- ################################################################################################ -->
     </div>
@@ -74,52 +74,97 @@ Licence URI: https://www.os-templates.com/template-terms
   <!-- ################################################################################################ -->
   <div class="wrapper row2">
     <main class="hoc container clear">
-      <!-- main body -->
-      <!-- ################################################################################################ -->
-      <ul class="nospace group services">
-        <li class="one_third first">
-          <article><a href="#"><i class="fa fa-2x fa-registered"></i></a>
-            <h6 class="heading font-x1">Main</h6>
-            <p>Ipsum feugiat diam fermentum ornare proin blandit rhoncus eros nec vulputate aliquam tempus non dolor
-              vitae finibus [&hellip;]</p>
-          </article>
-        </li>
-        <li class="one_third">
-          <article><a href="#"><i class="fa fa-2x fa-renren"></i></a>
-            <h6 class="heading font-x1">Core</h6>
-            <p>Suscipit lacus eu posuere vehicula cras lacinia nunc libero feugiat tristique massa mattis quis donec eu
-              porttitor consequat [&hellip;]</p>
-          </article>
-        </li>
-        <li class="one_third">
-          <article><a href="#"><i class="fa fa-2x fa-resistance"></i></a>
-            <h6 class="heading font-x1">Sub-Systems</h6>
-            <p>Felis proin hendrerit sapien ipsum quis accumsan ipsum vestibulum faucibus nunc rhoncus lectus non nunc
-              dapibus congue [&hellip;]</p>
-          </article>
-        </li>
-        <li class="one_third first">
-          <article><a href="#"><i class="fa fa-2x fa-flash"></i></a>
-            <h6 class="heading font-x1">Dignissim tristique</h6>
-            <p>Vivamus sollicitudin metus cursus pulvinar posuere nam fringilla pretium fringilla vestibulum commodo
-              sagittis elit dui rutrum velit [&hellip;]</p>
-          </article>
-        </li>
-        <li class="one_third">
-          <article><a href="#"><i class="fa fa-2x fa-assistive-listening-systems"></i></a>
-            <h6 class="heading font-x1">Ante luctus malesuada</h6>
-            <p>At porta massa fringilla vitae elit donec tellus lorem rhoncus in orci et efficitur hendrerit erat nam
-              porttitor duis eget dignissim [&hellip;]</p>
-          </article>
-        </li>
-        <li class="one_third">
-          <article><a href="#"><i class="fa fa-2x fa-globe"></i></a>
-            <h6 class="heading font-x1">Erat mauris donec</h6>
-            <p>Lacus ut lorem rhoncus dictum sed nisl eros consequat vel velit et venenatis accumsan nibh sed sit amet
-              turpis convallis [&hellip;]</p>
-          </article>
-        </li>
-      </ul>
+      <div class="sectiontitle">
+        <h6 class="heading">Main Core Sub-systems</h6>
+      </div>
+      <div class="group">
+        <p><strong>GameObjects</strong></p>
+        <p>The GameObjects are the core of the engine and the future game.
+          It is a container, an instance that stores different components. A GameObject by itself has nothing special,
+          components, a name, a unique identifier, a reference to the father and a vector with references to the
+          children, which provides
+          the possibility of creating GameObjects hierarchies.</p>
+        <p><strong>Components</strong></p>
+        <p>The components are what give the GameObjects useful. Each component has a use and features
+          that are displayed and can be edited in the GameObjects inspector. In WhispEngine we have a
+          few.</p>
+        <p class="btmspace-10">The Transform component will always exist alongside the GameObject.
+          It contains two transformation matrices, a global one with the position, rotation and scale with
+          respect to the world and a local one with respect to the father's global matrix.
+        </p>
+        <p class="btmspace-10">Mesh component contains the mesh to be rendered and is
+          responsible for painting each frame, it also has the
+          bounding boxes, the AABB and the OBB.
+        </p>
+        <p class="btmspace-10">Material component is responsible for painting a texture
+          in the mesh or, if it does not have any, of a specific color.
+        </p>
+        <p class="btmspace-10">Camera component is used to paint
+          the scene in the game, it has several values ​​to modify such as the FOV, the aspect ratio or the
+          distance of the near and far plane.
+        </p>
+        <p class="btmspace-10">Component script is the one that is responsible for executing
+          a lua script, saving its variables and displaying the public ones in the inspector so that they
+          can be modified.</p>
+
+        <p><strong>Prefabs</strong></p>
+        <p>Prefabs are hierarchies of GameObjects with components that are saved to
+          instantiate several or have some in the scene, change a value of a variable and the
+          change is reflected in the other objects.</p>
+
+        <p><strong>Hierarchy</strong></p>
+        <p>A hierarchy is simply GameObjects' relationship with his father and his children.
+          Each scene has an invisible parent object that is the root
+          and that GameObject is the one that has as children the objects we see in the scene.</p>
+
+        <p><strong>Scenes</strong></p>
+        <p>The scene saves the hierarchy, next to the position and rotation of the viewport camera under a name.</p>
+
+        <p><strong>Octree</strong></p>
+        <p>Octree are a way to optimize, and Whisp Engine is not far behind when
+          it comes to optimization. When a GameObject is set as static it is added to
+          the octree, dividing it into 8 if it is positioned in an empty quadrant. The octree are
+          a much faster way to check collisions, in our case with the mouse picking raycast or with the frustum.</p>
+        <p><strong>ZBuffer</strong></p>
+        <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex
+          non
+          enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut
+          condimentum
+          duis.</p>
+        <p><strong>Skybox</strong></p>
+        <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex
+          non
+          enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut
+          condimentum
+          duis.</p>
+        <p><strong>ShortCuts</strong></p>
+        <p>ShortCuts system allows to put a concatenation of three keys and a pointer to a function. Every
+          time you push the keys, the function will be called. We used them as call of panels active/deactive. It
+          also has a panel to edit that shortcuts in order to set your own keys.
+        </p>
+        <p><strong>Play, Pause and One Frame</strong></p>
+        <p>We want to separate the time creating the game and the time the game is playing. We have trhee buttons in
+          order to
+          do this task.</p>
+
+        <p class="btmspace-10">Play will start the game. Starting the game timer, compiling the scripts and creating a
+          temporary save file of current scene.
+          Pressing Play during game run, will stop the game, loading the scene that was before start.</p>
+
+        <p class="btmspace-10">Pause will pause all GameObjects, avoiding update scripts.</p>
+
+        <p class="btmspace-10">One Frame will reanude the game for one frame.
+        </p>
+        <p><strong>Library</strong></p>
+        <p>Load Fbx from file is so slow,
+          in order to speed up we create a file that contain the data we need
+          from assets in our own file format because loading from own file format
+          is a lot faster. On the other hand, if we have a mesh of a house and we
+          instantiate it more than one time, the mesh will be loaded in memory more than one,
+          but we don't want this, so, having a resource of that mess and the component mesh stores that resource
+          will share the resource with other component meshes but only have loaded in memory one mesh</p>
+      </div>
+
       <!-- ################################################################################################ -->
       <!-- / main body -->
       <div class="clear"></div>
@@ -128,40 +173,7 @@ Licence URI: https://www.os-templates.com/template-terms
   <!-- ################################################################################################ -->
   <!-- ################################################################################################ -->
   <!-- ################################################################################################ -->
-  <div class="wrapper bgded overlay" style="background-image:url('images/gal1.png');">
-    <!-- ################################################################################################ -->
-    <ul></ul>
-    <ul></ul>
-    <ul></ul>
-    <ul></ul>
-    <div class="sectiontitle">
-      <h6 class="heading">Team Intro</h6>
 
-      <div class="services">
-        <figure class="videocontainer">
-          <!-- Important: Any type of video called via "iframe" must be in a container using class="videocontainer" -->
-          <iframe width="1280" height="720" src="https://www.youtube.com/embed/Gw7vHAQZ10M" frameborder="0"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </figure>
-      </div>
-    </div>
-    <ul></ul>
-    <ul></ul>
-    <ul></ul>
-    <ul></ul>
-    <div class="sectiontitle">
-      <h6 class="heading">Whisp Engine - Demo</h6>
-      <div class="services">
-        <figure class="videocontainer">
-          <!-- Important: Any type of video called via "iframe" must be in a container using class="videocontainer" -->
-          <iframe width="1280" height="720" src="https://www.youtube.com/embed/Gw7vHAQZ10M" frameborder="0"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </figure>
-      </div>
-
-    </div>
-    <!-- ################################################################################################ -->
-  </div>
   <div class="wrapper row1">
     <main class="hoc container clear">
       <div class="sectiontitle">
@@ -169,22 +181,28 @@ Licence URI: https://www.os-templates.com/template-terms
       </div>
       <!-- main body -->
       <!-- ################################################################################################ -->
-      <h6 class="heading font-x1">1. Animated Gif</h6>
+      <h6 class="heading font-x1">1. Main Structure</h6>
+      <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex non
+        enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut condimentum
+        duis.</p>
+      <p class="btmspace-30">Luctus quam ut est aliquam et ultricies nisl vulputate donec in luctus arcu maecenas nec
+        metus ac magna posuere.</p>
       <div>
-        <a class="imgover"
-          href="https://github.com/optus23/AIUnityGame/blob/master/Assets/BT_Recollector.jpg?raw=true"><img
-            src="images/demo/BT_Recollector.jpg" alt=""></a>
+        <a><img src="images/demo/BT_Recollector.jpg" alt=""></a>
       </div>
       <ul></ul>
       <ul></ul>
-      <h6 class="heading font-x1">2. Animated Gif</h6>
+      <h6 class="heading font-x1">2. Script as a Component</h6>
+      <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex non
+        enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut condimentum
+        duis.</p>
+      <p class="btmspace-30">Luctus quam ut est aliquam et ultricies nisl vulputate donec in luctus arcu maecenas nec
+        metus ac magna posuere.</p>
       <div>
-        <a class="imgover"
-          href="https://github.com/optus23/AIUnityGame/blob/master/Assets/Defender_pdf.png?raw=true"><img
-            src="images/demo/BT_Defender.png" alt=""></a>
+        <a><img src="images/demo/BT_Defender.png"></a>
       </div>
       <ul></ul>
-      
+
       <div class="sectiontitle">
         <h6 class="heading">Lua Wiki</h6>
       </div>
@@ -215,165 +233,18 @@ Licence URI: https://www.os-templates.com/template-terms
     </main>
   </div>
   <!-- ################################################################################################ -->
-  <!-- ################################################################################################ -->
-  <!-- ################################################################################################ -->
-  <div class="wrapper row2">
-    <section class="hoc container clear">
-      <!-- ################################################################################################ -->
-      <div class="sectiontitle">
-        <h6 class="heading">Gallery</h6>
+  <div class="wrapper bgded overlay" style="background-image:url('images/gal1.png');">
+    <div class="sectiontitle">
+      <h6 class="heading">Video Demo</h6>
+      <div class="services">
+        <figure class="videocontainer">
+          <!-- Important: Any type of video called via "iframe" must be in a container using class="videocontainer" -->
+          <iframe width="1280" height="720" src="https://www.youtube.com/embed/Gw7vHAQZ10M" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </figure>
       </div>
-      <div class="group">
-        <!-- Images used to open the lightbox -->
-        <div class="row">
-          <div class="column">
-            <img src="images/gal2.png" onclick="openModal();currentSlide(1)" class="hover-shadow">
-          </div>
-          <div class="column">
-            <img src="images/gal3.png" onclick="openModal();currentSlide(2)" class="hover-shadow">
-          </div>
-          <div class="column">
-            <img src="images/gal4.png" onclick="openModal();currentSlide(3)" class="hover-shadow">
-          </div>
-        </div>
-        <ul></ul>
-        <ul></ul>
-        <ul></ul>
-        <div class="row">
-          <div class="column">
-            <img src="images/gal5.png" onclick="openModal();currentSlide(4)" class="hover-shadow">
-          </div>
-          <div class="column">
-            <img src="images/gal6.png" onclick="openModal();currentSlide(4)" class="hover-shadow">
-          </div>
-          <div class="column">
-            <img src="images/gal7.png" onclick="openModal();currentSlide(4)" class="hover-shadow">
-          </div>
-        </div>
-
-        <!-- The Modal/Lightbox -->
-        <div id="myModal" class="modal">
-          <span class="close cursor" onclick="closeModal()">&times;</span>
-          <div class="modal-content">
-
-            <div class="mySlides">
-              <div class="numbertext">1 / 6</div>
-              <img src="images/gal2.png" style="width:100%">
-            </div>
-
-            <div class="mySlides">
-              <div class="numbertext">2 / 6</div>
-              <img src="images/gal3.png" style="width:100%">
-            </div>
-
-            <div class="mySlides">
-              <div class="numbertext">3 / 6</div>
-              <img src="images/gal4.png" style="width:100%">
-            </div>
-
-            <div class="mySlides">
-              <div class="numbertext">4 / 6</div>
-              <img src="images/gal5.png" style="width:100%">
-            </div>
-
-            <div class="mySlides">
-              <div class="numbertext">5 / 6</div>
-              <img src="images/gal6.png" style="width:100%">
-            </div>
-
-            <div class="mySlides">
-              <div class="numbertext">6 / 6</div>
-              <img src="images/gal7.png" style="width:100%">
-            </div>
-
-            <!-- Next/previous controls -->
-            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-            <!-- Caption text -->
-            <div class="caption-container">
-              <p id="caption"></p>
-            </div>
-
-            <!-- Thumbnail image controls 
-            <div class="column">
-              <img class="demo" src="img1.jpg" onclick="currentSlide(1)" alt="Nature">
-            </div>
-            <div class="column">
-              <img class="demo" src="img2.jpg" onclick="currentSlide(2)" alt="Snow">
-            </div>
-            <div class="column">
-              <img class="demo" src="img3.jpg" onclick="currentSlide(3)" alt="Mountains">
-            </div>
-            <div class="column">
-              <img class="demo" src="img4.jpg" onclick="currentSlide(4)" alt="Lights">
-            </div>-->
-          </div>
-        </div>
-        <!-- <div class="three_third">
-          <figure class="group">
-            <div class="one_third first btmspace-30"><img onclick="openModal();currentSlide(1)" src="images/gal2.png" alt=""></div>
-            <div class="one_third"><img id=myImg src="images/gal3.png" alt=""></div>
-            
-            <div class="one_third"><img id=myImg src="images/gal4.png" alt=""></div>
-            
-            <div class="one_third first btmspace-30"><img id=myImg src="images/gal5.png" alt=""></div>
-            <div class="one_third"><img id=myImg src="images/gal6.png" alt=""></div>
-            <div class="one_third"><img id=myImg src="images/gal7.png" alt=""></div>
-                  <div id="myModal" class="modal">-->
-
-        <!-- The Close Button 
-                    <span class="close">&times;</span>
-                  
-                     Modal Content (The Image) 
-                    <img class="modal-content" id="img01">
-                  
-                     Modal Caption (Image Text) 
-                    <div id="caption"></div>
-                  </div>
-          </figure>
-        </div>-->
-      </div>
-      <!-- ################################################################################################ -->
-    </section>
+    </div>
   </div>
-  <script>
-    // Open the Modal
-    function openModal() {
-      document.getElementById("myModal").style.display = "block";
-    }
-    // Close the Modal
-    function closeModal() {
-      document.getElementById("myModal").style.display = "none";
-    }
-    var slideIndex = 1;
-    showSlides(slideIndex);
-    // Next/previous controls
-    function plusSlides(n) {
-      showSlides(slideIndex += n);
-    }
-    // Thumbnail image controls
-    function currentSlide(n) {
-      showSlides(slideIndex = n);
-    }
-    function showSlides(n) {
-      var i;
-      var slides = document.getElementsByClassName("mySlides");
-      var dots = document.getElementsByClassName("demo");
-      var captionText = document.getElementById("caption");
-      if (n > slides.length) { slideIndex = 1 }
-      if (n < 1) { slideIndex = slides.length }
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-      for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-      }
-      slides[slideIndex - 1].style.display = "block";
-      dots[slideIndex - 1].className += " active";
-      captionText.innerHTML = dots[slideIndex - 1].alt;
-    }
-  </script>
   <!-- ################################################################################################ -->
   <!-- ################################################################################################ -->
   <!-- ################################################################################################ -->
@@ -476,24 +347,25 @@ Licence URI: https://www.os-templates.com/template-terms
     <div class="hoc container testimonials clear">
       <!-- ################################################################################################ -->
       <article><img src="images/demo/100x100.png" alt="">
-        <blockquote>Organization made in Terrassa to develop AI Game and a 3D Engine of their corresponding subjects.
+        <blockquote>Organization made in Terrassa to develop a 3D Game Engine and an AI Game of their corresponding
+          subjects.
         </blockquote>
-        
+
         <h6 class="heading font-x1">License</h6>
         <em>MIT License
 
           Copyright (c) 2019 Empty-Whisper
-          
+
           Permission is hereby granted, free of charge, to any person obtaining a copy
           of this software and associated documentation files (the "Software"), to deal
           in the Software without restriction, including without limitation the rights
           to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
           copies of the Software, and to permit persons to whom the Software is
           furnished to do so, subject to the following conditions:
-          
+
           The above copyright notice and this permission notice shall be included in all
           copies or substantial portions of the Software.
-          
+
           THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
           IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
           FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -501,7 +373,7 @@ Licence URI: https://www.os-templates.com/template-terms
           LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
           OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
           SOFTWARE.
-          </em>
+        </em>
       </article>
       <!-- ################################################################################################ -->
     </div>

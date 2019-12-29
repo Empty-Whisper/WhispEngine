@@ -31,6 +31,7 @@
 
 #include "Brofiler/Brofiler.h"
 
+#include "mmgr/mmgr.h"
 
 ModuleGUI::ModuleGUI(bool enable_true) :Module(enable_true)
 {
