@@ -1,12 +1,16 @@
 # Changelog
 
+## [Assignment3.4] - 29/12/2019
+### Fixed
+
+- Memory Leaks Skybox
+- Optimize textures
 
 ## [Assignment3.3] - 29/12/2019
 ### Added
 
 - Skybox editor
 - Rainbow Tank Shot
-- Improve web
 
 ### Fixed
 

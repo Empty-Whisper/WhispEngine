@@ -1,7 +1,7 @@
 ﻿# 3D Game Engine: WhispEngine
 
 ## Current Version
-v Assignment3.3
+v Assignment3.4
 
 ## Description
 This is a 3D Game Engine made by Students at CITM (UPC) from Spain. 
@@ -35,10 +35,9 @@ Extract .zip files inside a folder and open the .exe file.
 * Script Editor:       	  Shift + 9
 * About: 	                  Shift + Control + A
 
-## Authors and Division Of Tasks
-### **Christian Martínez** [christt105](https://github.com/christt105)
-
-### **Marc Galvez** [optus23](https://github.com/optus23)
+## Authors
+- **Christian Martínez** [christt105](https://github.com/christt105)
+- **Marc Galvez** [optus23](https://github.com/optus23)
 
 ## Innovations Assignment 3
 
@@ -112,8 +111,10 @@ Extract .zip files inside a folder and open the .exe file.
 * [LuaBridge 2.4](https://github.com/vinniefalco/LuaBridge)
 * [ImGuiColorTextEdit](https://github.com/BalazsJako/ImGuiColorTextEdit)
 
-Github [repository](https://github.com/Empty-Whisper/WhispEngine)
-[Web page](https://empty-whisper.github.io/WhispEngine/)
+## Repository
+
+- Github [repository](https://github.com/Empty-Whisper/WhispEngine)
+- [Web page](https://empty-whisper.github.io/WhispEngine/)
 
 Under supervision of lecturers [Ricard Pillosu](https://www.linkedin.com/in/ricardpillosu/) and [Marc Garrigó](https://www.linkedin.com/in/mgarrigo/)
 
