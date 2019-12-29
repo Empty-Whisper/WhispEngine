@@ -298,110 +298,13 @@ void PanelConfiguration::zBuffer()
 
 void PanelConfiguration::Skybox()
 {
+
+	if (ImGui::Checkbox("Active Skybox", &checkbox_skybox))
+	{
+		active_skybox = !active_skybox;
+	}
 	
-	std::vector<GameObject*> game_objects;
-	App->object_manager->GetChildsFrom(App->object_manager->root, game_objects);
 
-
-	if (ImGui::Checkbox("Skybox Default", &checkbox_skybox))
-	{
-		
-		checkbox_skybox_bluespace = false;
-		checkbox_skybox_violetspace = false;
-	}
-	if (ImGui::Checkbox("Skybox Blue Space", &checkbox_skybox_bluespace))
-	{
-		
-		checkbox_skybox = false;
-		checkbox_skybox_violetspace = false;
-	}
-	if (ImGui::Checkbox("Skybox Violet Space", &checkbox_skybox_violetspace))
-	{
-		
-		checkbox_skybox_bluespace = false;
-		checkbox_skybox = false;
-	}
-
-	for each (GameObject* it in game_objects)
-	{
-		//Default Skybox
-		if (checkbox_skybox && strncmp(it->GetName(), App->scene_intro->skybox_default_string.c_str(), App->scene_intro->skybox_default_string.length()) == 0)
-		{
-			App->scene_intro->SkyboxDefault = it;
-			App->scene_intro->SkyboxDefault->SetActive(true);
-		}
-		else if (!checkbox_skybox && strncmp(it->GetName(), App->scene_intro->skybox_default_string.c_str(), App->scene_intro->skybox_default_string.length()) == 0)
-		{
-			App->scene_intro->SkyboxDefault = it;
-			App->scene_intro->SkyboxDefault->SetActive(false);
-		}
-		
-		//BlueSpace Skybox
-		if (checkbox_skybox_bluespace && strncmp(it->GetName(), App->scene_intro->skybox_bluespacet_string.c_str(), App->scene_intro->skybox_bluespacet_string.length()) == 0)
-		{
-			App->scene_intro->SkyboxBlueSpace = it;
-			App->scene_intro->SkyboxBlueSpace->SetActive(true);
-		}
-		else if (!checkbox_skybox_bluespace && strncmp(it->GetName(), App->scene_intro->skybox_bluespacet_string.c_str(), App->scene_intro->skybox_bluespacet_string.length()) == 0)
-		{
-			App->scene_intro->SkyboxBlueSpace = it;
-			App->scene_intro->SkyboxBlueSpace->SetActive(false);
-		}
-		
-		//VioletSpace Skybox
-		if (checkbox_skybox_violetspace && strncmp(it->GetName(), App->scene_intro->skybox_violetspace_string.c_str(), App->scene_intro->skybox_violetspace_string.length()) == 0)
-		{
-			App->scene_intro->SkyboxVioletSpace = it;
-			App->scene_intro->SkyboxVioletSpace->SetActive(true);
-		}
-		else if (!checkbox_skybox_violetspace && strncmp(it->GetName(), App->scene_intro->skybox_violetspace_string.c_str(), App->scene_intro->skybox_violetspace_string.length()) == 0)
-		{
-			App->scene_intro->SkyboxVioletSpace = it;
-			App->scene_intro->SkyboxVioletSpace->SetActive(false);
-		}
-
-		
-
-	}
-
-
-
-
-
-
-	//if (checkbox_skybox)
-	//{
-	//	for each (GameObject* it in game_objects)
-	//	{
-	//		if (strncmp(it->GetName(), skybox_default_string.c_str(), skybox_default_string.length()) == 0)
-	//		{
-	//			SkyboxDefault = it;
-	//			SkyboxDefault->SetActive(false);
-	//		}
-	//	}
-	//}
-	//if (checkbox_skybox_bluespace)
-	//{
-	//	for each (GameObject* it in game_objects)
-	//	{
-	//		if (strncmp(it->GetName(), skybox_bluespacet_string.c_str(), skybox_default_string.length()) == 0)
-	//		{
-	//			SkyboxBlueSpace = it;
-	//			SkyboxBlueSpace->SetActive(false);
-	//		}
-	//	}
-	//}
-	//if (checkbox_skybox_violetspace)
-	//{
-	//	for each (GameObject* it in game_objects)
-	//	{
-	//		if (strncmp(it->GetName(), skybox_violetspace_string.c_str(), skybox_default_string.length()) == 0)
-	//		{
-	//			SkyboxVioletSpace = it;
-	//			SkyboxVioletSpace->SetActive(false);
-	//		}
-	//	}
-	//}
 
 }
 

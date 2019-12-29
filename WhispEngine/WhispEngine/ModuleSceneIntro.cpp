@@ -12,6 +12,8 @@
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
 #include "ModuleResources.h"
+#include "ModuleGUI.h"
+#include "PanelConfiguration.h"
 
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"
@@ -62,6 +64,7 @@ bool ModuleSceneIntro::Start()
 		{
 			SkyboxBlueSpace = it;
 			((ComponentTransform*)SkyboxBlueSpace->GetComponent(ComponentType::TRANSFORM))->SetScale(7000, 7000, 7000);
+			SkyboxBlueSpace->parent->Detach();
 			SkyboxBlueSpace->Detach();
 		}
 		
@@ -101,9 +104,8 @@ update_status ModuleSceneIntro::Update()
 	BROFILER_CATEGORY("Scene", Profiler::Color::Orange);
 	if (show_grid)
 		DrawGrid();
-
-	//DrawSkyboxSphere();
-	SkyboxBlueSpace->Update();
+	if(App->gui->config->active_skybox)
+		SkyboxBlueSpace->Update();
 
 	if (show_octree) {
 		glDisable(GL_LIGHTING);

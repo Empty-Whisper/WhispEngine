@@ -34,18 +34,15 @@ private:
 	bool checkbox_fulldesktop_window = false;
 	bool checkbox_resizable_window = false;
 	bool checkbox_zbuffer = false;
+	bool checkbox_skybox = true;
 
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
 	std::vector<float> mem_reg;
 
 public:
-	bool checkbox_skybox = false;
-	bool checkbox_skybox_bluespace = true;
-	bool checkbox_skybox_violetspace = false;
-
-
-
+	bool active_skybox = true;
+	
 	
 };
 

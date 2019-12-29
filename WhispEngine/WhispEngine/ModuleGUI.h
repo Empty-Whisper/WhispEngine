@@ -73,7 +73,6 @@ private:
 	ImGuiTextBuffer buffer;
 	bool log_new_line = false;
 
-	PanelConfiguration* config = nullptr;
 	PanelAbout* about = nullptr;
 	PanelConsole* console = nullptr;
 	PanelRender* render = nullptr;
@@ -85,6 +84,7 @@ private:
 	PanelShortcut* shortcut = nullptr;
 
 public:
+	PanelConfiguration* config = nullptr;
 	PanelScene* scene = nullptr;
 	PanelGame* game = nullptr;
 };
