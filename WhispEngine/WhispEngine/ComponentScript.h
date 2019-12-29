@@ -61,7 +61,7 @@ private:
 	void GetInspectorVars();
 	void DrawInspectorVars();
 	void OpenModalWindowsToLoadScript();
-	void UpdateInspectorVars();
+	bool UpdateInspectorVars();
 
 private:
 	std::map<std::string, PublicVar*> public_vars;

@@ -95,7 +95,9 @@ int main(int argc, char ** argv)
 	}
 
 	LOG("Exiting Engine...");
+#ifndef GAME_BUILD
 	App->SaveLogFile();
+#endif
 	delete App;
 	App = nullptr;
 	
