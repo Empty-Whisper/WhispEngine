@@ -181,25 +181,65 @@ Licence URI: https://www.os-templates.com/template-terms
       </div>
       <!-- main body -->
       <!-- ################################################################################################ -->
-      <h6 class="heading font-x1">1. Main Structure</h6>
-      <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex non
-        enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut condimentum
-        duis.</p>
-      <p class="btmspace-30">Luctus quam ut est aliquam et ultricies nisl vulputate donec in luctus arcu maecenas nec
-        metus ac magna posuere.</p>
+      <h6 class="heading font-x1">Main Structure</h6>
+      <p>Here we have the simple flow diagram of scripting structure:</p>
+      <a><img src="images/ScriptingFlow.png" alt=""></a>
+      <p class="btmspace-30">First we have to talk about the language we chose, Lua. Lua is a powerful, efficient,
+        lightweight, embeddable scripting language. It supports procedural programming, object-oriented programming,
+        functional programming, data-driven programming, and data description.</p>
+      <p class="btmspace-30">Lua is a good option also for the great integration in C. We have also integrate LuaBridge,
+        a very good library to relate Lua with and C++ code of engine and vice versa.</p>
+      <p class="btmspace-10"><strong>Scripting Flow</strong></p>
+      <p class="btmspace-30">First, we count with two main files: ModuleScripting and ComponentScript. We will talk
+        about the component script later. ModuleScripting is a Sub Class of Module that will have the Lua State in order
+        to use lua scripts in the engine. On the init of Engine will create an instance of Lua State and init all lua
+        libraries. After, Application
+        wil call a virtual function in Module called <code>LuaRegister()</code> in charge of register all functions and
+        fields that we want to use in scripts, for example the Module Input will Register its functions GetKey,
+        GetMouseButton...</p>
+      <p class="btmspace-30">After the init and start of all modules, starts the Update loop. ModuleScripting does not
+        have any instructions to do in the loop, all logic is in component script. The update of GameObjects do the
+        update of all its components. The main structure of Component Script is drawed in the diagram above. Once the
+        engine is in game mode, will check if is the first time the component do the first update, if not, the engine
+        will compile the script and saved a copy of the lua table in a LuaRef (we will talk later when we explain the
+        component). After compiling, or not if was already compiled, the script pushes global variables to the lua
+        state. This is made because you will want to access to the GameObject attached to component script but lua has
+        not know what GameObject is the object you are calling. Lua allows you to set global variables, so we push the
+        pointer of GameObject of the component and called it "gameObject", so now in script when we type "gameObject" we
+        will refering to the GameObject of the script. We made the same with <code>transform</code> and with public vars
+        in inspector.</p>
+      <p class="btmspace-30">Once all variables are pushed we see if we have to call <code>Start</code> or
+        <code>Update</code>. Is important to call the function from LuaRef because we can have more than one GameObject
+        with the same script and if we execute the script as normal the variables will we shared with all GameObject
+        that have the same script (in the script sctructure we will see why we do like that).</p>
+      <p class="btmspace-30">After execute the script it is the time to pop the global variables we pushed before in
+        order that other scripts do not access to other GameObjects and other vars. We pushed from lua stack. Also we
+        update the public variables because we send a copy of that variables.</p>
+      <p class="btmspace-30">This is the Update of component script. After finish the Update, engine will check if the
+        user wants to exit, if he want, will destroy all modules. ModuleScripting will close Lua State. And finally
+        close all application.</p>
       <div>
-        <a><img src="images/demo/BT_Recollector.jpg" alt=""></a>
       </div>
       <ul></ul>
       <ul></ul>
-      <h6 class="heading font-x1">2. Script as a Component</h6>
-      <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex non
-        enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut condimentum
-        duis.</p>
-      <p class="btmspace-30">Luctus quam ut est aliquam et ultricies nisl vulputate donec in luctus arcu maecenas nec
-        metus ac magna posuere.</p>
+      <h6 class="heading font-x1">Script as a Component</h6>
+      <p>The component script will be the container that will compile and execute the script and save the public
+        variables in order to print them in the inspector. Here we have the class diagram:</p>
+      <a><img src="images/ComponentScriptDiagram.png"></a>
+      <p class="btmspace-30">The most important in the component is the LuaRef var and the script_path. LuaRef is a
+        structure of LuaBridge that keep the reference of any variable in a Lua script. To set some context, here we
+        have the Model Script:</p>
+      <a><img src="images/model.png"></a>
+      <p class="btmspace-30">This is the script Model, when you create a script inside the engine, will copy that and
+        change the name class for the name you setted. As we can see, all is in a function that returns a local table.
+        Because you cannot get local variables in C++ from Lua we have a complete function that returns a local table.
+        With that we save some headaches with the shared scripts with some GameObjects. The main variable here is the
+        <code>Model</code>(or the name you setted to the script) that will act like a class in C++. Model is a table
+        that has three different variables. <code>Variables</code> is a table that will keep the public variables that
+        we want to see in the inspector in order to modify in the engine. We also have <code>Start</code> and
+        <code>Update</code> that we have explained before. The user can create new variables inside Model table. Every
+        time a component script compile a script, will execute the Init function and save in a LuaRef the table.</p>
       <div>
-        <a><img src="images/demo/BT_Defender.png"></a>
       </div>
       <ul></ul>
 
