@@ -196,7 +196,8 @@ void ComponentScript::OnInspector()
 void ComponentScript::SetScriptName()
 {
 	static char buffer[50];
-	if (ImGui::InputText("", buffer, 50, ImGuiInputTextFlags_EnterReturnsTrue)) {
+	
+	if (ImGui::InputText("##scriptname", buffer, 50, ImGuiInputTextFlags_EnterReturnsTrue)) {
 		 //TODO: if(script already exists open modal window)
 		name.assign(buffer);
 		title = name + " (Script)";
@@ -420,8 +421,6 @@ void ComponentScript::UpdateInspectorVars()
 				for (auto k = keys.begin(); k != keys.end(); k++) {
 					if (public_vars.find((*k).c_str()) == public_vars.end()) {
 						auto r = ref[(*k).c_str()];
-						if ((*k).compare("bullet") == 0)
-							int a = 0;
 
 						if (r.isBool()) {
 							Property<bool>* var = new Property<bool>(TypeData::BOOL, r.cast<bool>());
