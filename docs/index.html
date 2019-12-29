@@ -127,40 +127,49 @@ Licence URI: https://www.os-templates.com/template-terms
           a much faster way to check collisions, in our case with the mouse picking raycast or with the frustum.</p>
 
         <p><strong>Frustum</strong></p>
-        <p>The frustum acts as a container space for the camera, from it you can vary the FOV, 
-          the maximum and minimum distance of rendering and finally its transformation. 
-          It is possible to create camera components for each object, which come embedded with a frustum and the previously mentioned functionalities.</p>
-        
+        <p>The frustum acts as a container space for the camera, from it you can vary the FOV,
+          the maximum and minimum distance of rendering and finally its transformation.
+          It is possible to create camera components for each object, which come embedded with a frustum and the
+          previously mentioned functionalities.</p>
+
         <p><strong>Viewport</strong></p>
-        <p>The Engine uses a viewports system to show both in the scene, in the game panel and in the preview game panel all the rendering. 
-          These viewports can be separated as single panels and moved and scaled across all screens of your computer.</p>
+        <p>The Engine uses a viewports system to show both in the scene, in the game panel and in the preview game panel
+          all the rendering.
+          These viewports can be separated as single panels and moved and scaled across all screens of your computer.
+        </p>
 
         <p><strong>Camera Culling</strong></p>
-        <p>Camera culling can be activated inside the camera component, in the inspector and allows you to render only what is inside the frustum. 
+        <p>Camera culling can be activated inside the camera component, in the inspector and allows you to render only
+          what is inside the frustum.
           It is a very good way of optimization.</p>
 
         <p><strong>Camera Preview</strong></p>
-        <p>Camera preview is a feature that by clicking on a game object that contains a camera component, 
+        <p>Camera preview is a feature that by clicking on a game object that contains a camera component,
           allows you to visualize what the frustum sees.</p>
 
         <p><strong>Docking</strong></p>
-        <p>The docking allows you to attach panels to each other, this creates a very good organization between the panels 
+        <p>The docking allows you to attach panels to each other, this creates a very good organization between the
+          panels
           of the engine and its a better way to work.</p>
 
         <p><strong>Mouse Picking</strong></p>
-        <p>Mouse Picking allows you to select objects from the scene with the mouse. So, you don't have to go to the hierarchy to select, 
+        <p>Mouse Picking allows you to select objects from the scene with the mouse. So, you don't have to go to the
+          hierarchy to select,
           it uses raycast.</p>
 
         <p><strong>Outline Stencil Buffer</strong></p>
-        <p>We have used the Stencil Buffer to create an orange outline in the selected objects, there is also the blue outline 
+        <p>We have used the Stencil Buffer to create an orange outline in the selected objects, there is also the blue
+          outline
           that is used for the child objects of the selected objects.</p>
 
         <p><strong>ZBuffer</strong></p>
-        <p>ZBuffer allows, from a grey scale, to find out the distance of the pixels rendered on screen within the 3D environment. 
+        <p>ZBuffer allows, from a grey scale, to find out the distance of the pixels rendered on screen within the 3D
+          environment.
           As darker pixel, more closer the viewport will be to it.</p>
 
         <p><strong>Skybox</strong></p>
-        <p>The Skybox is simply a large sphere with the UVs reversed, which when you put a texture on it you will see from the inside. 
+        <p>The Skybox is simply a large sphere with the UVs reversed, which when you put a texture on it you will see
+          from the inside.
           It can be customized in the configuration panel.</p>
 
         <p><strong>ShortCuts</strong></p>
@@ -302,8 +311,8 @@ Licence URI: https://www.os-templates.com/template-terms
       <div class="group">
         <p><strong>Introduction</strong></p>
 
-        <p>Here you will find the functions and global variables that uses the scripting system in order to create yout
-          own scripts.</p>
+        <p>Here you will find the functions and global variables that uses the scripting system in order to create your
+          own scripts. WhispEngine has an autocomplete for ZeroBrane editor (see Configuration/ZeroBrane/README.md)</p>
 
         <p><strong>Public variables</strong></p>
         <p>All the variables you set in the table of Variables will be public in the inspector. to access later in the
@@ -317,51 +326,177 @@ Licence URI: https://www.os-templates.com/template-terms
         <p> Changes the active bool of GameObject.
           <code>gameObject.active = false --> deactive the GameObject</code></p>
         <p style="color:orange"><strong>name</strong>:</p>
-        <p> Changes the name of GameObject.
-          <code>gameObject.name = 'Tina' --> Sets the name of GameObject to 'Tina'</code></pstyle="color:orange">
-          </pstyle>>
-          <p style="color:orange"><strong>transform</strong>:</p>
-          <p> Gets the transform object of the GameObject.</p>
-          <p><strong>gameObject</strong></p>
-          <p>The word "gameObject" is reserved for the GameObject pointer of the GameObject attached to that script
-            component.</p>
-          <p><strong>transform</strong></p>
-          <p>The word "transform" is reserved for the Transform pointer of the GameObject attached to that script
-            component. All GameObjects you have in scripts will have
-            that fields:</p>
+        <p> Changes the name of GameObject.</p>
+        <code>gameObject.name = 'Tina' --> Sets the name of GameObject to 'Tina'</code>
+        <p style="color:orange"><strong>transform</strong>:</p>
+        <p> Gets the transform object of the GameObject.</p>
 
-          <p style="color:orange"><strong>gameObject</strong>:</p>
-          <p> Is the GameObject of the own Transform.</p>
-          <p style="color:orange"><strong>parent</strong>:</p>
-          <p>The parent of the GameObject of the Transform.</p>
-          <p style="color:orange"><strong>position</strong>:</p>
-          <p>The Local position referenced to parent.</p>
-          <p style="color:orange"><strong>gposition</strong>:</p>
-          <p> The Global position.</p>
-          <p style="color:orange"><strong>rotation</strong>:</p>
-          <p>The Local Rotation.</p>
-          <p style="color:orange"><strong>grotation</strong>:</p>
-          <p>The Global Rotation.</p>
-          <p style="color:orange"><strong>forward</strong>:</p>
-          <p>Forward vector of the global rotation.</p>
-          <p style="color:orange"><strong>up</strong>:</p>
-          <p>Upper vector of the global rotation.</p>
-          <p style="color:orange"><strong>right</strong>:</p>
-          <p>Right vector of the global rotation.</p>
-          <p style="color:orange"><strong>scale</strong>:</p>
-          <p>Local Scale.</p>
-          <p style="color:orange"><strong>SetPositionv</strong>:</p>
-          <p>Function to set the position of the GameObject. The argument is a Vector3. <p style="color: lightblue;">
-              <code>transform:SetPositionv(Vector3(1, 0, 0)) --> Set the position to position (1, 0, 0)</code></p>
-          </p>
-          <p style="color:orange"><strong>SetPosition3f</strong>:</p>
-          <p>Function to set the position of the GameObject. The argument are 3 numbers. <p style="color: lightblue;">
-              <code>transform:SetPosition3f(1, 0, 0) --> Set the position to position (1, 0, 0)</code></p>
+        <p><strong>GameObject</strong></p>
+        <p>GameObject is also a namespace. You can use this functions from GameObject namespace</p>
+        <p style="color:orange"><strong>Instantiate</strong>:</p>
+        <p> Crates an instance of a Prefab. Sends a Prefab and return a GameObject pointer.</p>
+        <p style="color:orange"><strong>Destroy</strong>:</p>
+        <p>Destroys a GameObject. Sends a GameObject pointer.</p>
+        <p style="color:orange"><strong>SetColor</strong>:</p>
+        <p>Change the color of a GameObject. Send a GameObject pointer and three numbers from RGB.</p>
 
-            <p><strong>gameObject</strong></p>
-            <p>The word "gameObject" is reserved for the GameObject pointer of the GameObject attached to that
-              script
-              component.</p>
+        <p><strong>gameObject</strong></p>
+        <p>The word "gameObject" is reserved for the GameObject pointer of the GameObject attached to that script
+          component.</p>
+
+        <p><strong>Vector3</strong></p>
+        <p>Vector3 is a class and a namespace. You can use this functions and fields</p>
+        <p style="color:orange"><strong>(Constructor)</strong>:</p>
+        <p>To create a Vector3 you can send nothing or three numbers. vec = Vector3() or vec = Vector3(0,0,0).</p>
+        <p style="color:orange"><strong>x</strong>:</p>
+        <p>Gets x value.</p>
+        <p style="color:orange"><strong>y</strong>:</p>
+        <p>Gets y value.</p>
+        <p style="color:orange"><strong>z</strong>:</p>
+        <p>Gets z value.</p>
+        <p style="color:orange"><strong>Normalize</strong>:</p>
+        <p>Normalize the Vector3.</p>
+        <p style="color:orange"><strong>Normalized</strong>:</p>
+        <p>Returns the Vector3 normalized.</p>
+        <p style="color:orange"><strong>Magnitude</strong>:</p>
+        <p>Returns the magnitude.</p>
+        <p style="color:orange"><strong>sqrMagnitude</strong>:</p>
+        <p>Returns the magnitude sqrt.</p>
+        <p style="color:orange"><strong>toString</strong>:</p>
+        <p>Returns a string with the info of the Vector3.</p>
+        <p style="color:orange"><strong>FromEuler</strong>:</p>
+        <p>Creates a Quaternion from euler angles XYZ.</p>
+
+        <p><strong>Quaternion</strong></p>
+        <p>Quaternion is a class and a namespace. You can use this functions and fields</p>
+        <p style="color:orange"><strong>(Constructor)</strong>:</p>
+        <p>To create a Quaternion you have to send x y z and w numbers. quat = Quaternion(x,y,z,w).</p>
+        <p style="color:orange"><strong>x</strong>:</p>
+        <p>Gets x value.</p>
+        <p style="color:orange"><strong>y</strong>:</p>
+        <p>Gets y value.</p>
+        <p style="color:orange"><strong>z</strong>:</p>
+        <p>Gets z value.</p>
+        <p style="color:orange"><strong>Normalize</strong>:</p>
+        <p>Normalize the Quaternion.</p>
+        <p style="color:orange"><strong>Normalized</strong>:</p>
+        <p>Returns the Quaternion normalized.</p>
+        <p style="color:orange"><strong>toString</strong>:</p>
+        <p>Returns a string with the info of the Quaternion.</p>
+        <p style="color:orange"><strong>ToEuler</strong>:</p>
+        <p>Creates a Vector3 from euler angles XYZ.</p>
+        <p style="color:orange"><strong>SetFromAxisAngle</strong>:</p>
+        <p>Set the Quaternion from an axis and an angle.</p>
+        <p style="color:orange"><strong>FromEuler</strong>:</p>
+        <p>Set the Quaternion from a Vector3 Euler Angles.</p>
+        <p style="color:orange"><strong>RotateAxisAngle</strong>:</p>
+        <p>Rotates the Quaternion from an axis and an angle.</p>
+        <p style="color:orange"><strong>RotateX</strong>:</p>
+        <p>Rotates the Quaternion in X axis the given the angle in radians.</p>
+        <p style="color:orange"><strong>RotateY</strong>:</p>
+        <p>Rotates the Quaternion in Y axis the given the angle in radians.</p>
+        <p style="color:orange"><strong>RotateZ</strong>:</p>
+        <p>Rotates the Quaternion in Z axis the given the angle in radians.</p>
+
+        <p><strong>Random</strong></p>
+        <p>Random is a namespace.</p>
+        <p style="color:orange"><strong>Range</strong>:</p>
+        <p>Gives a random int between the given 2 numbers.</p>
+        <p style="color:orange"><strong>Rangef</strong>:</p>
+        <p>Gives a random float between the given 2 numbers.</p>
+
+        <p><strong>Log</strong></p>
+        <p>Log is a function.</p>
+        <p>Logs in console the message you send.</p>
+
+        <p><strong>Time</strong></p>
+        <p>Time is a namespace.</p>
+        <p style="color:orange"><strong>deltaTime</strong>:</p>
+        <p>Returns the Delta Time.</p>
+        <p style="color:orange"><strong>time</strong>:</p>
+        <p>Returns the time in seconds since game starts.</p>
+
+        <p><strong>transform</strong></p>
+        <p>The word "transform" is reserved for the Transform pointer of the GameObject attached to that script
+          component. All GameObjects you have in scripts will have
+          that fields:</p>
+
+        <p style="color:orange"><strong>gameObject</strong>:</p>
+        <p> Is the GameObject of the own Transform.</p>
+        <p style="color:orange"><strong>parent</strong>:</p>
+        <p>The parent of the GameObject of the Transform.</p>
+        <p style="color:orange"><strong>position</strong>:</p>
+        <p>The Local position referenced to parent.</p>
+        <p style="color:orange"><strong>gposition</strong>:</p>
+        <p> The Global position.</p>
+        <p style="color:orange"><strong>rotation</strong>:</p>
+        <p>The Local Rotation.</p>
+        <p style="color:orange"><strong>grotation</strong>:</p>
+        <p>The Global Rotation.</p>
+        <p style="color:orange"><strong>forward</strong>:</p>
+        <p>Forward vector of the global rotation.</p>
+        <p style="color:orange"><strong>up</strong>:</p>
+        <p>Upper vector of the global rotation.</p>
+        <p style="color:orange"><strong>right</strong>:</p>
+        <p>Right vector of the global rotation.</p>
+        <p style="color:orange"><strong>scale</strong>:</p>
+        <p>Local Scale.</p>
+        <p style="color:orange"><strong>SetPositionv</strong>:</p>
+        <p>Function to set the position of the GameObject. The argument is a Vector3. <p style="color: lightblue;">
+            <code>transform:SetPositionv(Vector3(1, 0, 0)) --> Set the position to position (1, 0, 0)</code></p>
+        </p>
+        <p style="color:orange"><strong>SetPosition3f</strong>:</p>
+        <p>Function to set the position of the GameObject. The argument are 3 numbers.</p>
+        <p style="color: lightblue;">
+          <code>transform:SetPosition3f(1, 0, 0) --> Set the position to position (1, 0, 0)</code></p>
+
+        <p><strong>transform</strong></p>
+        <p>The word "transform" is reserved for the Transform pointer of the GameObject attached to that script
+          component. All GameObjects you have in scripts will have
+          that fields:</p>
+
+        <p style="color:orange"><strong>gameObject</strong>:</p>
+        <p> Is the GameObject of the own Transform.</p>
+        <p style="color:orange"><strong>parent</strong>:</p>
+        <p>The parent of the GameObject of the Transform.</p>
+        <p style="color:orange"><strong>position</strong>:</p>
+        <p>The Local position referenced to parent.</p>
+        <p style="color:orange"><strong>gposition</strong>:</p>
+        <p> The Global position.</p>
+        <p style="color:orange"><strong>rotation</strong>:</p>
+        <p>The Local Rotation.</p>
+        <p style="color:orange"><strong>grotation</strong>:</p>
+        <p>The Global Rotation.</p>
+        <p style="color:orange"><strong>forward</strong>:</p>
+        <p>Forward vector of the global rotation.</p>
+        <p style="color:orange"><strong>up</strong>:</p>
+        <p>Upper vector of the global rotation.</p>
+        <p style="color:orange"><strong>right</strong>:</p>
+        <p>Right vector of the global rotation.</p>
+        <p style="color:orange"><strong>scale</strong>:</p>
+        <p>Local Scale.</p>
+
+        <p><strong>input</strong></p>
+        <p>input is a namespace.</p>
+        <p style="color:orange"><strong>getKey</strong>:</p>
+        <p>Returns true while pressing that key.</p>
+        <p style="color:orange"><strong>getKeyDown</strong>:</p>
+        <p>Returns true on press that key.</p>
+        <p style="color:orange"><strong>getKeyUp</strong>:</p>
+        <p>Returns true on release that key.</p>
+        <p style="color:orange"><strong>getMouseDown</strong>:</p>
+        <p>Returns true on press that mouse button.</p>
+        <p style="color:orange"><strong>getMouse</strong>:</p>
+        <p>Returns true while that mouse button.</p>
+        <p style="color:orange"><strong>getMouseUp</strong>:</p>
+        <p>Returns true on release that mouse button.</p>
+        <p style="color:orange"><strong>getMouseX</strong>:</p>
+        <p>Returns the X coordenate of mouse on screen.</p>
+        <p style="color:orange"><strong>getMouseY</strong>:</p>
+        <p>Returns the Y coordenate of mouse on screen.</p>
+        <p style="color:orange"><strong>getMouseZ</strong>:</p>
+        <p>Returns the Z coordenate of mouse on screen.</p>
+
       </div>
 
       <!-- ################################################################################################ -->
@@ -376,7 +511,7 @@ Licence URI: https://www.os-templates.com/template-terms
       <div class="services">
         <figure class="videocontainer">
           <!-- Important: Any type of video called via "iframe" must be in a container using class="videocontainer" -->
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/TGcIPD1WUWQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe width="1280" height="720" src="https://www.youtube.com/embed/TGcIPD1WUWQ" frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </figure>
       </div>
