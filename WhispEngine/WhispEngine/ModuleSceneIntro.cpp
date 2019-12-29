@@ -65,7 +65,6 @@ bool ModuleSceneIntro::Start()
 			SkyboxObject = it;
 			((ComponentTransform*)SkyboxObject->GetComponent(ComponentType::TRANSFORM))->SetScale(7000, 7000, 7000);
 			SkyboxObject->parent->Detach();
-			SkyboxObject->Detach();
 		}
 	}
 	
@@ -104,7 +103,7 @@ update_status ModuleSceneIntro::Update()
 
 #ifndef GAME_BUILD
 	if (App->gui->config->active_skybox)
-		SkyboxObject->Update();
+		if(SkyboxObject != nullptr) SkyboxObject->Update();
 		
 #else
 	SkyboxObject->Update();
@@ -174,6 +173,8 @@ bool ModuleSceneIntro::CleanUp()
 
 	glDeleteBuffers(1, &grid_id);
 
+	if (SkyboxObject != nullptr)
+		delete SkyboxObject->parent;
 	
 	if (octree != nullptr)
 		delete octree;

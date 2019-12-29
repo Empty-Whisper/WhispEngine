@@ -100,7 +100,6 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 
 bool ModuleObjectManager::CleanUp()
 {
-	delete App->scene_intro->SkyboxObject->parent;
 	delete root;
 
 	return true;
