@@ -57,7 +57,7 @@ bool ModuleSceneIntro::Start()
 	std::vector<GameObject*> game_objects;
 	App->object_manager->GetChildsFrom(App->object_manager->root, game_objects);
 
-	for each (GameObject* it in game_objects)
+	for (GameObject* it : game_objects)
 	{
 		//Skybox
 		if (strncmp(it->GetName(), skybox_id.c_str(), skybox_id.length()) == 0)
@@ -67,9 +67,8 @@ bool ModuleSceneIntro::Start()
 			SkyboxObject->parent->Detach();
 			SkyboxObject->Detach();
 		}
-		
 	}
-
+	
 	return ret;
 }
 
@@ -103,9 +102,16 @@ update_status ModuleSceneIntro::Update()
 	if (show_grid)
 		DrawGrid();
 
-	if(App->gui->config->active_skybox)
+#ifndef GAME_BUILD
+	if (App->gui->config->active_skybox)
 		SkyboxObject->Update();
+		
+#else
+	SkyboxObject->Update();
 
+#endif
+	
+			
 	if (show_octree) {
 		glDisable(GL_LIGHTING);
 		octree->Render();
