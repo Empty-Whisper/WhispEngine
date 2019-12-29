@@ -174,6 +174,7 @@ bool ModuleSceneIntro::CleanUp()
 
 	glDeleteBuffers(1, &grid_id);
 
+	
 	if (octree != nullptr)
 		delete octree;
 

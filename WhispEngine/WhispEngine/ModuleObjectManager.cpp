@@ -441,6 +441,7 @@ void ModuleObjectManager::UpdateGameObject(GameObject* &obj)
 bool ModuleObjectManager::CleanUp()
 {
 	delete root;
+	delete App->scene_intro->SkyboxObject;
 
 	return true;
 }
