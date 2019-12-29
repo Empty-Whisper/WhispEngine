@@ -41,10 +41,7 @@ void ComponentScript::Update()
 	if (is_assigned && valid && App->IsGameRunning())
 	{
 		if (!start_done) {
-			if (luaL_dofile(App->scripting->GetState(), script_path.c_str()) == 0) {
-				UpdateInspectorVars();
-			}
-			else {
+			if (!UpdateInspectorVars()) {
 				LOG("Failed to Load File: %s", script_path.c_str());
 			}
 		}
@@ -364,9 +361,10 @@ void ComponentScript::OpenModalWindowsToLoadScript()
 		SetCurrentDirectoryA(current_dir);
 }
 
-void ComponentScript::UpdateInspectorVars()
+bool ComponentScript::UpdateInspectorVars()
 {
-	if (luaL_dofile(App->scripting->GetState(), script_path.c_str()) == 0) {
+	int result = luaL_dofile(App->scripting->GetState(), script_path.c_str());
+	if (result == 0) {
 		script = luabridge::getGlobal(App->scripting->GetState(), "Init")();
 		if (script.isTable()) {
 			luabridge::LuaRef ref = script["Variables"];
@@ -540,6 +538,7 @@ void ComponentScript::UpdateInspectorVars()
 	else {
 		LOG("Cannot update inspector, Lua Error: %s", lua_tostring(App->scripting->GetState(), -1));
 	}
+	return result == 0;
 }
 
 void ComponentScript::SetScript(const char * path)
