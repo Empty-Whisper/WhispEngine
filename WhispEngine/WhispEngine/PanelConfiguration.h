@@ -2,6 +2,7 @@
 #include <vector>
 #include "Panel.h"
 #include "Globals.h"
+#include "GameObject.h"
 class PanelConfiguration :
 	public Panel
 {
@@ -22,6 +23,7 @@ private:
 	void Viewport();
 	void Frustum();
 	void zBuffer();
+	void Skybox();
 
 private:
 	void PushBackVectorAsQueue(std::vector<float> &vector, const float &value);
@@ -32,9 +34,17 @@ private:
 	bool checkbox_fulldesktop_window = false;
 	bool checkbox_resizable_window = false;
 	bool checkbox_zbuffer = false;
+	bool checkbox_skybox = true;
+
+	bool select_tex = false;
 
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
 	std::vector<float> mem_reg;
+
+public:
+	bool active_skybox = true;
+	
+	
 };
 

@@ -105,6 +105,8 @@ void ComponentMaterial::Load(const nlohmann::json & node)
 	App->json->GetColor4("wire color", node, wire_color);
 }
 
+
+
 void ComponentMaterial::SetFaceColor(const float & r, const float & g, const float & b, const float & a)
 {
 	face_color[0] = r;

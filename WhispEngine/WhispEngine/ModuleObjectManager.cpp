@@ -1,5 +1,7 @@
 #include "ModuleObjectManager.h"
 #include "ComponentTransform.h"
+#include "ComponentMaterial.h"
+
 #include "Application.h"
 #include "Brofiler/Brofiler.h"
 #include "Imgui/ImGuizmo.h"
@@ -14,6 +16,7 @@
 #include "ModuleGUI.h"
 #include "ModuleImport.h"
 #include "ModuleRenderer3D.h"
+#include "PanelGame.h"
 
 #include "ModuleScripting.h"
 #include "Lua/LuaBridge/LuaBridge.h"
@@ -37,6 +40,7 @@ bool ModuleObjectManager::Start()
 	root = new GameObject(nullptr);
 	root->SetName("Root");
 	//App->importer->Import("Assets/Textures/Checker.dds", );
+	App->importer->Import("Assets/Models/Skyboxhd2.fbx");
 
 	return true;
 }
@@ -74,6 +78,346 @@ update_status ModuleObjectManager::Update()
 		}
 		to_delete.clear();
 	}
+	//=================================================================
+	int r = 0;
+	int g = 0;
+	int b = 0;
+	
+	int first = 0;
+	int second = 0;
+	int first_color = 0;
+	int second_color = 0;
+	//=================================================================
+
+	first = Random::Randomi(1, 3);
+	if (first == 1) // r
+	{
+		first_color = Random::Randomi(1, 3);
+		if (first_color == 1) // 0
+		{
+			r = 0;
+
+			second = Random::Randomi(1, 2);
+			if (second == 1) // g
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 255
+				{
+					g = 1;
+					b = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					g = Random::Randomf(0, 1);
+					b = 1;
+				}
+			}
+			else if (second == 2) // b
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 255
+				{
+					b = 1;
+					g = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					b = Random::Randomf(0, 1);
+					g = 1;
+				}
+			}
+		}
+		else if (first_color == 2) // 255
+		{
+			r = 1;
+
+			second = Random::Randomi(1, 2);
+			if (second == 1) // g
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					g = 0;
+					b = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					g = Random::Randomf(0, 1);
+					b = 0;
+				}
+			}
+			else if (second == 2) // b
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					b = 0;
+					g = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					b = Random::Randomf(0, 1);
+					g = 0;
+				}
+			}
+		}
+		else if (first_color == 3) // R
+		{
+			r = Random::Randomf(0, 1);
+
+			second = Random::Randomi(1, 2);
+			if (second == 1) // g
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					g = 0;
+					b = 1;
+				}
+				else if (second_color == 2) // 1
+				{
+					g = 1;
+					b = 0;
+				}
+			}
+			else if (second == 2) // b
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					b = 0;
+					g = 1;
+				}
+				else if (second_color == 2) // 1
+				{
+					b = 1;
+					g = 0;
+				}
+			}
+		}
+
+	}
+	else if (first == 2) // g
+	{
+		first_color = Random::Randomi(1, 3);
+		if (first_color == 1) // 0
+		{
+			g = 0;
+
+			second = Random::Randomi(1, 2);
+			if (second == 1) // g
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 255
+				{
+					r = 1;
+					b = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					r = Random::Randomf(0, 1);
+					b = 1;
+				}
+			}
+			else if (second == 2) // b
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 255
+				{
+					b = 1;
+					r = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					b = Random::Randomf(0, 1);
+					r = 1;
+				}
+			}
+		}
+		else if (first_color == 2) // 255
+		{
+			g = 1;
+
+			second = Random::Randomi(1, 2);
+			if (second == 1) // g
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					r = 0;
+					b = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					r = Random::Randomf(0, 1);
+					b = 0;
+				}
+			}
+			else if (second == 2) // b
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					b = 0;
+					r = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					b = Random::Randomf(0, 1);
+					r = 0;
+				}
+			}
+		}
+		else if (first_color == 3) // g
+		{
+			g = Random::Randomf(0, 1);
+
+			second = Random::Randomi(1, 2);
+			if (second == 1) // g
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					r = 0;
+					b = 1;
+				}
+				else if (second_color == 2) // 1
+				{
+					r = 1;
+					b = 0;
+				}
+			}
+			else if (second == 2) // b
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					b = 0;
+					r = 1;
+				}
+				else if (second_color == 2) // 1
+				{
+					b = 1;
+					r = 0;
+				}
+			}
+		}
+
+	}
+	if (first == 3) // b
+	{
+		first_color = Random::Randomi(1, 3);
+		if (first_color == 1) // 0
+		{
+			b = 0;
+
+			second = Random::Randomi(1, 2);
+			if (second == 1) // r
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 255
+				{
+					r = 1;
+					g = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					r = Random::Randomf(0, 1);
+					g = 1;
+				}
+			}
+			else if (second == 2) // b
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 255
+				{
+					g = 1;
+					r = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					g = Random::Randomf(0, 1);
+					r = 1;
+				}
+			}
+		}
+		else if (first_color == 2) // 255
+		{
+			b = 1;
+
+			second = Random::Randomi(1, 2);
+			if (second == 1) // g
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					r = 0;
+					g = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					r = Random::Randomf(0, 1);
+					g = 0;
+				}
+			}
+			else if (second == 2) // b
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					g = 0;
+					r = Random::Randomf(0, 1);
+				}
+				else if (second_color == 2) // R
+				{
+					g = Random::Randomf(0, 1);
+					r = 0;
+				}
+			}
+		}
+		else if (first_color == 3) // R
+		{
+			b = Random::Randomf(0, 1);
+
+			second = Random::Randomi(1, 2);
+			if (second == 1) // g
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					r = 0;
+					g = 1;
+				}
+				else if (second_color == 2) // 1
+				{
+					r = 1;
+					g = 0;
+				}
+			}
+			else if (second == 2) // b
+			{
+				second_color = Random::Randomi(1, 2);
+				if (second_color == 1) // 0
+				{
+					g = 0;
+					r = 1;
+				}
+				else if (second_color == 2) // 1
+				{
+					g = 1;
+					r = 0;
+				}
+			}
+		}
+
+	}
+
+
+
+
+
+
+
 
 	return UPDATE_CONTINUE;
 }
@@ -247,9 +591,17 @@ void ModuleObjectManager::LuaRegister()
 			.addProperty("transform", &GameObject::transform)
 			//.addFunction("addComponent", &GameObject::CreateComponent)
 		.endClass()
+		.beginNamespace("Window")
+			//.addFunction("Size", &PanelGame::GetPanelSize)
+		.endNamespace()
+		.beginNamespace("Random")
+			.addFunction("Range", &Random::Randomi)
+			.addFunction("Rangef", &Random::Randomf)
+		.endNamespace()
 		.beginNamespace("GameObject")
 			.addFunction("Instantiate", &ModuleObjectManager::InstantiatePrefab)
 			.addFunction("Destroy", &ModuleObjectManager::DeleteObject)
+			.addFunction("SetColor", &ModuleObjectManager::ChangeColorRGB)
 		.endNamespace()
 		.beginClass<ComponentTransform>("transform")
 			.addData("gameObject", &ComponentTransform::object, false)
@@ -275,6 +627,11 @@ void ModuleObjectManager::LuaRegister()
 		.endClass();
 }
 
+int ModuleObjectManager::LRandomRange(int min, int max)
+{
+	return 0;
+}
+
 GameObject * ModuleObjectManager::InstantiatePrefab(const char * path)
 {
 	if (path != nullptr)
@@ -285,6 +642,12 @@ void ModuleObjectManager::DeleteObject(GameObject * obj)
 {
 	if(obj != nullptr)
 		to_delete.push_back(obj);
+}
+
+void ModuleObjectManager::ChangeColorRGB(GameObject * obj, const float &r, const float &g, const float &b, const float &a)
+{
+	if(obj != nullptr)
+		((ComponentMaterial*)obj->GetComponent(ComponentType::MATERIAL))->SetFaceColor(r, g, b, a);
 }
 
 

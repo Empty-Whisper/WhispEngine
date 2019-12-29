@@ -12,6 +12,8 @@
 #include "ModuleImport.h"
 #include "ModuleObjectManager.h"
 #include "ModuleResources.h"
+#include "ModuleGUI.h"
+#include "PanelConfiguration.h"
 
 //MathGeoLib--------------------------------------------------------
 #include "MathGeoLib/include/MathGeoLib.h"
@@ -49,6 +51,25 @@ bool ModuleSceneIntro::Start()
 
 	LoadScene("Assets/Scenes/TankLua.scene");
 
+	//Skybox
+	App->resources->Get(App->file_system->GetUIDFromMeta("Assets/Models/Skybox.fbx.meta"))->LoadToMemory();
+
+	std::vector<GameObject*> game_objects;
+	App->object_manager->GetChildsFrom(App->object_manager->root, game_objects);
+
+	for each (GameObject* it in game_objects)
+	{
+		//Skybox
+		if (strncmp(it->GetName(), skybox_id.c_str(), skybox_id.length()) == 0)
+		{
+			SkyboxObject = it;
+			((ComponentTransform*)SkyboxObject->GetComponent(ComponentType::TRANSFORM))->SetScale(7000, 7000, 7000);
+			SkyboxObject->parent->Detach();
+			SkyboxObject->Detach();
+		}
+		
+	}
+
 	return ret;
 }
 
@@ -82,7 +103,8 @@ update_status ModuleSceneIntro::Update()
 	if (show_grid)
 		DrawGrid();
 
-	//DrawSkyboxSphere();
+	if(App->gui->config->active_skybox)
+		SkyboxObject->Update();
 
 	if (show_octree) {
 		glDisable(GL_LIGHTING);

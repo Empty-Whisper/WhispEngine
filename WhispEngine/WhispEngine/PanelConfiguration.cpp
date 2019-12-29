@@ -7,8 +7,9 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleGUI.h"
 #include "ModuleRenderer3D.h"
-
+#include "ModuleObjectManager.h"
 #include "Brofiler/Brofiler.h"
+#include "ComponentMaterial.h"
 #include "mmgr/mmgr.h"
 
 PanelConfiguration::PanelConfiguration(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
@@ -68,6 +69,10 @@ void PanelConfiguration::Update()
 		if (ImGui::CollapsingHeader("zBuffer"))
 		{
 			zBuffer();
+		}
+		if (ImGui::CollapsingHeader("Skybox"))
+		{
+			Skybox();
 		}
 		
 	}
@@ -289,6 +294,16 @@ void PanelConfiguration::zBuffer()
 	{
 		App->renderer3D->is_zbuffer_active = !App->renderer3D->is_zbuffer_active;
 		App->renderer3D->StartzBuffer();
+	}
+}
+
+void PanelConfiguration::Skybox()
+{
+	((ComponentMaterial*)App->scene_intro->SkyboxObject->GetComponent(ComponentType::MATERIAL))->OnInspector();
+
+	if (ImGui::Checkbox("Active Skybox", &checkbox_skybox))
+	{
+		active_skybox = !active_skybox;
 	}
 }
 

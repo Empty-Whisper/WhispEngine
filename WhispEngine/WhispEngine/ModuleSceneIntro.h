@@ -1,7 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Imgui/imgui.h"
-
+#include "GameObject.h"
 #include "par_shapes.h"
 #include "ComponentMesh.h"
 #include "Octree.h"
@@ -54,4 +54,9 @@ public:
 	float3 mouse_pick_1 = float3::zero;
 
 	std::string scene_path;
+
+	//ID skybox
+	std::string skybox_id = "B1346513218416846464984654";
+	GameObject* SkyboxObject = nullptr;
+
 };

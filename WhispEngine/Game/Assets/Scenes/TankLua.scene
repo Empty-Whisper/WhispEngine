@@ -1,15 +1,15 @@
 {
     "Camera": {
         "position": [
-            4.96932315826416,
-            3.4925899505615234,
-            0.6065388917922974
+            -2.288789749145508,
+            6.114757537841797,
+            -4.48974609375
         ],
         "rotation": [
-            0.56704181432724,
-            -0.1272810399532318,
-            0.7940376996994019,
-            0.17823384702205658
+            -0.09195276349782944,
+            0.01476199273020029,
+            0.9830664396286011,
+            0.15782013535499573
         ]
     },
     "GameObjects": [
@@ -17,180 +17,6 @@
             "Children": [
                 {
                     "Children": [
-                        {
-                            "Children": [
-                                {
-                                    "Children": null,
-                                    "Components": [
-                                        {
-                                            "Resource": 0,
-                                            "active": true,
-                                            "face color": [
-                                                0.10586584359407425,
-                                                0.44117647409439087,
-                                                0.06055362895131111,
-                                                1.0
-                                            ],
-                                            "type": 2,
-                                            "wire color": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0
-                                            ]
-                                        },
-                                        {
-                                            "MeshId": 15506590023486883840,
-                                            "active": true,
-                                            "type": 1
-                                        }
-                                    ],
-                                    "UID": 8128710246000414720,
-                                    "active": true,
-                                    "name": "TankTurret_0",
-                                    "position": [
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "rotation": [
-                                        1.0,
-                                        -1.8626415965172782e-09,
-                                        -2.2351763107053557e-08,
-                                        -7.6834023587935e-09
-                                    ],
-                                    "scale": [
-                                        1.0,
-                                        1.0,
-                                        0.9999993443489075
-                                    ],
-                                    "static": false
-                                },
-                                {
-                                    "Children": null,
-                                    "Components": [
-                                        {
-                                            "Resource": 0,
-                                            "active": true,
-                                            "face color": [
-                                                9.999999974752427e-07,
-                                                9.999899930335232e-07,
-                                                9.999899930335232e-07,
-                                                1.0
-                                            ],
-                                            "type": 2,
-                                            "wire color": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0
-                                            ]
-                                        },
-                                        {
-                                            "MeshId": 10957061697348079616,
-                                            "active": true,
-                                            "type": 1
-                                        }
-                                    ],
-                                    "UID": 9042137371821571072,
-                                    "active": true,
-                                    "name": "TankTurret_1",
-                                    "position": [
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "rotation": [
-                                        1.0,
-                                        -1.8626415965172782e-09,
-                                        -2.2351763107053557e-08,
-                                        -7.6834023587935e-09
-                                    ],
-                                    "scale": [
-                                        1.0,
-                                        1.0,
-                                        0.9999993443489075
-                                    ],
-                                    "static": false
-                                },
-                                {
-                                    "Children": null,
-                                    "Components": [
-                                        {
-                                            "InspectorVars": [
-                                                {
-                                                    "data": "Assets\\Prefabs\\Bullet.prefab",
-                                                    "key": "bullet",
-                                                    "type": 8
-                                                },
-                                                {
-                                                    "data": 70,
-                                                    "key": "speed",
-                                                    "type": 1
-                                                }
-                                            ],
-                                            "active": true,
-                                            "script": "Assets\\Scripts\\ShotTank.lua",
-                                            "type": 5
-                                        }
-                                    ],
-                                    "UID": 3211201020940491264,
-                                    "active": true,
-                                    "name": "Cannon",
-                                    "position": [
-                                        -7.419626399496337e-06,
-                                        147.39950561523438,
-                                        99.766357421875
-                                    ],
-                                    "rotation": [
-                                        1.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    "scale": [
-                                        1.0,
-                                        1.0,
-                                        1.0
-                                    ],
-                                    "static": false
-                                }
-                            ],
-                            "Components": [
-                                {
-                                    "InspectorVars": [
-                                        {
-                                            "data": 0.009999999776482582,
-                                            "key": "mult",
-                                            "type": 2
-                                        }
-                                    ],
-                                    "active": true,
-                                    "script": "D:\\Christian\\Github\\WhispEngine\\WhispEngine\\Game\\Assets\\Scripts\\RotateTurret.lua",
-                                    "type": 5
-                                }
-                            ],
-                            "UID": 9166001808016059392,
-                            "active": true,
-                            "name": "TankTurret",
-                            "position": [
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "rotation": [
-                                1.0,
-                                0.0,
-                                0.0,
-                                0.0
-                            ],
-                            "scale": [
-                                0.0100000174716115,
-                                0.010000002570450306,
-                                0.0100000174716115
-                            ],
-                            "static": false
-                        },
                         {
                             "Children": [
                                 {
@@ -625,6 +451,185 @@
                                 1.0
                             ],
                             "static": false
+                        },
+                        {
+                            "Children": [
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 0,
+                                            "active": true,
+                                            "face color": [
+                                                0.10586584359407425,
+                                                0.44117647409439087,
+                                                0.06055362895131111,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 15506590023486883840,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 8128710246000414720,
+                                    "active": true,
+                                    "name": "TankTurret_0",
+                                    "position": [
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        -1.8626415965172782e-09,
+                                        -2.2351763107053557e-08,
+                                        -7.6834023587935e-09
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        0.9999993443489075
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 0,
+                                            "active": true,
+                                            "face color": [
+                                                9.999999974752427e-07,
+                                                9.999899930335232e-07,
+                                                9.999899930335232e-07,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 10957061697348079616,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 9042137371821571072,
+                                    "active": true,
+                                    "name": "TankTurret_1",
+                                    "position": [
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        -1.8626415965172782e-09,
+                                        -2.2351763107053557e-08,
+                                        -7.6834023587935e-09
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        0.9999993443489075
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "InspectorVars": [
+                                                {
+                                                    "data": "Assets\\Prefabs\\Bullet.prefab",
+                                                    "key": "bullet",
+                                                    "type": 8
+                                                },
+                                                {
+                                                    "data": 70,
+                                                    "key": "speed",
+                                                    "type": 1
+                                                }
+                                            ],
+                                            "active": true,
+                                            "script": "Assets\\Scripts\\ShotTank.lua",
+                                            "type": 5
+                                        }
+                                    ],
+                                    "UID": 3211201020940491264,
+                                    "active": true,
+                                    "name": "Cannon",
+                                    "position": [
+                                        -7.419626399496337e-06,
+                                        147.39950561523438,
+                                        99.766357421875
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                }
+                            ],
+                            "Components": [
+                                {
+                                    "InspectorVars": [
+                                        {
+                                            "data": 101,
+                                            "key": "lmx",
+                                            "type": 1
+                                        },
+                                        {
+                                            "data": 0.009999999776482582,
+                                            "key": "mult",
+                                            "type": 2
+                                        }
+                                    ],
+                                    "active": true,
+                                    "script": "Assets\\Scripts\\RotateTurret.lua",
+                                    "type": 5
+                                }
+                            ],
+                            "UID": 9166001808016059392,
+                            "active": true,
+                            "name": "TankTurret",
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "rotation": [
+                                0.9663899540901184,
+                                0.0,
+                                0.2570805549621582,
+                                0.0
+                            ],
+                            "scale": [
+                                0.0100000174716115,
+                                0.010000002570450306,
+                                0.0100000174716115
+                            ],
+                            "static": false
                         }
                     ],
                     "Components": [
@@ -667,7 +672,7 @@
                     "Components": [
                         {
                             "active": true,
-                            "aspect_ratio": 1.7449455261230469,
+                            "aspect_ratio": 1.7737704515457153,
                             "checkbox_main_camera": false,
                             "far_plane": 10000.0,
                             "is_main_camera": false,
@@ -698,12 +703,12 @@
                     "name": "MainCamera",
                     "position": [
                         0.0,
-                        2.520291328430176,
+                        3.119999885559082,
                         -4.499146938323975
                     ],
                     "rotation": [
-                        1.0,
-                        0.0,
+                        0.9961947202682495,
+                        0.08715573698282242,
                         0.0,
                         0.0
                     ],
@@ -711,6 +716,257 @@
                         0.9999991059303284,
                         0.9999998807907104,
                         0.9999991059303284
+                    ],
+                    "static": false
+                },
+                {
+                    "Children": [
+                        {
+                            "Children": [
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 0,
+                                            "active": true,
+                                            "face color": [
+                                                0.6055363416671753,
+                                                0.7508851289749146,
+                                                0.8235294222831726,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 16099754547435175936,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 16135434673685721088,
+                                    "active": true,
+                                    "name": "bad_skull:MACHOIR_NEW002",
+                                    "position": [
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 0,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                0.9186851382255554,
+                                                0.07843136787414551,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 3399376600475668992,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 10109387172214960128,
+                                    "active": true,
+                                    "name": "bad_skull:dents_inférieur002",
+                                    "position": [
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 0,
+                                            "active": true,
+                                            "face color": [
+                                                1.0,
+                                                1.0,
+                                                0.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 15053593404824584192,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 7475137615591856128,
+                                    "active": true,
+                                    "name": "bad_skull:dents_supérieur001",
+                                    "position": [
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                },
+                                {
+                                    "Children": null,
+                                    "Components": [
+                                        {
+                                            "Resource": 0,
+                                            "active": true,
+                                            "face color": [
+                                                0.7058823108673096,
+                                                0.9037191867828369,
+                                                1.0,
+                                                1.0
+                                            ],
+                                            "type": 2,
+                                            "wire color": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ]
+                                        },
+                                        {
+                                            "MeshId": 11390644243235227648,
+                                            "active": true,
+                                            "type": 1
+                                        }
+                                    ],
+                                    "UID": 9021292363526585344,
+                                    "active": true,
+                                    "name": "bad_skull:SKULL002",
+                                    "position": [
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "rotation": [
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "static": false
+                                }
+                            ],
+                            "Components": null,
+                            "UID": 10415674536964665344,
+                            "active": true,
+                            "name": "group1",
+                            "position": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "rotation": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ],
+                            "static": false
+                        }
+                    ],
+                    "Components": [
+                        {
+                            "InspectorVars": [
+                                {
+                                    "data": 0.10000000149011612,
+                                    "key": "speed",
+                                    "type": 2
+                                }
+                            ],
+                            "active": true,
+                            "script": "Assets\\Scripts\\SkullRotation.lua",
+                            "type": 5
+                        }
+                    ],
+                    "UID": 5848185727870315520,
+                    "active": true,
+                    "name": "skull_head",
+                    "position": [
+                        -1.3014483451843262,
+                        5.578635215759277,
+                        37.892578125
+                    ],
+                    "rotation": [
+                        0.3153223693370819,
+                        -0.0,
+                        -0.9489846229553223,
+                        -0.0
+                    ],
+                    "scale": [
+                        0.05000000074505806,
+                        0.05000000074505806,
+                        0.05000000074505806
                     ],
                     "static": false
                 },
@@ -1718,7 +1974,7 @@
                                     "position": [
                                         13.38798999786377,
                                         -33.75503921508789,
-                                        -9.383451811117993e-07
+                                        -9.383452379552182e-07
                                     ],
                                     "rotation": [
                                         1.0,
@@ -2528,53 +2784,6 @@
                         1.0,
                         1.0,
                         1.0
-                    ],
-                    "static": false
-                },
-                {
-                    "Children": null,
-                    "Components": [
-                        {
-                            "Resource": 1121053328114031232,
-                            "active": true,
-                            "face color": [
-                                1.0,
-                                1.0,
-                                1.0,
-                                1.0
-                            ],
-                            "type": 2,
-                            "wire color": [
-                                0.0,
-                                0.0,
-                                0.0,
-                                0.0
-                            ]
-                        },
-                        {
-                            "MeshId": 15843117866308825088,
-                            "active": true,
-                            "type": 1
-                        }
-                    ],
-                    "UID": 926199573481449600,
-                    "active": true,
-                    "name": "Skybox",
-                    "position": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "rotation": [
-                        1.0,
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        7000.0,
-                        7000.0,
-                        7000.0
                     ],
                     "static": false
                 }

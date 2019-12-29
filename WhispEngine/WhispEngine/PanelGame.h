@@ -15,15 +15,15 @@ public:
 
 	void Update() override;
 
-	const ImVec2 GetPanelSize();
+	static const ImVec2 GetPanelSize();
 	const ImVec2 GetPanelPos();
 
 	bool focused = false;
 
-private:
+public:
 
-	ImVec2 panel_size = { 0.f, 0.f };
-	ImVec2 panel_pos = { 0.f, 0.f };
+	static ImVec2 panel_size;
+	ImVec2 panel_pos;
 };
 
 #endif // !_PANEL_GAME__

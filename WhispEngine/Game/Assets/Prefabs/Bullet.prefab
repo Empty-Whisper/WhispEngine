@@ -3,61 +3,92 @@
         {
             "Children": [
                 {
-                    "Children": null,
-                    "Components": [
+                    "Children": [
                         {
-                            "Resource": 0,
-                            "active": true,
-                            "face color": [
-                                1.0,
-                                1.0,
-                                1.0,
-                                1.0
+                            "Children": null,
+                            "Components": [
+                                {
+                                    "Resource": 0,
+                                    "active": true,
+                                    "face color": [
+                                        1.0,
+                                        0.0,
+                                        0.3705747425556183,
+                                        0.5
+                                    ],
+                                    "type": 2,
+                                    "wire color": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ]
+                                },
+                                {
+                                    "MeshId": 15054831129172549632,
+                                    "active": true,
+                                    "type": 1
+                                },
+                                {
+                                    "InspectorVars": [
+                                        {
+                                            "data": 0.10000000149011612,
+                                            "key": "speed",
+                                            "type": 2
+                                        }
+                                    ],
+                                    "active": true,
+                                    "script": "Assets\\Scripts\\BulletRotation.lua",
+                                    "type": 5
+                                }
                             ],
-                            "type": 2,
-                            "wire color": [
-                                0.0,
+                            "UID": 4568988214770281472,
+                            "active": true,
+                            "name": "Cube",
+                            "position": [
                                 0.0,
                                 0.0,
                                 0.0
-                            ]
-                        },
-                        {
-                            "MeshId": 15054831129172549632,
-                            "active": true,
-                            "type": 1
-                        },
-                        {
-                            "InspectorVars": [
-                                {
-                                    "data": 0.10000000149011612,
-                                    "key": "speed",
-                                    "type": 2
-                                }
                             ],
+                            "rotation": [
+                                0.3153223693370819,
+                                -0.0,
+                                -0.9489846229553223,
+                                -0.0
+                            ],
+                            "scale": [
+                                0.009868161752820015,
+                                0.009868158958852291,
+                                0.009868158958852291
+                            ],
+                            "static": false
+                        }
+                    ],
+                    "Components": [
+                        {
                             "active": true,
-                            "script": "Assets\\Scripts\\BulletRotation.lua",
+                            "script": "Assets\\Scripts\\GunType1.lua",
                             "type": 5
                         }
                     ],
-                    "UID": 4568988214770281472,
+                    "UID": 17853350943230629888,
                     "active": true,
-                    "name": "Cube",
+                    "name": "Shell:Mesh",
                     "position": [
                         0.0,
                         0.0,
                         0.0
                     ],
                     "rotation": [
-                        0.7071067690849304,
-                        -0.7071068286895752,
+                        1.0,
+                        0.0,
                         0.0,
                         0.0
                     ],
                     "scale": [
-                        0.009868161752820015,
-                        0.009868158958852291,
-                        0.009868158958852291
+                        3.1395034790039063,
+                        3.1395034790039063,
+                        3.1395034790039063
                     ],
                     "static": false
                 }
@@ -66,7 +97,7 @@
                 {
                     "InspectorVars": [
                         {
-                            "data": 38,
+                            "data": 20,
                             "key": "speed",
                             "type": 1
                         }
@@ -82,7 +113,7 @@
             "position": [
                 -1.824532389640808,
                 1.2380239963531494,
-                0.0
+                4.260001182556152
             ],
             "rotation": [
                 1.0,
