@@ -87,6 +87,7 @@
 #include <time.h>
 #include <stdarg.h>
 #include <new>
+#include "../Globals.h"
 
 #ifndef	_WIN32
 #include <unistd.h>
