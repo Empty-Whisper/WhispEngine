@@ -349,9 +349,9 @@ bool ModuleInput::GetMouseButtonUp(int id) const
 	return mouse_buttons[id] == KEY_UP;
 }
 
-KEY_STATE ModuleInput::LGetMouseButton(int id)
+bool ModuleInput::LGetMouseButton(int id)
 {
-	return mouse_buttons[id];
+	return mouse_buttons[id] != KEY_STATE::KEY_IDLE;
 }
 
 bool ModuleInput::LGetMouseButtonDown(int id)

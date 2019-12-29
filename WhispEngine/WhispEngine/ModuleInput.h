@@ -49,7 +49,7 @@ public:
 	KEY_STATE GetMouseButton(int id) const;
 	bool GetMouseButtonDown(int id) const;
 	bool GetMouseButtonUp(int id) const;
-	static KEY_STATE LGetMouseButton(int id);
+	static bool LGetMouseButton(int id);
 	static bool		 LGetMouseButtonDown(int id);
 	static bool		 LGetMouseButtonUp(int id);
 
