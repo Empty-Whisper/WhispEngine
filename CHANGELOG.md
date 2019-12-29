@@ -1,5 +1,33 @@
 # Changelog
 
+
+## [Assignment3.3] - 29/12/2019
+### Added
+
+- Skybox editor
+- Rainbow Tank Shot
+- Improve web
+
+### Fixed
+
+- Memory Leak solved
+- Creation of Script Component
+- Change Textures
+
+## [Assignment3.1] - 28/12/2019
+### Added
+
+- Script independance
+- Don't mouse picking in Game Panel
+- Street FBX
+- More Brofiler
+- ZeroBrane autocomplete
+
+### Fixed
+
+- Save and Load scripts duplicates and don't load some inspector vars
+
+
 ## [Assignment3.2] - 28/12/2019
 ### Added
 
