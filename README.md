@@ -1,7 +1,7 @@
 ﻿# 3D Game Engine: WhispEngine
 
 ## Current Version
-v Assignment3.2
+v Assignment3.3
 
 ## Description
 This is a 3D Game Engine made by Students at CITM (UPC) from Spain. 
@@ -60,7 +60,7 @@ Extract .zip files inside a folder and open the .exe file.
 * Script Editor in Engine
 * Autocomplete WhispEngine Scripting API variables in ZeroBrane (see Assets/Configuration/ZeroBrane/README.md)
 * zBuffer (to active: go to Panel Configuration -> zBuffer -> active)
-* Skybox
+* Skybox (to change texture: go to Panel Configuration -> Skybox -> ChangeTexture)
 * Game Build
 
 ## Innovations Assignment 2
