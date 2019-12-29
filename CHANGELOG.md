@@ -1,5 +1,10 @@
 # Changelog
 
+## [Assignment3.5] - 29/12/2019
+### Fixed
+
+- When creates a script that already exist
+
 ## [Assignment3.4] - 29/12/2019
 ### Fixed
 

@@ -207,7 +207,11 @@ void ComponentScript::SetScriptName()
 		name.assign(buffer);
 		title = name + " (Script)";
 		script_path.append(name + ".lua");
-		App->file_system->Copy("Assets/Internal/model.lua", script_path.data());
+		if (App->file_system->Exists(script_path.c_str())) {
+			LOG("Script %s already exists", script_path.c_str())
+		}
+		else
+			App->file_system->Copy("Assets/Internal/model.lua", script_path.data());
 		valid = true;
 
 		char* file = App->file_system->GetTextFile(script_path.data());
