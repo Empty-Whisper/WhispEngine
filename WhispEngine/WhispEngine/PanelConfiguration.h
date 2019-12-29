@@ -36,6 +36,8 @@ private:
 	bool checkbox_zbuffer = false;
 	bool checkbox_skybox = true;
 
+	bool select_tex = false;
+
 	std::vector<float> ms_reg;
 	std::vector<float> fps_reg;
 	std::vector<float> mem_reg;

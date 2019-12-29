@@ -9,6 +9,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleObjectManager.h"
 #include "Brofiler/Brofiler.h"
+#include "ComponentMaterial.h"
 
 
 PanelConfiguration::PanelConfiguration(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
@@ -298,14 +299,12 @@ void PanelConfiguration::zBuffer()
 
 void PanelConfiguration::Skybox()
 {
+	((ComponentMaterial*)App->scene_intro->SkyboxObject->GetComponent(ComponentType::MATERIAL))->OnInspector();
 
 	if (ImGui::Checkbox("Active Skybox", &checkbox_skybox))
 	{
 		active_skybox = !active_skybox;
 	}
-	
-
-
 }
 
 void PanelConfiguration::PushBackVectorAsQueue(std::vector<float> &vector, const float &value)

@@ -55,12 +55,8 @@ public:
 
 	std::string scene_path;
 
-	GameObject* SkyboxDefault = nullptr;
-	GameObject* SkyboxBlueSpace = nullptr;
-	GameObject* SkyboxVioletSpace = nullptr;
-
 	//ID skybox
-	std::string skybox_default_string = "7656489754684654987454624";
-	std::string skybox_bluespacet_string = "B1346513218416846464984654";
-	std::string skybox_violetspace_string = "6168626498451654854654498";
+	std::string skybox_id = "B1346513218416846464984654";
+	GameObject* SkyboxObject = nullptr;
+
 };

@@ -58,20 +58,17 @@ bool ModuleSceneIntro::Start()
 
 	for each (GameObject* it in game_objects)
 	{
-
-		//BlueSpace Skybox
-		if (strncmp(it->GetName(), skybox_bluespacet_string.c_str(), skybox_bluespacet_string.length()) == 0)
+		//Skybox
+		if (strncmp(it->GetName(), skybox_id.c_str(), skybox_id.length()) == 0)
 		{
-			SkyboxBlueSpace = it;
-			((ComponentTransform*)SkyboxBlueSpace->GetComponent(ComponentType::TRANSFORM))->SetScale(7000, 7000, 7000);
-			SkyboxBlueSpace->parent->Detach();
-			SkyboxBlueSpace->Detach();
+			SkyboxObject = it;
+			((ComponentTransform*)SkyboxObject->GetComponent(ComponentType::TRANSFORM))->SetScale(7000, 7000, 7000);
+			SkyboxObject->parent->Detach();
+			SkyboxObject->Detach();
 		}
 		
 	}
 
-	
-	
 	return ret;
 }
 
@@ -104,8 +101,9 @@ update_status ModuleSceneIntro::Update()
 	BROFILER_CATEGORY("Scene", Profiler::Color::Orange);
 	if (show_grid)
 		DrawGrid();
+
 	if(App->gui->config->active_skybox)
-		SkyboxBlueSpace->Update();
+		SkyboxObject->Update();
 
 	if (show_octree) {
 		glDisable(GL_LIGHTING);
