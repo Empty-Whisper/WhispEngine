@@ -125,18 +125,44 @@ Licence URI: https://www.os-templates.com/template-terms
           it comes to optimization. When a GameObject is set as static it is added to
           the octree, dividing it into 8 if it is positioned in an empty quadrant. The octree are
           a much faster way to check collisions, in our case with the mouse picking raycast or with the frustum.</p>
+
+        <p><strong>Frustum</strong></p>
+        <p>The frustum acts as a container space for the camera, from it you can vary the FOV, 
+          the maximum and minimum distance of rendering and finally its transformation. 
+          It is possible to create camera components for each object, which come embedded with a frustum and the previously mentioned functionalities.</p>
+        
+        <p><strong>Viewport</strong></p>
+        <p>The Engine uses a viewports system to show both in the scene, in the game panel and in the preview game panel all the rendering. 
+          These viewports can be separated as single panels and moved and scaled across all screens of your computer.</p>
+
+        <p><strong>Camera Culling</strong></p>
+        <p>Camera culling can be activated inside the camera component, in the inspector and allows you to render only what is inside the frustum. 
+          It is a very good way of optimization.</p>
+
+        <p><strong>Camera Preview</strong></p>
+        <p>Camera preview is a feature that by clicking on a game object that contains a camera component, 
+          allows you to visualize what the frustum sees.</p>
+
+        <p><strong>Docking</strong></p>
+        <p>The docking allows you to attach panels to each other, this creates a very good organization between the panels 
+          of the engine and its a better way to work.</p>
+
+        <p><strong>Mouse Picking</strong></p>
+        <p>Mouse Picking allows you to select objects from the scene with the mouse. So, you don't have to go to the hierarchy to select, 
+          it uses raycast.</p>
+
+        <p><strong>Outline Stencil Buffer</strong></p>
+        <p>We have used the Stencil Buffer to create an orange outline in the selected objects, there is also the blue outline 
+          that is used for the child objects of the selected objects.</p>
+
         <p><strong>ZBuffer</strong></p>
-        <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex
-          non
-          enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut
-          condimentum
-          duis.</p>
+        <p>ZBuffer allows, from a grey scale, to find out the distance of the pixels rendered on screen within the 3D environment. 
+          As darker pixel, more closer the viewport will be to it.</p>
+
         <p><strong>Skybox</strong></p>
-        <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex
-          non
-          enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut
-          condimentum
-          duis.</p>
+        <p>The Skybox is simply a large sphere with the UVs reversed, which when you put a texture on it you will see from the inside. 
+          It can be customized in the configuration panel.</p>
+
         <p><strong>ShortCuts</strong></p>
         <p>ShortCuts system allows to put a concatenation of three keys and a pointer to a function. Every
           time you push the keys, the function will be called. We used them as call of panels active/deactive. It
@@ -350,7 +376,7 @@ Licence URI: https://www.os-templates.com/template-terms
       <div class="services">
         <figure class="videocontainer">
           <!-- Important: Any type of video called via "iframe" must be in a container using class="videocontainer" -->
-          <iframe width="1280" height="720" src="https://www.youtube.com/embed/Gw7vHAQZ10M" frameborder="0"
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/TGcIPD1WUWQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </figure>
       </div>
