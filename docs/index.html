@@ -239,32 +239,103 @@ Licence URI: https://www.os-templates.com/template-terms
         we want to see in the inspector in order to modify in the engine. We also have <code>Start</code> and
         <code>Update</code> that we have explained before. The user can create new variables inside Model table. Every
         time a component script compile a script, will execute the Init function and save in a LuaRef the table.</p>
+      <a><img src="images/PublicVar.png"></a>
+      <p class="btmspace-30">In order to have public vars that user can edit we have to consider some things specials in
+        lua. Firs of all, lua is dynamically typed so you can have a number and later assign a string, this will be
+        difficult to get in the inspector. Lua types are nil, boolean, number (only "float", int does not exist),
+        string, userdata, function, thread, and table. WhispEngine can hold in editor the next types: boolean, int,
+        float, string, GameObject and Prefab. to store that variables in editor we have to read from the raw script and
+        save in a container. The two classes above were made to store that data and print in the inspector.
+        <code>PublicVar</code> is the base class and Property class is the class to store data, inheriting from
+        PublicVar. We made that way because we want to save in the same vector different type of data. Each script
+        component will save a map of string and PublicVar. PublicVar also keeps the variable type and a list of macros
+        in order to edit the way variables show in the inspector. WhispEngine for the moment has four macros.
+        ISGAMEOBJECT is when you declare a GameObject to know that will be a GameObject. This can sound a little weird,
+        but it is necessary in lua because it is not like c# that you have <code>GameObject variable_name;</code> in lua
+        is like this: <code>variable_name</code>, and that could be a GameObject, a number, a string... and the same
+        with Prefabs. So in order to let the engine understand what will be you have to initialize all variables that
+        you want in the inspector. This are an example: </p>
+      <p>Script</p>
+      <a><img src="images/public_var_example1.png"></a>
+      <p>In engine Inspector</p>
+      <a><img src="images/public_var_example2.png"></a>
+      <p>GameObject vars are treated as GameObject pointers, to assign a GameObject to a public variable in the
+        inspector just drag a Gameobject from the hierarchy to the variable in the inspector. The Engine will save all
+        variables in the scene with the data you setted. If you want to instantiate a Gameobject from a script the
+        better way is to create a prefab of that GameObject and create a public var in the script. To assign a Prefab
+        just Drag from Resource panel the prefab you want to the variable prefab. Don't forget to set the macros, in the
+        case of GameObjects is: variable_name = nil, --[GameObject]. And for Prefabs is: variable_name = nil,
+        --[Prefab].</p>
       <div>
       </div>
       <ul></ul>
 
       <div class="sectiontitle">
-        <h6 class="heading">Lua Wiki</h6>
+        <h6 class="heading">WhispEngine Lua Wiki</h6>
       </div>
       <div class="group">
         <p><strong>Introduction</strong></p>
-        <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex non
-          enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut condimentum
-          duis.</p>
-        <p class="btmspace-30">Luctus quam ut est aliquam et ultricies nisl vulputate donec in luctus arcu maecenas nec
-          metus ac magna posuere.</p>
-        <p><strong>Macros</strong></p>
-        <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex non
-          enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut condimentum
-          duis.</p>
-        <p class="btmspace-30">Luctus quam ut est aliquam et ultricies nisl vulputate donec in luctus arcu maecenas nec
-          metus ac magna posuere.</p>
-        <p><strong>Inspector</strong></p>
-        <p>Odio in accumsan in finibus lacus vitae condimentum dignissim urna est auctor ante eget viverra ex ex non
-          enim fusce vitae leo eleifend rutrum nisl sit amet congue ligula ut vulputate hendrerit nisl ut condimentum
-          duis.</p>
-        <p class="btmspace-30">Luctus quam ut est aliquam et ultricies nisl vulputate donec in luctus arcu maecenas nec
-          metus ac magna posuere.</p>
+
+        <p>Here you will find the functions and global variables that uses the scripting system in order to create yout
+          own scripts.</p>
+
+        <p><strong>Public variables</strong></p>
+        <p>All the variables you set in the table of Variables will be public in the inspector. to access later in the
+          script you will have to add the prefix "var".</p>
+        <p class="btmspace-30">For example if you have speed = 5, later in code you will have to refer to it as
+          var.speed to access the value in the inspector.</p>
+        <p><strong>GameObject</strong></p>
+        <p>GameObject is a class of C++ that you can use in lus scripts. All GameObjects you have in scripts will have
+          that fields:</p>
+        <p style="color:orange"><strong>active</strong>:</p>
+        <p> Changes the active bool of GameObject.
+          <code>gameObject.active = false --> deactive the GameObject</code></p>
+        <p style="color:orange"><strong>name</strong>:</p>
+        <p> Changes the name of GameObject.
+          <code>gameObject.name = 'Tina' --> Sets the name of GameObject to 'Tina'</code></pstyle="color:orange">
+          </pstyle>>
+          <p style="color:orange"><strong>transform</strong>:</p>
+          <p> Gets the transform object of the GameObject.</p>
+          <p><strong>gameObject</strong></p>
+          <p>The word "gameObject" is reserved for the GameObject pointer of the GameObject attached to that script
+            component.</p>
+          <p><strong>transform</strong></p>
+          <p>The word "transform" is reserved for the Transform pointer of the GameObject attached to that script
+            component. All GameObjects you have in scripts will have
+            that fields:</p>
+
+          <p style="color:orange"><strong>gameObject</strong>:</p>
+          <p> Is the GameObject of the own Transform.</p>
+          <p style="color:orange"><strong>parent</strong>:</p>
+          <p>The parent of the GameObject of the Transform.</p>
+          <p style="color:orange"><strong>position</strong>:</p>
+          <p>The Local position referenced to parent.</p>
+          <p style="color:orange"><strong>gposition</strong>:</p>
+          <p> The Global position.</p>
+          <p style="color:orange"><strong>rotation</strong>:</p>
+          <p>The Local Rotation.</p>
+          <p style="color:orange"><strong>grotation</strong>:</p>
+          <p>The Global Rotation.</p>
+          <p style="color:orange"><strong>forward</strong>:</p>
+          <p>Forward vector of the global rotation.</p>
+          <p style="color:orange"><strong>up</strong>:</p>
+          <p>Upper vector of the global rotation.</p>
+          <p style="color:orange"><strong>right</strong>:</p>
+          <p>Right vector of the global rotation.</p>
+          <p style="color:orange"><strong>scale</strong>:</p>
+          <p>Local Scale.</p>
+          <p style="color:orange"><strong>SetPositionv</strong>:</p>
+          <p>Function to set the position of the GameObject. The argument is a Vector3. <p style="color: lightblue;">
+              <code>transform:SetPositionv(Vector3(1, 0, 0)) --> Set the position to position (1, 0, 0)</code></p>
+          </p>
+          <p style="color:orange"><strong>SetPosition3f</strong>:</p>
+          <p>Function to set the position of the GameObject. The argument are 3 numbers. <p style="color: lightblue;">
+            <code>transform:SetPosition3f(1, 0, 0) --> Set the position to position (1, 0, 0)</code></p>
+
+          <p><strong>gameObject</strong></p>
+          <p>The word "gameObject" is reserved for the GameObject pointer of the GameObject attached to that
+            script
+            component.</p>
       </div>
 
       <!-- ################################################################################################ -->
