@@ -51,7 +51,7 @@ bool ModuleSceneIntro::Start()
 	LoadScene("Assets/Scenes/TankLua.scene");
 
 	//Skybox
-	App->resources->Get(App->file_system->GetUIDFromMeta("Assets/Models/SkyboxBlue.fbx.meta"))->LoadToMemory();
+	App->resources->Get(App->file_system->GetUIDFromMeta("Assets/Models/Skybox.fbx.meta"))->LoadToMemory();
 
 	std::vector<GameObject*> game_objects;
 	App->object_manager->GetChildsFrom(App->object_manager->root, game_objects);
