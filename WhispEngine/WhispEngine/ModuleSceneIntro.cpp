@@ -48,6 +48,27 @@ bool ModuleSceneIntro::Start()
 
 	LoadScene("Assets/Scenes/TankLua.scene");
 
+	//Skybox
+	App->resources->Get(App->file_system->GetUIDFromMeta("Assets/Models/SkyboxBlue.fbx.meta"))->LoadToMemory();
+
+	std::vector<GameObject*> game_objects;
+	App->object_manager->GetChildsFrom(App->object_manager->root, game_objects);
+
+	for each (GameObject* it in game_objects)
+	{
+
+		//BlueSpace Skybox
+		if (strncmp(it->GetName(), skybox_bluespacet_string.c_str(), skybox_bluespacet_string.length()) == 0)
+		{
+			SkyboxBlueSpace = it;
+			((ComponentTransform*)SkyboxBlueSpace->GetComponent(ComponentType::TRANSFORM))->SetScale(7000, 7000, 7000);
+			SkyboxBlueSpace->Detach();
+		}
+		
+	}
+
+	
+	
 	return ret;
 }
 
@@ -82,6 +103,7 @@ update_status ModuleSceneIntro::Update()
 		DrawGrid();
 
 	//DrawSkyboxSphere();
+	SkyboxBlueSpace->Update();
 
 	if (show_octree) {
 		glDisable(GL_LIGHTING);
