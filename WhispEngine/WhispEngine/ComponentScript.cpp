@@ -180,6 +180,14 @@ void ComponentScript::OnInspector()
 			if (ImGui::Button("Change")) {
 				OpenModalWindowsToLoadScript();
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Reset")) {
+				for (auto i = public_vars.begin(); i != public_vars.end(); i++) {
+					delete (*i).second;
+				}
+				public_vars.clear();
+				UpdateInspectorVars();
+			}
 
 			if (valid) {
 				ImGui::Separator();
@@ -237,7 +245,7 @@ void ComponentScript::DrawInspectorVars()
 					switch (*i)
 					{
 					case ComponentScript::Macros::DRAG:
-						ImGui::DragInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data, 1, (int)(*var).second->macros_info["n1"], (int)(*var).second->macros_info["n2"]);
+						ImGui::DragInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data, ((int)(*var).second->macros_info["n2"] - (int)(*var).second->macros_info["n1"]) / 100, (int)(*var).second->macros_info["n1"], (int)(*var).second->macros_info["n2"]);
 						break;
 					case ComponentScript::Macros::INPUT:
 						ImGui::InputInt((*var).first.c_str(), &static_cast<Property<int>*>((*var).second)->data);
@@ -254,7 +262,7 @@ void ComponentScript::DrawInspectorVars()
 					switch (*i)
 					{
 					case ComponentScript::Macros::DRAG:
-						ImGui::DragFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data, (*var).second->macros_info["n1"], (*var).second->macros_info["n2"]);
+						ImGui::DragFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data, ((*var).second->macros_info["n2"] - (*var).second->macros_info["n1"])/100.f, (*var).second->macros_info["n1"], (*var).second->macros_info["n2"]);
 						break;
 					case ComponentScript::Macros::INPUT:
 						ImGui::InputFloat((*var).first.c_str(), &static_cast<Property<float>*>((*var).second)->data);
