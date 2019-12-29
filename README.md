@@ -1,7 +1,7 @@
 ﻿# 3D Game Engine: WhispEngine
 
 ## Current Version
-v Assignment3.4
+v Assignment3.5
 
 ## Description
 This is a 3D Game Engine made by Students at CITM (UPC) from Spain. 
@@ -61,6 +61,7 @@ Extract .zip files inside a folder and open the .exe file.
 * zBuffer (to active: go to Panel Configuration -> zBuffer -> active)
 * Skybox (to change texture: go to Panel Configuration -> Skybox -> ChangeTexture)
 * Game Build
+* Cool Web page with html
 
 ## Innovations Assignment 2
 
