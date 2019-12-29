@@ -248,8 +248,13 @@ static		unsigned int	sourceLine             = 0;
 static		bool		staticDeinitTime       = false;
 static		sAllocUnit	**reservoirBuffer      = NULL;
 static		unsigned int	reservoirBufferSize    = 0;
+#ifndef GAME_BUILD
 static const	char		*memoryLogFile         = "memory.log";
 static const	char		*memoryLeakLogFile     = "memleaks.log";
+#else
+static const	char		*memoryLogFile = "";
+static const	char		*memoryLeakLogFile = "";
+#endif
 static		void		doCleanupLogOnFirstRun();
 
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -563,7 +568,7 @@ static	void	dumpLeakReport()
 		fprintf(fp, "Congratulations! No memory leaks found!\r\n");
 
 		// We can finally free up our own memory allocations
-#endif
+//#endif
 		if (reservoirBuffer)
 		{
 			for (unsigned int i = 0; i < reservoirBufferSize; i++)
@@ -575,7 +580,7 @@ static	void	dumpLeakReport()
 			reservoirBufferSize = 0;
 			reservoir = NULL;
 		}
-#ifndef GAME_BUILD
+//#ifndef GAME_BUILD
 	}
 	fprintf(fp, "\r\n");
 
