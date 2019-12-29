@@ -12,6 +12,8 @@
 #include "ModuleCamera3D.h"
 #include "Lua/LuaBridge/LuaBridge.h"
 
+#include "mmgr/mmgr.h"
+
 ComponentTransform::ComponentTransform(GameObject* parent) : Component(parent, ComponentType::TRANSFORM)
 {
 	CalculeLocalMatrix();

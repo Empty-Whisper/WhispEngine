@@ -6,7 +6,7 @@
 #include "ModuleRenderer3D.h"
 #include "Brofiler/Brofiler.h"
 #include "ModuleWindow.h"
-
+#include "mmgr/mmgr.h"
 PanelGame::PanelGame(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
 	: Panel("Game", start_active, shortcut1, shortcut2, shortcut3)
 {

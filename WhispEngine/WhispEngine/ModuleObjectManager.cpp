@@ -18,6 +18,8 @@
 #include "ModuleScripting.h"
 #include "Lua/LuaBridge/LuaBridge.h"
 
+#include "mmgr/mmgr.h"
+
 std::vector<GameObject*> ModuleObjectManager::to_delete;
 
 ModuleObjectManager::ModuleObjectManager()

@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleShortCut.h"
 #include "ModuleInput.h"
-
+#include "mmgr/mmgr.h"
 ShortCut::ShortCut()
 {
 	App->shortcut->AddShortCut(this);

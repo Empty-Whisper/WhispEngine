@@ -4,6 +4,7 @@
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "ModuleImport.h"
+#include "mmgr/mmgr.h"
 
 ModuleResources::ModuleResources()
 {

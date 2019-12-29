@@ -21,6 +21,7 @@ class ComponentScript :
 	class PublicVar {
 	public:
 		PublicVar(TypeData type) : type(type) {}
+		virtual ~PublicVar() {}
 		TypeData type = TypeData::NONE;
 		std::list<Macros> macros;
 		std::map<std::string, float> macros_info;
@@ -29,6 +30,7 @@ class ComponentScript :
 	class Property : public PublicVar {
 	public:
 		Property(TypeData type, const T& data) : PublicVar(type), data(data) {}
+		~Property() {}
 		T data;
 	};
 

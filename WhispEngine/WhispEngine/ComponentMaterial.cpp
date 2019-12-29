@@ -9,6 +9,7 @@
 #include "ModuleObjectManager.h"
 #include "ModuleResources.h"
 #include "Resource.h"
+#include "mmgr/mmgr.h"
 
 ComponentMaterial::ComponentMaterial(GameObject* parent) : Component(parent, ComponentType::MATERIAL)
 {

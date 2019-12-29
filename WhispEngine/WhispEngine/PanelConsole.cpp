@@ -1,7 +1,7 @@
 #include "PanelConsole.h"
 #include "Application.h"
 #include "Brofiler/Brofiler.h"
-
+#include "mmgr/mmgr.h"
 
 PanelConsole::PanelConsole(const bool &start_active, const SDL_Scancode &shortcut1, const SDL_Scancode &shortcut2, const SDL_Scancode &shortcut3)
 	:Panel("Console", start_active, shortcut1, shortcut2, shortcut3)

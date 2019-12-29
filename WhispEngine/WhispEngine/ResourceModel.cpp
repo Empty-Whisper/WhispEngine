@@ -7,6 +7,8 @@
 #include "ModuleObjectManager.h"
 #include "ModuleResources.h"
 
+#include "mmgr/mmgr.h"
+
 ResourceModel::ResourceModel(const uint64 & uid) : Resource(uid, Resource::Type::MODEL)
 {
 }

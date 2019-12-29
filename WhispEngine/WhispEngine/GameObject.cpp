@@ -13,6 +13,8 @@
 #include "ResourceMesh.h"
 #include "Brofiler/Brofiler.h"
 
+#include "mmgr/mmgr.h"
+
 GameObject::GameObject(GameObject * parent) : parent(parent)
 {
 	if (parent != nullptr)

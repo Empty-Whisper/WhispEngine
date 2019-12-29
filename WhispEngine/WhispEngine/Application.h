@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "Globals.h"
 #include "Timer.h"
 #include "PerfTimer.h"
@@ -10,7 +12,6 @@
 #include "JsonHelper.h"
 #include "HardwareInfo.h"
 
-#include <list>
 
 class ModuleWindow;
 class ModuleInput;

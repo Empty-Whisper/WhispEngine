@@ -7,7 +7,7 @@
 #include "ModuleObjectManager.h"
 #include "Brofiler/Brofiler.h"
 #include "Imgui/imgui_internal.h"
-
+#include "mmgr/mmgr.h"
 PanelScene::PanelScene(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3) 
 	: Panel("Scene", start_active, shortcut1, shortcut2, shortcut3)
 {

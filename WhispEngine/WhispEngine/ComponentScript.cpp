@@ -1,19 +1,24 @@
+#include <fstream>
+
+#include "ModuleGUI.h"
+
 #include "ComponentScript.h"
 #include "Imgui/imgui.h"
 #include "Application.h"
 #include "FileSystem.h"
 #include "GameObject.h"
 #include "ModuleScripting.h"
-#include <fstream>
 #include "Imgui/imgui_internal.h"
 #include "ModuleObjectManager.h"
-#include "ModuleGUI.h"
 #include "PanelResources.h"
 #include "PanelScriptEditor.h"
 
 #include "ModuleInput.h"
 
 #include "Brofiler/Brofiler.h"
+
+#include "mmgr/mmgr.h"
+
 
 ComponentScript::ComponentScript(GameObject* parent) 
 	: Component(parent,ComponentType::SCRIPT), 
@@ -192,7 +197,7 @@ void ComponentScript::SetScriptName()
 {
 	static char buffer[50];
 	if (ImGui::InputText("", buffer, 50, ImGuiInputTextFlags_EnterReturnsTrue)) {
-		// TODO: if(script already exists open modal window)
+		 //TODO: if(script already exists open modal window)
 		name.assign(buffer);
 		title = name + " (Script)";
 		script_path.append(name + ".lua");
@@ -415,19 +420,21 @@ void ComponentScript::UpdateInspectorVars()
 				for (auto k = keys.begin(); k != keys.end(); k++) {
 					if (public_vars.find((*k).c_str()) == public_vars.end()) {
 						auto r = ref[(*k).c_str()];
+						if ((*k).compare("bullet") == 0)
+							int a = 0;
 
 						if (r.isBool()) {
 							Property<bool>* var = new Property<bool>(TypeData::BOOL, r.cast<bool>());
 							public_vars[(*k).c_str()] = var;
 						}
-						if (r.isNil()) {
+						else if (r.isNil()) {
 							if (macros.find((*k).c_str()) != macros.end()) {
 								if (macros[(*k).c_str()].compare("[GameObject]") == 0) {
 									Property<GameObject*>* var = new Property<GameObject*>(TypeData::GAMEOBJECT, nullptr);
 									public_vars[(*k).c_str()] = var;
 								}
 								else if (macros[(*k).c_str()].compare("[Prefab]") == 0) {
-									Property<std::string>* var = new Property<std::string>(TypeData::PREFAB, "");
+									Property<std::string>* var = new Property<std::string>(TypeData::PREFAB, r.cast<std::string>());
 									public_vars[(*k).c_str()] = var;
 								}
 							}
@@ -436,7 +443,7 @@ void ComponentScript::UpdateInspectorVars()
 								public_vars[(*k).c_str()] = var;
 							}
 						}
-						if (r.isNumber()) {
+						else if (r.isNumber()) {
 							float f = r.cast<float>();
 							if (ceilf(f) == f) { //integer
 								Property<int>* var = new Property<int>(TypeData::INT, r.cast<int>());
@@ -505,20 +512,21 @@ void ComponentScript::UpdateInspectorVars()
 								public_vars[(*k).c_str()] = var;
 							}
 						}
-						if (r.isString()) {
+						else if (r.isString()) {
 							Property<std::string>* var = new Property<std::string>(TypeData::STRING, r.cast<std::string>());
 							public_vars[(*k).c_str()] = var;
 						}
-						if (r.isTable()) {
+						else if (r.isTable()) {
 							Property<int>* var = new Property<int>(TypeData::TABLE, 0);
 							public_vars[(*k).c_str()] = var;
 						}
-						if (r.isUserdata()) {
+						else if (r.isUserdata()) {
 							Property<int>* var = new Property<int>(TypeData::USERDATA, 0);
 							public_vars[(*k).c_str()] = var;
 						}
 					}
 				}
+				is.close();
 			}
 		}
 	}
@@ -569,6 +577,7 @@ void ComponentScript::Save(nlohmann::json & node)
 			var["data"] = static_cast<Property<int>*>((*v).second)->data;
 			break;
 		case ComponentScript::TypeData::STRING:
+		case ComponentScript::TypeData::PREFAB:
 			var["data"] = static_cast<Property<std::string>*>((*v).second)->data.c_str();
 			break;
 		case ComponentScript::TypeData::USERDATA:
@@ -579,9 +588,6 @@ void ComponentScript::Save(nlohmann::json & node)
 			if (o != nullptr) var["data"] = o->GetUID();
 			else			  var["data"] = 0;
 		}
-			break;
-		case ComponentScript::TypeData::PREFAB:
-			var["data"] = static_cast<Property<std::string>*>((*v).second)->data;
 			break;
 		default:
 			break;
@@ -615,16 +621,14 @@ void ComponentScript::Load(const nlohmann::json & node)
 					static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
 					break;
 				case ComponentScript::TypeData::STRING:
-					static_cast<Property<std::string>*>(public_vars[(*v)["key"]])->data.assign((*v).value("data", "none"));
+				case ComponentScript::TypeData::PREFAB:
+					static_cast<Property<std::string>*>(public_vars[(*v)["key"]])->data = (*v).value("data", "none");
 					break;
 				case ComponentScript::TypeData::USERDATA:
 					static_cast<Property<int>*>(public_vars[(*v)["key"]])->data = (*v).value("data", 0);
 					break;
 				case ComponentScript::TypeData::GAMEOBJECT:
 					static_cast<Property<GameObject*>*>(public_vars[(*v)["key"]])->data = App->object_manager->Find((uint64)(*v).value("data", (uint64)0));
-					break;
-				case ComponentScript::TypeData::PREFAB:
-					static_cast<Property<std::string>*>(public_vars[(*v)["key"]])->data = (*v).value("data", "");
 					break;
 				default:
 					break;

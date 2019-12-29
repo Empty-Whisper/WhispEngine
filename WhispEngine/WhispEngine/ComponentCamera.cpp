@@ -10,7 +10,7 @@
 #include "ModuleObjectManager.h"
 #include "Imgui/imgui_internal.h"
 #include "Brofiler/Brofiler.h"
-
+#include "mmgr/mmgr.h"
 
 ComponentCamera::ComponentCamera(GameObject* parent) : Component(parent, ComponentType::CAMERA)
 {

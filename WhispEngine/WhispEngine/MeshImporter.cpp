@@ -8,6 +8,7 @@
 #include "Globals.h"
 #include "ModuleResources.h"
 #include "ResourceMesh.h"
+#include "mmgr/mmgr.h"
 
 MeshImporter::MeshImporter()
 {

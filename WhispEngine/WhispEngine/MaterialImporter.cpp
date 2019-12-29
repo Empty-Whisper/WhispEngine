@@ -16,6 +16,7 @@
 #pragma comment (lib, "DevIL/libx86/ILUT.lib")
 //--------------------------------------------------------------------
 
+#include "mmgr/mmgr.h"
 
 MaterialImporter::MaterialImporter()
 {

@@ -3,7 +3,7 @@
 #include "Application.h"
 #include "ModuleShortCut.h"
 #include "ModuleInput.h"
-
+#include "mmgr/mmgr.h"
 PanelShortcut::PanelShortcut(const bool & start_active, const SDL_Scancode & shortcut1, const SDL_Scancode & shortcut2, const SDL_Scancode & shortcut3)
 	: Panel("ShortCut", start_active, shortcut1, shortcut2, shortcut3)
 {

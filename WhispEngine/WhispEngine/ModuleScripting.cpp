@@ -6,6 +6,8 @@
 
 #include "Application.h"
 
+#include "mmgr/mmgr.h"
+
 ModuleScripting::ModuleScripting()
 {
 	L = luaL_newstate();
