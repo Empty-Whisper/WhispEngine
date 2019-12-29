@@ -20,15 +20,15 @@ function Init()
 	-- Start is called before the first frame update
 	function BulletRotation:Start()
 		--Se viene
-		first = Random.Range(1,3)
+		first = Random.Range(1,4)
 
 		if first == 1 then
-			first_color = Random.Range(1,3)
+			first_color = Random.Range(1,4)
 			if first_color == 1 then
 				 r = 0
-				second = Random.Range(1,2)
+				second = Random.Range(1,3)
 				if second == 1 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						g = 1
 						b = Random.Rangef(0,1)
@@ -39,7 +39,7 @@ function Init()
 					end
 				end
 				if second == 2 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						b = 1
 						g = Random.Rangef(0,1)
@@ -55,9 +55,9 @@ function Init()
 
 			if first_color == 2 then
 				 r = 1
-				second = Random.Range(1,2)
+				second = Random.Range(1,3)
 				if second == 1 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						g = 0
 						b = Random.Rangef(0,1)
@@ -68,7 +68,7 @@ function Init()
 					end
 				end
 				if second == 2 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						b = 0
 						g = Random.Rangef(0,1)
@@ -84,9 +84,9 @@ function Init()
 
 			if first_color == 3 then
 				 r = Random.Rangef(0,1)
-				second = Random.Range(1,2)
+				second = Random.Range(1,3)
 				if second == 1 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						g = 0
 						b = 1
@@ -97,7 +97,7 @@ function Init()
 					end
 				end
 				if second == 2 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						b = 0
 						g = 1
@@ -113,12 +113,12 @@ function Init()
 
 
 		if first == 2 then
-			first_color = Random.Range(1,3)
+			first_color = Random.Range(1,4)
 			if first_color == 1 then
 				 g = 0
-				second = Random.Range(1,2)
+				second = Random.Range(1,3)
 				if second == 1 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						r = 1
 						b = Random.Rangef(0,1)
@@ -129,7 +129,7 @@ function Init()
 					end
 				end
 				if second == 2 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						b = 1
 						r = Random.Rangef(0,1)
@@ -145,9 +145,9 @@ function Init()
 
 			if first_color == 2 then
 				 g = 1
-				second = Random.Range(1,2)
+				second = Random.Range(1,3)
 				if second == 1 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						r = 0
 						b = Random.Rangef(0,1)
@@ -158,7 +158,7 @@ function Init()
 					end
 				end
 				if second == 2 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						b = 0
 						r = Random.Rangef(0,1)
@@ -174,9 +174,9 @@ function Init()
 
 			if first_color == 3 then
 				 g = Random.Rangef(0,1)
-				second = Random.Range(1,2)
+				second = Random.Range(1,3)
 				if second == 1 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						r = 0
 						b = 1
@@ -187,7 +187,7 @@ function Init()
 					end
 				end
 				if second == 2 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						b = 0
 						r = 1
@@ -205,12 +205,12 @@ function Init()
 
 
 		if first == 3 then
-			first_color = Random.Range(1,3)
+			first_color = Random.Range(1,4)
 			if first_color == 1 then
 				 b = 0
-				second = Random.Range(1,2)
+				second = Random.Range(1,3)
 				if second == 1 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						r = 1
 						g = Random.Rangef(0,1)
@@ -221,7 +221,7 @@ function Init()
 					end
 				end
 				if second == 2 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						g = 1
 						r = Random.Rangef(0,1)
@@ -237,9 +237,9 @@ function Init()
 
 			if first_color == 2 then
 				 b = 1
-				second = Random.Range(1,2)
+				second = Random.Range(1,3)
 				if second == 1 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						r = 0
 						g = Random.Rangef(0,1)
@@ -250,7 +250,7 @@ function Init()
 					end
 				end
 				if second == 2 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						g = 0
 						r = Random.Rangef(0,1)
@@ -266,9 +266,9 @@ function Init()
 
 			if first_color == 3 then
 				 b = Random.Rangef(0,1)
-				second = Random.Range(1,2)
+				second = Random.Range(1,3)
 				if second == 1 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						r = 0
 						g = 1
@@ -279,7 +279,7 @@ function Init()
 					end
 				end
 				if second == 2 then
-					second_color = Random.Range(1,2)
+					second_color = Random.Range(1,3)
 					if second_color == 1 then
 						g = 0
 						r = 1
@@ -294,6 +294,7 @@ function Init()
 		end
 
 		--Se vino
+
 		GameObject.SetColor(transform.gameObject, r, g, b, 0.5)
 		mult = 0
 	end
@@ -306,6 +307,8 @@ function Init()
 
 	return BulletRotation
 end
+
+
 
 
 
