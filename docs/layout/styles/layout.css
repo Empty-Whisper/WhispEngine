@@ -18,6 +18,9 @@ File: Layout CSS
 .row3, .row3 a{}
 .row4, .row4 a{}
 .row5, .row5 a{}
+.column{float: left; width: 13.3%;}
+.row{display: flex;}
+.row:after {   content: "";   display: table;   clear: both; }
 
 
 /* Header
